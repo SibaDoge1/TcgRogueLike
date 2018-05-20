@@ -17,17 +17,17 @@ public class MapGenerator : MonoBehaviour
     public static Vector2Int roomSize;
     
     Room[,] Rooms;
-    List<Room> currentRooms = new List<Room>();
+    public List<Room> currentRooms = new List<Room>();
     List<Room> exploreRooms = new List<Room>();
     void Start()
     {
-        roomSize.x = 2; roomSize.y = 1;
+        roomSize.x = 18; roomSize.y = 10;
         SetMap();
     }
 
     void SetMap()
     {
-
+        
         Rooms = new Room[mapSize.x, mapSize.y];
 
         if(roomNum > mapSize.x*mapSize.y)
@@ -36,7 +36,9 @@ public class MapGenerator : MonoBehaviour
         }
 
         CreateRooms(); 
-        SetRoomDoors(); 
+        SetRoomDoors();
+        Player.instance.Spawn(currentRooms[0]);
+        currentRooms[0].OpenDoors();
     }
 
 
@@ -45,7 +47,7 @@ public class MapGenerator : MonoBehaviour
     {
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
         Room startRoom = Instantiate(room).GetComponent<Room>();
-        startRoom.setRoom(new Vector2Int(startPos.x, startPos.y), RoomType.STARTING);
+        startRoom.setRoom(new Vector2Int(startPos.x, startPos.y), RoomType.DEFAULT);
         Rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);
@@ -89,7 +91,9 @@ public class MapGenerator : MonoBehaviour
             {
                 currentRooms[i].doorLeft = true;
             }
+            currentRooms[i].SetDoors();
         }
+        
     }
 
 
