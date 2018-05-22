@@ -12,21 +12,25 @@ public class PlayerControll : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if(Input.GetKeyDown(KeyCode.W))
         {
             Player.instance.MoveUp();
+            TurnManager.instance.MoveNextTurn();
         }
-        else if(Input.GetKeyDown(KeyCode.RightArrow))
+        else if(Input.GetKeyDown(KeyCode.D))
         {
             Player.instance.MoveRight();
+            TurnManager.instance.MoveNextTurn();
         }
-        else if(Input.GetKeyDown(KeyCode.DownArrow))
+        else if(Input.GetKeyDown(KeyCode.S))
         {
             Player.instance.MoveDown();
+            TurnManager.instance.MoveNextTurn();
         }
-        else if(Input.GetKeyDown(KeyCode.LeftArrow))
+        else if(Input.GetKeyDown(KeyCode.A))
         {
             Player.instance.MoveLeft();
+            TurnManager.instance.MoveNextTurn();
         }
-	}
+    }
 }

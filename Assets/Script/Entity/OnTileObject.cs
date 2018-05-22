@@ -5,35 +5,82 @@ using UnityEngine;
 public abstract class OnTileObject : MonoBehaviour {
 
     public Room currentRoom;
+    public TheTile currentTile;
     public Vector2Int pos;
 
-    public int Hp;
+    protected int _fullHp=1;
+    protected int _currentHp=1;
+    
+    public virtual int fullHp
+    {
+        get
+        {
+            return _fullHp;
+        }
+        set
+        {
+            _fullHp = value;
+        }
+    }
+    public virtual int currentHp
+    {
+        get
+        {
+            return _currentHp;
+        }
+        set
+        {
+            if(value>=fullHp)
+            {
+                _currentHp = fullHp;
+            }
+            else
+            {
+                _currentHp = value;
+            }
+
+            if(_currentHp<=0)
+            {
+                DestroyThis();
+            }
+        }
+    }
+
     // Use this for initialization
-    Sprite sprite;
-	void Start () {
-        sprite = GetComponent<Sprite>();
+    SpriteRenderer sprite;
+	void Awake () {
+        sprite = GetComponent<SpriteRenderer>();
 	}
 	
-	public virtual void SetRoom(Room room)
+	public virtual void SetRoom(Room room,Vector2Int _pos)
     {
         currentRoom = room;
         this.transform.parent = room.transform;
+        this.MoveTo(_pos);
     }
 
     #region MoveMethod
     public virtual void MoveTo(Vector2Int _pos)
     {
-        if (currentRoom.thisNodes[_pos.x,_pos.y].IsStandAble(this))
+        if (!currentRoom.GetTile(_pos).IsStandAble(this))
         {
             return;
         }
 
-        if (currentRoom.thisNodes[pos.x, pos.y].onTile == this)
-            currentRoom.thisNodes[pos.x, pos.y].onTile = null;
+        if (currentRoom.GetTile(pos).onTile == this)
+            currentRoom.GetTile(pos).onTile = null;
 
         pos = _pos;
-        currentRoom.thisNodes[pos.x, pos.y].onTile = this;
-        transform.localPosition = new Vector3(-8.5f + pos.x, -4.5f + pos.y, 0);
+        currentTile = currentRoom.GetTile(pos);
+        currentTile.onTile = this;
+        transform.localPosition = currentTile.transform.localPosition;
+    }
+
+    public virtual void DestroyThis()
+    {
+        sprite.enabled = false;
+        currentTile.onTile = null;
+        gameObject.SetActive(false);
     }
     public virtual void MoveUp()
     {

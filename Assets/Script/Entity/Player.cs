@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class Player : Character
 {
     public static Player instance;
@@ -10,25 +10,95 @@ public class Player : Character
     {
         instance = this;  
     }
-
+    private void Start()
+    {
+        fullHp = 6; currentHp = 6;
+    }
     public override void MoveTo(Vector2Int _pos)
     {
         base.MoveTo(_pos);
-        //todo: TurnEnd
     }
     //스폰되듯이 이동
-    public void Spawn(Room _room)
+    public void SpawnToRoom(Room _room)
     {
-        StartCoroutine(CameraFollow.instance.RoomTrace(_room));
-        Player.instance.SetRoom(_room);
-        Player.instance.MoveTo(new Vector2Int(4, 4));
+        TurnManager.instance.currentRoom = _room;
+
+        if (currentRoom!=null)
+        currentTile.onTile = null;
+
+
+        CameraFollow.instance.RoomTrace(_room);
+        SetRoom(_room, new Vector2Int(4, 4));
     }
     //문을 통해서 이동
     public void EnterRoom(Room _room)
     {
-        Vector2Int temp = currentRoom.Pos - _room.Pos;
-        
-        StartCoroutine(CameraFollow.instance.RoomTrace(_room));
-        SetRoom(_room);
+        TurnManager.instance.currentRoom = _room;
+
+        Vector2Int temp;
+        bool isFlipped=false;
+
+        if (currentRoom != null)
+           currentTile.onTile = null;
+
+        if (_room == currentRoom.northRoom)
+        {
+            temp = new Vector2Int(_room.Size.x / 2, 1);
+        }
+        else if (_room == currentRoom.rightRoom)
+        {
+            temp = new Vector2Int(1, _room.Size.y / 2);
+            isFlipped = true;
+        }
+        else if (_room == currentRoom.leftRoom)
+        {
+            temp = new Vector2Int(_room.Size.x - 2, _room.Size.y / 2);
+            isFlipped = true;
+        }
+        else//_room == currentRoom.SouthRoom
+        {
+            temp = new Vector2Int(_room.Size.x / 2, _room.Size.y - 2);
+        }
+
+        SetRoom(_room,temp);
+        CameraFollow.instance.RoomTrace(_room);
+
+        if (isFlipped)
+        {
+            transform.localScale = new Vector3(-transform.localScale.x,1,1);
+        }
+
     }
+    public override void DestroyThis()
+    {
+        Debug.Log("GameOver!");
+        SceneManager.LoadScene(0);
+    }
+    public override int currentHp
+    {
+        get
+        {
+            return base.currentHp;
+        }
+
+        set
+        {
+            base.currentHp = value;
+            UIManager.instance.HpUpdate();
+        }
+    }
+    public override int fullHp
+    {
+        get
+        {
+            return base.fullHp;
+        }
+
+        set
+        {
+            base.fullHp = value;
+            UIManager.instance.HpUpdate();
+        }
+    }
+
 }

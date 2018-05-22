@@ -4,13 +4,31 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public static TurnManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+    private Room _currentRoom;
+    public Room currentRoom
+    {
+        get
+        {
+            return _currentRoom;
+        }
+        set
+        {
+            _currentRoom = value;
+            currentTurn = 0;
+        }
+    }
+    public int currentTurn;
+
+
+
+    public void MoveNextTurn()
+    {
+        currentRoom.DoTurn(currentTurn);
+        currentTurn++;
+    }
 }

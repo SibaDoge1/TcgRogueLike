@@ -10,15 +10,20 @@ public class CameraFollow : MonoBehaviour {
         instance = this;
     }
 
+    public void RoomTrace(Room curr)
+    {
+        StopAllCoroutines();
+        StartCoroutine(RoomTraceRoutine(curr));
+    }
 
-    public IEnumerator RoomTrace(Room curr)
+     IEnumerator RoomTraceRoutine(Room curr)
     {
         float _time = 0f;
         Vector3 Target = curr.transform.position + new Vector3(0, 0, -10);
-        while(_time <2f)
+        while(_time <1f)
         {
             _time += Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position,Target,_time/2);
+            transform.position = Vector3.Lerp(transform.position,Target,_time);
             yield return null;
         }
     }

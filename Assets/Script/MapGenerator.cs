@@ -13,15 +13,22 @@ public class MapGenerator : MonoBehaviour
 
     public Vector2Int mapSize;
     public int roomNum;
-    public GameObject room;
-    public static Vector2Int roomSize;
+    public  Vector2Int roomOffset;
     
+    public Vector3 GetRoomPosition(Vector2Int pos)
+    {
+        return new Vector3(2*pos.x * roomOffset.x,2*pos.y *roomOffset.y, 0);
+    }
+    public Vector3 GetTilePosition(Vector2Int pos)
+    {
+        return new Vector3(-roomOffset.x / 2 + 0.5f + pos.x, -roomOffset.y / 2 + 0.5f + pos.y, 0);
+    }
+     
     Room[,] Rooms;
-    public List<Room> currentRooms = new List<Room>();
+    List<Room> currentRooms = new List<Room>();
     List<Room> exploreRooms = new List<Room>();
     void Start()
-    {
-        roomSize.x = 18; roomSize.y = 10;
+    {       
         SetMap();
     }
 
@@ -37,8 +44,8 @@ public class MapGenerator : MonoBehaviour
 
         CreateRooms(); 
         SetRoomDoors();
-        Player.instance.Spawn(currentRooms[0]);
-        currentRooms[0].OpenDoors();
+        Player.instance.SpawnToRoom(currentRooms[0]);
+        //currentRooms[0].OpenDoors();
     }
 
 
@@ -46,8 +53,8 @@ public class MapGenerator : MonoBehaviour
     void CreateRooms()
     {
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
-        Room startRoom = Instantiate(room).GetComponent<Room>();
-        startRoom.setRoom(new Vector2Int(startPos.x, startPos.y), RoomType.DEFAULT);
+        Room startRoom = Instantiate(Resources.Load("Room/default") as GameObject, transform).GetComponent<Room>();
+        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomOffset);
         Rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);
@@ -62,11 +69,13 @@ public class MapGenerator : MonoBehaviour
             Vector2Int target = tempRoom.Pos+getRandomDir();
             if(CheckAvailPos(target))
             {
-                Room newRoom = Instantiate(room).GetComponent<Room>();
-                newRoom.setRoom(new Vector2Int(target.x, target.y), RoomType.BATTLE);
+                
+                Room newRoom = Instantiate(Resources.Load("Room/default") as GameObject, transform).GetComponent<Room>();
                 Rooms[target.x, target.y] = newRoom;
+                newRoom.SetRoomPos(target,roomOffset);
                 currentRooms.Add(newRoom);
                 exploreRooms.Add(newRoom);
+                newRoom.TempMakingEnemy();
             }
         }
     }
@@ -77,19 +86,19 @@ public class MapGenerator : MonoBehaviour
             Vector2Int temp = currentRooms[i].Pos;
             if(temp.y+1<mapSize.y && Rooms[temp.x,temp.y+1] != null)
             {
-                currentRooms[i].doorTop = true;
+                currentRooms[i].northRoom = Rooms[temp.x,temp.y+1];
             }
             if(temp.x+1<mapSize.x && Rooms[temp.x+1, temp.y] != null)
             {
-                currentRooms[i].doorRight = true;
+                currentRooms[i].rightRoom = Rooms[temp.x + 1, temp.y];
             }
             if (temp.y-1>=0 && Rooms[temp.x, temp.y - 1] != null)
             {
-                currentRooms[i].doorBot = true;
+                currentRooms[i].southRoom = Rooms[temp.x, temp.y - 1];
             }
             if(temp.x-1>=0 && Rooms[temp.x-1,temp.y]!=null)
             {
-                currentRooms[i].doorLeft = true;
+                currentRooms[i].leftRoom = Rooms[temp.x - 1, temp.y];
             }
             currentRooms[i].SetDoors();
         }

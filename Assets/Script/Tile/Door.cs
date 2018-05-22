@@ -3,25 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorNode : Node {
+public class Door : OffTile {
 
     Room target;
     public override void SomethingUpOnThis(OnTileObject ot)
     {
-        if(ot is Player)
+        if (ot is Player)
         {
+            Debug.Log("A");
             Player.instance.EnterRoom(target);
         }
     }
-    public DoorNode(Vector2Int _pos,Room _target) :base(_pos)
+    public override bool IsStandAble(OnTileObject ot)
     {
-        target = _target;
-    }
-    public override bool IsStandAble(OnTileObject me)
-    {
-        if (me is Player)
+        if (thisTile.onTile)
+        {
+            return false;
+        }
+
+        if (ot is Player)
             return true;
         else
             return false;
+    }
+    public void SetTargetRoom(Room room)
+    {
+        target = room;
     }
 }

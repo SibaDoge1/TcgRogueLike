@@ -2,114 +2,156 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RoomType
-{
-    DEFAULT,
-    BATTLE,
-}
 
-public class Room : MonoBehaviour
+
+public  class Room : MonoBehaviour
 {
 	public Vector2Int Pos;
-	public RoomType type;
-	public bool doorTop, doorBot, doorLeft, doorRight;
-    public Node[,] thisNodes;
+    public Vector2Int Size;
+	public Room northRoom, southRoom, leftRoom, rightRoom;//Neighbours
+    TheTile[,] Tiles;
+    public List<ITurnAble> TurnalbeList = new List<ITurnAble>();
 
-	public void setRoom(Vector2Int _Pos, RoomType _type)
+    Transform OO;
+    Transform TT;
+    public TheTile[,] GetTileArrays()
+    {
+        return Tiles;
+    }
+    public TheTile GetTile(Vector2Int p)
+    {
+        return Tiles[p.x, p.y];
+    }
+
+    public virtual void DoTurn(int turn)
+    {
+        foreach(ITurnAble it in TurnalbeList)
+        {
+            it.DoAct(turn);
+        }
+    }
+	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
     {
         Pos = _Pos;
-		type = _type;
-
-        transform.parent = MapGenerator.instance.transform;
-        transform.localPosition = new Vector3(Pos.x*MapGenerator.roomSize.x,Pos.y * MapGenerator.roomSize.y, 0);
+        Size = _Size;
+        transform.localPosition = MapGenerator.instance.GetRoomPosition(Pos);
         gameObject.name = "Room_" + Pos.x + "_" + Pos.y;
 
-        setNodes();
-	}
-    void setNodes()
+        TT = transform.Find("Tiles");
+
+        SetTiles();
+        MakeWall();
+    }
+
+    protected virtual void SetTiles()
     {
-        thisNodes = new Node[MapGenerator.roomSize.x, MapGenerator.roomSize.y];
-        for (int i = 0; i < MapGenerator.roomSize.x; i++)
+        Tiles = new TheTile[Size.x,Size.y];
+        for (int i = 0; i <Size.x; i++)
         {
-            for(int j=0;j< MapGenerator.roomSize.y; j++)
+            for(int j=0; j<Size.y; j++)
             {
-                if(i==0 || j==0 || j==MapGenerator.roomSize.y-1 || i==MapGenerator.roomSize.x-1)
+              TheTile tempTile = Instantiate(Resources.Load("Tile/default") as GameObject, TT).GetComponent<TheTile>();
+              tempTile.SetTile(new Vector2Int(i, j));
+                Tiles[i, j] = tempTile;
+            }
+        }
+        GenerateGraph();
+    }
+    /// <summary>
+    /// 이웃타일 등록
+    /// </summary>
+    protected void GenerateGraph()
+    {
+        for (int x = 0; x < Size.x; x++)
+        {
+            for (int y = 0; y < Size.y; y++)
+            {
+                if (x > 0)
                 {
-                    thisNodes[i, j] = new WallNode(new Vector2Int(i, j));
-                }else
+                    Tiles[x, y].neighbours.Add(Tiles[x - 1, y]);
+                }
+                if (x < Size.x - 1)
                 {
-                    thisNodes[i, j] = new GroundNode(new Vector2Int(i, j));
+                    Tiles[x, y].neighbours.Add(Tiles[x + 1, y]);
+                }
+                if (y > 0)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x, y - 1]);
+                }
+                if (y < Size.y - 1)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x, y + 1]);
                 }
             }
         }
     }
 
-    public void SetDoors()
+    public void MakeWall()
     {
-        if (!doorTop)
+        for (int i = 0; i < Size.x; i++)
         {
-            OnTileObject temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-             temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x / 2, -4.5f + MapGenerator.roomSize.y - 1, 0);
-             thisNodes[MapGenerator.roomSize.x/2, MapGenerator.roomSize.y - 1].onTile = temp;
-
-            temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x / 2 -1, -4.5f + MapGenerator.roomSize.y - 1, 0);
-            thisNodes[MapGenerator.roomSize.x/2-1, MapGenerator.roomSize.y - 1].onTile = temp;
-        }
-        if (!doorRight)
-        {
-            OnTileObject temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x - 1, -4.5f + MapGenerator.roomSize.y / 2, 0);
-            thisNodes[MapGenerator.roomSize.x - 1, MapGenerator.roomSize.y / 2].onTile = temp;
-
-            temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x - 1, -4.5f + MapGenerator.roomSize.y / 2 - 1, 0);
-            thisNodes[MapGenerator.roomSize.x - 1, MapGenerator.roomSize.y / 2 - 1].onTile = temp;
-        }
-        if (!doorBot)
-        {
-            OnTileObject temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x / 2, -4.5f +0, 0);
-            thisNodes[MapGenerator.roomSize.x / 2, 0].onTile = temp;
-
-            temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + MapGenerator.roomSize.x / 2, -4.5f + 0, 0);
-            thisNodes[MapGenerator.roomSize.x / 2-1, 0].onTile = temp;
-        }
-        if (!doorLeft)
-        {
-            OnTileObject temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + 0, -4.5f + MapGenerator.roomSize.y / 2, 0);
-            thisNodes[0, MapGenerator.roomSize.y / 2].onTile = temp;
-
-            temp = Instantiate(Resources.Load("Structure/00") as GameObject, transform).GetComponent<OnTileObject>();
-            temp.transform.localPosition = new Vector3(-8.5f + 0, -4.5f + MapGenerator.roomSize.y / 2 - 1, 0);
-            thisNodes[0, MapGenerator.roomSize.y / 2 - 1].onTile = temp;
-        }
-    }
-    public void OpenDoors()
-    {
-        if (doorTop)
-        {
-            Destroy(thisNodes[MapGenerator.roomSize.x / 2, MapGenerator.roomSize.y - 1].onTile.gameObject);
-            Destroy(thisNodes[MapGenerator.roomSize.x / 2 - 1, MapGenerator.roomSize.y - 1].onTile.gameObject);
-            
-        }
-        if (doorRight)
-        {
-            Destroy(thisNodes[MapGenerator.roomSize.x - 1, MapGenerator.roomSize.y / 2].onTile.gameObject);
-            Destroy(thisNodes[MapGenerator.roomSize.x - 1, MapGenerator.roomSize.y / 2 - 1].onTile.gameObject);
-        }
-        if (doorBot)
-        {
-            Destroy(thisNodes[MapGenerator.roomSize.x / 2, 0].onTile.gameObject);
-            Destroy(thisNodes[MapGenerator.roomSize.x / 2 - 1, 0].onTile.gameObject);
-        }
-        if (doorLeft)
-        {
-            Destroy(thisNodes[0, MapGenerator.roomSize.y / 2].onTile.gameObject);
-            Destroy(thisNodes[0, MapGenerator.roomSize.y / 2 - 1].onTile.gameObject);
+            for (int j = 0; j < Size.y; j++)
+            {
+                if (i == 0 || j == 0 || j == Size.y - 1 || i == Size.x - 1)
+                {
+                    OnTileObject tempWall = Instantiate(Resources.Load("Structure/wall") as GameObject, transform).GetComponent<OnTileObject>();
+                    tempWall.SetRoom(this, new Vector2Int(i, j));
+                }
+            }
         }
     }
 
+    public virtual void SetDoors()
+    {
+        if (northRoom)
+        {
+           Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
+            temp.SetTargetRoom(northRoom);
+            Tiles[Size.x / 2, Size.y - 1].TileInfo = temp;
+        }
+        if (rightRoom)
+        {
+            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
+            temp.SetTargetRoom(rightRoom);
+            Tiles[Size.x - 1, Size.y / 2].TileInfo = temp;
+        }
+        if (southRoom)
+        {
+            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
+            temp.SetTargetRoom(southRoom);
+            Tiles[Size.x / 2, 0].TileInfo = temp;
+        }
+        if (leftRoom)
+        {
+            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
+            temp.SetTargetRoom(leftRoom);
+            Tiles[0, Size.y / 2].TileInfo = temp;
+        }
+        OpenDoors();
+    }
+    public void TempMakingEnemy()
+    {
+        Vector2Int temp1 = new Vector2Int(Random.Range(2,8), Random.Range(2,5));
+        Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
+        temp.SetRoom(this, temp1);
+    }
+    public virtual void OpenDoors()
+    {
+        if (northRoom)
+        { 
+            Tiles[Size.x / 2, Size.y - 1].onTile.DestroyThis();
+        }
+        if (rightRoom)
+        {
+            Tiles[Size.x - 1, Size.y / 2].onTile.DestroyThis();
+        }
+        if (southRoom)
+        {
+            Tiles[Size.x / 2, 0].onTile.DestroyThis();
+        }
+        if (leftRoom)
+        {
+            Tiles[0, Size.y / 2].onTile.DestroyThis();
+        }
+    }
 }
