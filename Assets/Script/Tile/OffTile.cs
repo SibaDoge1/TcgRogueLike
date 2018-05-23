@@ -2,14 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Arch;
 /// <summary>
 /// 타일 속성
 /// </summary>
 public abstract class OffTile :MonoBehaviour
 {
-    protected TheTile thisTile;
+	protected Tile thisTile;
 
-    public void setTile(TheTile tile)
+	public void setTile(Tile tile)
     {
         thisTile = tile;
         transform.parent = tile.transform;

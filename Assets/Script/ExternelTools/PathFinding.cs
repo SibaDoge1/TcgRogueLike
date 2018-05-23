@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Arch;
+
+
 public class PathFinding : MonoBehaviour
 {
     public static PathFinding instance;
@@ -12,11 +15,11 @@ public class PathFinding : MonoBehaviour
 
 
 
-    TheTile _targetTile;
+	Tile _targetTile;
 
-     float CostToEnterTile(TheTile source, TheTile target)
+	float CostToEnterTile(Tile source, Tile target)
     {
-        if (target.onTile != null)
+        if (target.OnTileObj != null)
         {
             if(target == _targetTile)
             {
@@ -54,29 +57,29 @@ public class PathFinding : MonoBehaviour
     /// <summary>
     /// pathFinding Using A*
     /// </summary>
-     public void GeneratePathTo(OnTileObject obje,TheTile targetTile)
+	public void GeneratePathTo(OnTileObject obje,Tile targetTile)
     {
         OnTileObject selectedUnit = obje;
-        Dictionary<TheTile, TheTile> prev = new Dictionary<TheTile, TheTile>();
-        Dictionary<TheTile, float> distance = new Dictionary<TheTile, float>();
+		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+		Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
         _targetTile = targetTile;
-        TheTile target;
+		Tile target;
 
         // Setup the "Q" -- the list of nodes we haven't checked yet.
 
-        TheTile source = selectedUnit.currentTile;
+		Tile source = selectedUnit.currentTile;
 
         target = _targetTile;
 
         //source.distance = 0;
         prev[source] = null;
         prev[target] = null;
-        List<TheTile> openList = new List<TheTile>();
-        List<TheTile> closedList = new List<TheTile>();
+		List<Tile> openList = new List<Tile>();
+		List<Tile> closedList = new List<Tile>();
 
         openList.Add(source);
 
-        foreach(TheTile v in obje.currentRoom.GetTileArrays())
+		foreach(Tile v in obje.currentRoom.GetTileArrays())
         {
             distance[v] = Mathf.Infinity;
         }
@@ -84,7 +87,7 @@ public class PathFinding : MonoBehaviour
 
         while (openList.Count > 0)
         {
-            TheTile current = openList[0];
+			Tile current = openList[0];
             for (int i = 0; i < openList.Count; i++)
             {
                 
@@ -103,7 +106,7 @@ public class PathFinding : MonoBehaviour
 
 
 
-            foreach (TheTile v in current.neighbours)
+			foreach (Tile v in current.neighbours)
             {
 
                 if (closedList.Contains(v) || CostToEnterTile(current,v) == Mathf.Infinity)
@@ -129,8 +132,8 @@ public class PathFinding : MonoBehaviour
          
 
        
-        List<TheTile> currentPath = new List<TheTile>();
-        TheTile now = target;
+		List<Tile> currentPath = new List<Tile>();
+		Tile now = target;
         // Step through the "prev" chain and add it to our path
         while (now != null)
         {
@@ -147,7 +150,7 @@ public class PathFinding : MonoBehaviour
 
             if (currentPath == null)
                 return;
-            if (currentPath[1].onTile != null)
+            if (currentPath[1].OnTileObj != null)
             {
                 return;
             }
@@ -170,9 +173,9 @@ public class PathFinding : MonoBehaviour
 
 
     #region AI Path Block
-     float costToEnterTileForAPB(TheTile source, TheTile target)
+	float costToEnterTileForAPB(Tile source, Tile target)
     {
-        if (target.onTile is Structure)
+        if (target.OnTileObj is Structure)
         {
            return Mathf.Infinity;
         }
@@ -191,28 +194,28 @@ public class PathFinding : MonoBehaviour
     /// <summary>
     /// 길 막혔어도 가까이라도 가게 해주는 함수입니다. 
     /// </summary>
-    public void PathBlocked(OnTileObject obje, TheTile targetTile)
+	public void PathBlocked(OnTileObject obje, Tile targetTile)
     {
         OnTileObject selectedUnit = obje;
-        Dictionary<TheTile, TheTile> prev = new Dictionary<TheTile, TheTile>();
-        Dictionary<TheTile, float> distance = new Dictionary<TheTile, float>();
+		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+		Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
         _targetTile = targetTile;
-        TheTile target;
+		Tile target;
 
-        TheTile source = selectedUnit.currentTile;
+		Tile source = selectedUnit.currentTile;
 
         target = _targetTile;
 
         prev[source] = null;
         prev[target] = null;
-        List<TheTile> openList = new List<TheTile>();
-        List<TheTile> closedList = new List<TheTile>();
+		List<Tile> openList = new List<Tile>();
+		List<Tile> closedList = new List<Tile>();
 
         openList.Add(source);
 
         while (openList.Count > 0)
         {
-            TheTile current = openList[0];
+			Tile current = openList[0];
             for (int i = 0; i < openList.Count; i++)
             {
                 if (distance[openList[i]] < distance[current])
@@ -230,7 +233,7 @@ public class PathFinding : MonoBehaviour
 
 
 
-            foreach (TheTile v in current.neighbours)
+			foreach (Tile v in current.neighbours)
             {
                 if (v == null)
                     continue;
@@ -256,8 +259,8 @@ public class PathFinding : MonoBehaviour
 
 
 
-        List<TheTile> currentPath = new List<TheTile>();
-        TheTile now = target;
+		List<Tile> currentPath = new List<Tile>();
+		Tile now = target;
         // Step through the "prev" chain and add it to our path
         while (now != null)
         {
@@ -273,7 +276,7 @@ public class PathFinding : MonoBehaviour
   
             if (currentPath == null)
                 return;
-            if (currentPath[1].onTile != null)
+            if (currentPath[1].OnTileObj != null)
                 return;
 
             selectedUnit.MoveTo(currentPath[1].pos);

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Arch;
 
 public abstract class OnTileObject : MonoBehaviour {
 
     public Room currentRoom;
-    public TheTile currentTile;
+	public Tile currentTile;
     public Vector2Int pos;
 
     protected int _fullHp=1;
@@ -64,22 +65,23 @@ public abstract class OnTileObject : MonoBehaviour {
     {
         if (!currentRoom.GetTile(_pos).IsStandAble(this))
         {
+			//TODO consider return bool value (Is Move Success?) 
             return;
         }
 
-        if (currentRoom.GetTile(pos).onTile == this)
-            currentRoom.GetTile(pos).onTile = null;
+        if (currentRoom.GetTile(pos).OnTileObj == this)
+            currentRoom.GetTile(pos).OnTileObj = null;
 
         pos = _pos;
         currentTile = currentRoom.GetTile(pos);
-        currentTile.onTile = this;
+        currentTile.OnTileObj = this;
         transform.localPosition = currentTile.transform.localPosition;
     }
 
     public virtual void DestroyThis()
     {
         sprite.enabled = false;
-        currentTile.onTile = null;
+        currentTile.OnTileObj = null;
         gameObject.SetActive(false);
     }
     public virtual void MoveUp()

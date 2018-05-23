@@ -1,26 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Arch;
 
 
-
-public  class Room : MonoBehaviour
+public class Room : MonoBehaviour
 {
-	public Vector2Int Pos;
-    public Vector2Int Size;
+	public Vector2Int pos;
+    public Vector2Int size;
 	public Room northRoom, southRoom, leftRoom, rightRoom;//Neighbours
-    TheTile[,] Tiles;
+	Tile[,] tiles;
     public List<ITurnAble> TurnalbeList = new List<ITurnAble>();
     public Player player;
 
     Transform tileParent;
-    public TheTile[,] GetTileArrays()
+	public Tile[,] GetTileArrays()
     {
-        return Tiles;
+        return tiles;
     }
-    public TheTile GetTile(Vector2Int p)
+	public Tile GetTile(Vector2Int p)
     {
-        return Tiles[p.x, p.y];
+        return tiles[p.x, p.y];
     }
 
     public virtual void DoTurn()
@@ -32,10 +32,10 @@ public  class Room : MonoBehaviour
     }
 	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
     {
-        Pos = _Pos;
-        Size = _Size;
-        transform.localPosition = MapGenerator.instance.GetRoomPosition(Pos);
-        gameObject.name = "Room_" + Pos.x + "_" + Pos.y;
+        pos = _Pos;
+        size = _Size;
+        transform.localPosition = MapGenerator.instance.GetRoomPosition(pos);
+        gameObject.name = "Room_" + pos.x + "_" + pos.y;
 
         tileParent = transform.Find("Tiles");
 
@@ -45,14 +45,14 @@ public  class Room : MonoBehaviour
 
     protected virtual void SetTiles()
     {
-        Tiles = new TheTile[Size.x,Size.y];
-        for (int i = 0; i <Size.x; i++)
+		tiles = new Tile[size.x,size.y];
+        for (int i = 0; i <size.x; i++)
         {
-            for(int j=0; j<Size.y; j++)
+            for(int j=0; j<size.y; j++)
             {
-              TheTile tempTile = Instantiate(Resources.Load("Tile/default") as GameObject, tileParent).GetComponent<TheTile>();
-              tempTile.SetTile(new Vector2Int(i, j));
-                Tiles[i, j] = tempTile;
+				Tile tempTile = Instantiate(Resources.Load("Tile/default") as GameObject, tileParent).GetComponent<Tile>();
+              	tempTile.SetTile(new Vector2Int(i, j));
+                tiles[i, j] = tempTile;
             }
         }
         GenerateGraph();
@@ -62,25 +62,25 @@ public  class Room : MonoBehaviour
     /// </summary>
     protected void GenerateGraph()
     {
-        for (int x = 0; x < Size.x; x++)
+        for (int x = 0; x < size.x; x++)
         {
-            for (int y = 0; y < Size.y; y++)
+            for (int y = 0; y < size.y; y++)
             {
                 if (x > 0)
                 {
-                    Tiles[x, y].neighbours.Add(Tiles[x - 1, y]);
+                    tiles[x, y].neighbours.Add(tiles[x - 1, y]);
                 }
-                if (x < Size.x - 1)
+                if (x < size.x - 1)
                 {
-                    Tiles[x, y].neighbours.Add(Tiles[x + 1, y]);
+                    tiles[x, y].neighbours.Add(tiles[x + 1, y]);
                 }
                 if (y > 0)
                 {
-                    Tiles[x, y].neighbours.Add(Tiles[x, y - 1]);
+                    tiles[x, y].neighbours.Add(tiles[x, y - 1]);
                 }
-                if (y < Size.y - 1)
+                if (y < size.y - 1)
                 {
-                    Tiles[x, y].neighbours.Add(Tiles[x, y + 1]);
+                    tiles[x, y].neighbours.Add(tiles[x, y + 1]);
                 }
             }
         }
@@ -88,11 +88,11 @@ public  class Room : MonoBehaviour
 
     public void MakeWall()
     {
-        for (int i = 0; i < Size.x; i++)
+        for (int i = 0; i < size.x; i++)
         {
-            for (int j = 0; j < Size.y; j++)
+            for (int j = 0; j < size.y; j++)
             {
-                if (i == 0 || j == 0 || j == Size.y - 1 || i == Size.x - 1)
+                if (i == 0 || j == 0 || j == size.y - 1 || i == size.x - 1)
                 {
                     OnTileObject tempWall = Instantiate(Resources.Load("Structure/wall") as GameObject, transform).GetComponent<OnTileObject>();
                     tempWall.SetRoom(this, new Vector2Int(i, j));
@@ -107,25 +107,25 @@ public  class Room : MonoBehaviour
         {
            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(northRoom);
-            Tiles[Size.x / 2, Size.y - 1].TileInfo = temp;
+            tiles[size.x / 2, size.y - 1].OffTileObj = temp;
         }
         if (rightRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(rightRoom);
-            Tiles[Size.x - 1, Size.y / 2].TileInfo = temp;
+            tiles[size.x - 1, size.y / 2].OffTileObj = temp;
         }
         if (southRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(southRoom);
-            Tiles[Size.x / 2, 0].TileInfo = temp;
+            tiles[size.x / 2, 0].OffTileObj = temp;
         }
         if (leftRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(leftRoom);
-            Tiles[0, Size.y / 2].TileInfo = temp;
+            tiles[0, size.y / 2].OffTileObj = temp;
         }
         OpenDoors();
     }
@@ -139,19 +139,19 @@ public  class Room : MonoBehaviour
     {
         if (northRoom)
         { 
-            Tiles[Size.x / 2, Size.y - 1].onTile.DestroyThis();
+            tiles[size.x / 2, size.y - 1].OnTileObj.DestroyThis();
         }
         if (rightRoom)
         {
-            Tiles[Size.x - 1, Size.y / 2].onTile.DestroyThis();
+            tiles[size.x - 1, size.y / 2].OnTileObj.DestroyThis();
         }
         if (southRoom)
         {
-            Tiles[Size.x / 2, 0].onTile.DestroyThis();
+            tiles[size.x / 2, 0].OnTileObj.DestroyThis();
         }
         if (leftRoom)
         {
-            Tiles[0, Size.y / 2].onTile.DestroyThis();
+            tiles[0, size.y / 2].OnTileObj.DestroyThis();
         }
     }
 }

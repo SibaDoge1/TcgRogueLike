@@ -4,33 +4,30 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     public GameManager instance;
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(this);
-            Debug.LogError("SingleTone Error");
-        }
-    }
+    private void Awake(){
+		if (instance == null) {
+			instance = this;
+		} else {
+			Destroy (this);
+			Debug.LogError ("SingleTone Error");
+		}
+	}
+
+	private void Start() {	//Start of Everything
+		currentFloor = MapGenerator.instance.GetNewMap(0);
+
+		//Locate Player
+		//Player Init
+
+		//Turn loop
+	}
 
 
     private Map currentFloor;
-
-    private void Start()    //Start of Everything
-    {
-        currentFloor = MapGenerator.instance.GetNewMap(0);
-
-        //Locate Player
-        //Player Init
-
-        //Turn loop
-
-
-    }
+	public Room GetCurrentRoom(){
+		return currentFloor.CurrentRoom;
+	}
+    
 
 
     public void OnEndPlayerTurn()

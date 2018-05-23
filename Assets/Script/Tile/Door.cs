@@ -16,7 +16,7 @@ public class Door : OffTile {
     }
     public override bool IsStandAble(OnTileObject ot)
     {
-        if (thisTile.onTile)
+        if (thisTile.OnTileObj)
         {
             return false;
         }
