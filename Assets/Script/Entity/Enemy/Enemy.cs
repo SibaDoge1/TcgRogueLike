@@ -8,7 +8,7 @@ public abstract class Enemy : Character,ITurnAble {
     {
         EnterEvent();
     }
-    public abstract void DoAct(int turn);
+    public abstract void DoAct();
     public void EnterEvent()
     {
         currentRoom.TurnalbeList.Add(this);

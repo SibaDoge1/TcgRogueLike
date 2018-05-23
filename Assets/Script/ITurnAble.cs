@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface ITurnAble  {
 
-    void DoAct(int turn = 0);
+    void DoAct();
     void EnterEvent();
 }

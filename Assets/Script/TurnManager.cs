@@ -28,7 +28,7 @@ public class TurnManager : MonoBehaviour {
 
     public void MoveNextTurn()
     {
-        currentRoom.DoTurn(currentTurn);
+        currentRoom.DoTurn();
         currentTurn++;
     }
 }

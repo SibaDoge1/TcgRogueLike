@@ -11,6 +11,23 @@ public class MapGenerator : MonoBehaviour
         instance = this;
     }
 
+
+
+    public Map GetNewMap(int seed)
+    {
+        //Room Gen
+
+        //Room Reference Connect;
+
+        //Set Start Room;
+        Room startRoom = GetComponent<Room>();
+
+        Map result = new Map(startRoom);
+        return result;
+    }
+
+
+
     public Vector2Int mapSize;
     public int roomNum;
     public  Vector2Int roomOffset;
@@ -29,7 +46,7 @@ public class MapGenerator : MonoBehaviour
     List<Room> exploreRooms = new List<Room>();
     void Start()
     {       
-        SetMap();
+        //SetMap();
     }
 
     void SetMap()

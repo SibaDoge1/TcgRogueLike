@@ -55,7 +55,6 @@ MonoBehaviour:
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
-  Hp: 0
 --- !u!212 &212573733172671460
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -90,7 +89,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300322, guid: d164313d54665cb43bdb0bf2ab7cba6e, type: 3}
+  m_Sprite: {fileID: 21300478, guid: d164313d54665cb43bdb0bf2ab7cba6e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

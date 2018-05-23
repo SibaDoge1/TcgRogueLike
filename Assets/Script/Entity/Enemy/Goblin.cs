@@ -9,7 +9,7 @@ public class Goblin : Enemy {
         base.Start();
         fullHp = 5; currentHp = 5;
     }
-    public override void DoAct(int turn)
+    public override void DoAct()
     {
         Debug.Log("ACT");
         if(TileUtils.AI_SquareFind(currentTile,1))
