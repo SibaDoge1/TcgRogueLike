@@ -21,10 +21,11 @@ public static class TileUtils
 
         for(int i=1; i<=radius; i++)
         {
-            crossList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x,y+1)));
-            crossList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x, y - 1)));
-            crossList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x +1, y)));
-            crossList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x -1, y)));
+			//TODO : Array out of bound Check
+			crossList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x, y + 1)));
+			crossList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x, y - 1)));
+			crossList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x + 1, y)));
+			crossList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x - 1, y)));
         }
         return crossList;
     }
@@ -42,14 +43,14 @@ public static class TileUtils
             {
                 if(j==0)
                 {
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x, y - i)));
+					circleList.Add (GameManager.instance.GetCurrentRoom().GetTile (new Vector2Int (x, y - i)));
                     
                 }
                 else
                 {
                     
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x - j, y - i)));
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x + j, y - i)));
+					circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - j, y - i)));
+					circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + j, y - i)));
                 }
             }
         }
@@ -62,12 +63,12 @@ public static class TileUtils
             {
                 if(j==0)
                 {
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x, y + i)));
+					circleList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x, y + i)));
                 }
                 else
                 {
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x - j, y + i)));
-                    circleList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x + j, y + i)));
+					circleList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x - j, y + i)));
+					circleList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x + j, y + i)));
                 }
             }
         }
@@ -85,7 +86,7 @@ public static class TileUtils
         {
             for(int j= -radius; j<=radius;j++)
             {
-                squareList.Add(TurnManager.instance.currentRoom.GetTile(new Vector2Int(x +i, y+j)));
+				squareList.Add (GameManager.instance.GetCurrentRoom ().GetTile (new Vector2Int (x + i, y + j)));
             }
         }
         squareList.Remove(center);

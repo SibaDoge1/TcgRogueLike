@@ -22,8 +22,6 @@ public class Player : Character
     //스폰되듯이 이동
     public void SpawnToRoom(Room _room)
     {
-        TurnManager.instance.currentRoom = _room;
-
         if (currentRoom!=null)
         currentTile.OnTileObj = null;
 
@@ -34,8 +32,6 @@ public class Player : Character
     //문을 통해서 이동
     public void EnterRoom(Room _room)
     {
-        TurnManager.instance.currentRoom = _room;
-
         Vector2Int temp;
         bool isFlipped=false;
 

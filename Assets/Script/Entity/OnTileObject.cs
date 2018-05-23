@@ -65,7 +65,7 @@ public abstract class OnTileObject : MonoBehaviour {
     {
         if (!currentRoom.GetTile(_pos).IsStandAble(this))
         {
-			//TODO consider return bool value (Is Move Success?) 
+			//TODO : consider return bool value (Is Move Success?) 
             return;
         }
 
