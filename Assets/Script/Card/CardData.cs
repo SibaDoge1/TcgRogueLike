@@ -3,12 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardCategory
+
+
+
+public abstract class CardData
 {
-    PASSI,//패시브
-    DISPOSE,//일회성
-    PERMAN//영구성
+    protected string imageInfo;
+    public string ImageInfo
+    {
+        get { return imageInfo; }
+    }
+
+    protected string cardInfo;
+    public string CardInfo
+    {
+        get { return cardInfo; }
+    }
 }
+
+public abstract class PassiveCard : CardData
+{
+
+}
+#region ActiveCards
 public enum CardType
 {
     ATTACK,
@@ -21,14 +38,8 @@ public enum CardAttribute
     WATER,
     LEAF
 }
-
-public abstract class CardData
+public abstract class ActiveCard : CardData
 {
-    protected CardCategory category;
-    public CardCategory Category
-    {
-        get { return category; }
-    }
     protected CardType type;
     public CardType Type
     {
@@ -41,45 +52,50 @@ public abstract class CardData
         set { attribute = value; }
     }
 
-    protected string imageInfo;
-    public string ImageInfo
-    {
-        get { return imageInfo; }
-    }
-
-    protected string cardInfo;
-    public string CardInfo
-    {
-        get { return cardInfo; }
-    }
-
-    protected int atk;
     /// <summary>
     /// 효과 발동
     /// </summary>
     public abstract void ActiveThis();
-}
 
-
-public class Card0000 : CardData
-{
-    public Card0000()
+    /// <summary>
+    /// 생성자 파라미터 = 속성
+    /// </summary>
+    public ActiveCard(CardAttribute atr = CardAttribute.NONE)
     {
-        category = CardCategory.PERMAN;
-        type = CardType.ATTACK;         
-    }
-    public override void ActiveThis()
-    {
+        attribute = atr;
     }
 }
-public class Card0001 : CardData
+public class Card_Sword : ActiveCard
 {
-    public Card0001(Player player)
+    int range = 3;
+    int damage = 5;
+    public Card_Sword(CardAttribute atr) : base(atr)
     {
-        category = CardCategory.PERMAN;
         type = CardType.ATTACK;
+        //Set ImageInfo
+        cardInfo = range + "의 범위에 적에게+" + damage + "의 데미지를 줍니다.";
     }
     public override void ActiveThis()
     {
+        //todo : 플레이어 근처 오토타겟팅 어택 구현
     }
 }
+public class Card_Bandage : ActiveCard
+{
+    int heal = 3;
+    Player player;
+    public Card_Bandage(CardAttribute atr,Player _player) : base(atr)
+    {
+        type = CardType.ATTACK;
+        player = _player;
+
+        cardInfo = "자신의 hp를" + heal + "만큼 회복합니다.";
+        //Set ImageInfo
+    }
+
+    public override void ActiveThis()
+    {
+        player.currentHp += heal;
+    }
+}
+#endregion

@@ -29,13 +29,13 @@ public class PathFinding : MonoBehaviour
         }
 
         Vector2 temp = source.pos - target.pos;
-        if (temp == Vector2.right || temp == Vector2.left)
+        if (temp.magnitude >1)
         {
-            return 1 - 0.000001f;
+            return 1;
         }
         else
         {
-            return 1f;
+            return 1 - 0.000001f;
         }
 
     }
@@ -50,12 +50,15 @@ public class PathFinding : MonoBehaviour
     {
         return Mathf.Abs((a - b).x) + Mathf.Abs((a - b).y);
     }
-
     /// <summary>
     /// pathFinding Using A*
     /// </summary>
-     public void GeneratePathTo(OnTileObject obje,TheTile targetTile)
+     public void GeneratePathTo(OnTileObject obje,TheTile targetTile,int spatium =1)
     {
+        if(targetTile == obje.currentTile)
+        {
+            return;
+        }
         OnTileObject selectedUnit = obje;
         Dictionary<TheTile, TheTile> prev = new Dictionary<TheTile, TheTile>();
         Dictionary<TheTile, float> distance = new Dictionary<TheTile, float>();
@@ -144,7 +147,8 @@ public class PathFinding : MonoBehaviour
         currentPath.Reverse();
 
 
-
+            while(spatium>0)
+            {
             if (currentPath == null)
                 return;
             if (currentPath[1].onTile != null)
@@ -154,11 +158,13 @@ public class PathFinding : MonoBehaviour
 
             selectedUnit.MoveTo(new Vector2Int(currentPath[1].pos.x, currentPath[1].pos.y));
             currentPath.RemoveAt(0);
-
+            spatium--;
             if (currentPath.Count == 1)
             {
                 currentPath = null;
             }
+        }
+ 
 
 
     }
@@ -169,8 +175,8 @@ public class PathFinding : MonoBehaviour
 
 
 
-    #region AI Path Block
-     float costToEnterTileForAPB(TheTile source, TheTile target)
+    #region Path Block
+     float costToEnterTileForPB(TheTile source, TheTile target)
     {
         if (target.onTile is Structure)
         {
@@ -178,7 +184,7 @@ public class PathFinding : MonoBehaviour
         }
 
         Vector2 temp = source.pos - target.pos;
-        if (temp == Vector2.right || temp == Vector2.left)
+        if (temp.magnitude > 1)
         {
             return 1;
         }
@@ -234,10 +240,10 @@ public class PathFinding : MonoBehaviour
             {
                 if (v == null)
                     continue;
-                if (closedList.Contains(v) || costToEnterTileForAPB(current, v) == Mathf.Infinity)
+                if (closedList.Contains(v) || costToEnterTileForPB(current, v) == Mathf.Infinity)
                     continue;
                 //기본 pathFinding과 다른부분!!
-                float alt = distance[current] + costToEnterTileForAPB(current, v) + calculateVector(v.pos, target.pos);
+                float alt = distance[current] + costToEnterTileForPB(current, v) + calculateVector(v.pos, target.pos);
                 if (alt < distance[v] || !openList.Contains(v))
                 {
                     distance[v] = alt;

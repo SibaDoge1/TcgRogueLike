@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 public class TheTile :MonoBehaviour
 {
@@ -23,8 +23,12 @@ public class TheTile :MonoBehaviour
         }
     }
     private OffTile _OffTile;
-    public OffTile TileInfo
+    public OffTile OffTile
     {
+        get
+        {
+            return _OffTile;
+        }
         set
         {
             if (_OffTile != null)

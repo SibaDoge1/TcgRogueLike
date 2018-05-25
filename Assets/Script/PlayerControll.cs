@@ -4,33 +4,28 @@ using UnityEngine;
 
 public class PlayerControll : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    public static PlayerControll instance;
+    public void Awake()
+    {
+        instance = this;
+    }
+    // Use this for initialization
+    void Start () {
         Input.multiTouchEnabled = false;
 	}
 	
-	// Update is called once per frame
-	void Update ()
+    public void PlayerMove(TheTile pos)
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        StartCoroutine(PlayerMoveRoutine(pos));    
+    }
+    IEnumerator PlayerMoveRoutine(TheTile pos)
+    {
+        Room cur = Player.instance.currentRoom;
+        while(pos != Player.instance.currentTile && cur == Player.instance.currentRoom)
         {
-            Player.instance.MoveUp();
+            PathFinding.instance.GeneratePathTo(Player.instance, pos);
             TurnManager.instance.MoveNextTurn();
-        }
-        else if(Input.GetKeyDown(KeyCode.D))
-        {
-            Player.instance.MoveRight();
-            TurnManager.instance.MoveNextTurn();
-        }
-        else if(Input.GetKeyDown(KeyCode.S))
-        {
-            Player.instance.MoveDown();
-            TurnManager.instance.MoveNextTurn();
-        }
-        else if(Input.GetKeyDown(KeyCode.A))
-        {
-            Player.instance.MoveLeft();
-            TurnManager.instance.MoveNextTurn();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

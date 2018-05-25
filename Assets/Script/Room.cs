@@ -82,6 +82,22 @@ public  class Room : MonoBehaviour
                 {
                     Tiles[x, y].neighbours.Add(Tiles[x, y + 1]);
                 }
+                if(x<Size.x-1 && y<Size.y-1)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x+1, y + 1]);
+                }
+                if (x < Size.x - 1 && y > 0)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x + 1, y - 1]);
+                }
+                if (x > 0  && y > 0)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x - 1, y - 1]);
+                }
+                if (x > 0 && y < Size.y-1)
+                {
+                    Tiles[x, y].neighbours.Add(Tiles[x - 1, y + 1]);
+                }
             }
         }
     }
@@ -107,25 +123,25 @@ public  class Room : MonoBehaviour
         {
            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(northRoom);
-            Tiles[Size.x / 2, Size.y - 1].TileInfo = temp;
+            Tiles[Size.x / 2, Size.y - 1].OffTile = temp;
         }
         if (rightRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(rightRoom);
-            Tiles[Size.x - 1, Size.y / 2].TileInfo = temp;
+            Tiles[Size.x - 1, Size.y / 2].OffTile = temp;
         }
         if (southRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(southRoom);
-            Tiles[Size.x / 2, 0].TileInfo = temp;
+            Tiles[Size.x / 2, 0].OffTile = temp;
         }
         if (leftRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(leftRoom);
-            Tiles[0, Size.y / 2].TileInfo = temp;
+            Tiles[0, Size.y / 2].OffTile = temp;
         }
         OpenDoors();
     }
