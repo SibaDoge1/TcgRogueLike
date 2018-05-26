@@ -53,12 +53,9 @@ public class PathFinding : MonoBehaviour
     /// <summary>
     /// pathFinding Using A*
     /// </summary>
-     public void GeneratePathTo(OnTileObject obje,TheTile targetTile,int spatium =1)
+     public List<TheTile> GeneratePath(OnTileObject obje,TheTile targetTile)
     {
-        if(targetTile == obje.currentTile)
-        {
-            return;
-        }
+
         OnTileObject selectedUnit = obje;
         Dictionary<TheTile, TheTile> prev = new Dictionary<TheTile, TheTile>();
         Dictionary<TheTile, float> distance = new Dictionary<TheTile, float>();
@@ -71,6 +68,12 @@ public class PathFinding : MonoBehaviour
 
         target = _targetTile;
 
+        if (targetTile == obje.currentTile)
+        {
+            List<TheTile> temp = new List<TheTile>();
+            temp.Add(source);
+            return temp;
+        }
         //source.distance = 0;
         prev[source] = null;
         prev[target] = null;
@@ -126,7 +129,7 @@ public class PathFinding : MonoBehaviour
         ///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
         if (prev[target] == null)
         {
-        PathBlocked(obje,targetTile);
+        return PathBlocked(obje,targetTile);
 
         }
          
@@ -145,29 +148,13 @@ public class PathFinding : MonoBehaviour
         // So we need to invert it!
 
         currentPath.Reverse();
-
-
-            while(spatium>0)
-            {
-            if (currentPath == null)
-                return;
-            if (currentPath[1].onTile != null)
-            {
-                return;
-            }
-
-            selectedUnit.MoveTo(new Vector2Int(currentPath[1].pos.x, currentPath[1].pos.y));
-            currentPath.RemoveAt(0);
-            spatium--;
-            if (currentPath.Count == 1)
-            {
-                currentPath = null;
-            }
+        currentPath.Remove(source);
+        return currentPath;
         }
  
 
 
-    }
+    
 
    
 
@@ -195,9 +182,9 @@ public class PathFinding : MonoBehaviour
     }
 
     /// <summary>
-    /// 길 막혔어도 가까이라도 가게 해주는 함수입니다. 
+    /// 길 막혔다면 캐릭터 무시하고 계산하는 함수입니다. 
     /// </summary>
-    public void PathBlocked(OnTileObject obje, TheTile targetTile)
+    public List<TheTile> PathBlocked(OnTileObject obje, TheTile targetTile)
     {
         OnTileObject selectedUnit = obje;
         Dictionary<TheTile, TheTile> prev = new Dictionary<TheTile, TheTile>();
@@ -257,7 +244,9 @@ public class PathFinding : MonoBehaviour
         ///진짜 아예 길이없넹..
         if (prev[target] == null)
         {
-            return;
+            List<TheTile> temp = new List<TheTile>();
+            temp.Add(source);
+            return temp;
         }
 
 
@@ -275,21 +264,8 @@ public class PathFinding : MonoBehaviour
         // So we need to invert it!
 
         currentPath.Reverse();
-
-  
-            if (currentPath == null)
-                return;
-            if (currentPath[1].onTile != null)
-                return;
-
-            selectedUnit.MoveTo(currentPath[1].pos);
-            currentPath.RemoveAt(0);
-
-
-            if (currentPath.Count == 1)
-            {
-                currentPath = null;
-            }
+        currentPath.Remove(source);
+        return currentPath;
         }
 
     }

@@ -17,7 +17,7 @@ public class Goblin : Enemy {
             Player.instance.currentHp -= 1;
         }
         else
-        PathFinding.instance.GeneratePathTo(this, Player.instance.currentTile);
+       MoveTo( PathFinding.instance.GeneratePath(this, Player.instance.currentTile)[0].pos) ;
     }
     public override void SetRoom(Room room, Vector2Int _pos)
     {
