@@ -4,6 +4,7 @@ using UnityEngine;
 using Arch;
 
 public enum CardEffectType{Slash, Blood, Heal, Hit}
+public enum BulletType{Stone, Arrow}
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
 	void Awake(){
@@ -12,9 +13,13 @@ public class EffectDelegate : MonoBehaviour {
 
 
 	[NamedArrayAttribute (new string[]{
-		"Slash","Blood", "Heal", "Hit"
+		"Slash", "Blood", "Heal", "Hit"
 	})]
 	public GameObject[] effectPrefabs;
+	[NamedArrayAttribute (new string[]{
+		"Stone", "Arrow"
+	})]
+	public GameObject[] bulletPrefabs;
 	public GameObject textEffectPrefab;
 
 
@@ -50,5 +55,9 @@ public class EffectDelegate : MonoBehaviour {
 		Instantiate (
 			textEffectPrefab, targetTile.transform.position, Quaternion.identity).GetComponent<EffectText> ()
 			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+	}
+
+	public void MadeBullet(BulletType bType, Vector3 startPos, Transform target){
+		(Instantiate (bulletPrefabs [(int)bType], startPos, Quaternion.identity)as GameObject).GetComponent<Bullet> ().Shoot (target);
 	}
 }

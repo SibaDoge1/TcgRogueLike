@@ -4,22 +4,29 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour {
 
-	public virtual void Shoot(OnTileObject target){
+	private Vector3 recentTargetPos;
+	public virtual void Shoot(Transform target){
+		recentTargetPos = target.position;
 		StartCoroutine (ShootingRoutine (target));
 	}
 
 
-	private IEnumerator ShootingRoutine(OnTileObject target){
+	private IEnumerator ShootingRoutine(Transform target){
 		float timer = 0;
 		Vector3 originPos = transform.position;
 		while (true) {
-			timer += Time.deltaTime * 5f;
+			timer += Time.deltaTime * 10f;
 			if (timer > 1) {
 				break;
 			}
-			transform.position = Vector3.Lerp (originPos, target.transform.position, timer);
+			transform.position = Vector3.Lerp (originPos, target.position, timer);
 			yield return null;
 		}
-		EffectDelegate.instance.MadeEffect (CardEffectType.Hit, target);
+		if (target == null) {
+			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, recentTargetPos);
+		} else {
+			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, target);
+		}
+		Destroy (gameObject);
 	}
 }

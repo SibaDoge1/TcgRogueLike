@@ -31,4 +31,15 @@ public class Goblin : Enemy {
         base.SetRoom(room, _pos);
         gameObject.name = "Goblin" + _pos;
     }
+
+	protected override void OnDieCallback (){
+		//TODO : DROP CARD TEMP
+		if (UnityEngine.Random.Range (0, 3) == 0) {
+			PlayerControl.instance.AddCard (new CardData_Stone (5));
+		} else if (UnityEngine.Random.Range (0, 10) == 0) {
+			PlayerControl.instance.AddCard (new CardData_Portion (6));
+		}
+
+		base.OnDieCallback ();
+	}
 }

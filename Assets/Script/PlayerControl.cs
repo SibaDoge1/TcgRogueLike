@@ -67,6 +67,12 @@ public class PlayerControl : MonoBehaviour {
 		}
 	}
 
+	public void AddCard(CardData cData){
+		if (hand.CurrentHandCount < Config.HandMax) {
+			hand.AddHand (cData.Instantiate ());
+		}
+	}
+
 	public void ReLoadDeck(){
 		deck.Load ();
 	}

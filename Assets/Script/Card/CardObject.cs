@@ -57,8 +57,8 @@ public class CardObject : MonoBehaviour {
 		data.CancelPreview ();
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && InputModule.IsPlayerTurn) {
-			ActiveSelf ();
 			hand.RemoveCard (this);
+			ActiveSelf ();
 			Destroy (gameObject);
 		} else {
 			rendererParent.localScale = Vector3.one;

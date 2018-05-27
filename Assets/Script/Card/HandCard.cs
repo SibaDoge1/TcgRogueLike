@@ -26,7 +26,15 @@ public class HandCard : MonoBehaviour {
 
 	//Add from Others (different animation)
 	public void AddHand(CardObject cardObject){
-		
+		if(cardObject == null){
+			return;
+		}
+		cardObject.SetParent (this);
+		cardObject.transform.localPosition = Vector3.zero;
+		cardObject.transform.localScale = Vector3.one;
+
+		hand.Add (cardObject);
+		SetCardPosition ();
 	}
 
 	public void CheckAvailable(){
