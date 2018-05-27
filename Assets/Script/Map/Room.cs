@@ -10,7 +10,7 @@ public class Room : MonoBehaviour
     public Vector2Int size;
 	public Room northRoom, southRoom, leftRoom, rightRoom;//Neighbours
 	Tile[,] tiles;
-    public List<ITurnAble> TurnalbeList = new List<ITurnAble>();
+	public List<Enemy> TurnalbeList = new List<Enemy>();
     public Player player;
 
     Transform tileParent;
@@ -22,14 +22,7 @@ public class Room : MonoBehaviour
     {
         return tiles[p.x, p.y];
     }
-
-    public virtual void DoTurn()
-    {
-        foreach(ITurnAble it in TurnalbeList)
-        {
-            it.DoAct();
-        }
-    }
+		
 	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
     {
         pos = _Pos;

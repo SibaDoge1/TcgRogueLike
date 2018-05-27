@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public class PlayerControll : MonoBehaviour {
+public class PlayerControl : MonoBehaviour {
 
-    public static PlayerControll instance;
+    public static PlayerControl instance;
     public void Awake()
     {
         instance = this;
@@ -20,8 +20,9 @@ public class PlayerControll : MonoBehaviour {
 	public void PlayerMove(Tile pos)
     { 
         if(InputOk)
-        StartCoroutine(PlayerMoveRoutine(pos));    
+        StartCoroutine(PlayerMoveRoutine(pos));
     }
+
 	IEnumerator PlayerMoveRoutine(Tile pos)
     {
         InputOk = false;

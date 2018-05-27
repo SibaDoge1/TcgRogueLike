@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyControl : MonoBehaviour {
+	public static EnemyControl instance;
+	void Awake(){
+		instance = this;
+	}
 
-	// Use this for initialization
-	void Start () {
+	private List<Enemy> enemies;
+	public void InitEnemy(Room room){
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	public void EnemyTurn(){
+		
+	}
+
+	IEnumerator EnemyTurnRoutine(){
 		
 	}
 }

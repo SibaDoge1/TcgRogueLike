@@ -2,15 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Enemy : Character,ITurnAble {
+public abstract class Enemy : Character {
 
-    protected virtual void Start()
-    {
-        EnterEvent();
-    }
-    public abstract void DoAct();
-    public void EnterEvent()
-    {
-        currentRoom.TurnalbeList.Add(this);
-    }
+  
 }
