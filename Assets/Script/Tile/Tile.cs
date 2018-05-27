@@ -5,6 +5,10 @@ using UnityEngine;
 namespace Arch{
 	public class Tile :MonoBehaviour
 	{
+		void Awake(){
+			sprite = GetComponent<SpriteRenderer> ();
+		}
+
 	    #region variables
 		public List<Tile> neighbours;
 	    private SpriteRenderer sprite;

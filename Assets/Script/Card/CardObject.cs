@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public delegate void LocateCallback();
 public class CardObject : MonoBehaviour {
+	private HandCard hand;
+
 	private void Awake(){
 		rendererParent = transform.Find ("Renderer");
 		spriteRenderer = rendererParent.Find("Sprite").GetComponent<SpriteRenderer> ();
@@ -26,9 +28,9 @@ public class CardObject : MonoBehaviour {
 		txt_name.text = data.CardName;
 		txt_explain.text = data.CardExplain;
 	}
-
-	public void Active(){
-		data.CardActive ();
+	public void SetParent(HandCard hand_){
+		hand = hand_;
+		transform.parent = hand.transform;
 	}
 
 	public bool IsAvailable(){
@@ -55,8 +57,9 @@ public class CardObject : MonoBehaviour {
 		data.CancelPreview ();
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold) {
-			//TODO : Active Card
-			Debug.Log("Active!");
+			ActiveSelf ();
+			hand.RemoveCard (this);
+			Destroy (gameObject);
 		} else {
 			rendererParent.localScale = Vector3.one;
 			rendererParent.localPosition = Vector3.zero;
@@ -75,7 +78,6 @@ public class CardObject : MonoBehaviour {
 		} else {
 			rendererParent.transform.localScale = new Vector3 (2.5f, 2.5f, 1f);
 			Vector3 temp = originPos;
-			Debug.Log(temp);
 			temp.y = 0;
 			temp.z = -5f;
 			rendererParent.transform.localPosition = temp - transform.localPosition;
@@ -114,6 +116,16 @@ public class CardObject : MonoBehaviour {
 	}
 
 	#region Private
+	private void ActiveSelf(){
+		if (InputModule.IsPlayerTurn) {
+			InputModule.IsPlayerTurn = false;
+			data.CardActive ();
+			if (data.IsConsumeTurn ()) {
+				GameManager.instance.OnEndPlayerTurn ();
+			}
+		}
+	}
+
 	private Coroutine locateRoutine;
 	private IEnumerator LocateRoutine(Vector3 targetPosition, Quaternion targetRotation, LocateCallback callBack){
 

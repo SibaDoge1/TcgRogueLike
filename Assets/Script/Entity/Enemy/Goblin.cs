@@ -8,7 +8,7 @@ public class Goblin : Enemy {
     protected override void Start()
     {
         base.Start();
-        fullHp = 5; currentHp = 5;
+        fullHp = 10; currentHp = 10;
         damage = 1;
         range = 1;
     }
@@ -16,7 +16,7 @@ public class Goblin : Enemy {
 
     public override void DoAct()
     {
-		if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile ().pos) <= range)
+		if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
             Debug.Log("Attack");
             currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;

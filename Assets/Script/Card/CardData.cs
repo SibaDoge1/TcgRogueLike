@@ -55,4 +55,8 @@ public class CardData {
 	}
 	public virtual void CancelPreview(){
 	}
+
+	public virtual bool IsConsumeTurn(){
+		return true;
+	}
 }

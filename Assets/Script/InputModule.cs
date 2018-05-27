@@ -9,13 +9,13 @@ public class InputModule : MonoBehaviour {
 	void Awake(){
 		instance = this;
 	}
-	private static bool inputOK = true;
-	public static bool InputOK {
+	private static bool isPlayerTurn = true;
+	public static bool IsPlayerTurn {
 		get {
-			return inputOK;
+			return isPlayerTurn;
 		}
 		set {
-			inputOK = value;
+			isPlayerTurn = value;
 		}
 	}
 
@@ -25,9 +25,12 @@ public class InputModule : MonoBehaviour {
 
 	IEnumerator TileSelectRoutine(){
 		while (true) {
-			//TODO ANDROID TOUCH
-			if (inputOK) {
-				if (Input.GetMouseButtonDown (0) && !EventSystem.current.IsPointerOverGameObject ()){
+			//TODO : ANDROID TOUCH
+			if (isPlayerTurn) {
+				if (Input.GetMouseButtonDown (0) &&
+					!EventSystem.current.IsPointerOverGameObject () &&
+					!Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), new Vector3 (0, 0, 1), 10f)
+				){
 					Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
 						        Camera.main.ScreenToWorldPoint (Input.mousePosition)
 					        );
@@ -36,7 +39,7 @@ public class InputModule : MonoBehaviour {
 
                         if (PlayerControl.instance.PlayerMoveCommand(t))
                         {
-                            InputModule.InputOK = false;
+                            InputModule.IsPlayerTurn = false;
                         }
 
                     }

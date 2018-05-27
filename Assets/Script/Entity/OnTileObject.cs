@@ -62,7 +62,7 @@ public abstract class OnTileObject : MonoBehaviour {
 	}
 	
 	public virtual void SetRoom(Room room,Vector2Int _pos)
-    {
+    {		
         currentRoom = room;
         this.transform.parent = room.transform;
 		this.Teleport(_pos);

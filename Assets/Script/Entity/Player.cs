@@ -7,7 +7,7 @@ public class Player : Character
 {
     private void Start()
     {
-        fullHp = 6; currentHp = 6;
+        fullHp = 10; currentHp = 10;
     }
 	public override bool Teleport(Vector2Int _pos)
 	{
@@ -77,7 +77,7 @@ public class Player : Character
         set
         {
             base.currentHp = value;
-            UIManager.instance.HpUpdate();
+			UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
     public override int fullHp
@@ -90,7 +90,7 @@ public class Player : Character
         set
         {
             base.fullHp = value;
-            UIManager.instance.HpUpdate();
+			UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
 

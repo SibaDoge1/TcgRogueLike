@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HandCard : MonoBehaviour {
+	public int CurrentHandCount{
+		get{ return hand.Count; }
+	}
 	public Transform drawStartPosition;
 	public Transform cardFoldPosition;
 	private List<CardObject> hand = new List<CardObject> ();
@@ -10,7 +13,7 @@ public class HandCard : MonoBehaviour {
 
 	//Add from Deck
 	public void DrawHand(CardObject cardObject){
-		cardObject.transform.parent = transform;
+		cardObject.SetParent (this);
 		cardObject.transform.position = drawStartPosition.position;
 		cardObject.transform.localScale = Vector3.one;
 
@@ -62,6 +65,11 @@ public class HandCard : MonoBehaviour {
 		}else{
 			HideAll ();
 		}
+	}
+
+	public void RemoveCard(CardObject co){
+		hand.Remove (co);
+		SetCardPosition ();
 	}
 
 	#region Private

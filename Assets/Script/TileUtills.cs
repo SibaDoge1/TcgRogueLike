@@ -21,12 +21,16 @@ public static class TileUtils
 
         for (int i = 1; i <= radius; i++)
         {
-            //TODO : Array out of bound Check
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + 1)));
+			crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + 1)));
             crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y - 1)));
             crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + 1, y)));
             crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - 1, y)));
         }
+		for (int i = crossList.Count - 1; i >= 0; i--) {
+			if (crossList [i] == null) {
+				crossList.RemoveAt (i);
+			}
+		}
         return crossList;
     }
     /// <summary>
@@ -90,6 +94,11 @@ public static class TileUtils
             }
         }
         squareList.Remove(center);
+		for (int i = squareList.Count - 1; i >= 0; i--) {
+			if (squareList [i] == null) {
+				squareList.RemoveAt (i);
+			}
+		}
 
         return squareList;
     }
@@ -158,8 +167,24 @@ public static class TileUtils
                 targets.Add(range[i].OnTileObj);
             }
         }
-        return targets[Random.Range(0,targets.Count)];
+		if (targets.Count >0)
+			return targets [Random.Range (0, targets.Count)];
+		else
+			return null;
     }
+	public static bool IsHitableAround(Tile center, int radius)
+	{
+		List<OnTileObject> targets = new List<OnTileObject>();
+		List<Tile> range = SquareRange(center, radius);
+		for (int i = 0; i < range.Count; i++)
+		{
+			if (range[i].OnTileObj && range[i].OnTileObj.IsHitable)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 
