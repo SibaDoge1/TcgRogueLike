@@ -44,3 +44,13 @@ public class CardData_BFSword : CardData_Normal
     }
 
 }
+
+public class CardData_Stone : CardData_Normal{
+	public CardData_Stone(int index) : base(index)
+	{
+		damage = 5;
+		range = 5;
+		//Set ImageInfo
+		cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
+	}
+}

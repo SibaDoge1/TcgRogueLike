@@ -40,9 +40,8 @@ public class CardData_Sword : CardData_Normal {
 		if (TileUtils.IsHitableAround (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range)) {
 			target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
 			target.currentHp -= damage;
+			EffectDelegate.instance.MadeEffect (effectType, target);
 		}
-
-		EffectDelegate.instance.MadeEffect (effectType, target);
 	}
 
 	private List<Tile> targetTiles;
