@@ -11,7 +11,15 @@ public abstract class OnTileObject : MonoBehaviour {
 
     protected int _fullHp=1;
     protected int _currentHp=1;
-    
+
+    protected bool isHitable = true;
+    public bool IsHitable
+    {
+        get
+        {
+            return isHitable;
+        }
+    }
     public virtual int fullHp
     {
         get
@@ -137,4 +145,15 @@ public abstract class OnTileObject : MonoBehaviour {
 	protected virtual void OnEndTurn(){
 		
 	}
+   /* protected virtual bool AttackThis(int dam,CardAttribute atr)
+    {
+        if(!isHitable)
+        {
+            return false;
+        }
+
+
+
+        return true;
+    }*/
 }

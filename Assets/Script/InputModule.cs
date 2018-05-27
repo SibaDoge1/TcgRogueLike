@@ -26,14 +26,20 @@ public class InputModule : MonoBehaviour {
 		while (true) {
 			//TODO ANDROID TOUCH
 			if (inputOK) {
-				if (Input.GetMouseButtonDown (0)) {
+				if (Input.GetMouseButtonDown (1)) {
 					Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
 						        Camera.main.ScreenToWorldPoint (Input.mousePosition)
 					        );
+                    if(t!=null && t.OnTileObj == null)
+                    {
 
-					if (PlayerControl.instance.PlayerMoveCommand (t)) {
-						InputModule.InputOK = false;
-					}
+                        if (PlayerControl.instance.PlayerMoveCommand(t))
+                        {
+                            InputModule.InputOK = false;
+                        }
+
+                    }
+
 				}
 			}
 			yield return null;

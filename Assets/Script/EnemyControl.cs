@@ -10,12 +10,28 @@ public class EnemyControl : MonoBehaviour {
 
 	private List<Enemy> enemies;
 	public void InitEnemy(Room room){
-		enemies = room.enemyList;
-	}
+        enemies = room.enemyList;
+    }
 
-	public void EnemyTurn(){
-		//TODO Something Enemy Action
+    public void EnemyTurn(){
+        if (enemies.Count == 0)
+        {
+            GameManager.instance.OnEndEnemyTurn();
+        }
 
-		GameManager.instance.OnEndEnemyTurn ();
-	}
+        foreach (Enemy e in enemies)
+        {
+            e.DoAct();
+        }
+    }
+    int count;
+    public void EnemyEndCallBack()
+    {
+        count++;
+        if (count>=enemies.Count)
+        {
+            count = 0;
+            GameManager.instance.OnEndEnemyTurn();
+        }
+    }
 }

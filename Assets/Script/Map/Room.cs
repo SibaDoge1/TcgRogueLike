@@ -33,15 +33,14 @@ public class Room : MonoBehaviour
 		}
 		//Enemy All Dead
 		isCleared = true;
-		//TODO OpenDoors ();
+		OpenDoors ();
 	}
 
 	public Tile WorldToTile(Vector3 worldPos){
 		Vector3 sizeTemp = new Vector3 (size.x / 2, size.y / 2, 0);
 		Vector3 p = transform.position - sizeTemp;
 		Vector3 temp = worldPos - p;
-		Debug.Log (temp);
-		return tiles[(int)temp.x,(int)temp.y];
+        return GetTile(new Vector2Int((int)temp.x, (int)temp.y));
 	}
 
 	public Tile GetPlayerTile(){
@@ -57,15 +56,23 @@ public class Room : MonoBehaviour
     }
 	public Tile GetTile(Vector2Int p)
     {
+        if (p.x >= size.x || p.y >= size.y || p.x < 0 || p.y < 0)
+            return null;
+        else
         return tiles[p.x, p.y];
     }
 
 	public void GenerateEnemy()
 	{
+        int num = Random.Range(1, 3);
 		//TODO
-		Vector2Int temp1 = new Vector2Int(Random.Range(2,8), Random.Range(2,5));
-		Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
-		temp.SetRoom(this, temp1);
+        while(num>0)
+        {
+            Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
+            Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
+            temp.SetRoom(this, temp1);
+            num--;
+        }
 	}
 	public void DisableRoom(){
 		
@@ -197,7 +204,7 @@ public class Room : MonoBehaviour
             temp.SetTargetRoom(leftRoom);
             tiles[0, size.y / 2].OffTileObj = temp;
         }
-        OpenDoors();
+
     }
 
 	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)

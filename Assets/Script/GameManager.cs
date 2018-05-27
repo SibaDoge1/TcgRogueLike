@@ -18,8 +18,9 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < 20; i++) {
 			PlayerData.deck.Add (new CardData_Sword (0));
 		}
-
+        
 		currentFloor = MapGenerator.GetNewMap(0,new Vector2Int(10,10),10);
+        currentFloor.StartRoom.OpenDoors();
 		PlayerControl.instance.InitPlayer (currentFloor.StartRoom);
 	}
 
@@ -35,7 +36,6 @@ public class GameManager : MonoBehaviour {
 	public void OnPlayerEnterNewRoom(){
 		if (currentFloor.CurrentRoom.IsCleares == false) {
 			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
-			//Close the door
 		}
 	}
 
@@ -48,7 +48,8 @@ public class GameManager : MonoBehaviour {
     {
 		if (PlayerControl.instance.GetRemainAction () <= 0) {
 			InputModule.InputOK = true;
-		} else if (PlayerControl.instance.ActionResume () == false) {
+		}
+        else if (PlayerControl.instance.ActionResume() == false) {
 			InputModule.InputOK = true;
 		}
     }
