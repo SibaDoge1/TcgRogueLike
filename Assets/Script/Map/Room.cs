@@ -234,7 +234,7 @@ public class Room : MonoBehaviour
 	{
 		pos = _Pos;
 		size = _Size;
-		transform.localPosition = new Vector3(2 * pos.x * size.x, 2 * pos.y * size.y, 0); ;
+		transform.localPosition = new Vector3(2 * pos.x * 12, 2 * pos.y * 8, 0); ;
 		gameObject.name = "Room_" + pos.x + "_" + pos.y;
 
 		tileParent = transform.Find("Tiles");

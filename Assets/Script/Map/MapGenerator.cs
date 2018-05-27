@@ -64,7 +64,6 @@ public static class MapGenerator
             Vector2Int target = tempRoom.pos+getRandomDir();
             if(CheckAvailPos(target))
             {
-                
                 Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
                 rooms[target.x, target.y] = newRoom;
                 if(currentRooms.Count == roomNum-1)

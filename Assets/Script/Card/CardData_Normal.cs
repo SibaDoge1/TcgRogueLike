@@ -33,7 +33,7 @@ public class CardData_Sword : CardData_Normal {
 		damage = 5;
 		range = 1;
 		//Set ImageInfo
-		cardExplain = range + "의 범위에 적에게+" + damage + "의 데미지를 줍니다.";
+		cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
 	}
 	public override void CardActive (){
 

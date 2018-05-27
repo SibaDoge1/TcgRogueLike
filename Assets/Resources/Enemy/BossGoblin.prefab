@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 224592655956339412}
   - component: {fileID: 223174175865009372}
   - component: {fileID: 114929228283957966}
+  - component: {fileID: 114766228213142946}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -55,7 +56,6 @@ GameObject:
   - component: {fileID: 4216279066312272}
   - component: {fileID: 212022342736250570}
   - component: {fileID: 114182135687030006}
-  - component: {fileID: 114151701238772246}
   m_Layer: 0
   m_Name: BossGoblin
   m_TagString: Untagged
@@ -94,17 +94,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114151701238772246
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1330156985467786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbea00eb77aebf848ba5c5656c45cb16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114182135687030006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -131,14 +120,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2827586, g: 1, b: 0, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300232, guid: d164313d54665cb43bdb0bf2ab7cba6e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f64e9fc4d3b915a4abfdd1b012c8d1ba, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -146,6 +135,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114766228213142946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1089677359011404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbea00eb77aebf848ba5c5656c45cb16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114903291367772776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -286,7 +286,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 10}
+  m_SizeDelta: {x: 40, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224592655956339412
 RectTransform:
@@ -324,5 +324,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 30}
-  m_SizeDelta: {x: 50, y: 10}
+  m_SizeDelta: {x: 40, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}

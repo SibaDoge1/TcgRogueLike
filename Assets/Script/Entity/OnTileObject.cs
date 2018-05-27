@@ -29,7 +29,6 @@ public abstract class OnTileObject : MonoBehaviour {
         set
         {
             _fullHp = value;
-            ontileUI.HpUpdate(fullHp, currentHp);
         }
     }
     public virtual int currentHp
@@ -49,7 +48,6 @@ public abstract class OnTileObject : MonoBehaviour {
                 _currentHp = value;
             }
 
-            ontileUI.HpUpdate(fullHp,currentHp);
             if(_currentHp<=0)
             {
                 OnDieCallback();
@@ -57,11 +55,10 @@ public abstract class OnTileObject : MonoBehaviour {
         }
     }
 
-    OnTileUI ontileUI;
-    SpriteRenderer sprite;
-	void Awake () {
+    
+    protected SpriteRenderer sprite;
+	protected virtual void  Awake () {
         sprite = GetComponent<SpriteRenderer>();
-        ontileUI = GetComponent<OnTileUI>();
 	}
 	
 	public virtual void SetRoom(Room room,Vector2Int _pos)

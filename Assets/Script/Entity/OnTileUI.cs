@@ -13,7 +13,7 @@ public class OnTileUI : MonoBehaviour {
     Color targetColor;
 
 	void Awake () {
-        fullHpUI = transform.Find("Canvas").Find("HpUI").GetComponent<Image>();
+        fullHpUI = transform.Find("HpUI").GetComponent<Image>();
         currentHpUI = fullHpUI.transform.Find("current").GetComponent<Image>();
 
         originColor = currentHpUI.color;
@@ -28,6 +28,17 @@ public class OnTileUI : MonoBehaviour {
        StopCoroutine(hpRoutine);
 
        hpRoutine = StartCoroutine(HpUpdateRoutine(fullHp, currentHp));
+    }
+    public void SetLocalScale(int x)
+    {
+        if(x>0)
+        {
+            transform.localScale = new Vector3(0.02f, 0.02f,1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-0.02f, 0.02f,1);
+        }
     }
     IEnumerator HpUpdateRoutine(int fullHp, int currentHp)
     {
