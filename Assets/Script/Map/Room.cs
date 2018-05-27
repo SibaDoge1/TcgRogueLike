@@ -11,7 +11,7 @@ public class Room : MonoBehaviour
 	public Room northRoom, southRoom, leftRoom, rightRoom;//Neighbours
 	Tile[,] tiles;
     public List<ITurnAble> TurnalbeList = new List<ITurnAble>();
-    public Player player;
+    public Tile playerTile;
 
     Transform tileParent;
 	public Tile[,] GetTileArrays()
@@ -30,11 +30,11 @@ public class Room : MonoBehaviour
             it.DoAct();
         }
     }
-	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
+	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size )
     {
         pos = _Pos;
         size = _Size;
-        transform.localPosition = MapGenerator.instance.GetRoomPosition(pos);
+        transform.localPosition = new Vector3(2 * pos.x * size.x, 2 * pos.y * size.y, 0); ;
         gameObject.name = "Room_" + pos.x + "_" + pos.y;
 
         tileParent = transform.Find("Tiles");
@@ -51,7 +51,7 @@ public class Room : MonoBehaviour
             for(int j=0; j<size.y; j++)
             {
 				Tile tempTile = Instantiate(Resources.Load("Tile/default") as GameObject, tileParent).GetComponent<Tile>();
-              	tempTile.SetTile(new Vector2Int(i, j));
+              	tempTile.SetTile(new Vector2Int(i, j),size);
                 tiles[i, j] = tempTile;
             }
         }

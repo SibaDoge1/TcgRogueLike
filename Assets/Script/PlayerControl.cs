@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public class PlayerControll : MonoBehaviour {
+public class PlayerControl : MonoBehaviour {
 
-    public static PlayerControll instance;
+    public static PlayerControl instance;
     public void Awake()
     {
         instance = this;
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
     public bool InputOk = false;
     // Use this for initialization
@@ -16,8 +17,9 @@ public class PlayerControll : MonoBehaviour {
         Input.multiTouchEnabled = false;
         InputOk = true;
 	}
-	
-	public void PlayerMove(Tile pos)
+
+    private Player player;
+    public void PlayerMove(Tile pos)
     { 
         if(InputOk)
         StartCoroutine(PlayerMoveRoutine(pos));    

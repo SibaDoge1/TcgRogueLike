@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-public class MapGenerator : MonoBehaviour
+public static class MapGenerator 
 {
-    public static MapGenerator instance;
-    private void Awake()
-    {
-        instance = this;
-    }
+
 
 
 	#region Interface
-    public Map GetNewMap(int seed)
+    public static Map GetNewMap(int seed)
     {
 		//TODO : Generate Map With Seed
 		rooms = new Room[mapSize.x, mapSize.y];
@@ -21,41 +17,36 @@ public class MapGenerator : MonoBehaviour
 		{
 			roomNum = mapSize.x * mapSize.y;
 		}
+        Map newMap = GameObject.Find("Map").GetComponent<Map>();
 
-		CreateRooms(); 
-		SetRoomDoors();
+        CreateRooms(newMap); 
+		SetRoomDoors(newMap);
 
 		Room startRoom = currentRooms [0];
+        newMap.SetStartRoom(startRoom);
+        newMap.Room = currentRooms;
 
-        Map result = new Map(startRoom);
-        return result;
+        return newMap;
     }
-	#endregion
+    #endregion
+
+    static Room[,] rooms;
+    static Vector2Int mapSize;
+    static int roomNum;
+    static Vector2Int roomOffset;
+    static List<Room> currentRooms = new List<Room>();
 
 
-    public Vector2Int mapSize;
-    public int roomNum;
-    public Vector2Int roomOffset;
-    
-    public Vector3 GetRoomPosition(Vector2Int pos)
+
+
+
+
+    private static void CreateRooms(Map newMap)
     {
-        return new Vector3(2*pos.x * roomOffset.x,2*pos.y *roomOffset.y, 0);
-    }
-    public Vector3 GetTilePosition(Vector2Int pos)
-    {
-        return new Vector3(-roomOffset.x / 2 + 0.5f + pos.x, -roomOffset.y / 2 + 0.5f + pos.y, 0);
-    }
-     
-	Room[,] rooms;
-    List<Room> currentRooms = new List<Room>();
-    List<Room> exploreRooms = new List<Room>();
+        List<Room> exploreRooms = new List<Room>();
 
-
-	#region Private
-    private void CreateRooms()
-    {
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
-        Room startRoom = Instantiate(Resources.Load("Room/default") as GameObject, transform).GetComponent<Room>();
+        Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
         startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomOffset);
         rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
@@ -72,16 +63,15 @@ public class MapGenerator : MonoBehaviour
             if(CheckAvailPos(target))
             {
                 
-                Room newRoom = Instantiate(Resources.Load("Room/default") as GameObject, transform).GetComponent<Room>();
+                Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
                 rooms[target.x, target.y] = newRoom;
-                newRoom.SetRoomPos(target,roomOffset);
-                currentRooms.Add(newRoom);
+                newRoom.SetRoomPos(target, roomOffset);
                 exploreRooms.Add(newRoom);
                 newRoom.TempMakingEnemy();
             }
         }
     }
-    private void SetRoomDoors()
+    private static void SetRoomDoors(Map newMap)
     {
         for(int i=0; i< currentRooms.Count;i++)
         {
@@ -108,10 +98,10 @@ public class MapGenerator : MonoBehaviour
     }
 
 
-    private bool CheckAvailPos(Vector2Int target)
+    private static bool CheckAvailPos(Vector2Int target)
     {
         if(target.x >=0 && target.x <mapSize.x
-            && target.y>=0 && target.y<mapSize.y && 
+            && target.y>=0 && target.y<mapSize.y &&
             rooms[target.x,target.y]==null)
         {
             return true;
@@ -120,7 +110,7 @@ public class MapGenerator : MonoBehaviour
             return false;
         }
     }
-    private Vector2Int getRandomDir()
+    private static Vector2Int getRandomDir()
     {
        int randomValue = Random.Range(0, 4);
         switch(randomValue)
@@ -141,7 +131,7 @@ public class MapGenerator : MonoBehaviour
     /// 사방이 막혀있는 방이라면 false값을 리턴합니다.
     /// </summary>
     /// <returns></returns>
-    private bool CheckExploreAble(Room temp)
+    private static bool CheckExploreAble(Room temp)
     {
         int count = 0;
         if(temp.pos.x==0 || rooms[temp.pos.x-1,temp.pos.y]!=null)//왼쪽 체크
@@ -171,5 +161,4 @@ public class MapGenerator : MonoBehaviour
             return true;
         }
     }
-	#endregion
 }

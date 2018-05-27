@@ -14,7 +14,7 @@ public class Goblin : Enemy {
         Debug.Log("ACT");
         if(TileUtils.AI_SquareFind(currentTile,1))
         {
-            Player.instance.currentHp -= 1;
+           GameManager.player.currentHp -= 1;
         }
         else
        MoveTo( PathFinding.instance.GeneratePath(this, Player.instance.currentTile)[0].pos) ;

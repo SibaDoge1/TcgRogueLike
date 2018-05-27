@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Map {
-    public Map(Room startRoom_)
+public class Map : MonoBehaviour{
+    public void SetStartRoom(Room startRoom_)
     {
         startRoom = startRoom_;
         currentRoom = startRoom;
     }
 
+	private List<Room> room;
+    public List<Room> Room
+    {
+        get { return room; }
+        set { room = value; }
+    }
 
-	List<Room> room;
     private Room startRoom;
     public Room StartRoom
     {
