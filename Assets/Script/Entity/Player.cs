@@ -56,7 +56,7 @@ public class Player : Character
 
         if (isFlipped)
         {
-            transform.localScale = new Vector3(-transform.localScale.x,1,1);
+            SetLocalScale((int)-transform.localScale.x);
         }
 
 		GameManager.instance.SetCurrentRoom (_room);

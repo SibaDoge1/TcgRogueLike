@@ -49,7 +49,7 @@ public static class MapGenerator
 
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
         Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
-        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomSize);
+        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomSize,0);
         rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);
@@ -64,11 +64,13 @@ public static class MapGenerator
             Vector2Int target = tempRoom.pos+getRandomDir();
             if(CheckAvailPos(target))
             {
-                
                 Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
                 rooms[target.x, target.y] = newRoom;
-                newRoom.SetRoomPos(target, roomSize);
-				currentRooms.Add(newRoom);
+                if(currentRooms.Count == roomNum-1)
+                    newRoom.SetRoomPos(target, roomSize,1);
+                else
+                    newRoom.SetRoomPos(target, roomSize,0);
+                currentRooms.Add(newRoom);
                 exploreRooms.Add(newRoom);
                 newRoom.GenerateEnemy();
             }

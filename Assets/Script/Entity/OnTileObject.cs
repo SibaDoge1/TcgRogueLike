@@ -54,9 +54,9 @@ public abstract class OnTileObject : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
-    SpriteRenderer sprite;
-	void Awake () {
+    
+    protected SpriteRenderer sprite;
+	protected virtual void  Awake () {
         sprite = GetComponent<SpriteRenderer>();
 	}
 	

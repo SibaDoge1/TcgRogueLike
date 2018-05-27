@@ -17,6 +17,7 @@ public class Room : MonoBehaviour
 		get{ return isCleared; }
 	}
     Transform tileParent;
+    private int seed;
 
 	public static int CalcRange(Vector2Int a, Vector2Int b){
 		return Mathf.Max (Mathf.Abs (a.x - b.x), Mathf.Abs (a.y - b.y));
@@ -71,6 +72,14 @@ public class Room : MonoBehaviour
 
 	public void GenerateEnemy()
 	{
+        if (seed == 1)
+        {
+            Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
+            Enemy temp = Instantiate(Resources.Load("Enemy/BossGoblin") as GameObject).GetComponent<Enemy>();
+            temp.SetRoom(this, temp1);
+            return;
+        }
+
         int num = Random.Range(1, 3);
 		//TODO Enemy Algorithm Upgrade
         while(num>0)
@@ -86,6 +95,7 @@ public class Room : MonoBehaviour
             num--;
 			
         }
+
 	}
 	public void DisableRoom(){
 		
@@ -220,11 +230,11 @@ public class Room : MonoBehaviour
 
     }
 
-	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
+	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size,int seed)
 	{
 		pos = _Pos;
 		size = _Size;
-		transform.localPosition = new Vector3(2 * pos.x * size.x, 2 * pos.y * size.y, 0); ;
+		transform.localPosition = new Vector3(2 * pos.x * 12, 2 * pos.y * 8, 0); ;
 		gameObject.name = "Room_" + pos.x + "_" + pos.y;
 
 		tileParent = transform.Find("Tiles");
