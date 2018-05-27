@@ -56,7 +56,7 @@ public class CardObject : MonoBehaviour {
 	void OnMouseUp(){
 		data.CancelPreview ();
 
-		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold) {
+		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && InputModule.IsPlayerTurn) {
 			ActiveSelf ();
 			hand.RemoveCard (this);
 			Destroy (gameObject);

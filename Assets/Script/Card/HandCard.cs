@@ -13,6 +13,9 @@ public class HandCard : MonoBehaviour {
 
 	//Add from Deck
 	public void DrawHand(CardObject cardObject){
+		if(cardObject == null){
+			return;
+		}
 		cardObject.SetParent (this);
 		cardObject.transform.position = drawStartPosition.position;
 		cardObject.transform.localScale = Vector3.one;

@@ -77,7 +77,6 @@ public class Room : MonoBehaviour
             Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
             Enemy temp = Instantiate(Resources.Load("Enemy/BossGoblin") as GameObject).GetComponent<Enemy>();
             temp.SetRoom(this, temp1);
-            return;
         }
 
         int num = Random.Range(1, 3);
@@ -230,10 +229,12 @@ public class Room : MonoBehaviour
 
     }
 
-	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size,int seed)
+
+	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size,int _seed)
 	{
 		pos = _Pos;
 		size = _Size;
+		seed = _seed;
 		transform.localPosition = new Vector3(2 * pos.x * 12, 2 * pos.y * 8, 0); ;
 		gameObject.name = "Room_" + pos.x + "_" + pos.y;
 

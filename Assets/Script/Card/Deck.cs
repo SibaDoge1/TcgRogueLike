@@ -7,6 +7,9 @@ public class Deck : MonoBehaviour {
 	public List<CardData> deck;
 
 	public CardObject Draw(){
+		if (deck.Count <= 0) {
+			return null;
+		}
 		CardData c = deck [deck.Count - 1];
 		deck.RemoveAt(deck.Count - 1);
 		return c.Instantiate ();

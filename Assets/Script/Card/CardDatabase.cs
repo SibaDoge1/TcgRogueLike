@@ -13,11 +13,13 @@ public class CardDatabase {
 	public static readonly string[] cardSpritePaths = {
 		"card_reload",
 		"card_sword",
-		"card_heal"
+		"card_heal",
+		"card_bfsword"
 	};
 	public static readonly string[] cardNames = {
 		"Re:제로",
 		"짱짱쎈 칼",
-		"짱짱 회복"
+		"짱짱 회복",
+		"B.F.대검"
 	};
 }

@@ -7,7 +7,7 @@ public class CardData_BFSword : CardData_Normal
 {
     public CardData_BFSword(int index) : base(index)
 	{
-        damage = 8;
+        damage = 10;
         range = 1;
         //Set ImageInfo
         cardExplain = range + "의 범위의 모든 적에게+" + damage + "의 데미지를 줍니다.";
@@ -21,6 +21,7 @@ public class CardData_BFSword : CardData_Normal
             foreach(OnTileObject e in targets)
             {
                 e.currentHp -= damage;
+				EffectDelegate.instance.MadeEffect (CardEffectType.Slash, e.transform.position);
             }
         }
     }

@@ -15,12 +15,14 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 7; i++) {
 			PlayerData.deck.Add (new CardData_Sword (1));
 		}
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			PlayerData.deck.Add (new CardData_Bandage (2));
 		}
+		PlayerData.deck.Add (new CardData_BFSword (3));
+
 		currentFloor = MapGenerator.GetNewMap(0,new Vector2Int(10,10),10);
         currentFloor.StartRoom.OpenDoors();
 		PlayerControl.instance.InitPlayer (currentFloor.StartRoom);
