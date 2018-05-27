@@ -15,7 +15,7 @@ public class Bullet : MonoBehaviour {
 		float timer = 0;
 		Vector3 originPos = transform.position;
 		while (true) {
-			timer += Time.deltaTime * 10f;
+			timer += Time.deltaTime * 5f;
 			if (timer > 1) {
 				break;
 			}

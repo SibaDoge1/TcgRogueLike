@@ -83,7 +83,7 @@ public class CardData_Stone : CardData_Normal{
 	{
 		OnTileObject target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
 		target.currentHp -= damage;
-		EffectDelegate.instance.MadeBullet(BulletType.Arrow, PlayerControl.instance.PlayerObject.transform.position, target.transform);
+		EffectDelegate.instance.MadeBullet(BulletType.Stone, PlayerControl.instance.PlayerObject.transform.position, target.transform);
 	}
 
 	private List<Tile> targetTiles;
