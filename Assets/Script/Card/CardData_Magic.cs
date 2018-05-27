@@ -14,15 +14,28 @@ public class CardData_Magic : CardData {
 	}
 }
 
+public class CardData_Reload : CardData_Magic{
+	public CardData_Reload(){}
+	public CardData_Reload(int index) : base(index){
+		cardExplain = "내 덱을 처음 상태로 복구합니다.";
+	}
+
+	public override void CardActive(){
+		PlayerControl.instance.ReLoadDeck ();
+	}
+}
+
 public class CardData_Bandage : CardData_Magic{
 	public CardData_Bandage(){}
 	public CardData_Bandage(int index) : base(index){
 		cardExplain = "자신의 hp를" + healAmount + "만큼 회복합니다.";
+		effectType = CardEffectType.Heal;
 	}
 
 	int healAmount = 3;
 
 	public override void CardActive (){
         GameManager.instance.GetCurrentRoom().GetPlayerTile().OnTileObj.currentHp += healAmount;
+		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.instance.PlayerObject);
     }
 }

@@ -15,11 +15,11 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
-		for (int i = 0; i < 20; i++) {
-			PlayerData.deck.Add (new CardData_Sword (0));
-		}
 		for (int i = 0; i < 5; i++) {
-			PlayerData.deck.Add (new CardData_Bandage (1));
+			PlayerData.deck.Add (new CardData_Sword (1));
+		}
+		for (int i = 0; i < 2; i++) {
+			PlayerData.deck.Add (new CardData_Bandage (2));
 		}
 		currentFloor = MapGenerator.GetNewMap(0,new Vector2Int(10,10),10);
         currentFloor.StartRoom.OpenDoors();

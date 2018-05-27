@@ -15,6 +15,8 @@ public class Deck : MonoBehaviour {
 	public void Load(){
 		deck = new List<CardData> (PlayerData.deck);
 		Shuffle ();
+		deck.Add (deck [0]);
+		deck [0] = new CardData_Reload (0);
 	}
 
 	#region Private
@@ -22,13 +24,12 @@ public class Deck : MonoBehaviour {
 	private void Shuffle(){
 		CardData temp;
 		int randIndex;
-		for (int i = 0; i < deck.Count; i++) {
+		for (int i = 0; i < deck.Count - 1; i++) {
 			randIndex = Random.Range (0, deck.Count);
 			temp = deck [i];
 			deck [i] = deck [randIndex];
 			deck [randIndex] = temp;
 		}
 	}
-
 	#endregion
 }

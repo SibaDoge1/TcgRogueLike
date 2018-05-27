@@ -24,6 +24,9 @@ public class PlayerControl : MonoBehaviour {
 	}
 
     private Player player;
+	public Player PlayerObject{
+		get{ return player; }
+	}
     private int curHp;
 
     private List<Tile> path;

@@ -39,19 +39,18 @@ public abstract class OnTileObject : MonoBehaviour {
         }
         set
         {
-            if(value>=fullHp)
-            {
-                _currentHp = fullHp;
-            }
-            else
-            {
-                _currentHp = value;
-            }
+			if (value >= fullHp) {
+				EffectDelegate.instance.MadeEffect (fullHp - _currentHp, transform.position); 
+				_currentHp = fullHp;
+			} else {
+				EffectDelegate.instance.MadeEffect (value - _currentHp, transform.position); 
+				_currentHp = value;
+			}
 
-            if(_currentHp<=0)
-            {
-                OnDieCallback();
-            }
+			if (_currentHp <= 0) {
+				EffectDelegate.instance.MadeEffect (CardEffectType.Blood, transform.position);
+				OnDieCallback ();
+			}
         }
     }
 

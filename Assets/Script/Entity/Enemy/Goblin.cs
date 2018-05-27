@@ -20,6 +20,7 @@ public class Goblin : Enemy {
         {
             Debug.Log("Attack");
             currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
+			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, currentRoom.GetPlayerTile ());
             OnEndTurn();
 		} else {
 			MoveTo (PathFinding.instance.GeneratePath (this, currentRoom.GetPlayerTile()) [0].pos);

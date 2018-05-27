@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Effect
+    uniqueID: 200816457
+    locked: 0
   - name: Card
     uniqueID: 15772777
     locked: 0

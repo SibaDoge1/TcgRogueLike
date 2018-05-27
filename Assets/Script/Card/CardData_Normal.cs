@@ -36,10 +36,13 @@ public class CardData_Sword : CardData_Normal {
 		cardExplain = range + "의 범위에 적에게+" + damage + "의 데미지를 줍니다.";
 	}
 	public override void CardActive (){
+		OnTileObject target = null;
+		if (TileUtils.IsHitableAround (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range)) {
+			target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+			target.currentHp -= damage;
+		}
 
-		if(TileUtils.IsHitableAround(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range))
-        TileUtils.AutoTarget(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range).currentHp -= damage;
-
+		EffectDelegate.instance.MadeEffect (effectType, target);
 	}
 
 	private List<Tile> targetTiles;

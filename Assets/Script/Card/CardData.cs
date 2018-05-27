@@ -10,12 +10,10 @@ public enum CardAttribute
 	LEAF
 }
 public enum CardAnimationType{FrontSlash, SelfBuff}
-public enum CardEffectType{Slash, Heal}
 public class CardData {
 	protected CardData(){}
 	public CardData(int cardIndex){
 		cardName = CardDatabase.cardNames [cardIndex];
-		cardExplain = CardDatabase.cardExplains [cardIndex];
 		spritePath = CardDatabase.cardSpritePaths [cardIndex];
 	}
 		
@@ -30,8 +28,8 @@ public class CardData {
 		get { return cardExplain; }
 	}
 
-	CardAnimationType animType;
-	CardEffectType effectType;
+	protected CardAnimationType animType;
+	protected CardEffectType effectType;
 
 
 	public CardObject Instantiate(){
