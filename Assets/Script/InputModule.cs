@@ -31,10 +31,16 @@ public class InputModule : MonoBehaviour {
 					Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
 						        Camera.main.ScreenToWorldPoint (Input.mousePosition)
 					        );
+                    if(t!=null && t.OnTileObj == null)
+                    {
 
-					if (PlayerControl.instance.PlayerMoveCommand (t)) {
-						InputModule.InputOK = false;
-					}
+                        if (PlayerControl.instance.PlayerMoveCommand(t))
+                        {
+                            InputModule.InputOK = false;
+                        }
+
+                    }
+
 				}
 			}
 			yield return null;

@@ -13,7 +13,7 @@ public class PlayerControl : MonoBehaviour {
     void Start () {
         Input.multiTouchEnabled = false;
 	}
-
+     
 
 	public void InitPlayer(Room room)
 	{
@@ -24,8 +24,9 @@ public class PlayerControl : MonoBehaviour {
 	}
 
     private Player player;
+    private int curHp;
 
-	private List<Tile> path;
+    private List<Tile> path;
 	public int GetRemainAction(){
 		if (path == null) {
 			return 0;
@@ -34,7 +35,7 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	public bool ActionResume(){
-		if (player.MoveTo (path [0].pos)) {
+        if (curHp == player.currentHp && player.MoveTo(path[0].pos)) {
 			path.RemoveAt (0);
 			return true;
 		} else {
@@ -46,7 +47,7 @@ public class PlayerControl : MonoBehaviour {
 	public bool PlayerMoveCommand(Tile pos)
     {
 		Room cur = player.currentRoom;
-		int curHp = player.currentHp;
+		curHp = player.currentHp;
 		path = PathFinding.instance.GeneratePath(player, pos);
 
 		return ActionResume ();

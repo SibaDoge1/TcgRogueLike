@@ -64,8 +64,8 @@ public class Player : Character
     }
 	protected override void OnDieCallback()
     {
+        base.OnDieCallback();
         Debug.Log("GameOver!");
-        SceneManager.LoadScene(0);
     }
     public override int currentHp
     {

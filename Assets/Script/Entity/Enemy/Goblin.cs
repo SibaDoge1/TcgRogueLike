@@ -5,14 +5,22 @@ using UnityEngine;
 
 public class Goblin : Enemy {
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
         fullHp = 5; currentHp = 5;
+        damage = 1;
+        range = 1;
     }
-    public void DoAct()
+    protected int range;
+
+    public override void DoAct()
     {
-		if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile ().pos) <= 1) {
-			//TODO ATTACK PLAYER
+		if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile ().pos) <= range)
+        {
+            Debug.Log("Attack");
+            currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
+            OnEndTurn();
 		} else {
 			MoveTo (PathFinding.instance.GeneratePath (this, currentRoom.GetPlayerTile()) [0].pos);
 		}

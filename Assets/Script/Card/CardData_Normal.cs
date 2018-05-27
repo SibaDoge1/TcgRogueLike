@@ -37,10 +37,8 @@ public class CardData_Sword : CardData_Normal {
 	}
 	public override void CardActive (){
 		int validTarget = target;
-		//Check target in range
-		for (int i = 0; i < validTarget; i++) {
+        TileUtils.AutoTarget(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range).currentHp -= damage;
 
-		}
 	}
 
 	List<Tile> targetTiles;
