@@ -72,29 +72,10 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Call from GameManager(Move) or CardObject(Card)
+	/// Call from Player(Move) or CardObject(Card)
 	/// </summary>
-	public void EndTurn(){
-		//TODO : GameManager End Callback
-	}
-
-	public void BattleEncount(){
-
-	}
-
-
-	public void EndBattle(){
-
-
-
-	}
-
-	private void ShowHand(){
-
-	}
-
-	private void HideHand(){
-
+	public void EndPlayerTurn(){
+		GameManager.instance.OnEndPlayerTurn ();
 	}
 	#endregion
 }

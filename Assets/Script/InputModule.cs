@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Arch;
+using UnityEngine.EventSystems;
 
 public class InputModule : MonoBehaviour {
 	private static InputModule instance;
@@ -26,7 +27,7 @@ public class InputModule : MonoBehaviour {
 		while (true) {
 			//TODO ANDROID TOUCH
 			if (inputOK) {
-				if (Input.GetMouseButtonDown (0)) {
+				if (Input.GetMouseButtonDown (0) && !EventSystem.current.IsPointerOverGameObject ()){
 					Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
 						        Camera.main.ScreenToWorldPoint (Input.mousePosition)
 					        );

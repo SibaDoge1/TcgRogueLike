@@ -95,6 +95,6 @@ public class Player : Character
     }
 
 	protected override void OnEndTurn (){
-		GameManager.instance.OnEndPlayerTurn ();
+		PlayerControl.instance.EndPlayerTurn ();
 	}
 }

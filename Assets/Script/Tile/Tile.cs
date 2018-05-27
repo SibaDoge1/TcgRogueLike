@@ -7,7 +7,10 @@ namespace Arch{
 	{
 	    #region variables
 		public List<Tile> neighbours;
-	    SpriteRenderer sprite;
+	    private SpriteRenderer sprite;
+		public SpriteRenderer mySprite{
+			get { return sprite; }
+		}
 	    public Vector2Int pos;
 		private OnTileObject onTileObj;//타일위에 있는 mapObject
 	    public OnTileObject OnTileObj {

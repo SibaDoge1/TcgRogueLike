@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Arch;
 
 
 public class CardData_Normal : CardData {
@@ -39,6 +40,19 @@ public class CardData_Sword : CardData_Normal {
 		//Check target in range
 		for (int i = 0; i < validTarget; i++) {
 
+		}
+	}
+
+	List<Tile> targetTiles;
+	public override void CardEffectPreview (){
+		targetTiles = TileUtils.SquareRange (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		for(int i = 0; i < targetTiles.Count; i++){
+			targetTiles [i].mySprite.color = Color.red;
+		}
+	}
+	public override void CancelPreview (){
+		for(int i = 0; i < targetTiles.Count; i++){
+			targetTiles [i].mySprite.color = Color.white;
 		}
 	}
 }

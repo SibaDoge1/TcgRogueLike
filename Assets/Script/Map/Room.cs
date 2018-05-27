@@ -56,7 +56,7 @@ public class Room : MonoBehaviour
         return tiles;
     }
 	public Tile GetTile(Vector2Int p)
-    {
+	{
         return tiles[p.x, p.y];
     }
 
