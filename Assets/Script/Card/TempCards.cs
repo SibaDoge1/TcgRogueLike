@@ -44,13 +44,39 @@ public class CardData_BFSword : CardData_Normal
     }
 
 }
-
+public class CardData_Tumble : CardData_Magic
+{
+    public CardData_Tumble() { }
+    public CardData_Tumble(int index) : base(index)
+    {
+        cardExplain = "자신의 hp를" + healAmount + "만큼 회복하고 "+cardNum+"장을 드로우 합니다.";
+        effectType = CardEffectType.Heal;
+    }
+    int cardNum=3;
+    int healAmount = 4;
+    public override void CardActive()
+        GameManager.instance.GetCurrentRoom().GetPlayerTile().OnTileObj.currentHp += healAmount;
+    {
+        Routine del = DrawCards;
+        CoroutineDelegate.instance.StartRoutine(del);
+        EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
+    }
+    {
+    IEnumerator DrawCards()
+        for(int i=0; i<cardNum;i++)
+        {
+            PlayerControl.instance.DrawCard();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+}
 public class CardData_Stone : CardData_Normal{
 	public CardData_Stone(int index) : base(index)
 	{
 		damage = 5;
-		range = 5;
 		//Set ImageInfo
+		range = 5;
 		cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
 	}
 }
+    
