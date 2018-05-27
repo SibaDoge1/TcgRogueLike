@@ -32,12 +32,12 @@ namespace Arch{
 	    /// <summary>
 	    /// Defalut : GroundTile
 	    /// </summary>
-	    public void SetTile(Vector2Int _pos)
+	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
 		{
 			pos = _pos;
-			transform.localPosition = MapGenerator.instance.GetTilePosition (_pos);
-	
-			name = "Tile" + _pos;
+			transform.localPosition = new Vector3(-roomSize.x / 2 + 0.5f + pos.x, -roomSize.y / 2 + 0.5f + pos.y, 0);
+
+            name = "Tile" + _pos;
 		}
 	
 	    public bool IsStandAble(OnTileObject ot)

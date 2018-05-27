@@ -14,15 +14,14 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Start() {	//Start of Everything
-		currentFloor = MapGenerator.instance.GetNewMap(0);
-
-		//Locate Player
-		//Player Init
+		currentFloor = MapGenerator.GetNewMap(0);
+        player = Instantiate(Resources.Load("Player") as GameObject).GetComponent<Player>();
+        player.SetRoom(currentFloor.StartRoom, new Vector2Int(3,3) );
 
 		//Turn loop
 	}
 
-
+    
     private Map currentFloor;
 	public Room GetCurrentRoom(){
 		return currentFloor.CurrentRoom;

@@ -5,12 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
-    public static Player instance;
-    
-    private void Awake()
-    {
-        instance = this;  
-    }
     private void Start()
     {
         fullHp = 6; currentHp = 6;
