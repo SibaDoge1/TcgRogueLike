@@ -260,6 +260,27 @@ Prefab:
       propertyPath: hand
       value: 
       objectReference: {fileID: 1623250404}
+    - target: {fileID: 114090827980881282, guid: eaafdae6d1ecb0b4d879c411cc44dd0b,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114090827980881282, guid: eaafdae6d1ecb0b4d879c411cc44dd0b,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114090827980881282, guid: eaafdae6d1ecb0b4d879c411cc44dd0b,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0.37931037
+      objectReference: {fileID: 0}
+    - target: {fileID: 114090827980881282, guid: eaafdae6d1ecb0b4d879c411cc44dd0b,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f64e9fc4d3b915a4abfdd1b012c8d1ba,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eaafdae6d1ecb0b4d879c411cc44dd0b, type: 2}
   m_IsPrefabParent: 0
