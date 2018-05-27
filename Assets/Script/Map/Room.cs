@@ -82,6 +82,22 @@ public class Room : MonoBehaviour
                 {
                     tiles[x, y].neighbours.Add(tiles[x, y + 1]);
                 }
+                if(x<size.x-1 && y<size.y-1)
+                {
+                   	tiles[x, y].neighbours.Add(tiles[x+1, y + 1]);
+                }
+                if (x < size.x - 1 && y > 0)
+                {
+                    tiles[x, y].neighbours.Add(tiles[x + 1, y - 1]);
+                }
+                if (x > 0  && y > 0)
+                {
+                    tiles[x, y].neighbours.Add(tiles[x - 1, y - 1]);
+                }
+                if (x > 0 && y < size.y-1)
+                {
+                    tiles[x, y].neighbours.Add(tiles[x - 1, y + 1]);
+                }
             }
         }
     }

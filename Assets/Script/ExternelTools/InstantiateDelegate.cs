@@ -8,11 +8,9 @@ public class InstantiateDelegate : MonoBehaviour {
 		instance = this;
 	}
 
-	public static GameObject Instantiate(GameObject prefab){
+	public static GameObject ProxyInstantiate(GameObject prefab){
 		return instance.CreateNewGameObject (prefab);
 	}
-
-
 
 
 	private GameObject CreateNewGameObject(GameObject prefab){
