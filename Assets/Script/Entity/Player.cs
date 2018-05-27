@@ -9,20 +9,19 @@ public class Player : Character
     {
         fullHp = 6; currentHp = 6;
     }
-    public override void MoveTo(Vector2Int _pos)
+	public override bool Teleport(Vector2Int _pos)
+	{
+		bool returnValue = base.Teleport(_pos);
+		currentRoom.SetPlayerTile (currentTile);
+		return returnValue;
+	}
+	public override bool MoveTo(Vector2Int _pos)
     {
-        base.MoveTo(_pos);
+        bool returnValue = base.MoveTo(_pos);
+		currentRoom.SetPlayerTile (currentTile);
+		return returnValue;
     }
-    //스폰되듯이 이동
-    public void SpawnToRoom(Room _room)
-    {
-        if (currentRoom!=null)
-        currentTile.OnTileObj = null;
 
-
-        CameraFollow.instance.RoomTrace(_room);
-        SetRoom(_room, new Vector2Int(4, 4));
-    }
     //문을 통해서 이동
     public void EnterRoom(Room _room)
     {
@@ -32,6 +31,7 @@ public class Player : Character
         if (currentRoom != null)
            currentTile.OnTileObj = null;
 
+		//Spawn Position Set
         if (_room == currentRoom.northRoom)
         {
             temp = new Vector2Int(_room.size.x / 2, 1);
@@ -59,8 +59,10 @@ public class Player : Character
             transform.localScale = new Vector3(-transform.localScale.x,1,1);
         }
 
+		GameManager.instance.SetCurrentRoom (_room);
+		GameManager.instance.OnPlayerEnterNewRoom ();
     }
-    public override void DestroyThis()
+	protected override void OnDieCallback()
     {
         Debug.Log("GameOver!");
         SceneManager.LoadScene(0);
@@ -92,4 +94,7 @@ public class Player : Character
         }
     }
 
+	protected override void OnEndTurn (){
+		GameManager.instance.OnEndPlayerTurn ();
+	}
 }

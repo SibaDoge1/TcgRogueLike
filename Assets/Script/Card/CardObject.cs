@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardObject : MonoBehaviour {
 	private void Start(){
-		spriteRenderer = transform.GetComponentInChildren<SpriteRenderer> ();
+		spriteRenderer = transform.Find("Sprite").GetComponent<SpriteRenderer> ();
 	}
 	private SpriteRenderer spriteRenderer;
 	private CardData data;

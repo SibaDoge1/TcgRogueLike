@@ -42,7 +42,7 @@ public abstract class OnTileObject : MonoBehaviour {
 
             if(_currentHp<=0)
             {
-                DestroyThis();
+                OnDieCallback();
             }
         }
     }
@@ -57,16 +57,31 @@ public abstract class OnTileObject : MonoBehaviour {
     {
         currentRoom = room;
         this.transform.parent = room.transform;
-        this.MoveTo(_pos);
+		this.Teleport(_pos);
     }
 
     #region MoveMethod
-    public virtual void MoveTo(Vector2Int _pos)
+	public virtual bool Teleport(Vector2Int _pos){
+		if (!currentRoom.GetTile(_pos).IsStandAble(this))
+		{
+			return false;
+		}
+
+		if (currentRoom.GetTile(pos).OnTileObj == this)
+			currentRoom.GetTile(pos).OnTileObj = null;
+
+		pos = _pos;
+		currentTile = currentRoom.GetTile(pos);
+		currentTile.OnTileObj = this;
+		transform.localPosition = currentTile.transform.localPosition;
+
+		return true;
+	}
+	public virtual bool MoveTo(Vector2Int _pos)
     {
         if (!currentRoom.GetTile(_pos).IsStandAble(this))
         {
-			//TODO : consider return bool value (Is Move Success?) 
-            return;
+			return false;
         }
 
         if (currentRoom.GetTile(pos).OnTileObj == this)
@@ -75,10 +90,27 @@ public abstract class OnTileObject : MonoBehaviour {
         pos = _pos;
         currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-        transform.localPosition = currentTile.transform.localPosition;
+		StartCoroutine (MoveAnimationRoutine ());
+
+		return true;
     }
 
-    public virtual void DestroyThis()
+	private IEnumerator MoveAnimationRoutine(){
+		float timer = 0;
+		Vector3 originPos = transform.localPosition;
+		while (true) {
+			timer += Time.deltaTime * 5;
+			if (timer > 1) {
+				break;
+			}
+			transform.localPosition = Vector3.Lerp (originPos, currentTile.transform.localPosition, timer);
+			yield return null;
+		}
+		transform.localPosition = currentTile.transform.localPosition;
+		OnEndTurn ();
+	}
+
+    protected virtual void OnDieCallback()
     {
         sprite.enabled = false;
         currentTile.OnTileObj = null;
@@ -101,4 +133,8 @@ public abstract class OnTileObject : MonoBehaviour {
         MoveTo(pos + new Vector2Int(0, -1));
     }
     #endregion
+
+	protected virtual void OnEndTurn(){
+		
+	}
 }

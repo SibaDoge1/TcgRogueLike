@@ -1,35 +1,42 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Arch;
 
 public class InputModule : MonoBehaviour {
-
-	public void Init(){
-		Input.multiTouchEnabled = false;
+	private static InputModule instance;
+	void Awake(){
+		instance = this;
+	}
+	private static bool inputOK = true;
+	public static bool InputOK {
+		get {
+			return inputOK;
+		}
+		set {
+			inputOK = value;
+		}
 	}
 
-	IEnumerator KeyHitRoutine(){
+	void Start(){
+		StartCoroutine (TileSelectRoutine ());
+	}
+
+	IEnumerator TileSelectRoutine(){
 		while (true) {
-			if(Input.GetKeyDown(KeyCode.W))
-			{
-				Player.instance.MoveUp();
-				GameManager.instance.OnEndPlayerTurn();
+			//TODO ANDROID TOUCH
+			if (inputOK) {
+				if (Input.GetMouseButtonDown (0)) {
+					Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
+						        Camera.main.ScreenToWorldPoint (Input.mousePosition)
+					        );
+
+					if (PlayerControl.instance.PlayerMoveCommand (t)) {
+						InputModule.InputOK = false;
+					}
+				}
 			}
-			else if(Input.GetKeyDown(KeyCode.D))
-			{
-				Player.instance.MoveRight();
-				GameManager.instance.OnEndPlayerTurn();
-			}
-			else if(Input.GetKeyDown(KeyCode.S))
-			{
-				Player.instance.MoveDown();
-				GameManager.instance.OnEndPlayerTurn();
-			}
-			else if(Input.GetKeyDown(KeyCode.A))
-			{
-				Player.instance.MoveLeft();
-				GameManager.instance.OnEndPlayerTurn();
-			}
+			yield return null;
 		}
 	}
 }

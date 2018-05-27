@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HandCard : MonoBehaviour {
-	public List<CardObject> hand;
+	private List<CardObject> hand;
 
 	//Add from Deck
 	public void DrawHand(CardObject cardObject){

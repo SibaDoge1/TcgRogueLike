@@ -130,20 +130,7 @@ public static class TileUtils
         }
         return false;
     }
-    /// <summary>
-    /// 주어진 타일내에 플레이어가 있는가 체크
-    /// </summary>
-	public static bool AI_Find(List<Tile> list)
-    {
-		foreach(Tile v in list)
-        {
-            if(v.OnTileObj == Player.instance)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+
     
 }
 

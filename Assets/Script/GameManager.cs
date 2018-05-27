@@ -14,11 +14,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void Start() {	//Start of Everything
-		currentFloor = MapGenerator.GetNewMap(0);
-        player = Instantiate(Resources.Load("Player") as GameObject).GetComponent<Player>();
-        player.SetRoom(currentFloor.StartRoom, new Vector2Int(3,3) );
+		//DECK CONSTRUCTION
+		for (int i = 0; i < 20; i++) {
+			PlayerData.deck.Add (new CardData_Sword (0));
+		}
 
-		//Turn loop
+		currentFloor = MapGenerator.GetNewMap(0,new Vector2Int(10,10),10);
+		PlayerControl.instance.InitPlayer (currentFloor.StartRoom);
 	}
 
     
@@ -26,16 +28,28 @@ public class GameManager : MonoBehaviour {
 	public Room GetCurrentRoom(){
 		return currentFloor.CurrentRoom;
 	}
+	public void SetCurrentRoom(Room room_){
+		currentFloor.CurrentRoom = room_;
+	}
     
-
+	public void OnPlayerEnterNewRoom(){
+		if (currentFloor.CurrentRoom.IsCleares == false) {
+			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
+			//Close the door
+		}
+	}
 
     public void OnEndPlayerTurn()
     {
-        //Enemy's turn
+		EnemyControl.instance.EnemyTurn ();
     }
 
     public void OnEndEnemyTurn()
     {
-        //Enable Input System
+		if (PlayerControl.instance.GetRemainAction () <= 0) {
+			InputModule.InputOK = true;
+		} else if (PlayerControl.instance.ActionResume () == false) {
+			InputModule.InputOK = true;
+		}
     }
 }

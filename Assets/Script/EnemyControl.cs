@@ -10,14 +10,12 @@ public class EnemyControl : MonoBehaviour {
 
 	private List<Enemy> enemies;
 	public void InitEnemy(Room room){
-		
+		enemies = room.enemyList;
 	}
 
 	public void EnemyTurn(){
-		
-	}
+		//TODO Something Enemy Action
 
-	IEnumerator EnemyTurnRoutine(){
-		
+		GameManager.instance.OnEndEnemyTurn ();
 	}
 }

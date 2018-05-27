@@ -8,9 +8,11 @@ public static class MapGenerator
 
 
 	#region Interface
-    public static Map GetNewMap(int seed)
+	public static Map GetNewMap(int seed,Vector2Int _mapSize,int _roomNum)
     {
 		//TODO : Generate Map With Seed
+		mapSize = _mapSize;
+		roomNum = _roomNum;
 		rooms = new Room[mapSize.x, mapSize.y];
 
 		if(roomNum > mapSize.x*mapSize.y)
@@ -33,7 +35,7 @@ public static class MapGenerator
     static Room[,] rooms;
     static Vector2Int mapSize;
     static int roomNum;
-    static Vector2Int roomOffset;
+	static Vector2Int roomSize = new Vector2Int(12,8);
     static List<Room> currentRooms = new List<Room>();
 
 
@@ -41,13 +43,13 @@ public static class MapGenerator
 
 
 
-    private static void CreateRooms(Map newMap)
+	private static void CreateRooms(Map newMap)
     {
-        List<Room> exploreRooms = new List<Room>();
+	    List<Room> exploreRooms = new List<Room>();
 
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
         Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
-        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomOffset);
+        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomSize);
         rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);
@@ -65,9 +67,10 @@ public static class MapGenerator
                 
                 Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
                 rooms[target.x, target.y] = newRoom;
-                newRoom.SetRoomPos(target, roomOffset);
+                newRoom.SetRoomPos(target, roomSize);
+				currentRooms.Add(newRoom);
                 exploreRooms.Add(newRoom);
-                newRoom.TempMakingEnemy();
+                newRoom.GenerateEnemy();
             }
         }
     }

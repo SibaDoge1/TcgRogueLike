@@ -19,8 +19,9 @@ public class UIManager : MonoBehaviour
 
     public void HpUpdate()
     {
-        float hp = (float)Player.instance.currentHp / Player.instance.fullHp;
-        currentHp.rectTransform.sizeDelta = new Vector2(hp*400, 50);
-        hpText.text = Player.instance.currentHp+"/"+Player.instance.fullHp;
+		//TODO UI
+        //float hp = (float)Player.instance.currentHp / Player.instance.fullHp;
+        //currentHp.rectTransform.sizeDelta = new Vector2(hp*400, 50);
+        //hpText.text = Player.instance.currentHp+"/"+Player.instance.fullHp;
     }
 }

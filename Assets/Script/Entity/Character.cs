@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Character : OnTileObject {
 
-    public override void MoveTo(Vector2Int _pos)
+	public override bool MoveTo(Vector2Int _pos)
     {
         int xOffset = pos.x - _pos.x;
         if (xOffset >=1)
@@ -16,7 +16,7 @@ public abstract class Character : OnTileObject {
             transform.localScale = new Vector3(-1, 1, 1);
         }
 
-        base.MoveTo(_pos);
+		return  base.MoveTo(_pos);
     }
 
 }

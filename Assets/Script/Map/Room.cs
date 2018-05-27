@@ -10,10 +10,47 @@ public class Room : MonoBehaviour
     public Vector2Int size;
 	public Room northRoom, southRoom, leftRoom, rightRoom;//Neighbours
 	Tile[,] tiles;
-    public List<ITurnAble> TurnalbeList = new List<ITurnAble>();
-    //public Player player;
-
+	public List<Enemy> enemyList = new List<Enemy>();
+	private Tile playerTile;
+	private bool isCleared = false;
+	public bool IsCleares{
+		get{ return isCleared; }
+	}
     Transform tileParent;
+
+	public static int CalcRange(Vector2Int a, Vector2Int b){
+		return Mathf.Max (Mathf.Abs (a.x - b.x), Mathf.Abs (a.y - b.y));
+	}
+
+	public void OnEnemyDead(Enemy enemy){
+		enemyList.Remove (enemy);
+		if (enemyList.Count != 0) {
+			for (int i = 0; i < enemyList.Count; i++) {
+				if (enemyList [i] != null) {	//하나라도 남아있으면
+					return;
+				}
+			}
+		}
+		//Enemy All Dead
+		isCleared = true;
+		//TODO OpenDoors ();
+	}
+
+	public Tile WorldToTile(Vector3 worldPos){
+		Vector3 sizeTemp = new Vector3 (size.x / 2, size.y / 2, 0);
+		Vector3 p = transform.position - sizeTemp;
+		Vector3 temp = worldPos - p;
+		Debug.Log (temp);
+		return tiles[(int)temp.x,(int)temp.y];
+	}
+
+	public Tile GetPlayerTile(){
+		return playerTile;
+	}
+	public void SetPlayerTile(Tile tile_){
+		playerTile = tile_;
+	}
+
 	public Tile[,] GetTileArrays()
     {
         return tiles;
@@ -22,19 +59,42 @@ public class Room : MonoBehaviour
     {
         return tiles[p.x, p.y];
     }
-	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
-    {
-        pos = _Pos;
-        size = _Size;
-        transform.localPosition = new Vector3(2 * pos.x * size.x, 2 * pos.y * size.y, 0); ;
-        gameObject.name = "Room_" + pos.x + "_" + pos.y;
 
-        tileParent = transform.Find("Tiles");
+	public void GenerateEnemy()
+	{
+		//TODO
+		Vector2Int temp1 = new Vector2Int(Random.Range(2,8), Random.Range(2,5));
+		Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
+		temp.SetRoom(this, temp1);
+	}
+	public void DisableRoom(){
+		
+	}
 
-        SetTiles();
-        MakeWall();
-    }
 
+	public virtual void OpenDoors()
+	{
+		if (northRoom)
+		{ 
+			tiles[size.x / 2, size.y - 1].OnTileObj.currentHp = 0;
+		}
+		if (rightRoom)
+		{
+			tiles[size.x - 1, size.y / 2].OnTileObj.currentHp = 0;
+		}
+		if (southRoom)
+		{
+			tiles[size.x / 2, 0].OnTileObj.currentHp = 0;
+		}
+		if (leftRoom)
+		{
+			tiles[0, size.y / 2].OnTileObj.currentHp = 0;
+		}
+	}
+
+
+
+	#region Private
     protected virtual void SetTiles()
     {
 		tiles = new Tile[size.x,size.y];
@@ -94,7 +154,7 @@ public class Room : MonoBehaviour
         }
     }
 
-    public void MakeWall()
+	private void MakeWall()
     {
         for (int i = 0; i < size.x; i++)
         {
@@ -108,7 +168,9 @@ public class Room : MonoBehaviour
             }
         }
     }
+	#endregion
 
+	#region MapGenerate
     public virtual void SetDoors()
     {
         if (northRoom)
@@ -137,29 +199,18 @@ public class Room : MonoBehaviour
         }
         OpenDoors();
     }
-    public void TempMakingEnemy()
-    {
-        Vector2Int temp1 = new Vector2Int(Random.Range(2,8), Random.Range(2,5));
-        Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
-        temp.SetRoom(this, temp1);
-    }
-    public virtual void OpenDoors()
-    {
-        if (northRoom)
-        { 
-            tiles[size.x / 2, size.y - 1].OnTileObj.DestroyThis();
-        }
-        if (rightRoom)
-        {
-            tiles[size.x - 1, size.y / 2].OnTileObj.DestroyThis();
-        }
-        if (southRoom)
-        {
-            tiles[size.x / 2, 0].OnTileObj.DestroyThis();
-        }
-        if (leftRoom)
-        {
-            tiles[0, size.y / 2].OnTileObj.DestroyThis();
-        }
-    }
+
+	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size)
+	{
+		pos = _Pos;
+		size = _Size;
+		transform.localPosition = new Vector3(2 * pos.x * size.x, 2 * pos.y * size.y, 0); ;
+		gameObject.name = "Room_" + pos.x + "_" + pos.y;
+
+		tileParent = transform.Find("Tiles");
+
+		SetTiles();
+		MakeWall();
+	}
+	#endregion
 }

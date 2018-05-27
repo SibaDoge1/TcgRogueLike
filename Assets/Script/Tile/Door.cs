@@ -11,7 +11,7 @@ public class Door : OffTile {
         if (ot is Player)
         {
             Debug.Log("A");
-            Player.instance.EnterRoom(target);
+			(ot as Player).EnterRoom(target);
         }
     }
     public override bool IsStandAble(OnTileObject ot)

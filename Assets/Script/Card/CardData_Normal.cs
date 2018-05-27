@@ -26,8 +26,8 @@ public class CardData_Normal : CardData {
 	}
 }
 
-public class Card_Sword : CardData_Normal {
-	public Card_Sword(int index) : base(index)
+public class CardData_Sword : CardData_Normal {
+	public CardData_Sword(int index) : base(index)
 	{
 		damage = 5;
 		range = 1;
