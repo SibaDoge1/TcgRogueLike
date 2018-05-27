@@ -17,11 +17,10 @@ public class UIManager : MonoBehaviour
     Text hpText;
 
 
-    public void HpUpdate()
+	public void HpUpdate(int currentHp_, int fullHp_)
     {
-		//TODO UI
-        //float hp = (float)Player.instance.currentHp / Player.instance.fullHp;
-        //currentHp.rectTransform.sizeDelta = new Vector2(hp*400, 50);
-        //hpText.text = Player.instance.currentHp+"/"+Player.instance.fullHp;
+        
+		currentHp.fillAmount = currentHp_ / (float) fullHp_;
+		hpText.text = currentHp_ + "/" + fullHp_;
     }
 }

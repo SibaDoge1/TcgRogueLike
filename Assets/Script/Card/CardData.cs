@@ -14,27 +14,30 @@ public enum CardEffectType{Slash, Heal}
 public class CardData {
 	protected CardData(){}
 	public CardData(int cardIndex){
-
+		cardName = CardDatabase.cardNames [cardIndex];
+		cardExplain = CardDatabase.cardExplains [cardIndex];
+		spritePath = CardDatabase.cardSpritePaths [cardIndex];
+	}
+		
+	protected string spritePath;
+	protected string cardName;
+	public string CardName {
+		get { return cardName; }
 	}
 
-	private const string cardObjectPath = "Card/CardBase";
-	protected string spritePath = "Card/CardName";
-	protected string cardName;
 	protected string cardExplain;
+	public string CardExplain {
+		get { return cardExplain; }
+	}
 
 	CardAnimationType animType;
 	CardEffectType effectType;
 
 
-
-
-
-
-
 	public CardObject Instantiate(){
 		CardObject cardObject;
-		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(cardObjectPath)as GameObject).GetComponent<CardObject> ();
-		cardObject.Init (this, Resources.Load<Sprite> (spritePath));
+		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(CardDatabase.cardObjectPath)as GameObject).GetComponent<CardObject> ();
+		cardObject.Init (this, Resources.Load<Sprite> (CardDatabase.cardResourcePath + spritePath));
 		return cardObject;
 	}
 
@@ -45,5 +48,15 @@ public class CardData {
 
 	public virtual bool IsAvailable(){//Room Parameter
 		return false;
+	}
+
+	public virtual void CardEffectPreview(){
+		
+	}
+	public virtual void CancelPreview(){
+	}
+
+	public virtual bool IsConsumeTurn(){
+		return true;
 	}
 }

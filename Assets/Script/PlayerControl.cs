@@ -34,9 +34,10 @@ public class PlayerControl : MonoBehaviour {
 		return path.Count;
 	}
 
-	public bool ActionResume(){
+	public bool MoveReserveResume(){
         if (curHp == player.currentHp && player.MoveTo(path[0].pos)) {
 			path.RemoveAt (0);
+			DrawCard ();
 			return true;
 		} else {
 			path = null;
@@ -50,7 +51,7 @@ public class PlayerControl : MonoBehaviour {
 		curHp = player.currentHp;
 		path = PathFinding.instance.GeneratePath(player, pos);
 
-		return ActionResume ();
+		return MoveReserveResume ();
     }
 
 	#region Card
@@ -58,7 +59,9 @@ public class PlayerControl : MonoBehaviour {
 	public HandCard hand;
 
 	public void DrawCard(){
-		hand.DrawHand (deck.Draw ());
+		if (hand.CurrentHandCount < Config.HandMax && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
+			hand.DrawHand (deck.Draw ());
+		}
 	}
 
 	public void ReLoadDeck(){
@@ -73,29 +76,10 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Call from GameManager(Move) or CardObject(Card)
+	/// Call from Player(Move) or CardObject(Card)
 	/// </summary>
-	public void EndTurn(){
-		//TODO : GameManager End Callback
-	}
-
-	public void BattleEncount(){
-
-	}
-
-
-	public void EndBattle(){
-
-
-
-	}
-
-	private void ShowHand(){
-
-	}
-
-	private void HideHand(){
-
+	public void EndPlayerTurn(){
+		GameManager.instance.OnEndPlayerTurn ();
 	}
 	#endregion
 }

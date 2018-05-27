@@ -37,6 +37,13 @@ public class Room : MonoBehaviour
 		OpenDoors ();
 	}
 
+	public bool IsEnemyAlive(){
+		if (enemyList == null) {
+			return false;
+		}
+		return enemyList.Count > 0;
+	}
+
 	public Tile WorldToTile(Vector3 worldPos){
 		Vector3 sizeTemp = new Vector3 (size.x / 2, size.y / 2, 0);
 		Vector3 p = transform.position - sizeTemp;
@@ -74,13 +81,19 @@ public class Room : MonoBehaviour
         }
 
         int num = Random.Range(1, 3);
-		//TODO
+		//TODO Enemy Algorithm Upgrade
         while(num>0)
         {
+			
             Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
+			if (GetTile (temp1).OnTileObj != null)
+				continue;
+			
             Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
-            temp.SetRoom(this, temp1);
+			temp.SetRoom (this, temp1);
+				
             num--;
+			
         }
 
 	}
