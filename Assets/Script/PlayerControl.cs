@@ -17,7 +17,7 @@ public class PlayerControl : MonoBehaviour {
 
 	public void InitPlayer(Room room)
 	{
-		CameraFollow.instance.RoomTrace(room);
+		CameraFollow.instance.PlayerTrace(player);
 		player.SetRoom(room, new Vector2Int(4, 4));
 		GameManager.instance.SetCurrentRoom (room);
 		GameManager.instance.OnPlayerEnterNewRoom ();	
@@ -27,8 +27,7 @@ public class PlayerControl : MonoBehaviour {
 	public Player PlayerObject{
 		get{ return player; }
 	}
-    private int curHp;
-
+    
     private List<Tile> path;
 	public int GetRemainAction(){
 		if (path == null) {
@@ -38,7 +37,9 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	public bool MoveReserveResume(){
-        if (curHp == player.currentHp && player.MoveTo(path[0].pos)) {
+        if (moveStartRoom == player.currentRoom && 
+            moveStartHP == player.currentHp && player.MoveTo(path[0].pos))
+        {
 			path.RemoveAt (0);
 			DrawCard ();
 			return true;
@@ -47,14 +48,21 @@ public class PlayerControl : MonoBehaviour {
 			return false;
 		}
 	}
-
-	public bool PlayerMoveCommand(Tile pos)
+    private int moveStartHP;
+    Room moveStartRoom;
+    public bool PlayerMoveCommand(Tile pos)
     {
-		Room cur = player.currentRoom;
-		curHp = player.currentHp;
+		moveStartRoom = player.currentRoom;
+		moveStartHP = player.currentHp;
 		path = PathFinding.instance.GeneratePath(player, pos);
 
 		return MoveReserveResume ();
+    }
+
+    public void EndTurnButton()
+    {
+        DrawCard();
+        EndPlayerTurn();
     }
 
 	#region Card
@@ -85,7 +93,7 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Call from Player(Move) or CardObject(Card)
+	/// Call from Player(Move) or CardObject(Card) or EndTurnButton
 	/// </summary>
 	public void EndPlayerTurn(){
 		GameManager.instance.OnEndPlayerTurn ();

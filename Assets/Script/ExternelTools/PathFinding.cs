@@ -124,8 +124,7 @@ public class PathFinding : MonoBehaviour
 
 		///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
 		if (prev [target] == null) {
-			return PathBlocked (obje, targetTile);
-
+            return null;
 		}
          
 
@@ -145,9 +144,9 @@ public class PathFinding : MonoBehaviour
 		currentPath.Remove (source);
 		return currentPath;
 	}
- 
 
-   
+
+
 
 
 
@@ -155,7 +154,7 @@ public class PathFinding : MonoBehaviour
 
 
     #region Path Block
-	float costToEnterTileForPB(Tile source, Tile target)
+    /*float costToEnterTileForPB(Tile source, Tile target)
     {
 		if (target.OnTileObj is Structure)
         {
@@ -260,9 +259,8 @@ public class PathFinding : MonoBehaviour
 
         currentPath.Remove(source);
         return currentPath;
-        }
-
-    }
-
-
+        }*/
     #endregion
+}
+
+

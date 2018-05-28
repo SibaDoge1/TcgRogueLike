@@ -17,7 +17,6 @@ public class Room : MonoBehaviour
 		get{ return isCleared; }
 	}
     Transform tileParent;
-    private int seed;
 
 	public static int CalcRange(Vector2Int a, Vector2Int b){
 		return Mathf.Max (Mathf.Abs (a.x - b.x), Mathf.Abs (a.y - b.y));
@@ -70,14 +69,14 @@ public class Room : MonoBehaviour
         return tiles[p.x, p.y];
     }
 
-	public void GenerateEnemy()
+	private void GenerateEnemy()
 	{
-        if (seed == 1)
+        /*if (seed == 1)
         {
             Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
             Enemy temp = Instantiate(Resources.Load("Enemy/BossGoblin") as GameObject).GetComponent<Enemy>();
             temp.SetRoom(this, temp1);
-        }
+        }*/
 
         int num = Random.Range(1, 3);
 		//TODO Enemy Algorithm Upgrade
@@ -91,10 +90,8 @@ public class Room : MonoBehaviour
             Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
 			temp.SetRoom (this, temp1);
 				
-            num--;
-			
+            num--;			
         }
-
 	}
 	public void DisableRoom(){
 		
@@ -230,11 +227,25 @@ public class Room : MonoBehaviour
     }
 
 
-	public virtual void SetRoomPos(Vector2Int _Pos,Vector2Int _Size,int _seed)
+    private RoomSeed seed;
+    public RoomSeed GetSeed()
+    {
+        return seed;
+    }
+    public void SetSeed(RoomSeed _seed)
+    {
+        if(seed == null)
+        {
+            seed = _seed;
+        }else
+        {
+            Debug.LogError("시드 중복생성");
+        }
+    }
+    public virtual void MakeRoom(Vector2Int _Pos,Vector2Int _Size)
 	{
 		pos = _Pos;
 		size = _Size;
-		seed = _seed;
 		transform.localPosition = new Vector3(2 * pos.x * 12, 2 * pos.y * 8, 0); ;
 		gameObject.name = "Room_" + pos.x + "_" + pos.y;
 

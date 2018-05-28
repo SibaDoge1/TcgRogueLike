@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goblin : Enemy {
+public class FastGoblin : Enemy {
 
     protected override void Start()
     {
         base.Start();
-        fullHp = 10; currentHp = 10;
+        fullHp = 5; currentHp = 5;
         damage = 1;
         range = 1;
     }
@@ -16,9 +16,10 @@ public class Goblin : Enemy {
 
     public override void DoAct()
     {
-		if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
+        base.DoAct();
+
+        if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
-            Debug.Log("Attack");
             currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
 			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, currentRoom.GetPlayerTile ());
             OnEndTurn();
@@ -34,9 +35,9 @@ public class Goblin : Enemy {
 
 	protected override void OnDieCallback (){
 		//TODO : DROP CARD TEMP
-		if (UnityEngine.Random.Range (0, 3) == 0) {
+		if (UnityEngine.Random.Range (0, 5) == 0) {
 			PlayerControl.instance.AddCard (new CardData_Stone (5));
-		} else if (UnityEngine.Random.Range (0, 10) == 0) {
+		} else if (UnityEngine.Random.Range (0, 12) == 0) {
 			PlayerControl.instance.AddCard (new CardData_Portion (6));
 		}
 

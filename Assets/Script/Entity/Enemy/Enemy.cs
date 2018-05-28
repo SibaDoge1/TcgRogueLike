@@ -14,7 +14,16 @@ public abstract class Enemy : Character {
 
 		base.OnDieCallback ();
 	}
-    public abstract void DoAct();
+    protected int turn = -1;
+    public virtual void DoAct()
+    {
+        turn++;
+        if (turn <= 0)
+        {
+            OnEndTurn();
+            return;
+        }
+    }
     protected override void OnEndTurn()
     {
         base.OnEndTurn();

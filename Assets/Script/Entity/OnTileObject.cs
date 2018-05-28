@@ -123,22 +123,6 @@ public abstract class OnTileObject : MonoBehaviour {
         currentTile.OnTileObj = null;
         gameObject.SetActive(false);
     }
-    public virtual void MoveUp()
-    {
-        MoveTo(pos + new Vector2Int(0, 1));
-    }
-    public virtual void MoveRight()
-    {
-        MoveTo(pos + new Vector2Int(1, 0));
-    }
-    public virtual void MoveLeft()
-    {
-        MoveTo(pos + new Vector2Int(-1,0));
-    }
-    public virtual void MoveDown()
-    {
-        MoveTo(pos + new Vector2Int(0, -1));
-    }
     #endregion
 
 	protected virtual void OnEndTurn(){

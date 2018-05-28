@@ -23,8 +23,9 @@ public static class MapGenerator
 
         CreateRooms(newMap); 
 		SetRoomDoors(newMap);
+        SetSeeds(newMap);
 
-		Room startRoom = currentRooms [0];
+        Room startRoom = currentRooms [0];
         newMap.SetStartRoom(startRoom);
         newMap.Room = currentRooms;
 
@@ -35,21 +36,21 @@ public static class MapGenerator
     static Room[,] rooms;
     static Vector2Int mapSize;
     static int roomNum;
-	static Vector2Int roomSize = new Vector2Int(12,8);
     static List<Room> currentRooms = new List<Room>();
+    static Vector2Int defaultSize = new Vector2Int(12,8);
 
 
 
 
 
 
-	private static void CreateRooms(Map newMap)
+    private static void CreateRooms(Map newMap)
     {
 	    List<Room> exploreRooms = new List<Room>();
 
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
         Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
-        startRoom.SetRoomPos(new Vector2Int(startPos.x, startPos.y),roomSize,0);
+        startRoom.MakeRoom(new Vector2Int(startPos.x, startPos.y),defaultSize);
         rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);
@@ -62,19 +63,28 @@ public static class MapGenerator
                 continue;
             }
             Vector2Int target = tempRoom.pos+getRandomDir();
-            if(CheckAvailPos(target))
+            Vector2Int ranSize = new Vector2Int(Random.Range(12, 18), Random.Range(8, 12));
+            if (CheckAvailPos(target))
             {
                 Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, newMap.transform).GetComponent<Room>();
                 rooms[target.x, target.y] = newRoom;
                 if(currentRooms.Count == roomNum-1)
-                    newRoom.SetRoomPos(target, roomSize,1);
+                    newRoom.MakeRoom(target, ranSize);
                 else
-                    newRoom.SetRoomPos(target, roomSize,0);
+                    newRoom.MakeRoom(target, defaultSize);
                 currentRooms.Add(newRoom);
                 exploreRooms.Add(newRoom);
-                newRoom.GenerateEnemy();
             }
         }
+    }
+    private static void SetSeeds(Map newMap)
+    {
+        currentRooms[0].SetSeed(new StartRoom(currentRooms[0]));      
+        for (int i=1; i<currentRooms.Count-1;i++)
+        {
+            currentRooms[i].SetSeed(new BattleRoom(currentRooms[i], EnemyDatabase.pool1, Random.Range(2, 4)));
+        }
+        currentRooms[currentRooms.Count - 1].SetSeed(new BossRoom(currentRooms[currentRooms.Count - 1], EnemyDatabase.bossPool));
     }
     private static void SetRoomDoors(Map newMap)
     {

@@ -2,28 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossGoblin : Enemy {
+public class SlowGoblin : Enemy {
 
     protected override void Start()
     {
         base.Start();
-        fullHp = 30; currentHp = 30;
-        damage = 5;
+        fullHp = 10; currentHp = 10;
+        damage = 2;
         range = 1;
     }
     protected int range;
+
     public override void DoAct()
     {
         base.DoAct();
-        if(turn%3!=0)
+        if (turn % 2 != 0)
         {
             OnEndTurn();
             return;
         }
-
         if (Room.CalcRange(currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
             currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
+            EffectDelegate.instance.MadeEffect(CardEffectType.Hit, currentRoom.GetPlayerTile());
             OnEndTurn();
         }
         else
@@ -34,6 +35,21 @@ public class BossGoblin : Enemy {
     public override void SetRoom(Room room, Vector2Int _pos)
     {
         base.SetRoom(room, _pos);
-        gameObject.name = "BossGoblin" + _pos;
+        gameObject.name = "Goblin" + _pos;
+    }
+
+    protected override void OnDieCallback()
+    {
+        //TODO : DROP CARD TEMP
+        if (UnityEngine.Random.Range(0, 3) == 0)
+        {
+            PlayerControl.instance.AddCard(new CardData_Stone(5));
+        }
+        else if (UnityEngine.Random.Range(0, 5) == 0)
+        {
+            PlayerControl.instance.AddCard(new CardData_Portion(6));
+        }
+
+        base.OnDieCallback();
     }
 }

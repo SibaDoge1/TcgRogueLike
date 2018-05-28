@@ -4,26 +4,27 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour {
 
+    public int speed;
     public static CameraFollow instance;
     private void Awake()
     {
         instance = this;
     }
 
-    public void RoomTrace(Room curr)
+    public void PlayerTrace(Player player)
     {
         StopAllCoroutines();
-        StartCoroutine(RoomTraceRoutine(curr));
+        StartCoroutine(RoomTraceRoutine(player));
     }
 
-     IEnumerator RoomTraceRoutine(Room curr)
+     IEnumerator RoomTraceRoutine(Player player)
     {
-        float _time = 0f;
-        Vector3 Target = curr.transform.position + new Vector3(0, 0, -10);
-        while(_time <1f)
+        
+        Vector3 Target;
+        while(true)
         {
-            _time += Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position,Target,_time);
+            Target = player.transform.position + new Vector3(0, -1, -10);
+            transform.position = Vector3.Lerp(transform.position,Target,speed*Time.deltaTime);
             yield return null;
         }
     }

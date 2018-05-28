@@ -52,7 +52,7 @@ public class Player : Character
         }
 
         SetRoom(_room,temp);
-        CameraFollow.instance.RoomTrace(_room);
+        //CameraFollow.instance.RoomTrace(_room);
 
         if (isFlipped)
         {
@@ -94,7 +94,8 @@ public class Player : Character
         }
     }
 
-	protected override void OnEndTurn (){
+	protected override void OnEndTurn ()
+    {
 		PlayerControl.instance.EndPlayerTurn ();
 	}
 }
