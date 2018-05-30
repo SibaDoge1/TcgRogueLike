@@ -28,4 +28,8 @@ public class CameraFollow : MonoBehaviour {
             yield return null;
         }
     }
+
+	IEnumerator CameraImpactRoutine(){
+		yield return null;
+	}
 }

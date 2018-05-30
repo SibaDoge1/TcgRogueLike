@@ -119,7 +119,6 @@ public abstract class OnTileObject : MonoBehaviour {
 
     protected virtual void OnDieCallback()
     {
-        sprite.enabled = false;
         currentTile.OnTileObj = null;
         gameObject.SetActive(false);
     }

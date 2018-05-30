@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Enemy : Character {
-
+	protected Animator enemyAnimator;
     protected virtual void Start()
     {
         currentRoom.enemyList.Add(this);
+		enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
     }
     protected override void OnDieCallback (){
 
@@ -30,4 +31,8 @@ public abstract class Enemy : Character {
         EnemyControl.instance.EnemyEndCallBack();
     }
     protected int damage;
+
+	protected virtual void PlayAttackMotion(){
+		enemyAnimator.Play ("Attack");
+	}
 }
