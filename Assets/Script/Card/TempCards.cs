@@ -42,7 +42,6 @@ public class CardData_BFSword : CardData_Normal
             targetTiles[i].mySprite.color = Color.white;
         }
     }
-
 }
 public class CardData_Tumble : CardData_Magic
 {
@@ -51,24 +50,30 @@ public class CardData_Tumble : CardData_Magic
     public CardData_Tumble() { }
     public CardData_Tumble(int index) : base(index)
     {
-        cardExplain = "카드 "+cardNum+"장을 드로우 합니다.";
+        cardExplain = "카드 " + cardNum + "장을 드로우 합니다.";
         effectType = CardEffectType.Heal;
     }
+    int cardNum=3;
 
     public override void CardActive()
     {
         Routine del = DrawCards;
         CoroutineDelegate.instance.StartRoutine(del);
-        //EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
     }
 	IEnumerator DrawCards()
     {
         for(int i=0; i<cardNum;i++)
         {
-            PlayerControl.instance.DrawCard();
+			PlayerControl.instance.MagicDraw();
             yield return new WaitForSeconds(0.1f);
         }
     }
+	public override CardAbilityType GetCardAbilityType (){
+		return CardAbilityType.Util;
+	}
+	public override string GetCardAbilityValue (){
+		return cardNum.ToString();
+	}
 }
 
 public class CardData_Stone : CardData_Normal{
@@ -155,5 +160,10 @@ public class CardData_Portion : CardData_Magic{
 		EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
 	}
 
-
+	public override CardAbilityType GetCardAbilityType (){
+		return CardAbilityType.Heal;
+	}
+	public override string GetCardAbilityValue (){
+		return "All";
+	}
 }

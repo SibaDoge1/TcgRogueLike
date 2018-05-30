@@ -25,6 +25,13 @@ public class CardData_Normal : CardData {
 			
 		}
 	}
+
+	public override CardAbilityType GetCardAbilityType (){
+		return CardAbilityType.Attack;
+	}
+	public override string GetCardAbilityValue (){
+		return damage.ToString();
+	}
 }
 
 public class CardData_Sword : CardData_Normal {

@@ -24,6 +24,13 @@ public class CardData_Reload : CardData_Magic{
         PlayerControl.instance.PlayerObject.currentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}
+
+	public override CardAbilityType GetCardAbilityType (){
+		return CardAbilityType.Util;
+	}
+	public override string GetCardAbilityValue (){
+		return "RE";
+	}
 }
 
 public class CardData_Bandage : CardData_Magic{
@@ -39,4 +46,11 @@ public class CardData_Bandage : CardData_Magic{
         GameManager.instance.GetCurrentRoom().GetPlayerTile().OnTileObj.currentHp += healAmount;
 		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.instance.PlayerObject);
     }
+
+	public override CardAbilityType GetCardAbilityType (){
+		return CardAbilityType.Heal;
+	}
+	public override string GetCardAbilityValue (){
+		return healAmount.ToString();
+	}
 }

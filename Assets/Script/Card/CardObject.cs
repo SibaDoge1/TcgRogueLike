@@ -7,6 +7,9 @@ public delegate void LocateCallback();
 public class CardObject : MonoBehaviour {
 	private HandCard hand;
 
+	public Image img_Ability;
+	public Text txt_Ability;
+
 	private void Awake(){
 		rendererParent = transform.Find ("Renderer");
 		spriteRenderer = rendererParent.Find("Sprite").GetComponent<SpriteRenderer> ();
@@ -27,6 +30,19 @@ public class CardObject : MonoBehaviour {
 		spriteRenderer.sprite = sprite_;
 		txt_name.text = data.CardName;
 		txt_explain.text = data.CardExplain;
+		CardAbilityType a = data.GetCardAbilityType ();
+		switch (a) {
+		case CardAbilityType.Attack:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconAtk");
+			break;
+		case CardAbilityType.Heal:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconHeal");
+			break;
+		case CardAbilityType.Util:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
+			break;
+		}
+		txt_Ability.text = data.GetCardAbilityValue ();
 	}
 	public void SetParent(HandCard hand_){
 		hand = hand_;
