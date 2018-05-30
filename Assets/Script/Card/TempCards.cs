@@ -53,7 +53,6 @@ public class CardData_Tumble : CardData_Magic
         cardExplain = "카드 " + cardNum + "장을 드로우 합니다.";
         effectType = CardEffectType.Heal;
     }
-    int cardNum=3;
 
     public override void CardActive()
     {
