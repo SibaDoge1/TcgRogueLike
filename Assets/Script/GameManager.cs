@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
         currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(5, 5), 10);
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
+		EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
+		MinimapRenderer.instance.Init (currentFloor);
 	}
 
     

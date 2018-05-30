@@ -89,7 +89,7 @@ public class CardObject : MonoBehaviour {
 		transform.position = touchPos;
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > DragThreshold) {
-			rendererParent.transform.localScale = Vector3.one;
+			rendererParent.transform.localScale = new Vector3 (0.3f, 0.3f, 1f);
 			rendererParent.transform.localPosition = Vector3.zero;
 		} else {
 			rendererParent.transform.localScale = new Vector3 (2.5f, 2.5f, 1f);
@@ -156,10 +156,12 @@ public class CardObject : MonoBehaviour {
 			if (timer > 1) {
 				transform.localPosition = targetPosition;
 				transform.rotation = targetRotation;
+				rendererParent.localScale = Vector3.one;
 				break;
 			}
 			transform.localPosition = Vector3.Lerp (transform.localPosition, targetPosition, 0.1f);
 			transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, 0.1f);
+			rendererParent.localScale = Vector3.Lerp (rendererParent.localScale, Vector3.one, 0.1f);
 			yield return null;
 		}
 

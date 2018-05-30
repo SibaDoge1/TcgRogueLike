@@ -23,7 +23,9 @@ public class FastGoblin : Enemy {
         }
         if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
-            currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
+			if (currentRoom.GetPlayerTile ().OnTileObj != null) {
+				currentRoom.GetPlayerTile ().OnTileObj.currentHp -= damage;
+			}
 			PlayAttackMotion ();
 			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, currentRoom.GetPlayerTile ());
             OnEndTurn();
