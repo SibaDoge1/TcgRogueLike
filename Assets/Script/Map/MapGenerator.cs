@@ -90,6 +90,7 @@ public static class MapGenerator
         Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
         Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, tr).GetComponent<Room>();
         startRoom.MakeRoom(new Vector2Int(startPos.x, startPos.y),defaultSize);
+		startRoom.SetStartRoom ();
         rooms[startPos.x, startPos.y] = startRoom;
         currentRooms.Add(startRoom);
         exploreRooms.Add(startRoom);

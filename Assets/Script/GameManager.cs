@@ -38,12 +38,18 @@ public class GameManager : MonoBehaviour {
 	public void OnPlayerEnterNewRoom(){
 		if (currentFloor.CurrentRoom.IsCleares == false) {
 			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
+			MinimapRenderer.instance.RenderRoom (currentFloor.CurrentRoom);
 		}
+	}
+
+	public void OnPlayerClearRoom(){
+		MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()
     {
 		EnemyControl.instance.EnemyTurn ();
+		MinimapRenderer.instance.PlayerTileRefresh (currentFloor.CurrentRoom);
     }
 
     public void OnEndEnemyTurn()

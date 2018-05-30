@@ -14,7 +14,7 @@ public class EnemyControl : MonoBehaviour {
     }
 
     public void EnemyTurn(){
-        if (enemies.Count == 0)
+        if (enemies == null || enemies.Count == 0)
         {
             GameManager.instance.OnEndEnemyTurn();
         }
