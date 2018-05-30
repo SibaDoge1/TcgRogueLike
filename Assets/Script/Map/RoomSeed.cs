@@ -16,6 +16,7 @@ public class StartRoom : RoomSeed
 {
     public StartRoom(Room room):base(room)
     {
+        room.OpenDoors();
     }
 
 }
@@ -31,39 +32,57 @@ public class BattleRoom : RoomSeed
     }
     public void MakeEnemy()
     {
-        while(num>0)
-        {
-            Vector2Int temp1 = new Vector2Int(Random.Range(2, room.size.x-3), Random.Range(2, room.size.y - 3));
-            if (room.GetTile(temp1).OnTileObj != null)
-                continue;
+        int count = 0;
+        List<Tile> tiles = room.GetSpawnableTiles();
+        Tile tempTile;
 
-            int ran = Random.Range(0, enemyList[enemyList.Count-1]+1);
-            Enemy temp = InstantiateDelegate.Instantiate(Resources.Load("Enemy/"+EnemyDatabase.enemyPaths[ran]) as GameObject).GetComponent<Enemy>();
-            temp.SetRoom(room, temp1);
-            num--;
+        while (num > count)
+        {
+            int ranNum = Random.Range(count + 1, tiles.Count);
+            tempTile = tiles[count];
+            tiles[count] = tiles[ranNum];
+            tiles[ranNum] = tempTile;
+
+            int ran = enemyList[Random.Range(0, enemyList.Count - 1)];
+            Enemy tempEnemy = InstantiateDelegate.Instantiate(Resources.Load("Enemy/" + EnemyDatabase.enemyPaths[ran]) as GameObject).GetComponent<Enemy>();
+            tempEnemy.SetRoom(room, tiles[count].pos);
+            count++;
         }
     }
 }
 public class BossRoom : RoomSeed
 {
     List<int> enemyList;
-    public BossRoom(Room room, List<int> _enemyList) :base(room)
+    int num;
+    public BossRoom(Room room, List<int> _enemyList,int _num) :base(room)
     {
         enemyList = _enemyList;
+        num = _num;
+
         MakeEnemy();
     }
     public void MakeEnemy()
     {
-        int count = 0;
-        while (enemyList.Count>count)
-        {
-            Vector2Int temp1 = new Vector2Int(Random.Range(2, room.size.x - 4), Random.Range(2, room.size.y - 4));
-            if (room.GetTile(temp1).OnTileObj != null)
-                continue;
+        int count=0;
+        List<Tile> tiles = room.GetSpawnableTiles();
+        Tile tempTile;
 
-            Enemy temp = InstantiateDelegate.Instantiate(Resources.Load("Enemy/" + EnemyDatabase.enemyPaths[enemyList[count]]) as GameObject).GetComponent<Enemy>();
-            temp.SetRoom(room, temp1);
+        while (num>count)
+        {
+            int ranNum = Random.Range(count+1, tiles.Count);
+           tempTile = tiles[count];
+           tiles[count] = tiles[ranNum];
+           tiles[ranNum] = tempTile;
+
+            int ran = enemyList[Random.Range(0, enemyList.Count-1)];
+            Enemy tempEnemy = InstantiateDelegate.Instantiate(Resources.Load("Enemy/" + EnemyDatabase.enemyPaths[ran]) as GameObject).GetComponent<Enemy>();
+            tempEnemy.SetRoom(room, tiles[count].pos);
             count++;
         }
+
+        tempTile = tiles[Random.Range(count + 1, tiles.Count)];
+        int bossNum = enemyList[enemyList.Count - 1];
+        Enemy boss = InstantiateDelegate.Instantiate(Resources.Load("Enemy/" + EnemyDatabase.enemyPaths[bossNum]) as GameObject).GetComponent<Enemy>();
+        boss.SetRoom(room, tempTile.pos);
     }
 }

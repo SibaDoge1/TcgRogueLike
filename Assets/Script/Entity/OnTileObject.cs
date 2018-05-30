@@ -74,7 +74,7 @@ public abstract class OnTileObject : MonoBehaviour {
 			return false;
 		}
 
-		if (currentRoom.GetTile(pos).OnTileObj == this)
+		if (currentRoom.GetTile(pos) && currentRoom.GetTile(pos).OnTileObj == this)
 			currentRoom.GetTile(pos).OnTileObj = null;
 
 		pos = _pos;

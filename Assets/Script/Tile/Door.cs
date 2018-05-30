@@ -10,7 +10,6 @@ public class Door : OffTile {
     {
         if (ot is Player)
         {
-            Debug.Log("A");
 			(ot as Player).EnterRoom(target);
         }
     }

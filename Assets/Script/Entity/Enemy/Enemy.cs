@@ -6,31 +6,69 @@ public abstract class Enemy : Character {
 	protected Animator enemyAnimator;
     protected virtual void Start()
     {
+        CurrentTurn = Cost;
         currentRoom.enemyList.Add(this);
 		enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
     }
     protected override void OnDieCallback (){
 
 		currentRoom.OnEnemyDead (this);
-
 		base.OnDieCallback ();
 	}
-    protected int turn = -1;
-    public virtual void DoAct()
+
+    public int Cost;
+    private int currentTurn;
+    protected int CurrentTurn
     {
-        turn++;
-        if (turn <= 0)
+        get { return currentTurn; }
+        set
+        {
+            currentTurn = value;
+            characterUI.SetTurnText(currentTurn);
+        }
+        }
+    protected int damage;
+
+    public virtual bool DoAct()
+    {
+        if (FirstIgnore())
+        {
+            return false;
+        }
+        if(TurnWaiter())
+        {
+            return false;
+        }
+
+        return true;
+    }
+    protected virtual bool TurnWaiter()
+    {
+        CurrentTurn--;
+        if (CurrentTurn >=0)
         {
             OnEndTurn();
-            return;
+            return true;
         }
+        CurrentTurn = Cost;
+        return false;
+    }
+    protected bool firstIgnore = true;
+    protected virtual bool FirstIgnore()
+    {
+        if(firstIgnore)
+        {
+            firstIgnore = false;
+            return true;
+        }
+        return false;
     }
     protected override void OnEndTurn()
     {
         base.OnEndTurn();
         EnemyControl.instance.EnemyEndCallBack();
     }
-    protected int damage;
+
 
 	protected virtual void PlayAttackMotion(){
 		enemyAnimator.Play ("Attack");

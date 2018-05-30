@@ -12,14 +12,14 @@ public class BossGoblin : Enemy {
         range = 1;
     }
     protected int range;
-    public override void DoAct()
+    public override bool DoAct()
     {
-        base.DoAct();
-        if(turn%3!=0)
+        if (!base.DoAct())
         {
             OnEndTurn();
-            return;
+            return false;
         }
+
 
         if (Room.CalcRange(currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
@@ -31,10 +31,25 @@ public class BossGoblin : Enemy {
         {
             MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos);
         }
+        return true;
     }
     public override void SetRoom(Room room, Vector2Int _pos)
     {
         base.SetRoom(room, _pos);
         gameObject.name = "BossGoblin" + _pos;
+    }
+    protected override void OnDieCallback()
+    {
+        UIManager.instance.GameWin();
+        if (UnityEngine.Random.Range(0, 8) == 0)
+        {
+            PlayerControl.instance.AddCard(new CardData_Stone(5));
+        }
+        else if (UnityEngine.Random.Range(0, 12) == 0)
+        {
+            PlayerControl.instance.AddCard(new CardData_Bandage(2));
+        }
+
+        base.OnDieCallback();
     }
 }

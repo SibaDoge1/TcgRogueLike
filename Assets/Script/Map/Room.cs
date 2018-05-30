@@ -61,6 +61,21 @@ public class Room : MonoBehaviour
     {
         return tiles;
     }
+
+    public List<Tile> GetSpawnableTiles()
+    {
+        List<Tile> temp = new List<Tile>();
+        for(int i=2; i<size.x-2;i++)
+        {
+            for(int j=2; j<size.y-2;j++)
+            {
+                if (!tiles[i, j].OnTileObj)
+                    temp.Add(tiles[i, j]);
+            }
+        }
+        return temp;
+    }
+
 	public Tile GetTile(Vector2Int p)
     {
         if (p.x >= size.x || p.y >= size.y || p.x < 0 || p.y < 0)
@@ -69,30 +84,28 @@ public class Room : MonoBehaviour
         return tiles[p.x, p.y];
     }
 
-	private void GenerateEnemy()
-	{
-        /*if (seed == 1)
+    public List<Vector2Int> GetDoorPos()
+    {
+        List<Vector2Int> temp = new List<Vector2Int>();
+        if (northRoom)
         {
-            Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
-            Enemy temp = Instantiate(Resources.Load("Enemy/BossGoblin") as GameObject).GetComponent<Enemy>();
-            temp.SetRoom(this, temp1);
-        }*/
-
-        int num = Random.Range(1, 3);
-		//TODO Enemy Algorithm Upgrade
-        while(num>0)
-        {
-			
-            Vector2Int temp1 = new Vector2Int(Random.Range(2, 8), Random.Range(2, 5));
-			if (GetTile (temp1).OnTileObj != null)
-				continue;
-			
-            Enemy temp = Instantiate(Resources.Load("Enemy/Goblin") as GameObject).GetComponent<Enemy>();
-			temp.SetRoom (this, temp1);
-				
-            num--;			
+            temp.Add(tiles[size.x / 2, size.y - 1].pos);
         }
-	}
+        if (rightRoom)
+        {
+            temp.Add(tiles[size.x - 1, size.y / 2].pos);
+        }
+        if (southRoom)
+        {
+            temp.Add(tiles[size.x / 2, 0].pos);
+        }
+        if (leftRoom)
+        {
+            temp.Add(tiles[0, size.y / 2].pos);
+        }
+        return temp;
+    }
+
 	public void DisableRoom(){
 		
 	}
@@ -123,13 +136,23 @@ public class Room : MonoBehaviour
 	#region Private
     protected virtual void SetTiles()
     {
+        int count = 0;
 		tiles = new Tile[size.x,size.y];
         for (int i = 0; i <size.x; i++)
         {
+            count++;
             for(int j=0; j<size.y; j++)
             {
-				Tile tempTile = Instantiate(Resources.Load("Tile/default") as GameObject, tileParent).GetComponent<Tile>();
-              	tempTile.SetTile(new Vector2Int(i, j),size);
+                count++;
+                Tile tempTile;
+                if(count%2 == 0)
+                {
+                     tempTile = Instantiate(Resources.Load("Tile/tile3") as GameObject, tileParent).GetComponent<Tile>();
+                }else
+                {
+                     tempTile = Instantiate(Resources.Load("Tile/tile5") as GameObject, tileParent).GetComponent<Tile>();
+                }
+                tempTile.SetTile(new Vector2Int(i, j), size);
                 tiles[i, j] = tempTile;
             }
         }
@@ -203,25 +226,25 @@ public class Room : MonoBehaviour
         {
            Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(northRoom);
-            tiles[size.x / 2, size.y - 1].OffTileObj = temp;
+            tiles[size.x / 2, size.y - 1].SetOffTile(temp);
         }
         if (rightRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(rightRoom);
-            tiles[size.x - 1, size.y / 2].OffTileObj = temp;
+            tiles[size.x - 1, size.y / 2].SetOffTile(temp);
         }
         if (southRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(southRoom);
-            tiles[size.x / 2, 0].OffTileObj = temp;
+            tiles[size.x / 2, 0].SetOffTile(temp);
         }
         if (leftRoom)
         {
             Door temp = Instantiate(Resources.Load("OffTile/Door") as GameObject).GetComponent<Door>();
             temp.SetTargetRoom(leftRoom);
-            tiles[0, size.y / 2].OffTileObj = temp;
+            tiles[0, size.y / 2].SetOffTile(temp);
         }
 
     }

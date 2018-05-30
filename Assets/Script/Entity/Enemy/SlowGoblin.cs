@@ -13,14 +13,14 @@ public class SlowGoblin : Enemy {
     }
     protected int range;
 
-    public override void DoAct()
+    public override bool DoAct()
     {
-        base.DoAct();
-        if (turn % 2 != 0)
+        if (!base.DoAct())
         {
             OnEndTurn();
-            return;
+            return false;
         }
+
         if (Room.CalcRange(currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
         {
             currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
@@ -32,6 +32,7 @@ public class SlowGoblin : Enemy {
         {
             MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos);
         }
+        return true;
     }
     public override void SetRoom(Room room, Vector2Int _pos)
     {
@@ -42,15 +43,14 @@ public class SlowGoblin : Enemy {
     protected override void OnDieCallback()
     {
         //TODO : DROP CARD TEMP
-        if (UnityEngine.Random.Range(0, 3) == 0)
+        if (UnityEngine.Random.Range(0, 10) == 0)
         {
             PlayerControl.instance.AddCard(new CardData_Stone(5));
         }
         else if (UnityEngine.Random.Range(0, 5) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Portion(6));
+            PlayerControl.instance.AddCard(new CardData_Bandage(2));
         }
-
         base.OnDieCallback();
     }
 }

@@ -10,6 +10,6 @@ public static class EnemyDatabase
         "enemy_slowgoblin",
         "enemy_bossgoblin"
     };
-    public static List<int> pool1 = new List<int>{0,0,1};
+    public static List<int> pool1 = new List<int>{0,1,1,1};
     public static List<int> bossPool = new List<int>{0,0,0,1,2};
 }
