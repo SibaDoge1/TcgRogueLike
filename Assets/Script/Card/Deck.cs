@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Deck : MonoBehaviour {
 
+	public Text txt_RemainCard;
 	public List<CardData> deck;
 
 	public CardObject Draw(){
@@ -12,6 +14,7 @@ public class Deck : MonoBehaviour {
 		}
 		CardData c = deck [deck.Count - 1];
 		deck.RemoveAt(deck.Count - 1);
+		RefreshText ();
 		return c.Instantiate ();
 	}
 
@@ -20,6 +23,7 @@ public class Deck : MonoBehaviour {
 		Shuffle ();
 		deck.Add (deck [0]);
 		deck [0] = new CardData_Reload (0);
+		RefreshText ();
 	}
 
 	#region Private
@@ -33,6 +37,10 @@ public class Deck : MonoBehaviour {
 			deck [i] = deck [randIndex];
 			deck [randIndex] = temp;
 		}
+	}
+
+	private void RefreshText(){
+		txt_RemainCard.text = "X " + deck.Count; 
 	}
 	#endregion
 }

@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class HandCard : MonoBehaviour {
+	private Vector3 originLocalPosition;
+	void Awake(){
+		originLocalPosition = transform.localPosition;
+	}
+
+
 	public int CurrentHandCount{
 		get{ return hand.Count; }
 	}
@@ -34,6 +40,20 @@ public class HandCard : MonoBehaviour {
 		cardObject.transform.localScale = Vector3.one;
 
 		hand.Add (cardObject);
+		StartCoroutine (AddHandRoutine (cardObject));
+	}
+
+	private IEnumerator AddHandRoutine(CardObject co){
+		co.transform.localScale = Vector3.zero;
+		float timer = 0;
+		while (true) {
+			timer += Time.deltaTime;
+			if (timer > 0.5f) {
+				break;
+			}
+			co.transform.localScale = Vector3.Lerp (co.transform.localScale, Vector3.one, 0.1f);	
+			yield return null;
+		}
 		SetCardPosition ();
 	}
 
@@ -89,6 +109,33 @@ public class HandCard : MonoBehaviour {
             hand[i].Remove();
         }
     }
+
+	public void ChooseOne(){
+		if (moveRoutine != null) {
+			StopCoroutine (moveRoutine);
+		}
+		moveRoutine = StartCoroutine (HandMoveRoutine (originLocalPosition - new Vector3 (0, 1, 0)));
+	}
+
+	public void ChooseRollback(){
+		if (moveRoutine != null) {
+			StopCoroutine (moveRoutine);
+		}
+		moveRoutine = StartCoroutine (HandMoveRoutine (originLocalPosition));
+	}
+	private Coroutine moveRoutine;
+	IEnumerator HandMoveRoutine(Vector3 targetLocalPosition){
+		float timer = 0;
+		while (true) {
+			timer += Time.deltaTime;
+			if (timer > 1) {
+				transform.localPosition = targetLocalPosition;
+				break;
+			}
+			transform.localPosition = Vector3.Lerp (transform.localPosition, targetLocalPosition, 0.1f);
+			yield return null;
+		}	
+	}
 	#region Private
 	private void SetCardPosition(){
 		for (int i = 0; i < hand.Count; i++) {

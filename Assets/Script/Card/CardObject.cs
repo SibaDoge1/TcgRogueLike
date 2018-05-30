@@ -59,8 +59,10 @@ public class CardObject : MonoBehaviour {
 	private Vector3 originPos;
 	private Quaternion originRot;
 	private const int DragThreshold = 2;
-	private const int ActiveThreshold = 4;
+	private const int ActiveThreshold = 3;
 	void OnMouseDown(){
+		transform.parent = transform.parent.parent;
+		hand.ChooseOne ();
 		data.CardEffectPreview ();
 
 		if (locateRoutine != null) {
@@ -70,6 +72,8 @@ public class CardObject : MonoBehaviour {
 	}
 
 	void OnMouseUp(){
+		transform.parent = hand.transform;
+		hand.ChooseRollback ();
 		data.CancelPreview ();
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && InputModule.IsPlayerTurn) {
@@ -120,14 +124,6 @@ public class CardObject : MonoBehaviour {
         hand.RemoveCard(this);
         Destroy(gameObject);
     }
-
-	private void HideCard(int target){
-		
-		Vector3 targetPos = originPos;
-		targetPos.x = 0;
-		targetPos.y = -2.5f;
-
-	}
 
 	private void EnableInteraction(){
 		collider.enabled = true;
