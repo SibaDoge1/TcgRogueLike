@@ -43,8 +43,8 @@ public static class MapGenerator
     static int roomNum;
     static List<Room> currentRooms;
     static Vector2Int defaultSize = new Vector2Int(12,8);
-    static Vector2Int maxRoomSize = new Vector2Int(16, 12);
-    static Vector2Int minRoomSize = new Vector2Int(8, 6);
+    static Vector2Int maxRoomSize = new Vector2Int(16, 16);
+    static Vector2Int minRoomSize = new Vector2Int(8, 8);
 
 
 
@@ -101,7 +101,7 @@ public static class MapGenerator
                 exploreRooms.RemoveAt(exploreRooms.Count - 1);
                 continue;
             }
-            Vector2Int target = tempRoom.pos+getRandomDir();
+            Vector2Int target = tempRoom.pos+GetRandomDir();
             Vector2Int ranSize = new Vector2Int(Random.Range(minRoomSize.x, maxRoomSize.x), Random.Range(minRoomSize.y, maxRoomSize.y));
             if (CheckAvailPos(target))
             {
@@ -164,7 +164,7 @@ public static class MapGenerator
             return false;
         }
     }
-    private static Vector2Int getRandomDir()
+    private static Vector2Int GetRandomDir()
     {
        int randomValue = Random.Range(0, 4);
         switch(randomValue)

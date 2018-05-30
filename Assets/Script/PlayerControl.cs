@@ -20,8 +20,8 @@ public class PlayerControl : MonoBehaviour {
 		CameraFollow.instance.PlayerTrace(player);
 		player.SetRoom(room, new Vector2Int(4, 4));
 		GameManager.instance.SetCurrentRoom (room);
-		GameManager.instance.OnPlayerEnterNewRoom ();	
-	}
+		GameManager.instance.OnPlayerEnterNewRoom ();
+    }
 
     private Player player;
 	public Player PlayerObject{
@@ -82,13 +82,17 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	public void ReLoadDeck(){
+        hand.RemoveAll();
 		deck.Load ();
-	}
+        hand.DrawHand(deck.Draw());
+        hand.DrawHand(deck.Draw());
+        hand.DrawHand(deck.Draw());
+    }
 
-	/// <summary>
-	/// Call from GameManager
-	/// </summary>
-	public void OnStartPlayerTurn(){
+    /// <summary>
+    /// Call from GameManager
+    /// </summary>
+    public void OnStartPlayerTurn(){
 		hand.CheckAvailable ();
 	}
 

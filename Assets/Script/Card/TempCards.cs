@@ -51,7 +51,7 @@ public class CardData_Tumble : CardData_Magic
     public CardData_Tumble() { }
     public CardData_Tumble(int index) : base(index)
     {
-        cardExplain = "카드 "+cardNum+"장을 드로우 합니다.";
+        cardExplain = "전투중일 경우,카드 "+cardNum+"장을 드로우 합니다.";
         effectType = CardEffectType.Heal;
     }
 

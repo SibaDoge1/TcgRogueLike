@@ -47,7 +47,6 @@ public abstract class Enemy : Character {
         CurrentTurn--;
         if (CurrentTurn >=0)
         {
-            OnEndTurn();
             return true;
         }
         CurrentTurn = Cost;

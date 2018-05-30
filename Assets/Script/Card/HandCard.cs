@@ -82,7 +82,13 @@ public class HandCard : MonoBehaviour {
 		hand.Remove (co);
 		SetCardPosition ();
 	}
-
+    public void RemoveAll()
+    {
+        for(int i = hand.Count-1; i>=0;i--)
+        {
+            hand[i].Remove();
+        }
+    }
 	#region Private
 	private void SetCardPosition(){
 		for (int i = 0; i < hand.Count; i++) {

@@ -124,7 +124,9 @@ public class PathFinding : MonoBehaviour
 
 		///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
 		if (prev [target] == null) {
-            return null;
+            List<Tile> s = new List<Tile>();
+            s.Add(source);
+            return s;
 		}
          
 
