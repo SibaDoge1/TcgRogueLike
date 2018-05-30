@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
+		PlayerData.deck.Clear();
 		for (int i = 0; i < 7; i++) {
 			PlayerData.deck.Add (new CardData_Sword (1));
 		}
