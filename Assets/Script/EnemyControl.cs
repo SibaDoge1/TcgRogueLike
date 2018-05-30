@@ -18,11 +18,14 @@ public class EnemyControl : MonoBehaviour {
         {
             GameManager.instance.OnEndEnemyTurn();
         }
-
-        foreach (Enemy e in enemies)
+        else
         {
-            e.DoAct();
+            foreach (Enemy e in enemies)
+            {
+                e.DoAct();
+            }
         }
+
     }
     int count;
     public void EnemyEndCallBack()

@@ -23,7 +23,8 @@ public class CharacterUI : MonoBehaviour {
         fullHpUI.color = Color.clear;
         currentHpUI.color = Color.clear;
 
-        turnText = transform.Find("turnText").GetComponent<Text>();
+        turnText = transform.Find("turn").Find("turnText").GetComponent<Text>();
+        turnText.color = Color.black;
     }
 	public void HpUpdate(int fullHp,int currentHp)
     {
@@ -65,15 +66,11 @@ public class CharacterUI : MonoBehaviour {
     {
         if(turn<=0)
         {
-            turnText.text = "";
+            turnText.text = "A";
         }
         else
         {
             turnText.text = turn.ToString();
-            if (turn == 1)
-                turnText.color = Color.red;
-            else
-                turnText.color = Color.blue;
         }
     }
 }

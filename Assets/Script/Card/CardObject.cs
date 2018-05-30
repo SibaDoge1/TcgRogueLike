@@ -82,7 +82,7 @@ public class CardObject : MonoBehaviour {
 			locateRoutine = StartCoroutine (LocateRoutine (originPos, originRot, null));
 		}
 	}
-
+    
 	void OnMouseDrag(){
 		Vector2 touchPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 
@@ -115,6 +115,11 @@ public class CardObject : MonoBehaviour {
 			locateRoutine = StartCoroutine (LocateRoutine (originPos, originRot, EnableInteraction));
 		}
 	}
+    public void Remove()
+    {
+        hand.RemoveCard(this);
+        Destroy(gameObject);
+    }
 
 	private void HideCard(int target){
 		
