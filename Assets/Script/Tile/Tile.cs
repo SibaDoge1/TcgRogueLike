@@ -29,14 +29,7 @@ namespace Arch{
 			}
 		}
 		private OffTile offTileObj;
-	    public OffTile OffTileObj {
-			set {
-				if (offTileObj != null)
-					Destroy (offTileObj.gameObject);
-				offTileObj = value;
-				offTileObj.setTile (this);
-			}
-		}
+		
 	    #endregion
 	    /// <summary>
 	    /// Defalut : GroundTile
@@ -67,6 +60,12 @@ namespace Arch{
 				offTileObj.SomethingUpOnThis (ot);
 			}
 		}
-
+        public void SetOffTile(OffTile off)
+        {
+            if (offTileObj != null)
+                Destroy(offTileObj.gameObject);
+            offTileObj = off;
+            offTileObj.setTile(this);
+        }
 	}
 }

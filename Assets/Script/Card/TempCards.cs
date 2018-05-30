@@ -46,23 +46,23 @@ public class CardData_BFSword : CardData_Normal
 }
 public class CardData_Tumble : CardData_Magic
 {
+    int cardNum = 3;
+
     public CardData_Tumble() { }
     public CardData_Tumble(int index) : base(index)
     {
-        cardExplain = "자신의 hp를" + healAmount + "만큼 회복하고 "+cardNum+"장을 드로우 합니다.";
+        cardExplain = "카드 "+cardNum+"장을 드로우 합니다.";
         effectType = CardEffectType.Heal;
     }
-    int cardNum=3;
-    int healAmount = 4;
 
     public override void CardActive()
     {
-		GameManager.instance.GetCurrentRoom().GetPlayerTile().OnTileObj.currentHp += healAmount;
         Routine del = DrawCards;
         CoroutineDelegate.instance.StartRoutine(del);
-        EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
+        //EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
     }
-	IEnumerator DrawCards(){
+	IEnumerator DrawCards()
+    {
         for(int i=0; i<cardNum;i++)
         {
             PlayerControl.instance.DrawCard();

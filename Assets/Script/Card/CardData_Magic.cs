@@ -17,10 +17,11 @@ public class CardData_Magic : CardData {
 public class CardData_Reload : CardData_Magic{
 	public CardData_Reload(){}
 	public CardData_Reload(int index) : base(index){
-		cardExplain = "내 덱을 처음 상태로 복구합니다.";
+		cardExplain = "체력을 1잃고 내 덱을 처음 상태로 복구합니다.";
 	}
 
 	public override void CardActive(){
+        PlayerControl.instance.PlayerObject.currentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}
 }

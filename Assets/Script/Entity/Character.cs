@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class Character : OnTileObject {
 
-    protected OnTileUI ontileUI;
+    protected CharacterUI characterUI;
     protected override void Awake()
     {
         base.Awake();
-        ontileUI = transform.Find("Canvas").GetComponent<OnTileUI>();
+        characterUI = transform.Find("Canvas").GetComponent<CharacterUI>();
     }
     public override bool MoveTo(Vector2Int _pos)
     {
@@ -21,12 +21,12 @@ public abstract class Character : OnTileObject {
         if(x>0)
         {
             transform.localScale = new Vector3(1, 1, 1);
-            ontileUI.SetLocalScale(x);
+            characterUI.SetLocalScale(x);
         }
         else
         {
             transform.localScale = new Vector3(-1, 1, 1);
-            ontileUI.SetLocalScale(x);
+            characterUI.SetLocalScale(x);
         }
     }
     public override int fullHp
@@ -38,7 +38,7 @@ public abstract class Character : OnTileObject {
 
         set
         {
-            ontileUI.HpUpdate(value, currentHp);
+            characterUI.HpUpdate(value, currentHp);
             base.fullHp = value;
         }
     }
@@ -51,7 +51,7 @@ public abstract class Character : OnTileObject {
 
         set
         {
-            ontileUI.HpUpdate(fullHp, value);
+            characterUI.HpUpdate(fullHp, value);
             base.currentHp = value;
         }
     }

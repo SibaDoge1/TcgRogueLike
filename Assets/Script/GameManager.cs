@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
     private void Awake(){
@@ -18,17 +18,12 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < 7; i++) {
 			PlayerData.deck.Add (new CardData_Sword (1));
 		}
-		for (int i = 0; i < 3; i++) {
-			PlayerData.deck.Add (new CardData_Bandage (2));
-		}
 		PlayerData.deck.Add (new CardData_BFSword (3));
 		PlayerData.deck.Add (new CardData_Tumble (4));
 		PlayerData.deck.Add (new CardData_Arrow (7));
-
-		currentFloor = MapGenerator.GetNewMap(0,new Vector2Int(10,10),10);
-        currentFloor.StartRoom.OpenDoors();
-		PlayerControl.instance.InitPlayer (currentFloor.StartRoom);
-		PlayerControl.instance.ReLoadDeck ();
+        currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(10, 10), 10);
+        PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
+        PlayerControl.instance.ReLoadDeck();
 	}
 
     
@@ -59,5 +54,10 @@ public class GameManager : MonoBehaviour {
         else if (PlayerControl.instance.MoveReserveResume() == false) {
 			InputModule.IsPlayerTurn = true;
 		}
+    }
+
+    public void ReGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

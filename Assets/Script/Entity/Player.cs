@@ -65,7 +65,7 @@ public class Player : Character
 	protected override void OnDieCallback()
     {
         base.OnDieCallback();
-        Debug.Log("GameOver!");
+        UIManager.instance.GameOver();
     }
     public override int currentHp
     {

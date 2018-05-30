@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class OnTileUI : MonoBehaviour {
+public class CharacterUI : MonoBehaviour {
 
     Image fullHpUI;
     Image currentHpUI;
     // Use this for initialization
     Coroutine hpRoutine;
 
+    Text turnText;
     Color originColor;
     Color targetColor;
 
@@ -21,6 +22,8 @@ public class OnTileUI : MonoBehaviour {
 
         fullHpUI.color = Color.clear;
         currentHpUI.color = Color.clear;
+
+        turnText = transform.Find("turnText").GetComponent<Text>();
     }
 	public void HpUpdate(int fullHp,int currentHp)
     {
@@ -56,6 +59,21 @@ public class OnTileUI : MonoBehaviour {
             fullHpUI.color = Color.Lerp(Color.white, new Color(1, 1, 1, 0), _time);
             currentHpUI.color = Color.Lerp(originColor, targetColor, _time);
             yield return null;          
+        }
+    }
+    public void SetTurnText(int turn)
+    {
+        if(turn<=0)
+        {
+            turnText.text = "";
+        }
+        else
+        {
+            turnText.text = turn.ToString();
+            if (turn == 1)
+                turnText.color = Color.red;
+            else
+                turnText.color = Color.blue;
         }
     }
 }
