@@ -84,24 +84,24 @@ public class Room : MonoBehaviour
         return tiles[p.x, p.y];
     }
 
-    public List<Tile> GetDoorTiles()
+    public List<Vector2Int> GetDoorPos()
     {
-        List<Tile> temp = new List<Tile>();
+        List<Vector2Int> temp = new List<Vector2Int>();
         if (northRoom)
         {
-            temp.Add(tiles[size.x / 2, size.y - 1]);
+            temp.Add(tiles[size.x / 2, size.y - 1].pos);
         }
         if (rightRoom)
         {
-            temp.Add(tiles[size.x - 1, size.y / 2]);
+            temp.Add(tiles[size.x - 1, size.y / 2].pos);
         }
         if (southRoom)
         {
-            temp.Add(tiles[size.x / 2, 0]);
+            temp.Add(tiles[size.x / 2, 0].pos);
         }
         if (leftRoom)
         {
-            temp.Add(tiles[0, size.y / 2]);
+            temp.Add(tiles[0, size.y / 2].pos);
         }
         return temp;
     }

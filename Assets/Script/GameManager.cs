@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
 		PlayerData.deck.Add (new CardData_BFSword (3));
 		PlayerData.deck.Add (new CardData_Tumble (4));
 		PlayerData.deck.Add (new CardData_Arrow (7));
-        currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(10, 10), 10);
+        currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(5, 5), 10);
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
         PlayerControl.instance.ReLoadDeck();
 	}
