@@ -30,7 +30,8 @@ public class FastGoblin : Enemy {
 			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, currentRoom.GetPlayerTile ());
             OnEndTurn();
 		} else {
-			MoveTo (PathFinding.instance.GeneratePath (this, currentRoom.GetPlayerTile()) [0].pos);
+            if (!MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos))
+                OnEndTurn();
 		}
         return true;
     }

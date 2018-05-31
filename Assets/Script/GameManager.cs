@@ -46,7 +46,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void OnPlayerClearRoom(){
-		MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
+        PlayerControl.instance.ReLoadDeck();
+        MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()

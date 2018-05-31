@@ -23,7 +23,7 @@ public class CameraFollow : MonoBehaviour {
         Vector3 Target;
         while(true)
         {
-            Target = player.transform.position + new Vector3(0, -1, -10);
+            Target = new Vector3(player.transform.position.x, player.transform.position.y, -10);
             transform.position = Vector3.Lerp(transform.position,Target,speed*Time.deltaTime);
             yield return null;
         }

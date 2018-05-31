@@ -11,6 +11,7 @@ using Arch;
 public static class TileUtils
 {
 
+
     /// <summary>
     /// 십자로 타일 가져오기
     /// </summary>
@@ -102,6 +103,31 @@ public static class TileUtils
 
         return squareList;
     }
+    /// <summary>
+    /// 룸지정해서 가져오기
+    /// </summary>
+    public static List<Tile> SquareRange(Room room,Tile center, int radius)
+    {
+        List<Tile> squareList = new List<Tile>();
+        int x = center.pos.x; int y = center.pos.y;
+        for (int i = -radius; i <= radius; i++)
+        {
+            for (int j = -radius; j <= radius; j++)
+            {
+                squareList.Add(room.GetTile(new Vector2Int(x + i, y + j)));
+            }
+        }
+        squareList.Remove(center);
+        for (int i = squareList.Count - 1; i >= 0; i--)
+        {
+            if (squareList[i] == null)
+            {
+                squareList.RemoveAt(i);
+            }
+        }
+
+        return squareList;
+    }
 
 
 
@@ -185,6 +211,7 @@ public static class TileUtils
 		}
 		return false;
 	}
+
 }
 
 

@@ -4,6 +4,13 @@ using UnityEngine;
 using System.Linq;
 using Arch;
 
+public enum Shape
+{
+    NONE,
+    CENTER,
+    RANDOM
+}
+
 public abstract class RoomSeed
 {
     protected Room room;
@@ -24,13 +31,54 @@ public class BattleRoom : RoomSeed
 {
     List<int> enemyList;
     int num;
+    Shape shape;
+
     public BattleRoom(Room room, List<int> _enemyList,int _num) :base(room)
     {       
         enemyList = _enemyList;
         num = _num;
+        shape = Shape.NONE;
+
+        MakeObstacle();
         MakeEnemy();
     }
-    public void MakeEnemy()
+    public BattleRoom(Room room,Shape _shape ,List<int> _enemyList, int _num) : base(room)
+    {
+        enemyList = _enemyList;
+        num = _num;
+        shape = _shape;
+
+        MakeObstacle();
+        MakeEnemy();
+    }
+    void MakeObstacle()
+    {
+        Vector2Int center;
+        switch (shape)
+        {
+            case Shape.CENTER:
+                center = new Vector2Int(room.size.x / 2, room.size.y / 2);
+                List<Tile> centerTiles = TileUtils.SquareRange(room, room.GetTile(center), 1);
+                centerTiles.Add(room.GetTile(center));
+                foreach(Tile v in centerTiles)
+                {
+                    if(v.OnTileObj ==null)
+                    {
+                        OnTileObject tempWall = InstantiateDelegate.Instantiate(Resources.Load("Structure/wall") as GameObject, room.transform).GetComponent<OnTileObject>();
+                        tempWall.SetRoom(room,v.pos);
+                    }
+                }
+                break;
+            case Shape.RANDOM:
+
+
+                break;
+            default:
+                break;
+        }
+
+    }
+    void MakeEnemy()
     {
         int count = 0;
         List<Tile> tiles = room.GetSpawnableTiles();
@@ -58,10 +106,14 @@ public class BossRoom : RoomSeed
     {
         enemyList = _enemyList;
         num = _num;
-
+        MakeObstacle();
         MakeEnemy();
     }
-    public void MakeEnemy()
+    void MakeObstacle()
+    {
+
+    }
+    void MakeEnemy()
     {
         int count=0;
         List<Tile> tiles = room.GetSpawnableTiles();

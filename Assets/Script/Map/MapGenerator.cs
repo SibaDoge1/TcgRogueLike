@@ -122,7 +122,8 @@ public static class MapGenerator
         currentRooms[0].SetSeed(new StartRoom(currentRooms[0]));      
         for (int i=1; i<currentRooms.Count-1;i++)
         {
-            currentRooms[i].SetSeed(new BattleRoom(currentRooms[i], EnemyDatabase.pool1, (int)(currentRooms[i].size.magnitude/3)));
+
+            currentRooms[i].SetSeed(new BattleRoom(currentRooms[i], (Shape)Random.Range(0, 2), EnemyDatabase.pool1, (int)(currentRooms[i].size.magnitude/3)));
         }
         currentRooms[currentRooms.Count - 1].SetSeed(new BossRoom(currentRooms[currentRooms.Count - 1], EnemyDatabase.bossPool,EnemyDatabase.bossPool.Count));
     }

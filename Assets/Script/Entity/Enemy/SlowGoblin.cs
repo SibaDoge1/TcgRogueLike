@@ -30,7 +30,8 @@ public class SlowGoblin : Enemy {
         }
         else
         {
-            MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos);
+            if (!MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos))
+                OnEndTurn();
         }
         return true;
     }

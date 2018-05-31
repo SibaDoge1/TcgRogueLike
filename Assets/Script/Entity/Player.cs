@@ -67,19 +67,6 @@ public class Player : Character
         base.OnDieCallback();
         UIManager.instance.GameOver();
     }
-    public override int currentHp
-    {
-        get
-        {
-            return base.currentHp;
-        }
-
-        set
-        {
-            base.currentHp = value;
-			UIManager.instance.HpUpdate(currentHp, fullHp);
-        }
-    }
     public override int fullHp
     {
         get
@@ -90,9 +77,24 @@ public class Player : Character
         set
         {
             base.fullHp = value;
+            UIManager.instance.HpUpdate(currentHp, fullHp);
+        }
+    }
+    public override int currentHp
+    {
+        get
+        {
+            return base.currentHp;
+        }
+
+        set
+        {
+            base.currentHp = value;
+            characterUI.HpUpdate(fullHp, currentHp);
 			UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
+
 
 	protected override void OnEndTurn ()
     {

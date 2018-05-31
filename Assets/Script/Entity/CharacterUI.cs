@@ -26,6 +26,12 @@ public class CharacterUI : MonoBehaviour {
         turnText = transform.Find("turn").Find("turnText").GetComponent<Text>();
         turnText.color = Color.black;
     }
+    public void HpOn(int fullHp,int currentHp)
+    {
+        fullHpUI.color = Color.white;
+        currentHpUI.color = originColor;
+        currentHpUI.fillAmount = (float)currentHp / fullHp;
+    }
 	public void HpUpdate(int fullHp,int currentHp)
     {
         if(hpRoutine!=null)
