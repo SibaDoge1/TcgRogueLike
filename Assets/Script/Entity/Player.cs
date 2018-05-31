@@ -77,7 +77,8 @@ public class Player : Character
         set
         {
             base.currentHp = value;
-			UIManager.instance.HpUpdate(currentHp, fullHp);
+            characterUI.HpUpdateRoutine(fullHp, value);
+            UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
     public override int fullHp

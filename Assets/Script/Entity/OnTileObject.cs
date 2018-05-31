@@ -80,7 +80,7 @@ public abstract class OnTileObject : MonoBehaviour {
 		pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
 		currentTile.OnTileObj = this;
-		transform.localPosition = currentTile.transform.localPosition;
+		transform.localPosition = currentTile.transform.localPosition + new Vector3(0,0,_pos.y);
 
 		return true;
 	}
@@ -105,15 +105,16 @@ public abstract class OnTileObject : MonoBehaviour {
 	private IEnumerator MoveAnimationRoutine(){
 		float timer = 0;
 		Vector3 originPos = transform.localPosition;
-		while (true) {
+        Vector3 targetPos = currentTile.transform.localPosition+new Vector3(0, 0, pos.y);
+        while (true) {
 			timer += Time.deltaTime * 5;
 			if (timer > 1) {
 				break;
 			}
-			transform.localPosition = Vector3.Lerp (originPos, currentTile.transform.localPosition, timer);
+			transform.localPosition = Vector3.Lerp (originPos, targetPos, timer);
 			yield return null;
 		}
-		transform.localPosition = currentTile.transform.localPosition;
+		transform.localPosition = targetPos;
 		OnEndTurn ();
 	}
 

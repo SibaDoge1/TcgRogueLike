@@ -26,12 +26,11 @@ public class CharacterUI : MonoBehaviour {
         turnText = transform.Find("turn").Find("turnText").GetComponent<Text>();
         turnText.color = Color.black;
     }
-	public void HpUpdate(int fullHp,int currentHp)
+	public void HpUpdate(int fullHp, int currentHp)
     {
-        if(hpRoutine!=null)
-       StopCoroutine(hpRoutine);
-
-       hpRoutine = StartCoroutine(HpUpdateRoutine(fullHp, currentHp));
+        fullHpUI.color = Color.white;
+        currentHpUI.color = originColor;
+        currentHpUI.fillAmount = (float)currentHp / fullHp;
     }
     public void SetLocalScale(int x)
     {
@@ -44,7 +43,13 @@ public class CharacterUI : MonoBehaviour {
             transform.localScale = new Vector3(-0.02f, 0.02f,1);
         }
     }
-    IEnumerator HpUpdateRoutine(int fullHp, int currentHp)
+    public void HpUpdateRoutine(int fullHp, int currentHp)
+    {
+        if (hpRoutine != null)
+            StopCoroutine(hpRoutine);
+        hpRoutine = StartCoroutine(IEnumHpUpdate(fullHp, currentHp));
+    }
+    IEnumerator IEnumHpUpdate(int fullHp, int currentHp)
     {
         fullHpUI.color = Color.white;
         currentHpUI.color = originColor;

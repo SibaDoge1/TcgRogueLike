@@ -38,7 +38,7 @@ public abstract class Character : OnTileObject {
 
         set
         {
-            characterUI.HpUpdate(value, currentHp);
+            //characterUI.HpUpdate(value, currentHp);
             base.fullHp = value;
         }
     }
@@ -51,8 +51,9 @@ public abstract class Character : OnTileObject {
 
         set
         {
-            characterUI.HpUpdate(fullHp, value);
             base.currentHp = value;
+            if (currentHp < fullHp)
+                characterUI.HpUpdate(fullHp, currentHp);
         }
     }
 }

@@ -44,6 +44,9 @@ TagManager:
   - name: Effect
     uniqueID: 200816457
     locked: 0
+  - name: WorldUI
+    uniqueID: 997386241
+    locked: 0
   - name: Card
     uniqueID: 15772777
     locked: 0
