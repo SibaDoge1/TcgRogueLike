@@ -6,7 +6,7 @@ public class TestInput : MonoBehaviour {
 
 	void Update(){
 		if (Input.GetKeyDown (KeyCode.D)) {
-			PlayerControl.instance.DrawCard ();
+			PlayerControl.instance.NaturalDraw ();
 		}
 	}
 

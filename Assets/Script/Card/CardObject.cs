@@ -7,6 +7,9 @@ public delegate void LocateCallback();
 public class CardObject : MonoBehaviour {
 	private HandCard hand;
 
+	public Image img_Ability;
+	public Text txt_Ability;
+
 	private void Awake(){
 		rendererParent = transform.Find ("Renderer");
 		spriteRenderer = rendererParent.Find("Sprite").GetComponent<SpriteRenderer> ();
@@ -27,6 +30,19 @@ public class CardObject : MonoBehaviour {
 		spriteRenderer.sprite = sprite_;
 		txt_name.text = data.CardName;
 		txt_explain.text = data.CardExplain;
+		CardAbilityType a = data.GetCardAbilityType ();
+		switch (a) {
+		case CardAbilityType.Attack:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconAtk");
+			break;
+		case CardAbilityType.Heal:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconHeal");
+			break;
+		case CardAbilityType.Util:
+			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
+			break;
+		}
+		txt_Ability.text = data.GetCardAbilityValue ();
 	}
 	public void SetParent(HandCard hand_){
 		hand = hand_;
@@ -43,8 +59,10 @@ public class CardObject : MonoBehaviour {
 	private Vector3 originPos;
 	private Quaternion originRot;
 	private const int DragThreshold = 2;
-	private const int ActiveThreshold = 4;
+	private const int ActiveThreshold = 3;
 	void OnMouseDown(){
+		transform.parent = transform.parent.parent;
+		hand.ChooseOne ();
 		data.CardEffectPreview ();
 
 		if (locateRoutine != null) {
@@ -54,6 +72,8 @@ public class CardObject : MonoBehaviour {
 	}
 
 	void OnMouseUp(){
+		transform.parent = hand.transform;
+		hand.ChooseRollback ();
 		data.CancelPreview ();
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && InputModule.IsPlayerTurn) {
@@ -73,7 +93,7 @@ public class CardObject : MonoBehaviour {
 		transform.position = touchPos;
 
 		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > DragThreshold) {
-			rendererParent.transform.localScale = Vector3.one;
+			rendererParent.transform.localScale = new Vector3 (0.3f, 0.3f, 1f);
 			rendererParent.transform.localPosition = Vector3.zero;
 		} else {
 			rendererParent.transform.localScale = new Vector3 (2.5f, 2.5f, 1f);
@@ -105,14 +125,6 @@ public class CardObject : MonoBehaviour {
         Destroy(gameObject);
     }
 
-	private void HideCard(int target){
-		
-		Vector3 targetPos = originPos;
-		targetPos.x = 0;
-		targetPos.y = -2.5f;
-
-	}
-
 	private void EnableInteraction(){
 		collider.enabled = true;
 	}
@@ -140,10 +152,12 @@ public class CardObject : MonoBehaviour {
 			if (timer > 1) {
 				transform.localPosition = targetPosition;
 				transform.rotation = targetRotation;
+				rendererParent.localScale = Vector3.one;
 				break;
 			}
 			transform.localPosition = Vector3.Lerp (transform.localPosition, targetPosition, 0.1f);
 			transform.rotation = Quaternion.Slerp (transform.rotation, targetRotation, 0.1f);
+			rendererParent.localScale = Vector3.Lerp (rendererParent.localScale, Vector3.one, 0.1f);
 			yield return null;
 		}
 

@@ -22,6 +22,10 @@ public class Room : MonoBehaviour
 		return Mathf.Max (Mathf.Abs (a.x - b.x), Mathf.Abs (a.y - b.y));
 	}
 
+	public void SetStartRoom(){
+		isCleared = true;
+	}
+
 	public void OnEnemyDead(Enemy enemy){
 		enemyList.Remove (enemy);
 		if (enemyList.Count != 0) {
@@ -34,6 +38,7 @@ public class Room : MonoBehaviour
 		//Enemy All Dead
 		isCleared = true;
 		OpenDoors ();
+		GameManager.instance.OnPlayerClearRoom ();
 	}
 
 	public bool IsEnemyAlive(){

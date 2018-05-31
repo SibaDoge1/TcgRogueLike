@@ -9,7 +9,7 @@ public enum CardAttribute
 	WATER,
 	LEAF
 }
-public enum CardAnimationType{FrontSlash, SelfBuff}
+public enum CardAbilityType{Attack, Heal, Util}
 public class CardData {
 	protected CardData(){}
 	public CardData(int cardIndex){
@@ -27,8 +27,7 @@ public class CardData {
 	public string CardExplain {
 		get { return cardExplain; }
 	}
-
-	protected CardAnimationType animType;
+		
 	protected CardEffectType effectType;
 
 
@@ -56,5 +55,12 @@ public class CardData {
 
 	public virtual bool IsConsumeTurn(){
 		return true;
+	}
+
+	public virtual CardAbilityType GetCardAbilityType(){
+		return CardAbilityType.Attack;
+	}
+	public virtual string GetCardAbilityValue(){
+		return "0";
 	}
 }

@@ -41,7 +41,7 @@ public class PlayerControl : MonoBehaviour {
             moveStartHP == player.currentHp && player.MoveTo(path[0].pos))
         {
 			path.RemoveAt (0);
-			DrawCard ();
+			NaturalDraw ();
 			return true;
 		} else {
 			path = null;
@@ -61,7 +61,7 @@ public class PlayerControl : MonoBehaviour {
 
     public void EndTurnButton()
     {
-        DrawCard();
+        NaturalDraw();
         EndPlayerTurn();
     }
 
@@ -69,7 +69,26 @@ public class PlayerControl : MonoBehaviour {
 	public Deck deck;
 	public HandCard hand;
 
-	public void DrawCard(){
+	/// <summary>
+	/// Draw Anyway
+	/// </summary>
+	public void ForceDraw(){
+		hand.DrawHand (deck.Draw ());
+	}
+
+	/// <summary>
+	/// Draw With MagicCard
+	/// </summary>
+	public void MagicDraw(){
+		if (hand.CurrentHandCount < Config.HandMax) {
+			hand.DrawHand (deck.Draw ());
+		}
+	}
+
+	/// <summary>
+	/// Draw Each Turn (Check Remain Monsters)
+	/// </summary>
+	public void NaturalDraw(){
 		if (hand.CurrentHandCount < Config.HandMax && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
 			hand.DrawHand (deck.Draw ());
 		}

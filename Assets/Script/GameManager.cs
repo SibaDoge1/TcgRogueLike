@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
+		PlayerData.deck.Clear();
 		for (int i = 0; i < 7; i++) {
 			PlayerData.deck.Add (new CardData_Sword (1));
 		}
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour {
         currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(5, 5), 10);
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
+		EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
+		MinimapRenderer.instance.Init (currentFloor);
 	}
 
     
@@ -38,12 +41,18 @@ public class GameManager : MonoBehaviour {
 	public void OnPlayerEnterNewRoom(){
 		if (currentFloor.CurrentRoom.IsCleares == false) {
 			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
+			MinimapRenderer.instance.RenderRoom (currentFloor.CurrentRoom);
 		}
+	}
+
+	public void OnPlayerClearRoom(){
+		MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()
     {
 		EnemyControl.instance.EnemyTurn ();
+		MinimapRenderer.instance.PlayerTileRefresh (currentFloor.CurrentRoom);
     }
 
     public void OnEndEnemyTurn()
