@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager instance;
     private void Awake(){
-		if (instance == null) {
+        if (instance == null) {
 			instance = this;
 		} else {
 			Destroy (this);
@@ -22,11 +22,11 @@ public class GameManager : MonoBehaviour {
 		PlayerData.deck.Add (new CardData_BFSword (3));
 		PlayerData.deck.Add (new CardData_Tumble (4));
 		PlayerData.deck.Add (new CardData_Arrow (7));
-        currentFloor = MapGenerator.GetNewMap(0, new Vector2Int(5, 5), 10);
+        currentFloor = MapGenerator.GetNewMap(1,20);
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
 		EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
-		MinimapRenderer.instance.Init (currentFloor);
+		//MinimapRenderer.instance.Init (currentFloor);
 	}
 
     
@@ -41,19 +41,19 @@ public class GameManager : MonoBehaviour {
 	public void OnPlayerEnterNewRoom(){
 		if (currentFloor.CurrentRoom.IsCleares == false) {
 			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
-			MinimapRenderer.instance.RenderRoom (currentFloor.CurrentRoom);
+			//MinimapRenderer.instance.RenderRoom (currentFloor.CurrentRoom);
 		}
 	}
 
 	public void OnPlayerClearRoom(){
         PlayerControl.instance.ReLoadDeck();
-        MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
+        //MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()
     {
 		EnemyControl.instance.EnemyTurn ();
-		MinimapRenderer.instance.PlayerTileRefresh (currentFloor.CurrentRoom);
+		//MinimapRenderer.instance.PlayerTileRefresh (currentFloor.CurrentRoom);
     }
 
     public void OnEndEnemyTurn()

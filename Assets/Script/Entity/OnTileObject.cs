@@ -64,7 +64,9 @@ public abstract class OnTileObject : MonoBehaviour {
     {		
         currentRoom = room;
         this.transform.parent = room.transform;
-		this.Teleport(_pos);
+
+
+        this.Teleport(_pos);
     }
 
     #region MoveMethod

@@ -73,7 +73,7 @@ public class MinimapRenderer : MonoBehaviour {
 				}
 			}
 		}
-		Vector2Int roomIndex = new Vector2Int (room.pos.x - roomPosMin.x, room.pos.y - roomPosMin.y);
+		Vector2Int roomIndex = new Vector2Int ((int)room.transform.position.x - roomPosMin.x, (int)room.transform.position.y - roomPosMin.y);
 		renderState [roomIndex.x, roomIndex.y] = true;
 
 
@@ -192,8 +192,8 @@ public class MinimapRenderer : MonoBehaviour {
 	private Vector2Int RoomLocalPosToPixelCoord(Room room, Vector2Int localPos){
 		Vector2Int result = new Vector2Int ();
 
-		result.x = roomCenterX [room.pos.x - roomPosMin.x] - room.size.x / 2 + localPos.x;
-		result.y = roomCenterY [room.pos.y - roomPosMin.y] - room.size.y / 2 + localPos.y;
+		result.x = roomCenterX [(int)room.transform.position.x - roomPosMin.x] - room.size.x / 2 + localPos.x;
+		result.y = roomCenterY [(int)room.transform.position.y - roomPosMin.y] - room.size.y / 2 + localPos.y;
 		return result;
 	}
 

@@ -46,6 +46,11 @@ public class InputModule : MonoBehaviour {
 
 				}
 			}
+            //temp
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            }
 			yield return null;
 		}
 	}

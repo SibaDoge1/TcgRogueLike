@@ -23,7 +23,7 @@ public class Player : Character
     }
 
     //문을 통해서 이동
-    public void EnterRoom(Room _room)
+    public void EnterRoom(Door door)
     {
         Vector2Int temp;
         bool isFlipped=false;
@@ -32,34 +32,33 @@ public class Player : Character
            currentTile.OnTileObj = null;
 
 		//Spawn Position Set
-        if (_room == currentRoom.northRoom)
+        if (door.Dir == Direction.NORTH)
         {
-            temp = new Vector2Int(_room.size.x / 2, 1);
+            temp = door.ConnectedDoor.getTile().pos + Vector2Int.up;
         }
-        else if (_room == currentRoom.rightRoom)
+        else if (door.Dir == Direction.EAST)
         {
-            temp = new Vector2Int(1, _room.size.y / 2);
+            temp = door.ConnectedDoor.getTile().pos + Vector2Int.right;
             isFlipped = true;
         }
-        else if (_room == currentRoom.leftRoom)
+        else if (door.Dir == Direction.WEST)
         {
-            temp = new Vector2Int(_room.size.x - 2, _room.size.y / 2);
+            temp = door.ConnectedDoor.getTile().pos + Vector2Int.left;
             isFlipped = true;
         }
         else//_room == currentRoom.SouthRoom
         {
-            temp = new Vector2Int(_room.size.x / 2, _room.size.y - 2);
+            temp = door.ConnectedDoor.getTile().pos + Vector2Int.down;
         }
 
-        SetRoom(_room,temp);
-        //CameraFollow.instance.RoomTrace(_room);
+        SetRoom(door.TargetRoom,temp);
 
         if (isFlipped)
         {
             SetLocalScale((int)-transform.localScale.x);
         }
 
-		GameManager.instance.SetCurrentRoom (_room);
+		GameManager.instance.SetCurrentRoom (door.TargetRoom);
 		GameManager.instance.OnPlayerEnterNewRoom ();
     }
 	protected override void OnDieCallback()

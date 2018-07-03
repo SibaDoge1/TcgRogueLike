@@ -2,65 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
+public enum Direction
+{
+    NORTH,
+    EAST,
+    SOUTH,
+    WEST
+}
+
 public static class MapGenerator 
 {
-
-
-
 	#region Interface
-	public static Map GetNewMap(int seed,Vector2Int _mapSize,int _roomNum)
+	public static Map GetNewMap(int level,int _roomNum)
     {
 		//TODO : Generate Map With Seed
-		mapSize = _mapSize;
 		roomNum = _roomNum;
-		rooms = new Room[mapSize.x, mapSize.y];
         currentRooms = new List<Room>();
 
-        if (roomNum > mapSize.x*mapSize.y)
-		{
-			roomNum = mapSize.x * mapSize.y;
-		}
-        Map newMap = GameObject.Find("Map").GetComponent<Map>();
+        newMap = GameObject.Find("Map").GetComponent<Map>();
 
-        CreateRooms(newMap.transform); 
-		SetRoomDoors();
         SetSeeds();
+        SetRooms(); 
 
         newMap.Room = currentRooms;
         newMap.SetStartRoom(currentRooms[0]);
 
-        newMap.maxRoomSize = maxRoomSize;
-        newMap.minRoomSize = minRoomSize;
-        newMap.mapSize = mapSize;
-        newMap.maxRoomPos = GetMaxBorder();
-        newMap.minRoomPos = GetMinBorder();
+        for(int i=0; i<currentRooms.Count;i++)
+        {
+            currentRooms[i].OpenDoors();
+        }
         return newMap;
     }
     #endregion
 
-    static Room[,] rooms;
-    static Vector2Int mapSize;
+    static Map newMap;
     static int roomNum;
-    static List<Room> currentRooms;
-    static Vector2Int defaultSize = new Vector2Int(12,8);
-    static Vector2Int maxRoomSize = new Vector2Int(16, 16);
-    static Vector2Int minRoomSize = new Vector2Int(8, 8);
+    static List<Room> currentRooms;//현재 놓여진 방들
+    static Queue<Room> roomQueue;//놓아야 하는 방들
 
-
-
+    static Vector2Int mapSize;
 
     private static Vector2Int GetMaxBorder()
     {
         int maxX = mapSize.x/2; int maxY = mapSize.y/2;
        foreach(Room r in currentRooms)
         {
-            if(r.pos.x>maxX)
+            if(r.transform.position.x>maxX)
             {
-                maxX = r.pos.x;
+                maxX = (int)r.transform.position.x;
             }
-            if(r.pos.y>maxY)
+            if(r.transform.position.y>maxY)
             {
-                maxY = r.pos.y;
+                maxY = (int)r.transform.position.y;
             }          
         }
         return new Vector2Int(maxX, maxY);
@@ -71,150 +65,149 @@ public static class MapGenerator
         foreach (Room r in currentRooms)
         {
 
-            if (r.pos.x < minX)
+            if (r.transform.position.x < minX)
             {
-                minX = r.pos.x;
+                minX = (int)r.transform.position.x;
             }
-            if (r.pos.y < minY)
+            if (r.transform.position.y < minY)
             {
-                minY = r.pos.y;
+                minY = (int)r.transform.position.y;
             }
-
         }
         return new Vector2Int(minX, minY);
     }
-    private static void CreateRooms(Transform tr)
-    {
-	    List<Room> exploreRooms = new List<Room>();
 
-        Vector2Int startPos =  new Vector2Int(Mathf.RoundToInt(mapSize.x / 2), Mathf.RoundToInt(mapSize.y / 2));
-        Room startRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, tr).GetComponent<Room>();
-        startRoom.MakeRoom(new Vector2Int(startPos.x, startPos.y),defaultSize);
-		startRoom.SetStartRoom ();
-        rooms[startPos.x, startPos.y] = startRoom;
-        currentRooms.Add(startRoom);
-        exploreRooms.Add(startRoom);
-        while(roomNum>currentRooms.Count)
-        {
-            Room tempRoom = exploreRooms[exploreRooms.Count - 1];
-            if(!CheckExploreAble(tempRoom))
-            {
-                exploreRooms.RemoveAt(exploreRooms.Count - 1);
-                continue;
-            }
-            Vector2Int target = tempRoom.pos+GetRandomDir();
-            Vector2Int ranSize = new Vector2Int(Random.Range(minRoomSize.x, maxRoomSize.x), Random.Range(minRoomSize.y, maxRoomSize.y));
-            if (CheckAvailPos(target))
-            {
-                Room newRoom = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject, tr).GetComponent<Room>();
-                rooms[target.x, target.y] = newRoom;
-                if(currentRooms.Count == roomNum-1)
-                    newRoom.MakeRoom(target, maxRoomSize);
-                else
-                    newRoom.MakeRoom(target, ranSize);
-                currentRooms.Add(newRoom);
-                exploreRooms.Add(newRoom);
-            }
-        }
-    }
     private static void SetSeeds()
     {
-        currentRooms[0].SetSeed(new StartRoom(currentRooms[0]));      
-        for (int i=1; i<currentRooms.Count-1;i++)
-        {
+        roomQueue = new Queue<Room>();
 
-            currentRooms[i].SetSeed(new BattleRoom(currentRooms[i], (Shape)Random.Range(0, 2), EnemyDatabase.pool1, (int)(currentRooms[i].size.magnitude/3)));
-        }
-        currentRooms[currentRooms.Count - 1].SetSeed(new BossRoom(currentRooms[currentRooms.Count - 1], EnemyDatabase.bossPool,EnemyDatabase.bossPool.Count));
-    }
-    private static void SetRoomDoors()
-    {
-        for(int i=0; i< currentRooms.Count;i++)
+        Room startRoom = GetRoom();
+        new StartRoom(startRoom);
+        roomQueue.Enqueue(startRoom);
+        startRoom.name = "Start Room";
+
+        for (int i = 2; i < roomNum; i++)
         {
-            Vector2Int temp = currentRooms[i].pos;
-            if(temp.y+1<mapSize.y && rooms[temp.x,temp.y+1] != null)
-            {
-                currentRooms[i].northRoom = rooms[temp.x,temp.y+1];
-            }
-            if(temp.x+1<mapSize.x && rooms[temp.x+1, temp.y] != null)
-            {
-                currentRooms[i].rightRoom = rooms[temp.x + 1, temp.y];
-            }
-            if (temp.y-1>=0 && rooms[temp.x, temp.y - 1] != null)
-            {
-                currentRooms[i].southRoom = rooms[temp.x, temp.y - 1];
-            }
-            if(temp.x-1>=0 && rooms[temp.x-1,temp.y]!=null)
-            {
-                currentRooms[i].leftRoom = rooms[temp.x - 1, temp.y];
-            }
-            currentRooms[i].SetDoors();
+            Room battleRoom = GetRoom();
+            new BattleRoom(battleRoom, EnemyDatabase.pool1);
+            roomQueue.Enqueue(battleRoom);
+            battleRoom.name = "Battle Room"+i;
         }
-        
+        Room bossRoom = GetRoom();
+        new BossRoom(bossRoom, EnemyDatabase.bossPool);
+        roomQueue.Enqueue(bossRoom);
+        bossRoom.name = "Boss Room";
     }
 
-
-    private static bool CheckAvailPos(Vector2Int target)
+    private static void SetRooms()
     {
-        if(target.x >=0 && target.x <mapSize.x
-            && target.y>=0 && target.y<mapSize.y &&
-            rooms[target.x,target.y]==null)
+        //TODO : 수정
+        Room cur = roomQueue.Dequeue();
+        cur.SetStartRoom();
+        currentRooms.Add(cur);
+        while(roomQueue.Count > 0)
         {
-            return true;
-        }else
+            cur = roomQueue.Dequeue();
+            while(!ConnectRoom(currentRooms[Random.Range(0, currentRooms.Count)], cur))
+            {
+            }
+            currentRooms.Add(cur);
+        }
+    }
+    private static Room GetRoom()
+    {
+        Room room = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject,newMap.transform).GetComponent<Room>();
+        return room;
+    }
+
+
+    private static bool ConnectRoom(Room room1,Room room2)
+    {
+        Door room1Door = null;
+        for (int i=0; i<room1.doorList.Count;i++)
         {
+            if (room1.doorList[i].TargetRoom == null)
+            {
+                room1Door = room1.doorList[Random.Range(0, room1.doorList.Count)];               
+                break;
+            }
+            if(i == room1.doorList.Count-1)
+            {
+                return false;
+            }
+        }
+
+        Direction opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
+        Door room2Door = null;
+
+        for (int i=0; i<room2.doorList.Count;i++)
+        {
+            if(room2.doorList[i].Dir == opposite && room2.doorList[i].TargetRoom == null)
+            {
+                room2Door = room2.doorList[i];
+                break;
+            }
+            if(i == room2.doorList.Count-1)
+            {
+                return false;
+            }
+        }
+
+
+        ///방배치 시작
+        Vector3 offset = room2.transform.position- room2Door.transform.position;
+        switch (room1Door.Dir)
+        {
+            case Direction.NORTH:
+                room2.transform.position = 
+                    new Vector3(room1Door.transform.position.x+offset.x
+                    ,room1.transform.position.y+room1.size.y / 2 + room2.size.y / 2 + 2);
+                break;
+            case Direction.EAST:
+                room2.transform.position = 
+                   new Vector3(room1.transform.position.x + room1.size.x/2+room2.size.x/2 + 2
+                   , room1Door.transform.position.y+offset.y);
+                break;
+            case Direction.SOUTH:
+                room2.transform.position = 
+                    new Vector3(room1Door.transform.position.x + offset.x
+                    , room1.transform.position.y - room1.size.y / 2 - room2.size.y / 2 - 2);
+                break;
+            case Direction.WEST:
+                room2.transform.position = 
+                     new Vector3(room1.transform.position.x - room1.size.x / 2 - room2.size.x / 2 - 2
+                     , room1Door.transform.position.y + offset.y);
+                break;
+        }
+
+        if (IsOverlapped(room2))
             return false;
-        }
-    }
-    private static Vector2Int GetRandomDir()
-    {
-       int randomValue = Random.Range(0, 4);
-        switch(randomValue)
-        {
-            case 0: //UP
-                return Vector2Int.up;
-            case 1: //RIGHT
-                return Vector2Int.right;
-            case 2: //DOWN
-                return Vector2Int.down;
-            case 3: //LEFT
-                return Vector2Int.left;
-            default:
-                return Vector2Int.up;
-        }
-    }
-    /// <summary>
-    /// 사방이 막혀있는 방이라면 false값을 리턴합니다.
-    /// </summary>
-    /// <returns></returns>
-    private static bool CheckExploreAble(Room temp)
-    {
-        int count = 0;
-        if(temp.pos.x==0 || rooms[temp.pos.x-1,temp.pos.y]!=null)//왼쪽 체크
-        {
-            count++;
-        }
-        if (temp.pos.x == mapSize.x-1 || rooms[temp.pos.x + 1, temp.pos.y] != null)//오른쪽 체크
-        {
-            count++;
-        }
-        if (temp.pos.y == mapSize.y-1 || rooms[temp.pos.x, temp.pos.y+1] != null)//위쪽 체크
-        {
-            count++;
-        }
-        if (temp.pos.y == 0 || rooms[temp.pos.x, temp.pos.y-1] != null)//아래쪽 체크
-        {
-            count++;
-        }
-
-
-        if (count==4)
-        {
-            return false; 
-        }
         else
         {
+            room1Door.TargetRoom = room2;
+            room1Door.ConnectedDoor = room2Door;
+            room2Door.TargetRoom = room1;
+            room2Door.ConnectedDoor = room1Door;
             return true;
         }
+
     }
+
+    /// <summary>
+    /// 해당위치에 room을 놓았을때 다른 방들이랑 겹칠까?
+    /// </summary>
+    private static bool IsOverlapped(Room room)
+    {
+        foreach(Room r in currentRooms)
+        {
+            if(Mathf.Abs(r.transform.position.x-room.transform.position.x)<=r.size.x/2+room.size.x/2 +1 
+                && Mathf.Abs(r.transform.position.y-room.transform.position.y)<=r.size.y/2+room.size.y/2+1)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }
