@@ -22,15 +22,16 @@ public class GameManager : MonoBehaviour {
 		PlayerData.deck.Add (new CardData_BFSword (3));
 		PlayerData.deck.Add (new CardData_Tumble (4));
 		PlayerData.deck.Add (new CardData_Arrow (7));
-        currentFloor = MapGenerator.GetNewMap(1,20);
+       
+        currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
-		EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
-		//MinimapRenderer.instance.Init (currentFloor);
-	}
+        EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
+        //MinimapRenderer.instance.Init (currentFloor);
+    }
 
-    
-    private Map currentFloor;
+
+    public Map currentFloor;
 	public Room GetCurrentRoom(){
 		return currentFloor.CurrentRoom;
 	}

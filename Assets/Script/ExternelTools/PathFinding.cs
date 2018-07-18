@@ -57,10 +57,10 @@ public class PathFinding : MonoBehaviour
     /// pathFinding Using A*
     /// </summary>
 
-     public List<Tile> GeneratePath(OnTileObject obje,Tile targetTile)
+     public List<Tile> GeneratePath(Entity obje,Tile targetTile)
 	{
 
-		OnTileObject selectedUnit = obje;
+		Entity selectedUnit = obje;
 		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile> ();
 		Dictionary<Tile, float> distance = new Dictionary<Tile, float> ();
 		_targetTile = targetTile;

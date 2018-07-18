@@ -28,15 +28,11 @@ public class Map : MonoBehaviour{
         set { currentRoom = value; }
     }
 
+    public int floor;//층 수
     public int roomNum;//방갯수
 
-    public Vector2Int mapSize;
-    public Vector2Int maxRoomPos;//방의위치
-    public Vector2Int minRoomPos;
-
-    public Vector2Int maxRoomSize;//방의크기
-    public Vector2Int minRoomSize;
-
+    public Vector2Int maxHorizon;//Map의 가로 크기
+    public Vector2Int minVertical;//Map의 세로 크기
 
 
 }

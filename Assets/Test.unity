@@ -374,8 +374,8 @@ GameObject:
   m_Component:
   - component: {fileID: 515007992}
   - component: {fileID: 515007994}
-  - component: {fileID: 515007993}
   - component: {fileID: 515007995}
+  - component: {fileID: 515007993}
   m_Layer: 5
   m_Name: MiniMap
   m_TagString: Untagged
@@ -409,25 +409,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 515007991}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 59986b7522b4f89438ae7dafb37ab8b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5882353}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!222 &515007994
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -442,9 +426,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 515007991}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59986b7522b4f89438ae7dafb37ab8b1, type: 3}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!1 &601429116
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +455,7 @@ GameObject:
   - component: {fileID: 601429118}
   - component: {fileID: 601429117}
   - component: {fileID: 601429119}
+  - component: {fileID: 601429120}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -497,6 +498,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d02fd34df83fc0c42953e073f95395da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentFloor: {fileID: 0}
+--- !u!114 &601429120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 601429116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b21de209a18bad4280afca6bce6f892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HandMax: 5
+  UseCustomDeck: 0
+  CustomDeck: []
+  floorNum: 1
+  roomNum: 15
+  RoomTestMode: 0
+  TestRoomType: 0
+  TestRoomName: 
 --- !u!1 &687192912
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,7 +852,7 @@ GameObject:
   - component: {fileID: 849199651}
   - component: {fileID: 849199650}
   m_Layer: 5
-  m_Name: tempPanel
+  m_Name: GameOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1321,12 +1342,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a424047d2ea34d147a63c4fa2b335837, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floor: 0
   roomNum: 0
-  mapSize: {x: 0, y: 0}
-  maxRoomPos: {x: 0, y: 0}
-  minRoomPos: {x: 0, y: 0}
-  maxRoomSize: {x: 0, y: 0}
-  minRoomSize: {x: 0, y: 0}
+  maxHorizon: {x: 0, y: 0}
+  minVertical: {x: 0, y: 0}
 --- !u!4 &1186515145
 Transform:
   m_ObjectHideFlags: 0
@@ -1393,7 +1412,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 40
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

@@ -17,8 +17,8 @@ public class CardData_BFSword : CardData_Normal
 
         if (TileUtils.IsHitableAround(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range))
         {
-            List<OnTileObject> targets = TileUtils.GetNearEnemies(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
-            foreach(OnTileObject e in targets)
+            List<Entity> targets = TileUtils.GetNearEnemies(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
+            foreach(Entity e in targets)
             {
                 e.currentHp -= damage;
 				EffectDelegate.instance.MadeEffect (CardEffectType.Slash, e.transform.position);
@@ -85,7 +85,7 @@ public class CardData_Stone : CardData_Normal{
 	}
 	public override void CardActive()
 	{
-		OnTileObject target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		Entity target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
         if(target != null)
         {
             target.currentHp -= damage;
@@ -121,7 +121,7 @@ public class CardData_Arrow : CardData_Normal{
 	}
 	public override void CardActive()
 	{
-		OnTileObject target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		Entity target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
         if(target!=null)
         {
             target.currentHp -= damage;

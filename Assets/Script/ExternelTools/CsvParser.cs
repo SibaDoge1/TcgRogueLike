@@ -2,55 +2,51 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 /// <summary>
-/// CSV읽어오는 클래스입니다
-/// 출처 : 최원재 선배님 
+/// 맵 데이터 읽어오는 클래스 입니다.
 /// </summary>
 
 
-public class CsvParser : MonoBehaviour
-{
-   
-
-    private static string[] GetLines(string fileName)
+public static class CsvParser 
+{  
+    private static string[] ReadString(string path)
     {
-        TextAsset csvTextAsset = (TextAsset)Resources.Load(fileName) as TextAsset;
+        TextAsset csvTextAsset = Resources.Load(path) as TextAsset;
         return csvTextAsset.text.Split('\n');
     }
 
-    public static IEnumerator ReadMap(string fileName)
-       {
+    /// <summary>
+    /// 방 한개 데이터 가져오기
+    /// </summary>
+    public static string[,] ReadRoom(int floor,RoomType rt,string name)
+    {
+        string[] line = ReadString("RoomData/Floor"+floor+"/"+rt.ToString()+"/"+name);
+        int row, collum, type;
 
-        string[] line = GetLines(fileName);
-        int row, collum;
+        row = Int32.Parse(line[0].Split(',')[0]); collum = Int32.Parse(line[0].Split(',')[1]);
+        string[,] roomData = new string[row, collum];
 
-        row = line.Length-1; collum = line[0].Split(',').Length;
-        yield return row; yield return collum;
-        List<string> data = new List<string>(); 
-
-           for (int loop = 0; loop <=row-1; loop++)
-           {
-             if(line[loop].Length<=1)
-               {
+        for (int loop = 0; loop < row; loop++)
+        {
+            if (line[loop + 1].Length <= collum + 1)
+            {
                 continue;
-               }
+            }
 
-               string[] split = line[loop].Split(',');
-               if(split[0].Length<=1)
-                {
-                continue;
-                }
+            string[] split = line[loop+1].Split(',');
 
-               for (int loop2 = 0; loop2 <= collum -1; loop2++)
-               {
-                data.Add(split[loop2]);
-               }
-           }
 
-          yield return data;
-       }
-       
+            for (int loop2 = 0; loop2 < collum; loop2++)
+            {
+                roomData[loop, loop2] = split[loop2];
+            }
+        }
 
+        
+      
+        return roomData;
+    }
 }
 

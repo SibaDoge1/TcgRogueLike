@@ -27,7 +27,7 @@ public class InputModule : MonoBehaviour {
 		while (true) {
 			//TODO : ANDROID TOUCH
 			if (isPlayerTurn) {
-				if (Input.GetMouseButtonDown (0) &&
+				if (Input.GetMouseButtonDown (1) &&
 					!EventSystem.current.IsPointerOverGameObject () &&
 					!Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), new Vector3 (0, 0, 1), 10f)
 				){

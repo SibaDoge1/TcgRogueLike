@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-
+public enum RoomType
+{
+    DEFAULT,
+    BATTLE,
+    EVENT,
+    BOSS,
+    SHOP
+}
 /// <summary>
 /// ROOM 클래스 , 타일 정보와 방안의 적 정보를 가지고있다.
 /// 생성에 관한것은 RoomSeed 클래스에서 처리
@@ -14,6 +21,7 @@ public class Room : MonoBehaviour
     public List<Door> doorList;
 	Tile[,] tiles;
 
+    public RoomType roomType;
 	public List<Enemy> enemyList = new List<Enemy>();
 	private Tile playerTile;
 	private bool isCleared = false;
@@ -52,10 +60,9 @@ public class Room : MonoBehaviour
 	}
 
 	public Tile WorldToTile(Vector3 worldPos){
-		Vector3 sizeTemp = new Vector3 (size.x / 2, size.y / 2, 0);
-		Vector3 p = transform.position - sizeTemp;
-		Vector3 temp = worldPos - p;
-        return GetTile(new Vector2Int((int)temp.x, (int)temp.y));
+		Vector3 temp = worldPos - transform.position;
+        temp = new Vector3(-temp.y,temp.x, 0);
+        return GetTile(new Vector2Int((int)(temp.x), (int)temp.y));
 	}
 
 	public Tile GetPlayerTile(){
@@ -87,7 +94,7 @@ public class Room : MonoBehaviour
         for(int i=0; i<doorList.Count;i++)
         {
             if (doorList[i].TargetRoom != null)
-                temp.Add(doorList[i].getTile().pos);
+                temp.Add(doorList[i].ThisTile.pos);
         }
         return temp;
     }
@@ -102,7 +109,7 @@ public class Room : MonoBehaviour
         for (int i = 0; i < doorList.Count; i++)
         {
             if(doorList[i].TargetRoom != null)
-            doorList[i].getTile().OnTileObj.currentHp = 0;
+            doorList[i].ThisTile.OnTileObj.currentHp = 0;
         }
     }
     

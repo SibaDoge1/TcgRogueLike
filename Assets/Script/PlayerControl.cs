@@ -18,7 +18,7 @@ public class PlayerControl : MonoBehaviour {
 	public void InitPlayer(Room room)
 	{
 		CameraFollow.instance.PlayerTrace(player);
-		player.SetRoom(room, new Vector2Int(4, 4));
+		player.SetRoom(room, new Vector2Int(3,3));
 		GameManager.instance.SetCurrentRoom (room);
 		GameManager.instance.OnPlayerEnterNewRoom ();
     }
@@ -80,7 +80,7 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw With MagicCard
 	/// </summary>
 	public void MagicDraw(){
-		if (hand.CurrentHandCount < Config.HandMax) {
+		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.DrawHand (deck.Draw ());
 		}
 	}
@@ -89,13 +89,13 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw Each Turn (Check Remain Monsters)
 	/// </summary>
 	public void NaturalDraw(){
-		if (hand.CurrentHandCount < Config.HandMax && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
+		if (hand.CurrentHandCount < Config.instance.HandMax && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
 			hand.DrawHand (deck.Draw ());
 		}
 	}
 
 	public void AddCard(CardData cData){
-		if (hand.CurrentHandCount < Config.HandMax) {
+		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.AddHand (cData.Instantiate ());
 		}
 	}

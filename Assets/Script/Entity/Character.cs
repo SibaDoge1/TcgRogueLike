@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Character : OnTileObject {
+public abstract class Character : Entity {
 
     protected CharacterUI characterUI;
     protected override void Awake()
@@ -12,7 +12,7 @@ public abstract class Character : OnTileObject {
     }
     public override bool MoveTo(Vector2Int _pos)
     {
-        int xOffset = pos.x - _pos.x;
+        int xOffset = pos.y - _pos.y;
         SetLocalScale(xOffset);
 		return  base.MoveTo(_pos);
     }
@@ -23,7 +23,7 @@ public abstract class Character : OnTileObject {
             transform.localScale = new Vector3(1, 1, 1);
             characterUI.SetLocalScale(x);
         }
-        else
+        else if (x<0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
             characterUI.SetLocalScale(x);

@@ -16,8 +16,8 @@ namespace Arch{
 			get { return sprite; }
 		}
 	    public Vector2Int pos;
-		private OnTileObject onTileObj;//타일위에 있는 mapObject
-	    public OnTileObject OnTileObj {
+		private Entity onTileObj;//타일위에 있는 mapObject
+	    public Entity OnTileObj {
 			get {
 				return onTileObj;
 			}
@@ -28,8 +28,13 @@ namespace Arch{
 				}
 			}
 		}
-		private OffTile offTileObj;
-		
+		private OffTile _offTile;
+		public OffTile offTile
+        { get { return _offTile; }  set { _offTile = value; _offTile.ThisTile = this; } }
+        private EventLayer _eventLayer;
+        public EventLayer eventLayer
+        { get { return _eventLayer;  } set { _eventLayer = value; _eventLayer.ThisTile = this; } }
+
 	    #endregion
 	    /// <summary>
 	    /// Defalut : GroundTile
@@ -37,35 +42,28 @@ namespace Arch{
 	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
 		{
 			pos = _pos;
-			transform.localPosition = new Vector3(-roomSize.x / 2 + 0.5f + pos.x, -roomSize.y / 2 + 0.5f + pos.y, 0);
+			transform.localPosition = new Vector3(0.5f + pos.y, -0.5f-pos.x, 0);
 
             name = "Tile" + _pos;
 		}
 	
-	    public bool IsStandAble(OnTileObject ot)
-		{
-			if (offTileObj != null) {
-				return offTileObj.IsStandAble (ot);
-			} else {
+	    public bool IsStandAble(Entity ot)
+		{			
 				if (OnTileObj) {
 					return false;
 				} else {
 					return true;
-				}
-			}
+				}			
 		}
-    	public void SomethingUpOnThis (OnTileObject ot)
+    	public void SomethingUpOnThis (Entity ot)
 		{
-			if (offTileObj != null) {
-				offTileObj.SomethingUpOnThis (ot);
+			if (offTile != null) {
+				offTile.SomethingUpOnThis (ot);
 			}
-		}
-        public void SetOffTile(OffTile off)
-        {
-            if (offTileObj != null)
-                Destroy(offTileObj.gameObject);
-            offTileObj = off;
-            offTileObj.setTile(this);
-        }
+            if(eventLayer != null)
+            {
+                eventLayer.SomethingUpOnThis(ot);
+            }
+		}       
 	}
 }

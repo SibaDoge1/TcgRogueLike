@@ -34,21 +34,21 @@ public class Player : Character
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
-            temp = door.ConnectedDoor.getTile().pos + Vector2Int.up;
+            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.up;
         }
         else if (door.Dir == Direction.EAST)
         {
-            temp = door.ConnectedDoor.getTile().pos + Vector2Int.right;
-            isFlipped = true;
+            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.right;
+            //isFlipped = true;
         }
         else if (door.Dir == Direction.WEST)
         {
-            temp = door.ConnectedDoor.getTile().pos + Vector2Int.left;
-            isFlipped = true;
+            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.left;
+            //isFlipped = true;
         }
         else//_room == currentRoom.SouthRoom
         {
-            temp = door.ConnectedDoor.getTile().pos + Vector2Int.down;
+            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.down;
         }
 
         SetRoom(door.TargetRoom,temp);

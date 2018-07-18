@@ -14,15 +14,15 @@ public enum Direction
 public static class MapGenerator 
 {
 	#region Interface
-	public static Map GetNewMap(int level,int _roomNum)
+	public static Map GetNewMap(int floor,int _roomNum)
     {
-		//TODO : Generate Map With Seed
 		roomNum = _roomNum;
         currentRooms = new List<Room>();
 
         newMap = GameObject.Find("Map").GetComponent<Map>();
+        newMap.floor = floor;
 
-        SetSeeds();
+        BuildRooms();
         SetRooms(); 
 
         newMap.Room = currentRooms;
@@ -36,16 +36,18 @@ public static class MapGenerator
     }
     #endregion
 
+    #region Data
+
+    #endregion
+
     static Map newMap;
     static int roomNum;
     static List<Room> currentRooms;//현재 놓여진 방들
     static Queue<Room> roomQueue;//놓아야 하는 방들
 
-    static Vector2Int mapSize;
-
     private static Vector2Int GetMaxBorder()
     {
-        int maxX = mapSize.x/2; int maxY = mapSize.y/2;
+        int maxX = 0; int maxY = 0;
        foreach(Room r in currentRooms)
         {
             if(r.transform.position.x>maxX)
@@ -61,7 +63,7 @@ public static class MapGenerator
     }
     private static Vector2Int GetMinBorder()
     {
-        int minX = mapSize.x / 2; int minY = mapSize.y / 2;
+        int minX = 0; int minY = 0;
         foreach (Room r in currentRooms)
         {
 
@@ -77,31 +79,37 @@ public static class MapGenerator
         return new Vector2Int(minX, minY);
     }
 
-    private static void SetSeeds()
+    private static void GetRoomData(int floor)
     {
-        roomQueue = new Queue<Room>();
-
-        Room startRoom = GetRoom();
-        new StartRoom(startRoom);
-        roomQueue.Enqueue(startRoom);
-        startRoom.name = "Start Room";
-
-        for (int i = 2; i < roomNum; i++)
+      TextAsset[] res =  Resources.LoadAll("RoomData/Floor" + floor) as TextAsset[];
+      for(int i=0; i<res.Length; i++)
         {
-            Room battleRoom = GetRoom();
-            new BattleRoom(battleRoom, EnemyDatabase.pool1);
-            roomQueue.Enqueue(battleRoom);
-            battleRoom.name = "Battle Room"+i;
+            Debug.Log(res[i].text);
         }
-        Room bossRoom = GetRoom();
-        new BossRoom(bossRoom, EnemyDatabase.bossPool);
-        roomQueue.Enqueue(bossRoom);
-        bossRoom.name = "Boss Room";
+    }
+
+    private static void BuildRooms()
+    {
+            BuildRoom.SetRoomData(newMap);
+
+            roomQueue = new Queue<Room>();
+
+            Room startRoom = BuildRoom.Build(RoomType.DEFAULT ,"start");
+            roomQueue.Enqueue(startRoom);
+
+            for (int i = 2; i < roomNum; i++)
+            {
+                Room battleRoom = BuildRoom.Build(RoomType.BATTLE);
+                roomQueue.Enqueue(battleRoom);
+            }
+
+            Room bossRoom = BuildRoom.Build(RoomType.BOSS);
+            roomQueue.Enqueue(bossRoom);
+        
     }
 
     private static void SetRooms()
     {
-        //TODO : 수정
         Room cur = roomQueue.Dequeue();
         cur.SetStartRoom();
         currentRooms.Add(cur);
@@ -114,11 +122,7 @@ public static class MapGenerator
             currentRooms.Add(cur);
         }
     }
-    private static Room GetRoom()
-    {
-        Room room = InstantiateDelegate.Instantiate(Resources.Load("Room/default") as GameObject,newMap.transform).GetComponent<Room>();
-        return room;
-    }
+
 
 
     private static bool ConnectRoom(Room room1,Room room2)

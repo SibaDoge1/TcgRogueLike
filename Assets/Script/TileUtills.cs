@@ -169,9 +169,9 @@ public static class TileUtils
     /// 근처의 적 리스트 가져옵니다.
     /// </summary>
 
-    public static List<OnTileObject> GetNearEnemies(Tile center,int radius)
+    public static List<Entity> GetNearEnemies(Tile center,int radius)
     {
-        List<OnTileObject> targets = new List<OnTileObject>();
+        List<Entity> targets = new List<Entity>();
         List<Tile> range = SquareRange(center, radius);
         for(int i=0; i<range.Count;i++)
         {
@@ -182,9 +182,9 @@ public static class TileUtils
         }
         return targets;
     }
-    public static OnTileObject AutoTarget(Tile center, int radius)
+    public static Entity AutoTarget(Tile center, int radius)
     {
-        List<OnTileObject> targets = new List<OnTileObject>();
+        List<Entity> targets = new List<Entity>();
         List<Tile> range = SquareRange(center, radius);
         for (int i = 0; i < range.Count; i++)
         {
@@ -200,7 +200,7 @@ public static class TileUtils
     }
 	public static bool IsHitableAround(Tile center, int radius)
 	{
-		List<OnTileObject> targets = new List<OnTileObject>();
+		List<Entity> targets = new List<Entity>();
 		List<Tile> range = SquareRange(center, radius);
 		for (int i = 0; i < range.Count; i++)
 		{

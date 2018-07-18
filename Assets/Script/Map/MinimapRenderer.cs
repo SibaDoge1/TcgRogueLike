@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class MinimapRenderer : MonoBehaviour {
-	public static MinimapRenderer instance;
+	/*public static MinimapRenderer instance;
 	void Awake(){
 		instance = this;
 		img_MiniMap = GetComponent<Image> ();
@@ -196,5 +196,5 @@ public class MinimapRenderer : MonoBehaviour {
 		result.y = roomCenterY [(int)room.transform.position.y - roomPosMin.y] - room.size.y / 2 + localPos.y;
 		return result;
 	}
-
+    */
 }

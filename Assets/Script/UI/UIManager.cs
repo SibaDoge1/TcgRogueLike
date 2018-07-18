@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        tempPanel = transform.Find("tempPanel").GetComponent<Image>();
+        tempPanel = transform.Find("GameOver").GetComponent<Image>();
         message = tempPanel.transform.Find("Text").GetComponent<Text>();
         fullHp = transform.Find("StatusUI").Find("Hp").GetComponent<Image>();
         currentHp = fullHp.transform.Find("current").GetComponent<Image>();
