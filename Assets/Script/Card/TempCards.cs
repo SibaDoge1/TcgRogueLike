@@ -15,9 +15,9 @@ public class CardData_BFSword : CardData_Normal
     public override void CardActive()
     {
 
-        if (TileUtils.IsHitableAround(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range))
+        if (TileUtils.IsHitableAround(PlayerControl.instance.PlayerObject.currentTile, range))
         {
-            List<Entity> targets = TileUtils.GetNearEnemies(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
+            List<Entity> targets = TileUtils.GetNearEnemies(PlayerControl.instance.PlayerObject.currentTile, range);
             foreach(Entity e in targets)
             {
                 e.currentHp -= damage;
@@ -29,7 +29,7 @@ public class CardData_BFSword : CardData_Normal
     private List<Tile> targetTiles;
     public override void CardEffectPreview()
     {
-        targetTiles = TileUtils.SquareRange(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
+        targetTiles = TileUtils.SquareRange(PlayerControl.instance.PlayerObject.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
             targetTiles[i].mySprite.color = Color.red;
@@ -85,7 +85,7 @@ public class CardData_Stone : CardData_Normal{
 	}
 	public override void CardActive()
 	{
-		Entity target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		Entity target = TileUtils.AutoTarget (PlayerControl.instance.PlayerObject.currentTile, range);
         if(target != null)
         {
             target.currentHp -= damage;
@@ -96,7 +96,7 @@ public class CardData_Stone : CardData_Normal{
 	private List<Tile> targetTiles;
 	public override void CardEffectPreview()
 	{
-		targetTiles = TileUtils.SquareRange(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
+		targetTiles = TileUtils.SquareRange(PlayerControl.instance.PlayerObject.currentTile, range);
 		for (int i = 0; i < targetTiles.Count; i++)
 		{
 			targetTiles[i].mySprite.color = Color.red;
@@ -121,7 +121,7 @@ public class CardData_Arrow : CardData_Normal{
 	}
 	public override void CardActive()
 	{
-		Entity target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		Entity target = TileUtils.AutoTarget (PlayerControl.instance.PlayerObject.currentTile, range);
         if(target!=null)
         {
             target.currentHp -= damage;
@@ -132,7 +132,7 @@ public class CardData_Arrow : CardData_Normal{
 	private List<Tile> targetTiles;
 	public override void CardEffectPreview()
 	{
-		targetTiles = TileUtils.SquareRange(GameManager.instance.GetCurrentRoom().GetPlayerTile(), range);
+		targetTiles = TileUtils.SquareRange(PlayerControl.instance.PlayerObject.currentTile, range);
 		for (int i = 0; i < targetTiles.Count; i++)
 		{
 			targetTiles[i].mySprite.color = Color.red;
@@ -155,7 +155,7 @@ public class CardData_Portion : CardData_Magic{
 	}
 	public override void CardActive()
 	{
-		GameManager.instance.GetCurrentRoom ().GetPlayerTile ().OnTileObj.currentHp += 999;
+        PlayerControl.instance.PlayerObject.currentHp += 999;
 		EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
 	}
 

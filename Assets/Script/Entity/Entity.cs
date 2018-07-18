@@ -81,8 +81,10 @@ public abstract class Entity : MonoBehaviour {
 
 		pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
-		transform.localPosition = currentTile.transform.localPosition + new Vector3(0, 0, pos.y);
         currentTile.OnTileObj = this;
+        currentTile.SomethingUpOnThis(this);
+        transform.localPosition = currentTile.transform.localPosition + new Vector3(0, 0, pos.y);
+
 
         return true;
 	}
@@ -97,12 +99,18 @@ public abstract class Entity : MonoBehaviour {
             currentRoom.GetTile(pos).OnTileObj = null;
 
         pos = _pos;
-		StartCoroutine (MoveAnimationRoutine (pos));
 
-		return true;
+        currentTile = currentRoom.GetTile(pos);
+        currentTile.OnTileObj = this;
+
+        StartCoroutine (MoveAnimationRoutine (pos));
+
+
+        
+        return true;
     }
 
-	private IEnumerator MoveAnimationRoutine(Vector2Int pos){
+	protected virtual IEnumerator MoveAnimationRoutine(Vector2Int pos){
 		float timer = 0;
 		Vector3 originPos = transform.localPosition;
         Vector3 targetPos = currentRoom.GetTile(pos).transform.localPosition + new Vector3(0, 0, pos.y);
@@ -116,9 +124,7 @@ public abstract class Entity : MonoBehaviour {
 		}
         transform.localPosition = targetPos;
 
-        currentTile = currentRoom.GetTile(pos);
-        currentTile.OnTileObj = this;
-
+        currentTile.SomethingUpOnThis(this);
         OnEndTurn();
 	}
 

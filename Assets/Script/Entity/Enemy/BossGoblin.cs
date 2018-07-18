@@ -21,15 +21,15 @@ public class BossGoblin : Enemy {
         }
 
 
-        if (Room.CalcRange(currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
+        if (Room.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
-            currentRoom.GetPlayerTile().OnTileObj.currentHp -= damage;
+            PlayerControl.instance.PlayerObject.currentHp -= damage;
 			PlayAttackMotion ();
             OnEndTurn();
         }
         else
         {
-            if (!MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos))
+            if (!MoveTo(PathFinding.instance.GeneratePath(this, PlayerControl.instance.PlayerObject.currentTile)[0].pos))
             {
                 OnEndTurn();
             }

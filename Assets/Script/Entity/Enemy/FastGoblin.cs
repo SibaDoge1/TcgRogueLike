@@ -21,16 +21,16 @@ public class FastGoblin : Enemy {
             OnEndTurn();
             return false;
         }
-        if (Room.CalcRange (currentTile.pos, currentRoom.GetPlayerTile().pos) <= range)
+        if (Room.CalcRange (currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
-			if (currentRoom.GetPlayerTile ().OnTileObj != null) {
-				currentRoom.GetPlayerTile ().OnTileObj.currentHp -= damage;
+			if (PlayerControl.instance.PlayerObject != null) {
+                PlayerControl.instance.PlayerObject.currentHp -= damage;
 			}
 			PlayAttackMotion ();
-			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, currentRoom.GetPlayerTile ());
+			EffectDelegate.instance.MadeEffect (CardEffectType.Hit, PlayerControl.instance.PlayerObject.currentTile);
             OnEndTurn();
 		} else {
-            if (!MoveTo(PathFinding.instance.GeneratePath(this, currentRoom.GetPlayerTile())[0].pos))
+            if (!MoveTo(PathFinding.instance.GeneratePath(this, PlayerControl.instance.PlayerObject.currentTile)[0].pos))
                 OnEndTurn();
 		}
         return true;

@@ -23,22 +23,21 @@ public static class MapGenerator
         newMap.floor = floor;
 
         BuildRooms();
-        SetRooms(); 
+        SetRooms();
+
+        for (int i = 0; i < currentRooms.Count; i++)
+        {
+            currentRooms[i].DeleteDoors();
+        }
 
         newMap.Room = currentRooms;
         newMap.SetStartRoom(currentRooms[0]);
+        currentRooms[0].SetStartRoom();
 
-        for(int i=0; i<currentRooms.Count;i++)
-        {
-            currentRooms[i].OpenDoors();
-        }
         return newMap;
     }
     #endregion
 
-    #region Data
-
-    #endregion
 
     static Map newMap;
     static int roomNum;
@@ -111,7 +110,6 @@ public static class MapGenerator
     private static void SetRooms()
     {
         Room cur = roomQueue.Dequeue();
-        cur.SetStartRoom();
         currentRooms.Add(cur);
         while(roomQueue.Count > 0)
         {
@@ -157,29 +155,28 @@ public static class MapGenerator
             }
         }
 
-
         ///방배치 시작
         Vector3 offset = room2.transform.position- room2Door.transform.position;
         switch (room1Door.Dir)
         {
             case Direction.NORTH:
-                room2.transform.position = 
-                    new Vector3(room1Door.transform.position.x+offset.x
-                    ,room1.transform.position.y+room1.size.y / 2 + room2.size.y / 2 + 2);
+                    room2.transform.position =
+                    new Vector3(room1Door.transform.position.x + offset.x
+                    ,room1.transform.position.y + room2.size.x +2);
                 break;
-            case Direction.EAST:
+            case Direction.EAST:             
                 room2.transform.position = 
-                   new Vector3(room1.transform.position.x + room1.size.x/2+room2.size.x/2 + 2
+                   new Vector3(room1.transform.position.x + room1.size.y + 2
                    , room1Door.transform.position.y+offset.y);
                 break;
             case Direction.SOUTH:
                 room2.transform.position = 
                     new Vector3(room1Door.transform.position.x + offset.x
-                    , room1.transform.position.y - room1.size.y / 2 - room2.size.y / 2 - 2);
+                    , room1.transform.position.y - room1.size.x - 2);
                 break;
             case Direction.WEST:
                 room2.transform.position = 
-                     new Vector3(room1.transform.position.x - room1.size.x / 2 - room2.size.x / 2 - 2
+                     new Vector3(room1.transform.position.x - room2.size.y - 2
                      , room1Door.transform.position.y + offset.y);
                 break;
         }
@@ -204,8 +201,26 @@ public static class MapGenerator
     {
         foreach(Room r in currentRooms)
         {
-            if(Mathf.Abs(r.transform.position.x-room.transform.position.x)<=r.size.x/2+room.size.x/2 +1 
-                && Mathf.Abs(r.transform.position.y-room.transform.position.y)<=r.size.y/2+room.size.y/2+1)
+            float compareX, compareY,disX,disY;
+            disX = r.transform.position.x - room.transform.position.x;
+            disY = r.transform.position.y - room.transform.position.y;
+            if (disX >0)
+            {
+                compareX = room.size.y;
+            }else
+            {
+                compareX = r.size.y;
+            }
+
+            if(disY>0)
+            {
+                compareY = r.size.x;
+            }else
+            {
+                compareY = room.size.x;
+            }
+
+            if(Mathf.Abs(disX)<compareX+1 && Mathf.Abs(disY)<compareY+1)
             {
                 return true;
             }

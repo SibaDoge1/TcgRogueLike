@@ -44,8 +44,8 @@ public class CardData_Sword : CardData_Normal {
 	}
 	public override void CardActive (){
 		Entity target = null;
-		if (TileUtils.IsHitableAround (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range)) {
-			target = TileUtils.AutoTarget (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		if (TileUtils.IsHitableAround (PlayerControl.instance.PlayerObject.currentTile, range)) {
+			target = TileUtils.AutoTarget (PlayerControl.instance.PlayerObject.currentTile, range);
 			target.currentHp -= damage;
 			EffectDelegate.instance.MadeEffect (effectType, target);
 		}
@@ -53,7 +53,7 @@ public class CardData_Sword : CardData_Normal {
 
 	private List<Tile> targetTiles;
 	public override void CardEffectPreview (){
-		targetTiles = TileUtils.SquareRange (GameManager.instance.GetCurrentRoom ().GetPlayerTile (), range);
+		targetTiles = TileUtils.SquareRange (PlayerControl.instance.PlayerObject.currentTile, range);
 		for(int i = 0; i < targetTiles.Count; i++){
 			targetTiles [i].mySprite.color = Color.red;
 		}

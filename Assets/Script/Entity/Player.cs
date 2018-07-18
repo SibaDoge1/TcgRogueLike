@@ -9,19 +9,11 @@ public class Player : Character
     {
         fullHp = 10; currentHp = 10;
     }
-	public override bool Teleport(Vector2Int _pos)
-	{
-		bool returnValue = base.Teleport(_pos);
-		currentRoom.SetPlayerTile (currentTile);
-		return returnValue;
-	}
-	public override bool MoveTo(Vector2Int _pos)
-    {
-        bool returnValue = base.MoveTo(_pos);
-		currentRoom.SetPlayerTile (currentTile);
-		return returnValue;
-    }
 
+    protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
+    {
+        return base.MoveAnimationRoutine(pos);       
+    }
     //문을 통해서 이동
     public void EnterRoom(Door door)
     {
@@ -34,21 +26,21 @@ public class Player : Character
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.up;
+            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(-1,0);
         }
         else if (door.Dir == Direction.EAST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.right;
+            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0, 1);
             //isFlipped = true;
         }
         else if (door.Dir == Direction.WEST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.left;
+            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0, -1);
             //isFlipped = true;
         }
         else//_room == currentRoom.SouthRoom
         {
-            temp = door.ConnectedDoor.ThisTile.pos + Vector2Int.down;
+            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(1,0);
         }
 
         SetRoom(door.TargetRoom,temp);

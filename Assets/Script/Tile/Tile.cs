@@ -23,9 +23,6 @@ namespace Arch{
 			}
 			set {
 				onTileObj = value;
-				if (onTileObj != null) {
-					SomethingUpOnThis (onTileObj);
-				}
 			}
 		}
 		private OffTile _offTile;
@@ -42,14 +39,14 @@ namespace Arch{
 	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
 		{
 			pos = _pos;
-			transform.localPosition = new Vector3(0.5f + pos.y, -0.5f-pos.x, 0);
+			transform.localPosition = new Vector3(pos.y,-pos.x, 0);
 
             name = "Tile" + _pos;
 		}
 	
 	    public bool IsStandAble(Entity ot)
 		{			
-				if (OnTileObj) {
+				if (onTileObj != null) {
 					return false;
 				} else {
 					return true;

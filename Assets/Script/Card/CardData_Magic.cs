@@ -43,7 +43,7 @@ public class CardData_Bandage : CardData_Magic{
 	int healAmount = 3;
 
 	public override void CardActive (){
-        GameManager.instance.GetCurrentRoom().GetPlayerTile().OnTileObj.currentHp += healAmount;
+        PlayerControl.instance.PlayerObject.currentHp += healAmount;
 		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.instance.PlayerObject);
     }
 
