@@ -118,22 +118,39 @@ public class PlayerControl : MonoBehaviour {
 	public void EndPlayerTurn(){
 		GameManager.instance.OnEndPlayerTurn ();
 	}
-	#endregion
+    #endregion
 
+    //TODO : HERE IS TEMP!
     public void MoveLeft()
     {
-        player.MoveTo(player.pos + new Vector2Int(0, -1));
+        if (player.MoveTo(player.pos + new Vector2Int(0, -1)))
+        {
+            NaturalDraw();
+            InputModule.IsPlayerTurn = false;
+        }
     }
     public void MoveUP()
     {
-        player.MoveTo(player.pos + new Vector2Int(-1,0));
+        if (player.MoveTo(player.pos + new Vector2Int(-1, 0)))
+        {
+            NaturalDraw();
+            InputModule.IsPlayerTurn = false;
+        }
     }
     public void MoveRight()
     {
-        player.MoveTo(player.pos + new Vector2Int(0,1));
+        if (player.MoveTo(player.pos + new Vector2Int(0, 1)))
+        {
+            NaturalDraw();
+            InputModule.IsPlayerTurn = false;
+        }
     }
     public void MoveDown()
     {
-        player.MoveTo(player.pos + new Vector2Int(1,0));
+        if (player.MoveTo(player.pos + new Vector2Int(1, 0)))
+        {
+            NaturalDraw();
+            InputModule.IsPlayerTurn = false;
+        }
     }
 }

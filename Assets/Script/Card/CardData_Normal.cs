@@ -6,12 +6,10 @@ using Arch;
 
 public class CardData_Attack : CardData {
 	public CardData_Attack(){}
-	public CardData_Attack(int index,Player pl) : base(index,pl){
-		//TODO : TEMP
-
+	public CardData_Attack(int index,Player pl,Attribute atr) : base(index,pl){
 		range = 1;
 		target = 1;
-        cardAtr = (Attribute)Random.Range(1, 4);
+        cardAtr = atr;
 	}
 
 	protected int range;
@@ -32,11 +30,11 @@ public class CardData_Attack : CardData {
 		return damage.ToString();
 	}
 
-    private float AtrCounter(Attribute card, Attribute enemy)
+    private int AtrCounter(Attribute card, Attribute enemy)
     {
         if (card == enemy)
         {
-            return 1.5f;
+            return 2;
         }
         else return 1;
     }
@@ -50,7 +48,7 @@ public class CardData_Attack : CardData {
         if(etarget != null)
         {
             etarget.GetDamage(dam * AtrCounter(cardAtr,etarget.Atr),player);
-            etarget.AtrCheck(cardAtr);
+            //etarget.AtrCheck(cardAtr);
         }
         else
         {
@@ -60,7 +58,7 @@ public class CardData_Attack : CardData {
 }
 
 public class CardData_Sword : CardData_Attack {
-	public CardData_Sword(int index,Player pl) : base(index,pl)
+	public CardData_Sword(int index,Player pl, Attribute atr) : base(index,pl,atr)
 	{
 		damage = 5;
 		range = 1;
@@ -92,7 +90,7 @@ public class CardData_Sword : CardData_Attack {
 }
 public class CardData_BFSword : CardData_Attack
 {
-    public CardData_BFSword(int index, Player pl) : base(index, pl)
+    public CardData_BFSword(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 10;
         range = 1;
@@ -134,7 +132,7 @@ public class CardData_BFSword : CardData_Attack
 
 public class CardData_Stone : CardData_Attack
 {
-    public CardData_Stone(int index, Player pl) : base(index, pl)
+    public CardData_Stone(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 5;
         //Set ImageInfo
@@ -171,7 +169,7 @@ public class CardData_Stone : CardData_Attack
 
 public class CardData_Arrow : CardData_Attack
 {
-    public CardData_Arrow(int index, Player pl) : base(index, pl)
+    public CardData_Arrow(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 10;
         //Set ImageInfo

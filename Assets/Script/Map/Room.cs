@@ -28,9 +28,7 @@ public class Room : MonoBehaviour
 		get{ return isCleared; }
 	}
 
-	public static int CalcRange(Vector2Int a, Vector2Int b){
-		return Mathf.Max (Mathf.Abs (a.x - b.x), Mathf.Abs (a.y - b.y));
-	}
+
 
 	public void SetStartRoom(){
 		isCleared = true;

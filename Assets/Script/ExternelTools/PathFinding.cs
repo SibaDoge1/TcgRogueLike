@@ -66,7 +66,6 @@ public class PathFinding : MonoBehaviour
 		_targetTile = targetTile;
 		Tile target;
 
-		// Setup the "Q" -- the list of nodes we haven't checked yet.
 
 		Tile source = selectedUnit.currentTile;
 

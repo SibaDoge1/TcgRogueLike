@@ -25,8 +25,8 @@ public class InputModule : MonoBehaviour {
 
 	IEnumerator TileSelectRoutine(){
 		while (true) {
-			//TODO : ANDROID TOUCH
-			if (isPlayerTurn) {
+            //TODO : ANDROID TOUCH
+            /* if (isPlayerTurn) {
 				if (Input.GetMouseButtonDown (1) &&
 					!EventSystem.current.IsPointerOverGameObject () &&
 					!Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), new Vector3 (0, 0, 1), 10f)
@@ -45,15 +45,11 @@ public class InputModule : MonoBehaviour {
                     }
 
 				}
-			}
-            //temp
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-            }
-            
-            /*
-            if(IsPlayerTurn)
+			}*/
+
+
+            //TODO : HERE IS TEMP!
+            if (IsPlayerTurn)        
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -71,9 +67,10 @@ public class InputModule : MonoBehaviour {
                 {
                     PlayerControl.instance.MoveLeft();
                 }
-            }*/
+            }
+            
 
-			yield return null;
+            yield return null;
 		}
 	}
 }

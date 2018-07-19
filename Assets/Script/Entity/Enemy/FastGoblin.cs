@@ -20,7 +20,7 @@ public class FastGoblin : Enemy {
             OnEndTurn();
             return false;
         }
-        if (Room.CalcRange (currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
+        if (TileUtils.CalcRange (currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
 			if (PlayerControl.instance.PlayerObject != null) {
                 PlayerControl.instance.PlayerObject.GetDamage(atk);
@@ -43,7 +43,7 @@ public class FastGoblin : Enemy {
 	protected override void OnDieCallback (){
 		//TODO : DROP CARD TEMP
 		if (UnityEngine.Random.Range (0, 8) == 0) {
-			PlayerControl.instance.AddCard (new CardData_Stone (5,PlayerControl.instance.PlayerObject));
+			PlayerControl.instance.AddCard (new CardData_Stone (5,PlayerControl.instance.PlayerObject,(Attribute)UnityEngine.Random.Range(1, 4)));
 		} else if (UnityEngine.Random.Range (0, 12) == 0)
         {
 			PlayerControl.instance.AddCard (new CardData_Bandage (2, PlayerControl.instance.PlayerObject));

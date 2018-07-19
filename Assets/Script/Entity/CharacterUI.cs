@@ -95,7 +95,11 @@ public class CharacterUI : MonoBehaviour {
                 attSprite = Resources.Load<Sprite>("Attribute/vayu1");
                 break;
         }
-        attImage.sprite = Resources.Load<Sprite>("Attribute/dontknow");
+
+        attImage.color = Color.white;
+        attImage.sprite = attSprite;
+        attImage.enabled = true;
+        //attImage.sprite = Resources.Load<Sprite>("Attribute/dontknow");
     }
     public void AttIconFlash()
     {

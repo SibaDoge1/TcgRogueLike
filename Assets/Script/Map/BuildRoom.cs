@@ -177,6 +177,7 @@ public static class BuildRoom
     /// </summary>
      static void GenerateGraph()
     {
+        //TODO : HERE IS TEMP!
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
@@ -197,7 +198,7 @@ public static class BuildRoom
                 {
                     tiles[x, y].neighbours.Add(tiles[x, y + 1]);
                 }
-                if (x < size.x - 1 && y < size.y - 1)
+                /*if (x < size.x - 1 && y < size.y - 1)
                 {
                     tiles[x, y].neighbours.Add(tiles[x + 1, y + 1]);
                 }
@@ -212,7 +213,7 @@ public static class BuildRoom
                 if (x > 0 && y < size.y - 1)
                 {
                     tiles[x, y].neighbours.Add(tiles[x - 1, y + 1]);
-                }
+                }*/
             }
         }
     }

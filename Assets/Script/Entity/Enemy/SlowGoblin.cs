@@ -21,7 +21,7 @@ public class SlowGoblin : Enemy {
             return false;
         }
 
-        if (Room.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
+        if (TileUtils.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
             PlayerControl.instance.PlayerObject.GetDamage(atk);
 			PlayAttackMotion ();
@@ -46,7 +46,7 @@ public class SlowGoblin : Enemy {
         //TODO : DROP CARD TEMP
         if (UnityEngine.Random.Range(0, 10) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.instance.PlayerObject));
+            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.instance.PlayerObject,(Attribute)Random.Range(1,4)));
         }
         else if (UnityEngine.Random.Range(0, 5) == 0)
         {

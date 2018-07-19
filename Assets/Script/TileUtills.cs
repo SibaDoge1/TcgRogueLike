@@ -11,7 +11,10 @@ using Arch;
 public static class TileUtils
 {
 
-
+    public static int CalcRange(Vector2Int a, Vector2Int b)
+    {
+        return Mathf.Abs(a.x - b.x)+ Mathf.Abs(a.y - b.y);
+    }
     /// <summary>
     /// 십자로 타일 가져오기
     /// </summary>

@@ -16,12 +16,20 @@ public class GameManager : MonoBehaviour {
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
 		PlayerData.deck.Clear();
-		for (int i = 0; i < 7; i++) {
-			PlayerData.deck.Add (new CardData_Sword (1,PlayerControl.instance.PlayerObject));
+		for (int i = 0; i < 3; i++) {
+			PlayerData.deck.Add (new CardData_Sword (1,PlayerControl.instance.PlayerObject, Attribute.APAS));
 		}
-		PlayerData.deck.Add (new CardData_BFSword (3, PlayerControl.instance.PlayerObject));
+        for (int i = 0; i < 3; i++)
+        {
+            PlayerData.deck.Add(new CardData_Sword(1, PlayerControl.instance.PlayerObject, Attribute.PRITHVI));
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            PlayerData.deck.Add(new CardData_Sword(1, PlayerControl.instance.PlayerObject, Attribute.TEJAS));
+        }
+        PlayerData.deck.Add (new CardData_BFSword (3, PlayerControl.instance.PlayerObject,Attribute.AK));
 		PlayerData.deck.Add (new CardData_Tumble (4, PlayerControl.instance.PlayerObject));
-		PlayerData.deck.Add (new CardData_Arrow (7, PlayerControl.instance.PlayerObject));
+		PlayerData.deck.Add (new CardData_Arrow (7, PlayerControl.instance.PlayerObject, Attribute.AK));
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
         PlayerControl.instance.ReLoadDeck();

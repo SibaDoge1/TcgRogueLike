@@ -20,7 +20,7 @@ public class BossGoblin : Enemy {
         }
 
 
-        if (Room.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
+        if (TileUtils.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
             PlayerControl.instance.PlayerObject.GetDamage(atk,this);
 			PlayAttackMotion ();
@@ -44,7 +44,7 @@ public class BossGoblin : Enemy {
     {
         if (UnityEngine.Random.Range(0, 8) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.instance.PlayerObject));
+            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.instance.PlayerObject, (Attribute)Random.Range(1, 4)));
         }
         else if (UnityEngine.Random.Range(0, 12) == 0)
         {
