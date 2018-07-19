@@ -7,8 +7,7 @@ public class BossGoblin : Enemy {
     protected override void Start()
     {
         base.Start();
-        fullHp = 30; currentHp = 30;
-        damage = 5;
+        fullHp = HP; currentHp = HP;
         range = 1;
     }
     protected int range;
@@ -23,7 +22,7 @@ public class BossGoblin : Enemy {
 
         if (Room.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
-            PlayerControl.instance.PlayerObject.currentHp -= damage;
+            PlayerControl.instance.PlayerObject.GetDamage(atk,this);
 			PlayAttackMotion ();
             OnEndTurn();
         }
@@ -43,14 +42,13 @@ public class BossGoblin : Enemy {
     }
     protected override void OnDieCallback()
     {
-        UIManager.instance.GameWin();
         if (UnityEngine.Random.Range(0, 8) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5));
+            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.instance.PlayerObject));
         }
         else if (UnityEngine.Random.Range(0, 12) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2));
+            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.instance.PlayerObject));
         }
 
         base.OnDieCallback();

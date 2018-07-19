@@ -10,9 +10,6 @@ public class PlayerControl : MonoBehaviour {
         instance = this;
         player = GetComponent<Player>();
     }
-    void Start () {
-        Input.multiTouchEnabled = false;
-	}
      
 
 	public void InitPlayer(Room room)
@@ -122,4 +119,21 @@ public class PlayerControl : MonoBehaviour {
 		GameManager.instance.OnEndPlayerTurn ();
 	}
 	#endregion
+
+    public void MoveLeft()
+    {
+        player.MoveTo(player.pos + new Vector2Int(0, -1));
+    }
+    public void MoveUP()
+    {
+        player.MoveTo(player.pos + new Vector2Int(-1,0));
+    }
+    public void MoveRight()
+    {
+        player.MoveTo(player.pos + new Vector2Int(0,1));
+    }
+    public void MoveDown()
+    {
+        player.MoveTo(player.pos + new Vector2Int(1,0));
+    }
 }

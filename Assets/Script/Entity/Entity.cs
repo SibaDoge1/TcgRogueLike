@@ -11,8 +11,8 @@ public abstract class Entity : MonoBehaviour {
 
     protected int _fullHp=1;
     protected int _currentHp=1;
-
     protected bool isHitable = true;
+
     public bool IsHitable
     {
         get
@@ -39,18 +39,8 @@ public abstract class Entity : MonoBehaviour {
         }
         set
         {
-			if (value >= fullHp) {
-				EffectDelegate.instance.MadeEffect (fullHp - _currentHp, transform.position); 
-				_currentHp = fullHp;
-			} else {
-				EffectDelegate.instance.MadeEffect (value - _currentHp, transform.position); 
-				_currentHp = value;
-			}
-
-			if (_currentHp <= 0) {
-				EffectDelegate.instance.MadeEffect (CardEffectType.Blood, transform.position);
-				OnDieCallback ();
-			}
+            HpEffect(value);
+            _currentHp = value;
         }
     }
 
@@ -138,15 +128,30 @@ public abstract class Entity : MonoBehaviour {
 	protected virtual void OnEndTurn(){
 		
 	}
-   /* protected virtual bool AttackThis(int dam,CardAttribute atr)
+
+
+    /// <summary>
+    /// 체력이 달았으면 true반환 아니면 false반환
+    /// </summary>
+    public virtual bool GetDamage(int damage,Entity atker = null)
     {
-        if(!isHitable)
-        {
-            return false;
-        }
-
-
-
+        currentHp -= damage;
         return true;
-    }*/
+    }
+    public virtual bool GetDamage(float damage, Entity atker = null)
+    {
+        return GetDamage((int)damage,atker);
+    }
+    
+
+    protected virtual void HpEffect(int value)
+    {
+        EffectDelegate.instance.MadeEffect(value - currentHp, transform.position);
+
+        if (value <= 0)
+        {
+            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, transform.position);
+            OnDieCallback();
+        }
+    }
 }

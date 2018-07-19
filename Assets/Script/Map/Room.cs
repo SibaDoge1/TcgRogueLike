@@ -61,8 +61,9 @@ public class Room : MonoBehaviour
 
 	public Tile WorldToTile(Vector3 worldPos){
 		Vector3 temp = worldPos - transform.position + new Vector3(0.5f,-0.5f,0);
-        temp = new Vector3(-temp.y,temp.x, 0);
-        return GetTile(new Vector2Int((int)(temp.x), (int)temp.y));
+
+        Vector2Int IntPos = new Vector2Int(Mathf.FloorToInt(-temp.y), Mathf.FloorToInt((temp.x)));
+        return GetTile(IntPos);
 	}
 
 	public Tile[,] GetTileArrays()

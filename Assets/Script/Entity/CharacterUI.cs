@@ -6,10 +6,11 @@ public class CharacterUI : MonoBehaviour {
 
     Image fullHpUI;
     Image currentHpUI;
+    Image attImage;
+    Image actionImage;
     // Use this for initialization
     Coroutine hpRoutine;
 
-    Text turnText;
     Color originColor;
     Color targetColor;
 
@@ -20,17 +21,20 @@ public class CharacterUI : MonoBehaviour {
         originColor = currentHpUI.color;
         targetColor = new Color(originColor.r, originColor.g, originColor.b, 0);
 
+        attImage = transform.Find("Atr").GetComponent<Image>();
+        actionImage = transform.Find("action").GetComponent<Image>();
+        attImage.color = Color.clear;
         fullHpUI.color = Color.clear;
         currentHpUI.color = Color.clear;
 
-        turnText = transform.Find("turn").Find("turnText").GetComponent<Text>();
-        turnText.color = Color.black;
+        actionImage.enabled = false;
     }
     public void HpOn(int fullHp,int currentHp)
     {
         fullHpUI.color = Color.white;
         currentHpUI.color = originColor;
         currentHpUI.fillAmount = (float)currentHp / fullHp;
+        HpUpdate(fullHp, currentHp);
     }
 	public void HpUpdate(int fullHp,int currentHp)
     {
@@ -68,15 +72,69 @@ public class CharacterUI : MonoBehaviour {
             yield return null;          
         }
     }
-    public void SetTurnText(int turn)
+
+    Sprite attSprite;
+    bool isDiscovered;
+    public void SetAtt(Attribute at)
     {
-        if(turn<=0)
+        switch(at)
         {
-            turnText.text = "A";
+            case Attribute.AK:
+                attSprite = Resources.Load<Sprite>("Attribute/akasha1");
+                break;
+            case Attribute.APAS:
+                attSprite = Resources.Load<Sprite>("Attribute/apas1");
+                break;
+            case Attribute.PRITHVI:
+                attSprite = Resources.Load<Sprite>("Attribute/prithivi1");
+                break;
+            case Attribute.TEJAS:
+                attSprite = Resources.Load<Sprite>("Attribute/tejas1");
+                break;
+            case Attribute.VAYU:
+                attSprite = Resources.Load<Sprite>("Attribute/vayu1");
+                break;
+        }
+        attImage.sprite = Resources.Load<Sprite>("Attribute/dontknow");
+    }
+    public void AttIconFlash()
+    {
+        if(!isDiscovered)
+        StartCoroutine(AttFlashRoutine());
+    }
+    IEnumerator AttFlashRoutine()
+    {
+        attImage.color = Color.white;
+        
+        yield return new WaitForSeconds(0.5f);
+
+        float _time = 0f;
+        while (_time < 1)
+        {
+            _time += Time.deltaTime;
+
+            attImage.color = Color.Lerp(Color.white, new Color(1, 1, 1, 0), _time);
+            yield return null;
+        }
+    }
+    public void AttIconOn()
+    {
+        isDiscovered = true;
+        attImage.color = Color.white;
+        attImage.sprite = attSprite;
+    }
+    /// <summary>
+    ///temp
+    /// </summary>
+    public void ActionIconOn(bool bo)
+    {
+        if(bo)
+        {
+            actionImage.enabled = true;
         }
         else
         {
-            turnText.text = turn.ToString();
+            actionImage.enabled = false;
         }
     }
 }

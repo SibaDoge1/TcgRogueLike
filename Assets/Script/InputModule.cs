@@ -51,6 +51,28 @@ public class InputModule : MonoBehaviour {
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             }
+            
+            /*
+            if(IsPlayerTurn)
+            {
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    PlayerControl.instance.MoveUP();
+                }
+                else if (Input.GetKeyDown(KeyCode.D))
+                {
+                    PlayerControl.instance.MoveRight();
+                }
+                else if (Input.GetKeyDown(KeyCode.S))
+                {
+                    PlayerControl.instance.MoveDown();
+                }
+                else if (Input.GetKeyDown(KeyCode.A))
+                {
+                    PlayerControl.instance.MoveLeft();
+                }
+            }*/
+
 			yield return null;
 		}
 	}

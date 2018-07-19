@@ -17,11 +17,11 @@ public class GameManager : MonoBehaviour {
 		//DECK CONSTRUCTION
 		PlayerData.deck.Clear();
 		for (int i = 0; i < 7; i++) {
-			PlayerData.deck.Add (new CardData_Sword (1));
+			PlayerData.deck.Add (new CardData_Sword (1,PlayerControl.instance.PlayerObject));
 		}
-		PlayerData.deck.Add (new CardData_BFSword (3));
-		PlayerData.deck.Add (new CardData_Tumble (4));
-		PlayerData.deck.Add (new CardData_Arrow (7));
+		PlayerData.deck.Add (new CardData_BFSword (3, PlayerControl.instance.PlayerObject));
+		PlayerData.deck.Add (new CardData_Tumble (4, PlayerControl.instance.PlayerObject));
+		PlayerData.deck.Add (new CardData_Arrow (7, PlayerControl.instance.PlayerObject));
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
         PlayerControl.instance.ReLoadDeck();

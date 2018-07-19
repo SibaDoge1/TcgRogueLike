@@ -2,34 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardAttribute
+public enum Attribute
 {
-	NONE,
-	FIRE,
-	WATER,
-	LEAF
+	AK,//NONE
+	PRITHVI,
+    APAS,
+	TEJAS,
+    VAYU
 }
 public enum CardAbilityType{Attack, Heal, Util}
 public class CardData {
 	protected CardData(){}
-	public CardData(int cardIndex){
+	public CardData(int cardIndex,Player pl)
+    {
 		cardName = CardDatabase.cardNames [cardIndex];
 		spritePath = CardDatabase.cardSpritePaths [cardIndex];
+        player = pl;
 	}
-		
+
+    protected Player player;
 	protected string spritePath;
 	protected string cardName;
 	public string CardName {
 		get { return cardName; }
 	}
 
-	protected string cardExplain;
+    protected Attribute cardAtr = Attribute.AK;
+    public Attribute CardAtr { get { return cardAtr; } }
+
+
+    protected string cardExplain;
 	public string CardExplain {
 		get { return cardExplain; }
 	}
 		
 	protected CardEffectType effectType;
-
 
 	public CardObject Instantiate(){
 		CardObject cardObject;

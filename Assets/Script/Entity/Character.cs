@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Character : Entity {
+    [Header("Setting")]
+    public int HP;
+    public int atk;
+    public int def;
 
     protected CharacterUI characterUI;
     protected override void Awake()
@@ -29,32 +33,40 @@ public abstract class Character : Entity {
             characterUI.SetLocalScale(x);
         }
     }
-    public override int fullHp
-    {
-        get
-        {
-            return base.fullHp;
-        }
 
-        set
+
+
+    public override bool GetDamage(int damage, Entity atker = null)
+    {
+        int rest = damage - def;
+        if (rest > 0)
         {
-            base.fullHp = value;
+            base.GetDamage(rest);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
-    public override int currentHp
+    public override bool GetDamage(float damage, Entity atker = null)
     {
-        get
+        return GetDamage((int)damage,atker);
+    }
+    /// <summary>
+    /// 방무뎀
+    /// </summary>
+    protected virtual bool DirectDamage(int damage, Entity atker = null)
+    {
+        currentHp -= damage;
+        return true;
+    }
+    protected override void HpEffect(int value)
+    {
+        base.HpEffect(value);
+        if (value < fullHp)
         {
-            return base.currentHp;
-        }
-
-        set
-        {
-            base.currentHp = value;
-            if (currentHp < fullHp)
-            {
-                characterUI.HpOn(fullHp, currentHp);
-            }
+            characterUI.HpOn(fullHp, value);
         }
     }
 }

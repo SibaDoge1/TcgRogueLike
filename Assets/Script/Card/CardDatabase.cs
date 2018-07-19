@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardDatabase {
+public static class CardDatabase {
 
 	public const string cardResourcePath = "Card/";
 	public const string cardObjectPath = "Card/CardBase";

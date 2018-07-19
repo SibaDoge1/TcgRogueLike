@@ -47,6 +47,9 @@ public class EffectDelegate : MonoBehaviour {
 			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
 	}
 	public void MadeEffect(int damage, Vector3 worldPosition){
+        if (damage == 0)
+            return; 
+
 		Instantiate (
 			textEffectPrefab, worldPosition, Quaternion.identity).GetComponent<EffectText> ()
 			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);

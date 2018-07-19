@@ -7,8 +7,9 @@ public delegate void LocateCallback();
 public class CardObject : MonoBehaviour {
 	private HandCard hand;
 
-	public Image img_Ability;
-	public Text txt_Ability;
+    private Image img_Ability;
+    private Text txt_Ability;
+    private Image img_Attribute;
 
 	private void Awake(){
 		rendererParent = transform.Find ("Renderer");
@@ -17,6 +18,9 @@ public class CardObject : MonoBehaviour {
 		Transform canvas = rendererParent.Find ("Canvas");
 		txt_name = canvas.Find ("Name").GetComponent<Text>();
 		txt_explain = canvas.Find ("Explain").GetComponent<Text> ();
+        img_Ability = canvas.Find("Icon").GetComponent<Image>();
+        txt_Ability = canvas.Find("Value").GetComponent<Text>();
+        img_Attribute = canvas.Find("Attribute").GetComponent<Image>();
 	}
 	private Text txt_name;
 	private Text txt_explain;
@@ -34,7 +38,29 @@ public class CardObject : MonoBehaviour {
 		switch (a) {
 		case CardAbilityType.Attack:
 			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconAtk");
-			break;
+                {//속성 불러오기
+                    img_Attribute.enabled = true;
+                    Attribute at = data.CardAtr;
+                    switch (at)
+                    {
+                        case Attribute.AK:
+                            img_Attribute.sprite = Resources.Load<Sprite>("Attribute/akasha1");
+                            break;
+                        case Attribute.APAS:
+                            img_Attribute.sprite = Resources.Load<Sprite>("Attribute/apas1");
+                            break;
+                        case Attribute.PRITHVI:
+                            img_Attribute.sprite = Resources.Load<Sprite>("Attribute/prithivi1");
+                            break;
+                        case Attribute.TEJAS:
+                            img_Attribute.sprite = Resources.Load<Sprite>("Attribute/tejas1");
+                            break;
+                        case Attribute.VAYU:
+                            img_Attribute.sprite = Resources.Load<Sprite>("Attribute/vayu1");
+                            break;
+                    }
+                }
+                break;
 		case CardAbilityType.Heal:
 			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconHeal");
 			break;
@@ -42,6 +68,8 @@ public class CardObject : MonoBehaviour {
 			img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
 			break;
 		}
+
+
 		txt_Ability.text = data.GetCardAbilityValue ();
 	}
 	public void SetParent(HandCard hand_){

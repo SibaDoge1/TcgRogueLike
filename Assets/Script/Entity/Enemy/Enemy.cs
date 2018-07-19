@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Enemy : Character {
-	protected Animator enemyAnimator;
+
+    public Attribute Atr;
+
+    protected Animator enemyAnimator;
     protected virtual void Start()
     {
         CurrentTurn = Cost;
         currentRoom.enemyList.Add(this);
 		enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
+        characterUI.SetAtt(Atr);
     }
     protected override void OnDieCallback (){
 
@@ -16,6 +20,16 @@ public abstract class Enemy : Character {
 		base.OnDieCallback ();
 	}
 
+    public void AtrCheck(Attribute atr)
+    {
+        if(Atr == atr)
+        {
+            characterUI.AttIconOn();
+        }else
+        {
+            characterUI.AttIconFlash();
+        }
+    }
     public int Cost;
     private int currentTurn;
     protected int CurrentTurn
@@ -24,11 +38,15 @@ public abstract class Enemy : Character {
         set
         {
             currentTurn = value;
-            characterUI.SetTurnText(currentTurn);
+            if (currentTurn == 0)
+            {
+                characterUI.ActionIconOn(true);
+            }else
+            {
+                characterUI.ActionIconOn(false);
+            }
         }
         }
-    protected int damage;
-
     public virtual bool DoAct()
     {
         if (FirstIgnore())
@@ -69,7 +87,7 @@ public abstract class Enemy : Character {
     }
 
 
-	protected virtual void PlayAttackMotion(){
+    protected virtual void PlayAttackMotion(){
 		enemyAnimator.Play ("Attack");
 	}
 }

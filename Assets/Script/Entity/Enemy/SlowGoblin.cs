@@ -7,8 +7,8 @@ public class SlowGoblin : Enemy {
     protected override void Start()
     {
         base.Start();
-        fullHp = 10; currentHp = 10;
-        damage = 2;
+        fullHp = HP; currentHp = HP;
+        
         range = 1;
     }
     protected int range;
@@ -23,7 +23,7 @@ public class SlowGoblin : Enemy {
 
         if (Room.CalcRange(currentTile.pos, PlayerControl.instance.PlayerObject.currentTile.pos) <= range)
         {
-            PlayerControl.instance.PlayerObject.currentHp -= damage;
+            PlayerControl.instance.PlayerObject.GetDamage(atk);
 			PlayAttackMotion ();
             EffectDelegate.instance.MadeEffect(CardEffectType.Hit, PlayerControl.instance.PlayerObject.currentTile);
             OnEndTurn();
@@ -46,11 +46,11 @@ public class SlowGoblin : Enemy {
         //TODO : DROP CARD TEMP
         if (UnityEngine.Random.Range(0, 10) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5));
+            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.instance.PlayerObject));
         }
         else if (UnityEngine.Random.Range(0, 5) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2));
+            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.instance.PlayerObject));
         }
         base.OnDieCallback();
     }
