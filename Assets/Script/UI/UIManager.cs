@@ -10,17 +10,26 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        tempPanel = transform.Find("GameOver").GetComponent<Image>();
-        message = tempPanel.transform.Find("Text").GetComponent<Text>();
+        GameOverPanel = transform.Find("GameOver").GetComponent<Image>();
+        message = GameOverPanel.transform.Find("Text").GetComponent<Text>();
         fullHp = transform.Find("StatusUI").Find("Hp").GetComponent<Image>();
         currentHp = fullHp.transform.Find("current").GetComponent<Image>();
         hpText = fullHp.transform.Find("hpText").GetComponent<Text>();
+        MapUI = transform.Find("MapUI");
+        fullMapPanel = MapUI.Find("FullMapPanel").gameObject;
+        miniMap = MapUI.Find("MiniMapPanel").Find("MiniMap").GetComponent<RawImage>();
+        fullMap = fullMapPanel.transform.Find("FullMap").GetComponent<RawImage>();
 
-        tempPanel.gameObject.SetActive(false);
+        GameOverPanel.gameObject.SetActive(false);
     }
     Image fullHp, currentHp;
     Text hpText,message;
-    Image tempPanel;
+    Image GameOverPanel;
+
+    Transform MapUI;
+    GameObject fullMapPanel;
+    RawImage miniMap;
+    RawImage fullMap;
 
 	public void HpUpdate(int currentHp_, int fullHp_)
     {     
@@ -29,13 +38,45 @@ public class UIManager : MonoBehaviour
     }
     public void GameOver()
     {
-        tempPanel.gameObject.SetActive(true);
+        GameOverPanel.gameObject.SetActive(true);
         message.text = "You Died";
     }
     public void GameWin()
     {
-        tempPanel.gameObject.SetActive(true);
+        GameOverPanel.gameObject.SetActive(true);
         message.text = "이겼닭! 오늘 저녁은 치킨이다!";
     }
-   
+    public void SetMapTexture(Texture2D texture,Vector2Int size)
+    {
+        miniMap.texture = texture;
+        miniMap.rectTransform.sizeDelta = size * 8;
+        fullMap.texture = texture;
+        fullMap.rectTransform.sizeDelta = size * 12;
+
+    }
+
+    public void MoveMiniMap(Vector3 origin,Vector3 target)
+    {
+        StartCoroutine(MoveMiniMapRoutine(origin,target));
+    }
+    IEnumerator MoveMiniMapRoutine(Vector3 origin, Vector3 target)
+    {
+            
+        float _time = 0;
+        while (_time < 1f)
+        {
+            miniMap.transform.localPosition = Vector3.Lerp(-origin, -target, _time);
+            _time += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    public void OpenFullMap()
+    {
+        fullMapPanel.SetActive(true);
+    }
+    public void CloseFullMap()
+    {
+        fullMapPanel.SetActive(false);
+    }
 }

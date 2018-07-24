@@ -16,7 +16,7 @@ public abstract class Character : Entity {
     }
     public override bool MoveTo(Vector2Int _pos)
     {
-        int xOffset = pos.y - _pos.y;
+        int xOffset = pos.x - _pos.x;
         SetLocalScale(xOffset);
 		return  base.MoveTo(_pos);
     }

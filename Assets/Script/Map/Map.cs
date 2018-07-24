@@ -10,7 +10,7 @@ public class Map : MonoBehaviour{
     }
 
 	private List<Room> room;
-    public List<Room> Room
+    public List<Room> Rooms
     {
         get { return room; }
         set { room = value; }
@@ -31,8 +31,8 @@ public class Map : MonoBehaviour{
     public int floor;//층 수
     public int roomNum;//방갯수
 
-    public Vector2Int maxHorizon;//Map의 가로 크기
-    public Vector2Int minVertical;//Map의 세로 크기
+    public Vector2Int minBorder;
+    public Vector2Int maxBorder;
 
 
 }

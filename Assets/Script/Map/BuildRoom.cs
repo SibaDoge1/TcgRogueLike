@@ -27,7 +27,8 @@ public static class BuildRoom
         room.roomType = type;
 
         roomData = CsvParser.ReadRoom(1, type, name);
-        size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
+        size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
+        Debug.Log(size);
         room.size = size;
         tiles = new Tile[size.x, size.y];
         room.SetTileArray(tiles);
@@ -49,7 +50,8 @@ public static class BuildRoom
         room.roomType = type;
 
         roomData = GetRoomData(type);
-        size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
+        size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
+        Debug.Log(size);
 
         room.size = size;
         tiles = new Tile[size.x, size.y];
@@ -125,9 +127,9 @@ public static class BuildRoom
 
 
         //string을 다시 tile , item, player , height 항목으로 나눕니다
-        for (int i = 0; i < size.x ; i++)
+        for (int i = 0; i < size.y ; i++)
         {
-            for (int j = 0; j < size.y; j++)
+            for (int j = 0; j < size.x; j++)
             {
                 string[] temp = roomData[i,j].Split('/');
                 tile = int.Parse(temp[0]);
@@ -140,8 +142,8 @@ public static class BuildRoom
                 if (tile != 0)
                 {
                     Tile tempTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("Tile/"+tile) as GameObject, room.transform).GetComponent<Tile>();
-                    tempTile.SetTile(new Vector2Int(i, j), size);
-                    tiles[i, j] = tempTile;
+                    tempTile.SetTile(new Vector2Int(j, (size.y - 1) - i), size);
+                    tiles[j, (size.y-1)-i] = tempTile;
 
                     if (offtile != 0)
                     {
@@ -154,7 +156,7 @@ public static class BuildRoom
                     if (entity != 0) //엔타이티
                     {
                         Entity et = InstantiateDelegate.ProxyInstantiate(Resources.Load("Entity/"+ entity) as GameObject).GetComponent<Entity>();
-                        et.SetRoom(room, new Vector2Int(i, j));
+                        et.SetRoom(room, new Vector2Int(j, (size.y - 1) - i));
                     }
                     if(eventlayer !=0)
                     {
@@ -198,22 +200,6 @@ public static class BuildRoom
                 {
                     tiles[x, y].neighbours.Add(tiles[x, y + 1]);
                 }
-                /*if (x < size.x - 1 && y < size.y - 1)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y + 1]);
-                }
-                if (x < size.x - 1 && y > 0)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y - 1]);
-                }
-                if (x > 0 && y > 0)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y - 1]);
-                }
-                if (x > 0 && y < size.y - 1)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y + 1]);
-                }*/
             }
         }
     }

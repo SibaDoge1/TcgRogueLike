@@ -67,6 +67,15 @@ public class InputModule : MonoBehaviour {
                 {
                     PlayerControl.instance.MoveLeft();
                 }
+                else if(Input.GetKeyDown(KeyCode.Q))
+                {
+                    PlayerControl.instance.EndTurnButton();
+                }
+
+                if(Input.GetKeyDown(KeyCode.Space))
+                {
+                    PlayerControl.instance.ToggleHand();
+                }
             }
             
 

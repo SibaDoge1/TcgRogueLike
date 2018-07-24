@@ -39,7 +39,7 @@ namespace Arch{
 	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
 		{
 			pos = _pos;
-			transform.localPosition = new Vector3(pos.y,-pos.x, 0);
+			transform.localPosition = new Vector3(pos.x,pos.y, 0);
 
             name = "Tile" + _pos;
 		}

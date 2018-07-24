@@ -17,44 +17,13 @@ public class PlayerControl : MonoBehaviour {
 		CameraFollow.instance.PlayerTrace(player);
 		player.SetRoom(room, new Vector2Int(3,3));
 		GameManager.instance.SetCurrentRoom (room);
-		GameManager.instance.OnPlayerEnterNewRoom ();
+		GameManager.instance.OnPlayerEnterRoom ();
     }
 
     private Player player;
 	public Player PlayerObject{
 		get{ return player; }
 	}
-    
-    private List<Tile> path;
-	public int GetRemainAction(){
-		if (path == null) {
-			return 0;
-		}
-		return path.Count;
-	}
-
-	public bool MoveReserveResume(){
-        if (moveStartRoom == player.currentRoom && 
-            moveStartHP == player.currentHp && player.MoveTo(path[0].pos))
-        {
-			path.RemoveAt (0);
-			NaturalDraw ();
-			return true;
-		} else {
-			path = null;
-			return false;
-		}
-	}
-    private int moveStartHP;
-    Room moveStartRoom;
-    public bool PlayerMoveCommand(Tile pos)
-    {
-		moveStartRoom = player.currentRoom;
-		moveStartHP = player.currentHp;
-		path = PathFinding.instance.GeneratePath(player, pos);
-
-		return MoveReserveResume ();
-    }
 
     public void EndTurnButton()
     {
@@ -67,7 +36,7 @@ public class PlayerControl : MonoBehaviour {
 	public HandCard hand;
 
 	/// <summary>
-	/// Draw Anyway
+	/// Draw Anyway even if Hand is Full
 	/// </summary>
 	public void ForceDraw(){
 		hand.DrawHand (deck.Draw ());
@@ -120,10 +89,9 @@ public class PlayerControl : MonoBehaviour {
 	}
     #endregion
 
-    //TODO : HERE IS TEMP!
     public void MoveLeft()
     {
-        if (player.MoveTo(player.pos + new Vector2Int(0, -1)))
+        if (player.MoveTo(player.pos + Vector2Int.left))
         {
             NaturalDraw();
             InputModule.IsPlayerTurn = false;
@@ -131,7 +99,7 @@ public class PlayerControl : MonoBehaviour {
     }
     public void MoveUP()
     {
-        if (player.MoveTo(player.pos + new Vector2Int(-1, 0)))
+        if (player.MoveTo(player.pos + Vector2Int.up))
         {
             NaturalDraw();
             InputModule.IsPlayerTurn = false;
@@ -139,7 +107,7 @@ public class PlayerControl : MonoBehaviour {
     }
     public void MoveRight()
     {
-        if (player.MoveTo(player.pos + new Vector2Int(0, 1)))
+        if (player.MoveTo(player.pos + Vector2Int.right))
         {
             NaturalDraw();
             InputModule.IsPlayerTurn = false;
@@ -147,10 +115,14 @@ public class PlayerControl : MonoBehaviour {
     }
     public void MoveDown()
     {
-        if (player.MoveTo(player.pos + new Vector2Int(1, 0)))
+        if (player.MoveTo(player.pos + Vector2Int.down))
         {
             NaturalDraw();
             InputModule.IsPlayerTurn = false;
         }
+    }
+    public void ToggleHand()
+    {
+        hand.ToggleHand();
     }
 }

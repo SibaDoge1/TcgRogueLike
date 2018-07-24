@@ -32,10 +32,15 @@ public class GameManager : MonoBehaviour {
 		PlayerData.deck.Add (new CardData_Arrow (7, PlayerControl.instance.PlayerObject, Attribute.AK));
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
+
+        MinimapRenderer.instance.Init(currentFloor);
+
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
         EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
-        //MinimapRenderer.instance.Init (currentFloor);
+
+        MinimapRenderer.instance.DrawDoors(currentFloor.CurrentRoom);
+        MinimapRenderer.instance.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
     }
 
 
@@ -47,32 +52,30 @@ public class GameManager : MonoBehaviour {
 		currentFloor.CurrentRoom = room_;
 	}
     
-	public void OnPlayerEnterNewRoom(){
-		if (currentFloor.CurrentRoom.IsCleares == false) {
-			EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
-			//MinimapRenderer.instance.RenderRoom (currentFloor.CurrentRoom);
+	public void OnPlayerEnterRoom()
+    {
+		if (currentFloor.CurrentRoom.IsVisited == false)
+        {
+            currentFloor.CurrentRoom.IsVisited = true;
+            EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
+			MinimapRenderer.instance.DrawRoom (currentFloor.CurrentRoom);
 		}
-	}
+    }
 
 	public void OnPlayerClearRoom(){
         PlayerControl.instance.ReLoadDeck();
-        //MinimapRenderer.instance.DoorOpen (currentFloor.CurrentRoom);
+        MinimapRenderer.instance.DrawDoors (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()
     {
 		EnemyControl.instance.EnemyTurn ();
-		//MinimapRenderer.instance.PlayerTileRefresh (currentFloor.CurrentRoom);
+	    MinimapRenderer.instance.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
     }
 
     public void OnEndEnemyTurn()
-    {
-		if (PlayerControl.instance.GetRemainAction () <= 0) {
-			InputModule.IsPlayerTurn = true;
-		}
-        else if (PlayerControl.instance.MoveReserveResume() == false) {
-			InputModule.IsPlayerTurn = true;
-		}
+    {       
+        InputModule.IsPlayerTurn = true;
     }
 
     public void ReGame()

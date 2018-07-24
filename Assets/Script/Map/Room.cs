@@ -23,11 +23,16 @@ public class Room : MonoBehaviour
 
     public RoomType roomType;
 	public List<Enemy> enemyList = new List<Enemy>();
+    private bool isVisited = false;
+    public bool IsVisited
+    {
+        get { return isVisited; }
+        set { isVisited = value; }
+    }
 	private bool isCleared = false;
 	public bool IsCleares{
 		get{ return isCleared; }
 	}
-
 
 
 	public void SetStartRoom(){
@@ -57,13 +62,6 @@ public class Room : MonoBehaviour
 		return enemyList.Count > 0;
 	}
 
-	public Tile WorldToTile(Vector3 worldPos){
-		Vector3 temp = worldPos - transform.position + new Vector3(0.5f,-0.5f,0);
-
-        Vector2Int IntPos = new Vector2Int(Mathf.FloorToInt(-temp.y), Mathf.FloorToInt((temp.x)));
-        return GetTile(IntPos);
-	}
-
 	public Tile[,] GetTileArrays()
     {
         return tiles;
@@ -80,24 +78,15 @@ public class Room : MonoBehaviour
     {
         tiles = t;
     }
-    public List<Vector2Int> GetDoorPos()
-    {
-        List<Vector2Int> temp = new List<Vector2Int>();
-        for(int i=0; i<doorList.Count;i++)
-        {
-            if (doorList[i].TargetRoom != null)
-                temp.Add(doorList[i].ThisTile.pos);
-        }
-        return temp;
-    }
 
-	public void DisableRoom(){
+	public void DisableRoom()
+    {
 		
 	}
 
     public void DeleteDoors()
     {
-        for (int i = doorList.Count-1; i > 0; i--)
+        for (int i = doorList.Count-1; i >= 0; i--)
         {
             if (doorList[i].TargetRoom == null)
             {
