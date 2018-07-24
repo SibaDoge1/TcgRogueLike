@@ -3,31 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MinimapRenderer : MonoBehaviour {
-	public static MinimapRenderer instance;
-	void Awake(){
-		instance = this;
-	}
-
-    private readonly Color emptyColor = Color.clear;
-	private readonly Color wallColor = Color.white;
-	private readonly Color tileColor = Color.blue;
-    private readonly Color playerColor = Color.red;
-    private readonly Color enemyColor = Color.yellow;
-
-	int space;
+/// <summary>
+/// 미니맵 텍스쳐 생성하는 클래스
+/// </summary>
+public  static class MinimapTexture 
+{
 
 
-	private Texture2D texture;
+
+    private static readonly Color emptyColor = Color.clear;
+    private static readonly Color wallColor = Color.white;
+	private static readonly Color tileColor = Color.blue;
+    private static readonly Color playerColor = Color.red;
+    private static readonly Color enemyColor = Color.yellow;
+
+    static int space;
 
 
-    private Vector2Int textureSize;
+	private static Texture2D texture;
+    static RawImage miniMap;
+    static RawImage fullMap;
 
-	private Vector2Int minBorder;
-	private Vector2Int maxBorder;
-    private Vector2Int playerPos = new Vector2Int(-1,-1);
+    private static Vector2Int textureSize;
 
-    public void Init(Map map)
+	private static Vector2Int minBorder;
+	private static Vector2Int maxBorder;
+    private static Vector2Int playerPos = new Vector2Int(-1,-1);
+
+    static public  void Init(Map map)
     {
         minBorder = map.minBorder;
         maxBorder = map.maxBorder;
@@ -51,7 +54,7 @@ public class MinimapRenderer : MonoBehaviour {
         UIManager.instance.SetMapTexture(texture, textureSize);
     }
 
-    public void DrawRoom(Room room)
+    static public void DrawRoom(Room room)
     {
         Vector2Int pos = WoldPosToMapPos(room.transform.position);
         for(int i=0; i<room.size.y;i++)
@@ -76,7 +79,7 @@ public class MinimapRenderer : MonoBehaviour {
         texture.Apply();
     }
 
-    public void DrawDoors(Room room)
+    static public void DrawDoors(Room room)
     {
         List<Door> doors = room.doorList;
         foreach(Door d in doors)
@@ -119,7 +122,7 @@ public class MinimapRenderer : MonoBehaviour {
     /// 임시
     /// </summary>
     /// <param name="room"></param>
-    public void DrawPlayerPos(Vector3 pPos)
+    static  public  void DrawPlayerPos(Vector3 pPos)
     {
         Vector2Int oldPos = playerPos;
         playerPos = WoldPosToMapPos(pPos);
@@ -134,14 +137,13 @@ public class MinimapRenderer : MonoBehaviour {
 
         UIManager.instance.MoveMiniMap(MapPosToUIPos(oldPos),MapPosToUIPos(playerPos));       
     }
-    //계산때매 일단 여기서 호출..
 
 
-    Vector2Int WoldPosToMapPos(Vector3 pos)
+    static Vector2Int WoldPosToMapPos(Vector3 pos)
     {
         return new Vector2Int((int)pos.x,(int)pos.y) - minBorder + new Vector2Int(space,space);
     }
-    Vector3 MapPosToUIPos(Vector2Int pos)
+    static Vector3 MapPosToUIPos(Vector2Int pos)
     {
         if (pos.x < 0)
         {

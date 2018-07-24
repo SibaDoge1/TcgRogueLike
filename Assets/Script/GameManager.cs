@@ -33,14 +33,14 @@ public class GameManager : MonoBehaviour {
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
 
-        MinimapRenderer.instance.Init(currentFloor);
+        MinimapTexture.Init(currentFloor);
 
         PlayerControl.instance.ReLoadDeck();
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
         EnemyControl.instance.InitEnemy (currentFloor.StartRoom);
 
-        MinimapRenderer.instance.DrawDoors(currentFloor.CurrentRoom);
-        MinimapRenderer.instance.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
+        MinimapTexture.DrawDoors(currentFloor.CurrentRoom);
+        MinimapTexture.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
     }
 
 
@@ -58,19 +58,19 @@ public class GameManager : MonoBehaviour {
         {
             currentFloor.CurrentRoom.IsVisited = true;
             EnemyControl.instance.InitEnemy (currentFloor.CurrentRoom);
-			MinimapRenderer.instance.DrawRoom (currentFloor.CurrentRoom);
+			MinimapTexture.DrawRoom (currentFloor.CurrentRoom);
 		}
     }
 
 	public void OnPlayerClearRoom(){
         PlayerControl.instance.ReLoadDeck();
-        MinimapRenderer.instance.DrawDoors (currentFloor.CurrentRoom);
+        MinimapTexture.DrawDoors (currentFloor.CurrentRoom);
 	}
 
     public void OnEndPlayerTurn()
     {
 		EnemyControl.instance.EnemyTurn ();
-	    MinimapRenderer.instance.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
+	    MinimapTexture.DrawPlayerPos(PlayerControl.instance.PlayerObject.transform.position);
     }
 
     public void OnEndEnemyTurn()
