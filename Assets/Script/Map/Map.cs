@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 맵 데이터를 가지고있는 클래스 입니다.
+/// </summary>
 public class Map : MonoBehaviour{
     public void SetStartRoom(Room startRoom_)
     {

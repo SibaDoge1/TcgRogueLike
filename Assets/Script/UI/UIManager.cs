@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// UI MANAGER , TODO : 각 UI들 따로 클래스 만들어서 깔끔하게 구현
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
@@ -46,15 +49,21 @@ public class UIManager : MonoBehaviour
         GameOverPanel.gameObject.SetActive(true);
         message.text = "이겼닭! 오늘 저녁은 치킨이다!";
     }
+
+    /// <summary>
+    /// 맵 이미지에 텍스쳐 설정, 크기 설정
+    /// </summary>
     public void SetMapTexture(Texture2D texture,Vector2Int size)
     {
         miniMap.texture = texture;
         miniMap.rectTransform.sizeDelta = size * 8;
         fullMap.texture = texture;
-        fullMap.rectTransform.sizeDelta = size * 12;
-
+        float ratio = Mathf.Min(1200f / size.x, 720f / size.y);
+        fullMap.rectTransform.sizeDelta = new Vector2(size.x * ratio, size.y * ratio);
     }
-
+    /// <summary>
+    /// 미니맵 움직이기 target 포지션으로 코루틴써서 옮김
+    /// </summary>
     public void MoveMiniMap(Vector3 origin,Vector3 target)
     {
         StartCoroutine(MoveMiniMapRoutine(origin,target));
