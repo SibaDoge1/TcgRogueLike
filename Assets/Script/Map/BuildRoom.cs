@@ -134,39 +134,32 @@ public static class BuildRoom
                 string[] temp = roomData[i,j].Split('/');
                 tile = int.Parse(temp[0]);
                 offtile = int.Parse(temp[1]);
-                item = int.Parse(temp[2]);
-                entity = int.Parse(temp[3]);
-                eventlayer = int.Parse(temp[4]);
+                entity = int.Parse(temp[2]);
 
 
                 if (tile != 0)
                 {
-                    Tile tempTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("Tile/"+tile) as GameObject, room.transform).GetComponent<Tile>();
+                    Tile tempTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("Fields/Tile/"+tile) as GameObject, room.transform).GetComponent<Tile>();
                     tempTile.SetTile(new Vector2Int(j, (size.y - 1) - i), size);
                     tiles[j, (size.y-1)-i] = tempTile;
 
                     if (offtile != 0)
                     {
-                        OffTile offTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("OffTile/" + offtile) as GameObject, tempTile.transform).GetComponent<OffTile>();
-                        tempTile.offTile = offTile;
-                    }
-                    if (item != 0)//아이템
-                    {
-                    }
-                    if (entity != 0) //엔타이티
-                    {
-                        Entity et = InstantiateDelegate.ProxyInstantiate(Resources.Load("Entity/"+ entity) as GameObject).GetComponent<Entity>();
-                        et.SetRoom(room, new Vector2Int(j, (size.y - 1) - i));
-                    }
-                    if(eventlayer !=0)
-                    {
-                        EventLayer ev = InstantiateDelegate.ProxyInstantiate(Resources.Load("EventLayer/"+eventlayer) as GameObject).GetComponent<EventLayer>();
-                        tempTile.eventLayer = ev;
-                        if(eventlayer<5)//문
+                        OffTile ot = InstantiateDelegate.ProxyInstantiate(Resources.Load("Fields/OffTile/" + offtile) as GameObject, tempTile.transform).GetComponent<OffTile>();
+                        tempTile.offTile = ot;
+
+                        if (offtile < 5)//문
                         {
-                            room.doorList.Add(ev as Door);
+                            room.doorList.Add(ot as Door);
                         }
                     }
+
+                    if (entity != 0) //엔타이티
+                    {
+                        Entity et = InstantiateDelegate.ProxyInstantiate(Resources.Load("Fields/Entity/"+ entity) as GameObject).GetComponent<Entity>();
+                        et.SetRoom(room, new Vector2Int(j, (size.y - 1) - i));
+                    }
+
                 }
 
             }

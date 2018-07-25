@@ -12,6 +12,8 @@ public enum Attribute
 }
 public enum CardAbilityType{Attack, Heal, Util}
 public class CardData {
+    protected static Color attackRangeColor = new Color(1,0,0,0.5f);
+    
 	protected CardData(){}
 	public CardData(int cardIndex,Player pl)
     {

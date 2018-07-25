@@ -5,16 +5,27 @@ using UnityEngine;
 namespace Arch{
 	public class Tile :MonoBehaviour
 	{
-		void Awake(){
-			sprite = GetComponent<SpriteRenderer> ();
-		}
+        static GameObject Load;//rangeLayer
+        GameObject rangeLayer;
+       
+        public void InstantiateRangeLayer(Color c)
+        {
+            if(Load == null)
+                Load = (GameObject)Resources.Load("RangeLayer");
 
-	    #region variables
-		public List<Tile> neighbours;
-	    private SpriteRenderer sprite;
-		public SpriteRenderer mySprite{
-			get { return sprite; }
-		}
+            if(rangeLayer == null)
+            {
+                rangeLayer = Instantiate(Load, transform.position, Quaternion.identity);
+                rangeLayer.GetComponent<RangeLayer>().SetColor(c);
+            }
+        }
+        public void DestroyRangeLayer()
+        {
+            DestroyImmediate(rangeLayer);           
+        }
+        #region variables
+        public List<Tile> neighbours;
+
 	    public Vector2Int pos;
 		private Entity onTileObj;//타일위에 있는 mapObject
 	    public Entity OnTileObj {
@@ -27,10 +38,17 @@ namespace Arch{
 		}
 		private OffTile _offTile;
 		public OffTile offTile
-        { get { return _offTile; }  set { _offTile = value; _offTile.ThisTile = this; } }
-        private EventLayer _eventLayer;
-        public EventLayer eventLayer
-        { get { return _eventLayer;  } set { _eventLayer = value; _eventLayer.ThisTile = this; } }
+        {
+            get
+            { return _offTile; }
+            set
+            {
+                if (_offTile != null && offTile is EventLayer)
+                    return;
+
+                _offTile = value; _offTile.ThisTile = this;
+            }
+        }
 
 	    #endregion
 	    /// <summary>
@@ -57,10 +75,6 @@ namespace Arch{
 			if (offTile != null) {
 				offTile.SomethingUpOnThis (ot);
 			}
-            if(eventLayer != null)
-            {
-                eventLayer.SomethingUpOnThis(ot);
-            }
 		}       
 	}
 }

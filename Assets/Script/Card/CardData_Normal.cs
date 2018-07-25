@@ -30,7 +30,10 @@ public class CardData_Attack : CardData {
 		return damage.ToString();
 	}
 
-    private int AtrCounter(Attribute card, Attribute enemy)
+    /// <summary>
+    /// 속성 계산 판정기
+    /// </summary>
+    private int AtrCompare(Attribute card, Attribute enemy)
     {
         if (card == enemy)
         {
@@ -47,7 +50,7 @@ public class CardData_Attack : CardData {
         Enemy etarget = target as Enemy;
         if(etarget != null)
         {
-            etarget.GetDamage(dam * AtrCounter(cardAtr,etarget.Atr),player);
+            etarget.GetDamage(dam * AtrCompare(cardAtr,etarget.Atr),player);
             //etarget.AtrCheck(cardAtr);
         }
         else
@@ -79,12 +82,12 @@ public class CardData_Sword : CardData_Attack {
 	public override void CardEffectPreview (){
 		targetTiles = TileUtils.SquareRange (player.currentTile, range);
 		for(int i = 0; i < targetTiles.Count; i++){
-			targetTiles [i].mySprite.color = Color.red;
+            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
 		}
 	}
 	public override void CancelPreview (){
 		for(int i = 0; i < targetTiles.Count; i++){
-			targetTiles [i].mySprite.color = Color.white;
+            targetTiles[i].DestroyRangeLayer();
 		}
 	}
 }
@@ -117,14 +120,14 @@ public class CardData_BFSword : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.red;
+            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.white;
+            targetTiles[i].DestroyRangeLayer();
         }
     }
 }
@@ -155,14 +158,14 @@ public class CardData_Stone : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.red;
+            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.white;
+            targetTiles[i].DestroyRangeLayer();
         }
     }
 }
@@ -192,14 +195,14 @@ public class CardData_Arrow : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.red;
+            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].mySprite.color = Color.white;
+            targetTiles[i].DestroyRangeLayer();
         }
     }
 }
