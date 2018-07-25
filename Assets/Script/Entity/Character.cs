@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class Character : Entity {
     [Header("Setting")]
-    public int HP;
+    [SerializeField]
+    protected int SettingHp;
     public int atk;
     public int def;
 
@@ -52,14 +53,6 @@ public abstract class Character : Entity {
     public override bool GetDamage(float damage, Entity atker = null)
     {
         return GetDamage((int)damage,atker);
-    }
-    /// <summary>
-    /// 방무뎀
-    /// </summary>
-    protected virtual bool DirectDamage(int damage, Entity atker = null)
-    {
-        currentHp -= damage;
-        return true;
     }
     protected override void HpEffect(int value)
     {

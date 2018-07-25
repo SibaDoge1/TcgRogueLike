@@ -40,7 +40,10 @@ public abstract class Entity : MonoBehaviour {
         set
         {
             HpEffect(value);
-            _currentHp = value;
+            if (value < fullHp)
+                _currentHp = value;
+            else
+                _currentHp = fullHp;
         }
     }
 
@@ -142,7 +145,7 @@ public abstract class Entity : MonoBehaviour {
     {
         return GetDamage((int)damage,atker);
     }
-    
+
 
     protected virtual void HpEffect(int value)
     {

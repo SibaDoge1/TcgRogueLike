@@ -22,7 +22,7 @@ public class CardData_Reload : CardData_Magic{
 
     int reloadAmount=1;
 	public override void CardActive(){
-        player.GetDamage(reloadAmount); 
+        player.currentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}
 
@@ -44,7 +44,7 @@ public class CardData_Bandage : CardData_Magic{
 	int healAmount = 3;
 
 	public override void CardActive (){
-        player.GetDamage(-healAmount);
+        player.currentHp += 3;
 		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.instance.PlayerObject);
     }
 
@@ -64,7 +64,7 @@ public class CardData_Portion : CardData_Magic
     }
     public override void CardActive()
     {
-        player.GetDamage(-999);
+        player.currentHp += 99;
         EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
     }
 

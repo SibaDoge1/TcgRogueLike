@@ -340,7 +340,7 @@ MonoBehaviour:
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
-  HP: 12
+  SettingHp: 12
   atk: 0
   def: 0
 --- !u!4 &241675146
@@ -1468,6 +1468,9 @@ MonoBehaviour:
   - {fileID: 1157186078190964, guid: 9bd42800a97fe7245b68316478d5650b, type: 2}
   textEffectPrefab: {fileID: 1442815581718012, guid: 2f7b052117bb2f343b0038f31f02cbfc,
     type: 2}
+  rangeLayer:
+  - {fileID: 1901324666352306, guid: 5ca6b911662ffdc4492076ef2455d80e, type: 2}
+  - {fileID: 1291516968948508, guid: a297356345012a948bdcf06f95532c6b, type: 2}
 --- !u!4 &928653822
 Transform:
   m_ObjectHideFlags: 0
@@ -3184,3 +3187,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: {fileID: 2075585292}
   hand: {fileID: 1623250404}
+  Move: 1
+  Draw: 1

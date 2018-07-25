@@ -74,30 +74,30 @@ public static class BuildRoom
         shopRoomData = new List<string>();
 
 
-        Object[] defaultData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/DEFAULT");
-        for (int i = 0; i < defaultData.Length; i++)
+        Object[] Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/DEFAULT");
+        for (int i = 0; i < Data.Length; i++)
         {
-            defaultRoomData.Add(defaultData[i].name);
+            defaultRoomData.Add(Data[i].name);
         }
-        Object[] battleData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BATTLE");
-        for (int i = 0; i < battleData.Length; i++)
+         Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BATTLE");
+        for (int i = 0; i < Data.Length; i++)
         {
-            battleRoomData.Add(battleData[i].name);
+            battleRoomData.Add(Data[i].name);
         }
-        Object[] bossData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BOSS");
-        for (int i = 0; i < bossData.Length; i++)
+        Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BOSS");
+        for (int i = 0; i < Data.Length; i++)
         {
-            bossRoomData.Add(bossData[i].name);
+            bossRoomData.Add(Data[i].name);
         }
-        Object[] eventData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/EVENT");
-        for (int i = 0; i < eventData.Length; i++)
+        Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/EVENT");
+        for (int i = 0; i < Data.Length; i++)
         {
-            eventRoomData.Add(eventData[i].name);
+            eventRoomData.Add(Data[i].name);
         }
-        Object[] shopData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/SHOP");
-        for (int i = 0; i < shopData.Length; i++)
+        Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/SHOP");
+        for (int i = 0; i < Data.Length; i++)
         {
-            shopRoomData.Add(shopData[i].name);
+            shopRoomData.Add(Data[i].name);
         }
     }
      static string[,] GetRoomData(RoomType rt)

@@ -732,11 +732,11 @@ MonoBehaviour:
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
-  HP: 12
+  SettingHp: 12
   atk: 2
   def: 0
   Atr: 2
-  Cost: 1
+  delay: 1
 --- !u!114 &114603695558678800
 MonoBehaviour:
   m_ObjectHideFlags: 1

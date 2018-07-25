@@ -5,6 +5,7 @@ using Arch;
 
 public enum CardEffectType{Slash, Blood, Heal, Hit}
 public enum BulletType{Stone, Arrow}
+public enum RangeType {CARD,ENEMY }
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
 	void Awake(){
@@ -21,7 +22,7 @@ public class EffectDelegate : MonoBehaviour {
 	})]
 	public GameObject[] bulletPrefabs;
 	public GameObject textEffectPrefab;
-
+    public GameObject[] rangeLayer;
 
 	public void MadeEffect(CardEffectType eType, Transform parent){
 		Instantiate (effectPrefabs [(int)eType], parent);
@@ -63,4 +64,31 @@ public class EffectDelegate : MonoBehaviour {
 	public void MadeBullet(BulletType bType, Vector3 startPos, Transform target){
 		(Instantiate (bulletPrefabs [(int)bType], startPos, Quaternion.identity)as GameObject).GetComponent<Bullet> ().Shoot (target);
 	}
+
+    Dictionary<Tile, GameObject> tileToRange = new Dictionary<Tile, GameObject>();
+    public Tile MadeRange(RangeType range, Tile targetTile)
+    {
+        if (targetTile == null || targetTile.OnTileObj is Structure)
+            return null;
+        else if(tileToRange.ContainsKey(targetTile))
+        {
+            DestroyImmediate(tileToRange[targetTile]);
+            tileToRange.Remove(targetTile);
+        }
+        
+     tileToRange.Add(targetTile, Instantiate(rangeLayer[(int)range],
+     targetTile.transform.position, Quaternion.identity));
+
+        return targetTile;        
+    }
+    public void DeleteRange(Tile targetTile)
+    {
+        if (targetTile == null || !tileToRange.ContainsKey(targetTile))
+            return;
+        else
+        {
+           DestroyImmediate(tileToRange[targetTile]);
+           tileToRange.Remove(targetTile);
+        }
+    }
 }

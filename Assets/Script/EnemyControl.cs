@@ -22,7 +22,7 @@ public class EnemyControl : MonoBehaviour {
         {
             foreach (Enemy e in enemies)
             {
-                e.DoAct();
+                e.AIRoutine();
             }
         }
 

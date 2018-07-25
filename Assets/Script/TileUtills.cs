@@ -106,68 +106,11 @@ public static class TileUtils
 
         return squareList;
     }
-    /// <summary>
-    /// 룸지정해서 가져오기
-    /// </summary>
-    public static List<Tile> SquareRange(Room room,Tile center, int radius)
-    {
-        List<Tile> squareList = new List<Tile>();
-        int x = center.pos.x; int y = center.pos.y;
-        for (int i = -radius; i <= radius; i++)
-        {
-            for (int j = -radius; j <= radius; j++)
-            {
-                squareList.Add(room.GetTile(new Vector2Int(x + i, y + j)));
-            }
-        }
-        squareList.Remove(center);
-        for (int i = squareList.Count - 1; i >= 0; i--)
-        {
-            if (squareList[i] == null)
-            {
-                squareList.RemoveAt(i);
-            }
-        }
-
-        return squareList;
-    }
 
 
 
-    /// <summary>
-    /// 플레이어가 원모양으로 주위에 있는가 체크
-    /// </summary>
-	public static bool AI_CircleFind(Tile center, int radius)
-    {
-        List<Tile> range = CircleRange(center, radius);
 
-        for (int i = 0; i < range.Count; i++)
-        {
-            if (range[i].OnTileObj != null)
-            {
-                if (range[i].OnTileObj is Player)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    public static bool AI_SquareFind(Tile center, int radius)
-    {
-        List<Tile> range = SquareRange(center, radius);
-        for (int i = 0; i < range.Count; i++)
-        {
-            if (range[i].OnTileObj != null)
-            {
-                if (range[i].OnTileObj is Player)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
     /// <summary>
     /// 근처의 적 리스트 가져옵니다.
     /// </summary>
@@ -214,7 +157,57 @@ public static class TileUtils
 		}
 		return false;
 	}
+    /// <summary>
+    /// 2타일의 위치관계를 통해, 동,서,남,북 방향을 구해서 리턴합니다.
+    /// </summary>
+    /// <returns></returns>
+    public static Vector2Int GetDir(Tile center,Tile target)
+    {        
+        Vector2Int v = target.pos - center.pos;
+        if(Mathf.Abs(v.x)>Mathf.Abs(v.y))
+        {
+            return new Vector2Int(v.x /Mathf.Abs(v.x), 0);
+        }else
+        {
+            return new Vector2Int(0,v.y/Mathf.Abs(v.y));
+        }
+    }
+    #region AI Utils
+    /// <summary>
+    /// 플레이어가 원모양으로 주위에 있는가 체크
+    /// </summary>
+    public static bool AI_CircleFind(Tile center, int radius)
+    {
+        List<Tile> range = CircleRange(center, radius);
 
+        for (int i = 0; i < range.Count; i++)
+        {
+            if (range[i].OnTileObj != null)
+            {
+                if (range[i].OnTileObj is Player)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static bool AI_SquareFind(Tile center, int radius)
+    {
+        List<Tile> range = SquareRange(center, radius);
+        for (int i = 0; i < range.Count; i++)
+        {
+            if (range[i].OnTileObj != null)
+            {
+                if (range[i].OnTileObj is Player)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    #endregion
 }
 
 

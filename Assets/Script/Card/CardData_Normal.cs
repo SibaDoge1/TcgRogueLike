@@ -82,14 +82,14 @@ public class CardData_Sword : CardData_Attack {
 	public override void CardEffectPreview (){
 		targetTiles = TileUtils.SquareRange (player.currentTile, range);
 		for(int i = 0; i < targetTiles.Count; i++){
-            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
+            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
 		}
 	}
 	public override void CancelPreview (){
 		for(int i = 0; i < targetTiles.Count; i++){
-            targetTiles[i].DestroyRangeLayer();
-		}
-	}
+            EffectDelegate.instance.DeleteRange(targetTiles[i]);
+        }
+    }
 }
 public class CardData_BFSword : CardData_Attack
 {
@@ -120,14 +120,14 @@ public class CardData_BFSword : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
+            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].DestroyRangeLayer();
+            EffectDelegate.instance.DeleteRange(targetTiles[i]);
         }
     }
 }
@@ -158,14 +158,14 @@ public class CardData_Stone : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
+            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].DestroyRangeLayer();
+            EffectDelegate.instance.DeleteRange(targetTiles[i]);
         }
     }
 }
@@ -195,14 +195,14 @@ public class CardData_Arrow : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].InstantiateRangeLayer(attackRangeColor);
+            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            targetTiles[i].DestroyRangeLayer();
+            EffectDelegate.instance.DeleteRange(targetTiles[i]);
         }
     }
 }

@@ -125,4 +125,32 @@ public class PlayerControl : MonoBehaviour {
     {
         hand.ToggleHand();
     }
+
+    #region Status //상태이상 스테이터스 관리
+
+    public bool Move = true; public bool Draw = true;
+
+    private Debuffs debuff;
+    public void SetDebuff(Debuffs d)
+    {
+        if(debuff != null)
+        {
+           EraseDebuff();
+        }
+        debuff = d;
+    }
+    public void CountDebuff()
+    {
+        if(debuff != null)
+        {
+            debuff.CountTurn();
+        }
+    }
+    public void EraseDebuff()
+    {
+        debuff.OnDestroy();
+        debuff = null;
+    }
+    
+    #endregion
 }

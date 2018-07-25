@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour {
     public void OnEndEnemyTurn()
     {       
         InputModule.IsPlayerTurn = true;
+        PlayerControl.instance.CountDebuff();
     }
 
     public void ReGame()

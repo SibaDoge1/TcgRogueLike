@@ -5,24 +5,6 @@ using UnityEngine;
 namespace Arch{
 	public class Tile :MonoBehaviour
 	{
-        static GameObject Load;//rangeLayer
-        GameObject rangeLayer;
-       
-        public void InstantiateRangeLayer(Color c)
-        {
-            if(Load == null)
-                Load = (GameObject)Resources.Load("RangeLayer");
-
-            if(rangeLayer == null)
-            {
-                rangeLayer = Instantiate(Load, transform.position, Quaternion.identity);
-                rangeLayer.GetComponent<RangeLayer>().SetColor(c);
-            }
-        }
-        public void DestroyRangeLayer()
-        {
-            DestroyImmediate(rangeLayer);           
-        }
         #region variables
         public List<Tile> neighbours;
 

@@ -7,10 +7,13 @@ public class Player : Character
 {
     private void Start()
     {
-        fullHp = HP; currentHp = HP;
+        _fullHp = SettingHp; _currentHp = SettingHp;
+        UIManager.instance.HpUpdate(currentHp, fullHp);
     }
 
-    protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
+
+
+protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
     {
         return base.MoveAnimationRoutine(pos);       
     }
@@ -75,7 +78,7 @@ public class Player : Character
     public override int currentHp
     {
         set { base.currentHp = value;
-            UIManager.instance.HpUpdate(value, fullHp); }
+            UIManager.instance.HpUpdate(currentHp, fullHp); }
     }
 
 

@@ -68,16 +68,15 @@ public static class PathFinding
     /// <summary>
     /// pathFinding Using A*
     /// </summary>
-    static public List<Tile> GeneratePath(Entity obje,Tile targetTile)
+    static public List<Tile> GeneratePath(Entity obje,Tile target)
 	{
 
 		Entity selectedUnit = obje;
 		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile> ();
 		Dictionary<Tile, float> distance = new Dictionary<Tile, float> ();
-		_targetTile = targetTile;
-		Tile target;
+		_targetTile = target;
 
-        if(Mathf.Abs(targetTile.pos.x - obje.pos.x)>Mathf.Abs(targetTile.pos.y-obje.pos.y))
+        if(Mathf.Abs(target.pos.x - obje.pos.x)>Mathf.Abs(target.pos.y-obje.pos.y))
         {
             isVerticalLarge = true;
         } else
@@ -87,9 +86,7 @@ public static class PathFinding
 
 		Tile source = selectedUnit.currentTile;
 
-		target = _targetTile;
-
-		if (targetTile == obje.currentTile) {
+		if (target == obje.currentTile) {
 			List<Tile> temp = new List<Tile> ();
 			temp.Add (source);
 			return temp;
@@ -141,7 +138,7 @@ public static class PathFinding
 
 		///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
 		if (prev [target] == null) {
-            return PathBlocked(obje,targetTile);
+            return PathBlocked(obje, target);
 		}
          
 
@@ -162,7 +159,109 @@ public static class PathFinding
 		return currentPath;
 	}
 
+    static public List<Tile> GeneratePath(Entity obje, Entity target)
+    {
 
+        Entity selectedUnit = obje;
+        Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+        Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
+        _targetTile = target.currentTile;
+        Tile targetTile = _targetTile;
+
+        if (Mathf.Abs(targetTile.pos.x - obje.pos.x) > Mathf.Abs(targetTile.pos.y - obje.pos.y))
+        {
+            isVerticalLarge = true;
+        }
+        else
+        {
+            isVerticalLarge = false;
+        }
+
+        Tile source = selectedUnit.currentTile;
+
+
+        if (targetTile == obje.currentTile)
+        {
+            List<Tile> temp = new List<Tile>();
+            temp.Add(source);
+            return temp;
+        }
+        //source.distance = 0;
+        prev[source] = null;
+        prev[targetTile] = null;
+        List<Tile> openList = new List<Tile>();
+        List<Tile> closedList = new List<Tile>();
+
+        openList.Add(source);
+
+        foreach (Tile v in obje.currentRoom.GetTileArrays())
+        {
+            distance[v] = Mathf.Infinity;
+        }
+        distance[source] = 0;
+
+        while (openList.Count > 0)
+        {
+            Tile current = openList[0];
+            for (int i = 0; i < openList.Count; i++)
+            {
+
+                if (distance[openList[i]] < distance[current])
+                {
+                    current = openList[i];
+                }
+            }
+            openList.Remove(current);
+            closedList.Add(current);
+
+            if (current == target)
+            {
+                break;
+            }
+
+
+
+            foreach (Tile v in current.neighbours)
+            {
+
+                if (closedList.Contains(v) || CostToEnterTile(current, v) == Mathf.Infinity)
+                    continue;
+
+                float alt = distance[current] + CostToEnterTile(current, v) + calculateVector(v.pos, target.pos);
+                if (alt < distance[v] || !openList.Contains(v))
+                {
+                    distance[v] = alt;
+                    prev[v] = current;
+                    if (!openList.Contains(v))
+                        openList.Add(v);
+                }
+            }
+        }
+
+        ///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
+        if (prev[targetTile] == null)
+        {
+            return PathBlocked(obje, targetTile);
+        }
+
+
+
+        List<Tile> currentPath = new List<Tile>();
+        Tile now = targetTile;
+        // Step through the "prev" chain and add it to our path
+        while (now != null)
+        {
+            currentPath.Add(now);
+            now = prev[now];
+        }
+
+        // Right now, currentPath describes a route from out target to our source
+        // So we need to invert it!
+
+        currentPath.Reverse();
+        currentPath.Remove(source);
+        return currentPath;
+    }
 
 
 
