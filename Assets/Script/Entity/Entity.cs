@@ -47,23 +47,26 @@ public abstract class Entity : MonoBehaviour {
         }
     }
 
-    
     protected SpriteRenderer sprite;
 	protected virtual void  Awake () {
         sprite = GetComponent<SpriteRenderer>();
+        
 	}
 	
 	public virtual void SetRoom(Room room,Vector2Int _pos)
     {		
         currentRoom = room;
         this.transform.parent = room.transform;
-
-
         this.Teleport(_pos);
     }
-
+    public virtual void SetRoom(Room room, Tile _pos)
+    {
+        currentRoom = room;
+        this.transform.parent = room.transform;
+        this.Teleport(_pos.pos);
+    }
     #region MoveMethod
-	public virtual bool Teleport(Vector2Int _pos){
+    public virtual bool Teleport(Vector2Int _pos){
 		if (!currentRoom.GetTile(_pos).IsStandAble(this))
 		{
 			return false;
@@ -72,16 +75,20 @@ public abstract class Entity : MonoBehaviour {
 		if (currentRoom.GetTile(pos) && currentRoom.GetTile(pos).OnTileObj == this)
 			currentRoom.GetTile(pos).OnTileObj = null;
 
-		pos = _pos;
+        if (moveAnim != null)
+        {
+            StopCoroutine(moveAnim);
+        }
+        pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
         currentTile.SomethingUpOnThis(this);
-        transform.localPosition = currentTile.transform.localPosition + new Vector3(0, 0, pos.y);
-
-
+        transform.localPosition = currentTile.transform.localPosition + new Vector3(0,0,pos.y);
         return true;
 	}
-	public virtual bool MoveTo(Vector2Int _pos)
+
+    Coroutine moveAnim;
+    public virtual bool MoveTo(Vector2Int _pos)
     {
         if (!currentRoom.GetTile(_pos).IsStandAble(this))
         {
@@ -91,24 +98,25 @@ public abstract class Entity : MonoBehaviour {
         if (currentRoom.GetTile(pos).OnTileObj == this)
             currentRoom.GetTile(pos).OnTileObj = null;
 
+        if (moveAnim != null)
+        {
+            StopCoroutine(moveAnim);
+        }
+        moveAnim = StartCoroutine(MoveAnimationRoutine(pos,_pos));
+
         pos = _pos;
 
         currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-
-        StartCoroutine (MoveAnimationRoutine (pos));
-
-
-        
         return true;
     }
 
-	protected virtual IEnumerator MoveAnimationRoutine(Vector2Int pos){
+    protected virtual IEnumerator MoveAnimationRoutine(Vector2Int origin,Vector2Int target){
 		float timer = 0;
-		Vector3 originPos = transform.localPosition;
-        Vector3 targetPos = currentRoom.GetTile(pos).transform.localPosition + new Vector3(0, 0, pos.y);
+        Vector3 originPos = currentRoom.GetTile(origin).transform.localPosition;
+        Vector3 targetPos = currentRoom.GetTile(target).transform.localPosition + new Vector3(0, 0, target.y);
 		while (true) {
-			timer += Time.deltaTime * 5;
+			timer += Time.deltaTime * 6;
 			if (timer > 1) {
 				break;
 			}
@@ -116,9 +124,6 @@ public abstract class Entity : MonoBehaviour {
 			yield return null;
 		}
         transform.localPosition = targetPos;
-
-        currentTile.SomethingUpOnThis(this);
-        OnEndTurn();
 	}
 
     protected virtual void OnDieCallback()

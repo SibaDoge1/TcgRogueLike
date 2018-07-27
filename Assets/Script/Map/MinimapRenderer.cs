@@ -21,14 +21,11 @@ public  static class MinimapTexture
 
 
 	private static Texture2D texture;
-    static RawImage miniMap;
-    static RawImage fullMap;
-
     private static Vector2Int textureSize;
 
 	private static Vector2Int minBorder;
 	private static Vector2Int maxBorder;
-    private static Vector2Int playerPos = new Vector2Int(-1,-1);
+    private static Vector2Int playerPos;
 
     static public  void Init(Map map)
     {
@@ -36,8 +33,8 @@ public  static class MinimapTexture
         maxBorder = map.maxBorder;
         space = MapGenerator.space;
         playerPos = new Vector2Int(-1, -1);
-        textureSize = new Vector2Int(maxBorder.x - minBorder.x, maxBorder.y - minBorder.y);
-        texture = new Texture2D(textureSize.x + space * 2, textureSize.y + space * 2);
+        textureSize = maxBorder - minBorder + new Vector2Int(space*2,space*2);
+        texture = new Texture2D(textureSize.x,textureSize.y);
         texture.filterMode = FilterMode.Point;
 
         Color resetColor = Color.clear;

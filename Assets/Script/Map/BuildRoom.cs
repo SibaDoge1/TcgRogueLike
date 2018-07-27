@@ -12,6 +12,7 @@ public static class BuildRoom
     static List<string> bossRoomData;
     static List<string> eventRoomData;
     static List<string> shopRoomData;
+    static List<string> TestRoomData;
     static Vector2Int size;
     static Tile[,] tiles;
     static Room room;
@@ -63,6 +64,9 @@ public static class BuildRoom
         roomData = null;
         return room;
     }
+    /// <summary>
+    /// 현재 층의 룸정보파일들의 파일 이름들만 받아서 저장
+    /// </summary>
     public static void SetRoomData(Map _newMap)
     {
         newMap = _newMap;
@@ -100,7 +104,8 @@ public static class BuildRoom
             shopRoomData.Add(Data[i].name);
         }
     }
-     static string[,] GetRoomData(RoomType rt)
+
+    static string[,] GetRoomData(RoomType rt)
     {
         switch(rt)
         {
@@ -123,7 +128,7 @@ public static class BuildRoom
 
     static void Draw()
     {
-        int tile; int offtile; int item; int entity; int eventlayer;
+        int tile; int offtile;  int entity;
 
 
         //string을 다시 tile , item, player , height 항목으로 나눕니다

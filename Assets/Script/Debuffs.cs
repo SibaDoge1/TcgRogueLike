@@ -8,6 +8,7 @@ using UnityEngine;
 public abstract class Debuffs
 {
     protected int turn;
+    protected GameObject effect;
     public virtual void CountTurn()
     {
         turn--;
@@ -24,27 +25,27 @@ public class Debuff_Move : Debuffs
 {
     public Debuff_Move()
     {
-        PlayerControl.instance.Move = false;
         turn = 3;
-        //TODO : MAKE EFFECT
+        PlayerControl.instance.isMoveAble = false;
+        effect = EffectDelegate.instance.MadeEffect(StatusEffectType.Spider, PlayerControl.Player);
     }
     public override void OnDestroy()
     {
-        PlayerControl.instance.Move = true;
-        //TODO : ERASE EFFECT
+        PlayerControl.instance.isMoveAble = true;
+        EffectDelegate.instance.DestroyEffect(effect);
     }
 }
 public class Debuff_Draw : Debuffs
 {
     public Debuff_Draw()
     {
-        PlayerControl.instance.Draw = false;
+        PlayerControl.instance.isDrawAble = false;
         turn = 3;
         //TODO : MAKE EFFECT
     }
     public override void OnDestroy()
     {
-        PlayerControl.instance.Draw = true;
+        PlayerControl.instance.isDrawAble = true;
         //TODO : ERASE EFFECT
     }
 }

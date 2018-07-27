@@ -20,6 +20,7 @@ public class Config : MonoBehaviour
     public int floorNum = 1;
     public int roomNum;
 
+    [Header("TestMode")]
     public bool RoomTestMode;
     public RoomType TestRoomType;
     public string TestRoomName;

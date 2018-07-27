@@ -11,6 +11,7 @@ public class RabbitEye : Enemy {
         _fullHp = SettingHp; _currentHp = SettingHp;
     }
 
+    #region AI
     protected override void Think()
     {
         if (TileUtils.AI_CircleFind(currentTile, 1))
@@ -28,44 +29,65 @@ public class RabbitEye : Enemy {
     {
         DelayList = null;
         attackList = new List<Action>()
-        { new RangeOnAction(this),new AttackThenRangeOffAction(this)};
+        { new Action(RangeOnAction),new Action(AttackThenRangeOffAction)};
         moveList = new List<Action>()
-        { new SimpleRunAway(this)};
+        { new Action(SimpleRunAway)};
     }
-    #region 원거리 공격 AI
-    class RangeOnAction : Action
-    {
-        RabbitEye b;
-        public RangeOnAction(RabbitEye e) : base(e) { b = e; }
-        public override void Do()
+
+    Arch.Tile aimedTile;
+         IEnumerator RangeOnAction()
         {
-            b.rangeList.Add(EffectDelegate.instance.MadeRange(RangeType.ENEMY, PlayerControl.instance.PlayerObject.currentTile));
+            PlayAnimation("Ready");
+            aimedTile = PlayerControl.Player.currentTile;
+            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.Player.currentTile));
+            yield return null;
         }
-    }
-    class AttackThenRangeOffAction : Action
-    {
-        RabbitEye b;
-        public AttackThenRangeOffAction(RabbitEye e) : base(e) { b = e; }
-        public override void Do()
+  
+
+
+          IEnumerator AttackThenRangeOffAction()
         {
-            b.PlayAttackMotion(); EffectDelegate.instance.MadeEffect(CardEffectType.Hit, b.rangeList[0]);
-            if (b.rangeList[0].OnTileObj != null && b.rangeList[0].OnTileObj is Player)
+            PlayAnimation("Attack"); EffectDelegate.instance.MadeEffect(CardEffectType.Hit, rangeList[0].transform);
+            if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
             {
-                b.rangeList[0].OnTileObj.GetDamage(b.atk);
+            aimedTile.OnTileObj.GetDamage(atk);
             }
-            b.ClearRangeList();
+            ClearRangeList();
+            yield return null;
         }
-    }
+
+
+
+    Vector2Int dir;
+          IEnumerator SimpleRunAway()
+        {
+            if (dir == Vector2Int.zero)
+            {
+                List<Arch.Tile> nearTiles = TileUtils.CircleRange(currentTile, 1);
+                for (int i = 0; i < nearTiles.Count; i++)
+                {
+                    if (nearTiles[i].OnTileObj == null)
+                    {
+                        dir = TileUtils.GetDir(currentTile, nearTiles[i]);
+                        break;
+                    }
+                }
+            }
+            MoveTo(currentTile.pos + dir);
+            PlayAnimation("Idle");
+            yield return null;
+        }
+    
     #endregion
     protected override void OnDieCallback()
     {
         if (UnityEngine.Random.Range(0, 8) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.instance.PlayerObject, (Attribute)UnityEngine.Random.Range(1, 4)));
+            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.Player, (Attribute)UnityEngine.Random.Range(1, 4)));
         }
         else if (UnityEngine.Random.Range(0, 12) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.instance.PlayerObject));
+            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.Player));
         }
 
         base.OnDieCallback();

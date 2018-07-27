@@ -16,7 +16,8 @@ public class CardData_Attack : CardData {
 	protected int target;
 	protected int damage;
 
-	public override void CardActive (){
+    protected List<GameObject> ranges = new List<GameObject>();
+    public override void CardActive (){
 		int validTarget = target;
 		//Check target in range
 		for (int i = 0; i < validTarget; i++) {			
@@ -78,16 +79,21 @@ public class CardData_Sword : CardData_Attack {
 		}
 	}
 
-	private List<Tile> targetTiles;
+    protected List<Tile> targetTiles;
 	public override void CardEffectPreview (){
 		targetTiles = TileUtils.SquareRange (player.currentTile, range);
 		for(int i = 0; i < targetTiles.Count; i++){
-            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
-		}
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
+        }
+
 	}
 	public override void CancelPreview (){
 		for(int i = 0; i < targetTiles.Count; i++){
-            EffectDelegate.instance.DeleteRange(targetTiles[i]);
+            EffectDelegate.instance.DestroyEffect(ranges);
         }
     }
 }
@@ -120,14 +126,18 @@ public class CardData_BFSword : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.DeleteRange(targetTiles[i]);
+            EffectDelegate.instance.DestroyEffect(ranges);
         }
     }
 }
@@ -148,7 +158,7 @@ public class CardData_Stone : CardData_Attack
         if (target != null)
         {
             DamageToTarget(target, damage);
-            EffectDelegate.instance.MadeBullet(BulletType.Stone, PlayerControl.instance.PlayerObject.transform.position, target.transform);
+            EffectDelegate.instance.MadeBullet(BulletType.Stone, PlayerControl.Player.transform.position, target.transform);
         }
     }
 
@@ -158,14 +168,18 @@ public class CardData_Stone : CardData_Attack
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if(ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.DeleteRange(targetTiles[i]);
+            EffectDelegate.instance.DestroyEffect(ranges);
         }
     }
 }
@@ -188,21 +202,24 @@ public class CardData_Arrow : CardData_Attack
             EffectDelegate.instance.MadeBullet(BulletType.Arrow, player.transform.position, target.transform);
         }
     }
-
     private List<Tile> targetTiles;
     public override void CardEffectPreview()
     {
         targetTiles = TileUtils.SquareRange(player.currentTile, range);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.MadeRange(RangeType.CARD, targetTiles[i]);
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
         }
     }
     public override void CancelPreview()
     {
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            EffectDelegate.instance.DeleteRange(targetTiles[i]);
+            EffectDelegate.instance.DestroyEffect(ranges);
         }
     }
 }

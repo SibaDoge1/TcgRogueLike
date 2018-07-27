@@ -45,7 +45,7 @@ public class CardData_Bandage : CardData_Magic{
 
 	public override void CardActive (){
         player.currentHp += 3;
-		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.instance.PlayerObject);
+		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.Player);
     }
 
 	public override CardAbilityType GetCardAbilityType (){
@@ -65,7 +65,7 @@ public class CardData_Portion : CardData_Magic
     public override void CardActive()
     {
         player.currentHp += 99;
-        EffectDelegate.instance.MadeEffect(effectType, PlayerControl.instance.PlayerObject);
+        EffectDelegate.instance.MadeEffect(effectType, PlayerControl.Player);
     }
 
     public override CardAbilityType GetCardAbilityType()

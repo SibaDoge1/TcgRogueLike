@@ -11,6 +11,7 @@ public class Bozz : Enemy {
         _fullHp = SettingHp; _currentHp = SettingHp;
         
     }
+    #region AI
 
     protected override void Think()
     {
@@ -21,46 +22,53 @@ public class Bozz : Enemy {
     protected override void SetActionLists()
     {
         DelayList = new List<Action>()
-        { new SimpleDelayAction(this) ,new SimpleDelayAction(this) };
+        { new Action(DelayAction) ,new Action(DelayAction) };
         attackList = new List<Action>()
-        { new RangeOnAction(this),new  AttackThenRangeOffAction(this)};
+        { new Action(RangeOnAction),new  Action(AttackThenRangeOffAction)};
     }
 
-    #region 원거리 공격 AI
-    class RangeOnAction : Action
-    {
-        Bozz b;
-        public RangeOnAction(Bozz e) : base(e) { b = e; }
-        public override void Do()
+
+         IEnumerator RangeOnAction()
         {
-            b.rangeList.Add(EffectDelegate.instance.MadeRange(RangeType.ENEMY, PlayerControl.instance.PlayerObject.currentTile));
-        }
-    }
-    class AttackThenRangeOffAction : Action
-    {
-        Bozz b;
-        public AttackThenRangeOffAction(Bozz e) : base(e) { b = e; }
-        public override void Do()
-        {
-            b.PlayAttackMotion(); EffectDelegate.instance.MadeEffect(CardEffectType.Hit, b.rangeList[0]);
-            if (b.rangeList[0].OnTileObj != null && b.rangeList[0].OnTileObj is Player)
+            PlayAnimation("Ready");
+            List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
+            for (int i=0; i<tiles.Count; i++)
             {
-                b.rangeList[0].OnTileObj.GetDamage(b.atk);
+                rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
             }
-            b.ClearRangeList();
+            yield return null;
         }
-    }
+    
+
+          IEnumerator AttackThenRangeOffAction()
+        {
+            PlayAnimation("Attack"); EffectDelegate.instance.MadeEffect(CardEffectType.Hit, rangeList[0].transform);
+            if (TileUtils.AI_SquareFind(currentTile,1))
+            {
+                PlayerControl.Player.GetDamage(atk);
+            }
+            ClearRangeList();
+            yield return null;
+        }
+    
+
+          IEnumerator DelayAction()
+        {
+            PlayAnimation("Idle");
+            yield return null;
+        }
+    
     #endregion
     protected override void OnDieCallback()
     {
         //TODO : DROP CARD TEMP
         if (UnityEngine.Random.Range(0, 10) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.instance.PlayerObject,(Attribute)UnityEngine.Random.Range(1,4)));
+            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.Player,(Attribute)UnityEngine.Random.Range(1,4)));
         }
         else if (UnityEngine.Random.Range(0, 5) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.instance.PlayerObject));
+            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.Player));
         }
         base.OnDieCallback();
     }

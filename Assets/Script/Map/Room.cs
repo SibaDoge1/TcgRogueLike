@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public enum RoomType
-{
-    DEFAULT,
-    BATTLE,
-    EVENT,
-    BOSS,
-    SHOP
-}
 /// <summary>
 /// ROOM 클래스 , 타일 정보와 방안의 적 정보를 가지고있다.
 /// 생성에 관한것은 RoomSeed 클래스에서 처리
@@ -65,6 +57,23 @@ public class Room : MonoBehaviour
 	public Tile[,] GetTileArrays()
     {
         return tiles;
+    }
+    /// <summary>
+    /// null인 tile은 제외
+    /// </summary>
+    /// <returns></returns>
+    public List<Tile> GetTileToList()
+    {
+        List<Tile> temp = new List<Tile>();
+       for(int i=0;i<size.x;i++)
+        {
+            for(int j=0;j<size.y;j++)
+            {
+                if(tiles[i,j] != null)
+                temp.Add(tiles[i, j]);
+            }
+        }
+        return temp;
     }
 
 	public Tile GetTile(Vector2Int p)

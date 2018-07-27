@@ -10,6 +10,14 @@ public enum Direction
     SOUTH,
     WEST
 }
+public enum RoomType
+{
+    DEFAULT,
+    BATTLE,
+    EVENT,
+    BOSS,
+    SHOP,
+}
 
 public static class MapGenerator 
 {
@@ -54,13 +62,15 @@ public static class MapGenerator
         int maxX = 0; int maxY = 0;
        foreach(Room r in currentRooms)
         {
-            if(r.transform.position.x>maxX)
+            Vector2Int temp = new Vector2Int((int)r.transform.position.x,
+                (int)r.transform.position.y) + r.size;
+            if(temp.x>maxX)
             {
-                maxX = (int)r.transform.position.x + r.size.x;
+                maxX = temp.x;
             }
-            if(r.transform.position.y>maxY)
+            if(temp.y>maxY)
             {
-                maxY = (int)r.transform.position.y + r.size.y;
+                maxY = temp.y;
             }          
         }
         return new Vector2Int(maxX, maxY);
@@ -94,13 +104,17 @@ public static class MapGenerator
 
     private static void BuildRooms()
     {
-            BuildRoom.SetRoomData(newMap);
+        BuildRoom.SetRoomData(newMap);
+        roomQueue = new Queue<Room>();
+        Room startRoom = BuildRoom.Build(RoomType.DEFAULT, "start");
+        roomQueue.Enqueue(startRoom);
 
-            roomQueue = new Queue<Room>();
-
-            Room startRoom = BuildRoom.Build(RoomType.DEFAULT ,"start");
-            roomQueue.Enqueue(startRoom);
-
+        if (Config.instance.RoomTestMode)
+        {
+            Room testRoom = BuildRoom.Build(Config.instance.TestRoomType,Config.instance.TestRoomName);
+            roomQueue.Enqueue(testRoom);
+        }else
+        {
             for (int i = 2; i < roomNum; i++)
             {
                 Room battleRoom = BuildRoom.Build(RoomType.BATTLE);
@@ -109,7 +123,7 @@ public static class MapGenerator
 
             Room bossRoom = BuildRoom.Build(RoomType.BOSS);
             roomQueue.Enqueue(bossRoom);
-        
+        }        
     }
 
     private static void SetRooms()

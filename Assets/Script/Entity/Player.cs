@@ -10,13 +10,6 @@ public class Player : Character
         _fullHp = SettingHp; _currentHp = SettingHp;
         UIManager.instance.HpUpdate(currentHp, fullHp);
     }
-
-
-
-protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
-    {
-        return base.MoveAnimationRoutine(pos);       
-    }
     //문을 통해서 이동
     public void EnterRoom(Door door)
     {
@@ -80,7 +73,10 @@ protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
         set { base.currentHp = value;
             UIManager.instance.HpUpdate(currentHp, fullHp); }
     }
-
+    public override bool MoveTo(Vector2Int _pos)
+    {
+        return base.MoveTo(_pos);
+    }
 
     protected override void OnEndTurn ()
     {

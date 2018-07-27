@@ -163,10 +163,9 @@ public class CardObject : MonoBehaviour {
 	#region Private
 	private void ActiveSelf(){
 		if (InputModule.IsPlayerTurn) {
-			InputModule.IsPlayerTurn = false;
 			data.CardActive ();
 			if (data.IsConsumeTurn ()) {
-				GameManager.instance.OnEndPlayerTurn ();
+				PlayerControl.instance.EndPlayerTurn();
 			}
 		}
 	}

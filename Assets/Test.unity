@@ -340,7 +340,7 @@ MonoBehaviour:
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
-  SettingHp: 12
+  SettingHp: 50
   atk: 0
   def: 0
 --- !u!4 &241675146
@@ -594,7 +594,6 @@ GameObject:
   m_Component:
   - component: {fileID: 515007992}
   - component: {fileID: 515007994}
-  - component: {fileID: 515007993}
   - component: {fileID: 515007995}
   m_Layer: 5
   m_Name: MiniMap
@@ -621,17 +620,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &515007993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 515007991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59986b7522b4f89438ae7dafb37ab8b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!222 &515007994
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -772,9 +760,9 @@ MonoBehaviour:
   CustomDeck: []
   floorNum: 1
   roomNum: 15
-  RoomTestMode: 0
+  RoomTestMode: 1
   TestRoomType: 0
-  TestRoomName: 
+  TestRoomName: test_m_104
 --- !u!1 &666380408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1466,11 +1454,13 @@ MonoBehaviour:
   bulletPrefabs:
   - {fileID: 1608892538639568, guid: b2039397239bc6b46ab677c6590c6d45, type: 2}
   - {fileID: 1157186078190964, guid: 9bd42800a97fe7245b68316478d5650b, type: 2}
-  textEffectPrefab: {fileID: 1442815581718012, guid: 2f7b052117bb2f343b0038f31f02cbfc,
-    type: 2}
   rangeLayer:
   - {fileID: 1901324666352306, guid: 5ca6b911662ffdc4492076ef2455d80e, type: 2}
   - {fileID: 1291516968948508, guid: a297356345012a948bdcf06f95532c6b, type: 2}
+  statusEffectPrefab:
+  - {fileID: 1343061889036252, guid: b4d9250e8d39c0d4983849cefe30fe66, type: 2}
+  textEffectPrefab: {fileID: 1442815581718012, guid: 2f7b052117bb2f343b0038f31f02cbfc,
+    type: 2}
 --- !u!4 &928653822
 Transform:
   m_ObjectHideFlags: 0
@@ -3187,5 +3177,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deck: {fileID: 2075585292}
   hand: {fileID: 1623250404}
-  Move: 1
-  Draw: 1
+  isMoveAble: 1
+  isDrawAble: 1

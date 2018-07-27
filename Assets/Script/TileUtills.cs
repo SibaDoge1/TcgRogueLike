@@ -25,10 +25,10 @@ public static class TileUtils
 
         for (int i = 1; i <= radius; i++)
         {
-			crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + 1)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y - 1)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + 1, y)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - 1, y)));
+			crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + i)));
+            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y - i)));
+            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + i, y)));
+            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - i, y)));
         }
 		for (int i = crossList.Count - 1; i >= 0; i--) {
 			if (crossList [i] == null) {
@@ -195,6 +195,21 @@ public static class TileUtils
     public static bool AI_SquareFind(Tile center, int radius)
     {
         List<Tile> range = SquareRange(center, radius);
+        for (int i = 0; i < range.Count; i++)
+        {
+            if (range[i].OnTileObj != null)
+            {
+                if (range[i].OnTileObj is Player)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static bool AI_CrossFind(Tile center, int radius)
+    {
+        List<Tile> range = CrossRange(center, radius);
         for (int i = 0; i < range.Count; i++)
         {
             if (range[i].OnTileObj != null)

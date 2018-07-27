@@ -16,6 +16,7 @@ namespace Arch{
 			}
 			set {
 				onTileObj = value;
+                SomethingUpOnThis(value);
 			}
 		}
 		private OffTile _offTile;
