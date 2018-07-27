@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour {
 		//DECK CONSTRUCTION
 		PlayerData.deck.Clear();
 		for (int i = 0; i < 9; i++) {
-			PlayerData.deck.Add (new CardData_BFSword (3,PlayerControl.Player,(Attribute)Random.Range(0,4)));
+			PlayerData.deck.Add (new CardData_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
 		}
         PlayerData.deck.Add (new CardData_BFSword (3, PlayerControl.Player,Attribute.AK));
 		PlayerData.deck.Add (new CardData_Tumble (4, PlayerControl.Player));

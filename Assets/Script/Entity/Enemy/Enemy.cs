@@ -84,9 +84,10 @@ public abstract class Enemy : Character {
                 if (delayCount >= DelayList.Count)
                 {
                     delayCount = 0;
+                    OnEndTurn();
                     currentState = State.THINK;
-                }
-                OnEndTurn();
+                    yield break;
+                } 
             }
             else
             {

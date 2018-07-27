@@ -18,12 +18,13 @@ public abstract class Debuffs
         }
     }
 
+    public abstract void Active();
     public abstract void OnDestroy();
 
 }
 public class Debuff_Move : Debuffs
 {
-    public Debuff_Move()
+    public override void Active()
     {
         turn = 3;
         PlayerControl.instance.isMoveAble = false;
@@ -37,7 +38,7 @@ public class Debuff_Move : Debuffs
 }
 public class Debuff_Draw : Debuffs
 {
-    public Debuff_Draw()
+    public override void Active()
     {
         PlayerControl.instance.isDrawAble = false;
         turn = 3;

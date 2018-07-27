@@ -340,7 +340,7 @@ MonoBehaviour:
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
-  SettingHp: 50
+  SettingHp: 10
   atk: 0
   def: 0
 --- !u!4 &241675146
@@ -1501,6 +1501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e3a0092712e56448c2eebd9daf4fc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  count: 0
 --- !u!4 &964607034
 Transform:
   m_ObjectHideFlags: 0

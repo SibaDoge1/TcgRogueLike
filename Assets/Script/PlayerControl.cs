@@ -156,6 +156,7 @@ public class PlayerControl : MonoBehaviour {
            EraseDebuff();
         }
         debuff = d;
+        d.Active();
     }
     public void CountDebuff()
     {
