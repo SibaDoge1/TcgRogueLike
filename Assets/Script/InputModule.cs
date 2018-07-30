@@ -9,15 +9,6 @@ public class InputModule : MonoBehaviour {
 	void Awake(){
 		instance = this;
 	}
-	private static bool isPlayerTurn = true;
-	public static bool IsPlayerTurn {
-		get {
-			return isPlayerTurn;
-		}
-		set {
-			isPlayerTurn = value;
-		}
-	}
 
 	void Start(){
 		StartCoroutine (TileSelectRoutine ());
@@ -51,8 +42,7 @@ public class InputModule : MonoBehaviour {
         IEnumerator TileSelectRoutine(){
 		while (true) {
 
-            //TODO : HERE IS TEMP!
-            if (IsPlayerTurn)        
+            if (GameManager.instance.CurrentTurn==Turn.PLAYER)        
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {

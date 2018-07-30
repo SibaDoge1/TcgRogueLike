@@ -21,7 +21,6 @@ public class EnemyControl : MonoBehaviour {
         }
         else
         {
-            count = 0;
             currentEnemies = new List<Enemy>(currentRoom.enemyList);
             for(int i=0;i<currentEnemies.Count;i++)
             {
@@ -33,13 +32,12 @@ public class EnemyControl : MonoBehaviour {
 
     }
 
-    public int count;
+    int count;
     public void EnemyEndCallBack()
     {
         count++;
         if (count>=currentEnemies.Count)
         {
-            Debug.Log("EnemyTurn Called");
             count = 0;
             GameManager.instance.OnEndEnemyTurn();
         }

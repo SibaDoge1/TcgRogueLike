@@ -7,12 +7,11 @@ using Arch;
 public static class BuildRoom
 {
     static Map newMap;
-    static List<string> defaultRoomData;
-    static List<string> battleRoomData;
-    static List<string> bossRoomData;
-    static List<string> eventRoomData;
-    static List<string> shopRoomData;
-    static List<string> TestRoomData;
+    static List<string> defaultRoomName;
+    static List<string> battleRoomName;
+    static List<string> bossRoomName;
+    static List<string> eventRoomName;
+    static List<string> shopRoomName;
     static Vector2Int size;
     static Tile[,] tiles;
     static Room room;
@@ -67,41 +66,41 @@ public static class BuildRoom
     /// <summary>
     /// 현재 층의 룸정보파일들의 파일 이름들만 받아서 저장
     /// </summary>
-    public static void SetRoomData(Map _newMap)
+    public static void Init(Map _newMap)
     {
         newMap = _newMap;
 
-        defaultRoomData = new List<string>();
-        battleRoomData = new List<string>();
-        bossRoomData = new List<string>();
-        eventRoomData = new List<string>();
-        shopRoomData = new List<string>();
+        defaultRoomName = new List<string>();
+        battleRoomName = new List<string>();
+        bossRoomName = new List<string>();
+        eventRoomName = new List<string>();
+        shopRoomName = new List<string>();
 
 
         Object[] Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/DEFAULT");
         for (int i = 0; i < Data.Length; i++)
         {
-            defaultRoomData.Add(Data[i].name);
+            defaultRoomName.Add(Data[i].name);
         }
          Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BATTLE");
         for (int i = 0; i < Data.Length; i++)
         {
-            battleRoomData.Add(Data[i].name);
+            battleRoomName.Add(Data[i].name);
         }
         Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BOSS");
         for (int i = 0; i < Data.Length; i++)
         {
-            bossRoomData.Add(Data[i].name);
+            bossRoomName.Add(Data[i].name);
         }
         Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/EVENT");
         for (int i = 0; i < Data.Length; i++)
         {
-            eventRoomData.Add(Data[i].name);
+            eventRoomName.Add(Data[i].name);
         }
         Data = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/SHOP");
         for (int i = 0; i < Data.Length; i++)
         {
-            shopRoomData.Add(Data[i].name);
+            shopRoomName.Add(Data[i].name);
         }
     }
 
@@ -110,15 +109,15 @@ public static class BuildRoom
         switch(rt)
         {
             case RoomType.DEFAULT:
-                return CsvParser.ReadRoom(newMap.floor, rt, defaultRoomData[Random.Range(0, defaultRoomData.Count)]);
+                return CsvParser.ReadRoom(newMap.floor, rt, defaultRoomName[Random.Range(0, defaultRoomName.Count)]);
             case RoomType.BATTLE:
-                return CsvParser.ReadRoom(newMap.floor, rt, battleRoomData[Random.Range(0, battleRoomData.Count)]);
+                return CsvParser.ReadRoom(newMap.floor, rt, battleRoomName[Random.Range(0, battleRoomName.Count)]);
             case RoomType.BOSS:
-                return CsvParser.ReadRoom(newMap.floor, rt, bossRoomData[Random.Range(0, bossRoomData.Count)]);
+                return CsvParser.ReadRoom(newMap.floor, rt, bossRoomName[Random.Range(0, bossRoomName.Count)]);
             case RoomType.EVENT:
-                return CsvParser.ReadRoom(newMap.floor, rt, eventRoomData[Random.Range(0, eventRoomData.Count)]);
+                return CsvParser.ReadRoom(newMap.floor, rt, eventRoomName[Random.Range(0, eventRoomName.Count)]);
             case RoomType.SHOP:
-                return CsvParser.ReadRoom(newMap.floor, rt, shopRoomData[Random.Range(0, shopRoomData.Count)]);
+                return CsvParser.ReadRoom(newMap.floor, rt, shopRoomName[Random.Range(0, shopRoomName.Count)]);
             default:
                 Debug.Log("Room Type ERROR");
                 return null;

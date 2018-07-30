@@ -2,7 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
+public enum Turn
+{
+    PLAYER,
+    ENEMY
+}
 public class GameManager : MonoBehaviour {
+
+    private Turn currentTurn;
+    public Turn CurrentTurn
+    {
+        get { return currentTurn; }
+        set { currentTurn = value; }
+    }
+
+
     public static GameManager instance;
     private void Awake(){
         if (instance == null) {
@@ -17,11 +32,11 @@ public class GameManager : MonoBehaviour {
 		//DECK CONSTRUCTION
 		PlayerData.deck.Clear();
 		for (int i = 0; i < 9; i++) {
-			PlayerData.deck.Add (new CardData_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
+			PlayerData.deck.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
 		}
-        PlayerData.deck.Add (new CardData_BFSword (3, PlayerControl.Player,Attribute.AK));
+        PlayerData.deck.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
 		PlayerData.deck.Add (new CardData_Tumble (4, PlayerControl.Player));
-		PlayerData.deck.Add (new CardData_Arrow (7, PlayerControl.Player, Attribute.AK));
+		PlayerData.deck.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
 
@@ -65,8 +80,9 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public void OnEndPlayerTurn(float time)
+    public void OnEndPlayerTurn(float time = 0.12f)
     {
+        CurrentTurn = Turn.ENEMY;
         if (playerTurnDelay != null)
         {
             StopCoroutine(playerTurnDelay);
@@ -86,7 +102,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void OnEndEnemyTurn()
     {
-        InputModule.IsPlayerTurn = true;
+        currentTurn = Turn.PLAYER;
         PlayerControl.instance.CountDebuff();
 
     }

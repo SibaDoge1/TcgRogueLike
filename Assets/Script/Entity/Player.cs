@@ -80,6 +80,6 @@ public class Player : Character
 
     protected override void OnEndTurn ()
     {
-		PlayerControl.instance.EndPlayerTurn ();
+		GameManager.instance.OnEndPlayerTurn ();
 	}
 }

@@ -83,7 +83,7 @@ public class RabbitEye : Enemy {
     {
         if (UnityEngine.Random.Range(0, 8) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5,PlayerControl.Player, (Attribute)UnityEngine.Random.Range(1, 4)));
+            PlayerControl.instance.AddCard(new Card_Stone(5,PlayerControl.Player, (Attribute)UnityEngine.Random.Range(1, 4)));
         }
         else if (UnityEngine.Random.Range(0, 12) == 0)
         {

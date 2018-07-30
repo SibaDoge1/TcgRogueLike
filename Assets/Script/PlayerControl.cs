@@ -28,7 +28,7 @@ public class PlayerControl : MonoBehaviour {
     public void EndTurnButton()
     {
         NaturalDraw();
-        EndPlayerTurn();
+        GameManager.instance.OnEndPlayerTurn();
     }
 
 	#region Card
@@ -60,7 +60,7 @@ public class PlayerControl : MonoBehaviour {
 		}
 	}
 
-	public void AddCard(CardData cData){
+	public void AddCard(Card cData){
 		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.AddHand (cData.Instantiate ());
 		}
@@ -85,26 +85,26 @@ public class PlayerControl : MonoBehaviour {
 	/// Call from Player(Move) or CardObject(Card) or EndTurnButton
 	/// </summary>
 	public void EndPlayerTurn(float t = 0.12f){
-        InputModule.IsPlayerTurn = false;
         GameManager.instance.OnEndPlayerTurn (t);
+
     }
     #endregion
 
     public void MoveLeft()
     {
-        if(!isMoveAble)
+        if(!IsMoveAble)
         {
             EndTurnButton();
         }
         else if (player.MoveTo(player.pos + Vector2Int.left))
         {
             NaturalDraw();
-            EndPlayerTurn();
+            GameManager.instance.OnEndPlayerTurn();
         }
     }
     public void MoveUP()
     {
-        if (!isMoveAble)
+        if (!IsMoveAble)
         {
             EndTurnButton();
             
@@ -112,31 +112,31 @@ public class PlayerControl : MonoBehaviour {
         else if(player.MoveTo(player.pos + Vector2Int.up))
         {
             NaturalDraw();
-            EndPlayerTurn();
+            GameManager.instance.OnEndPlayerTurn();
         }
     }
     public void MoveRight()
     {
-        if (!isMoveAble)
+        if (!IsMoveAble)
         {
             EndTurnButton();
         }
         else if(player.MoveTo(player.pos + Vector2Int.right))
         {
             NaturalDraw();
-            EndPlayerTurn();
+            GameManager.instance.OnEndPlayerTurn();
         }
     }
     public void MoveDown()
     {
-        if (!isMoveAble)
+        if (!IsMoveAble)
         {
             EndTurnButton();
         }
         else if(player.MoveTo(player.pos + Vector2Int.down))
         {
             NaturalDraw();
-            EndPlayerTurn();
+            GameManager.instance.OnEndPlayerTurn();
         }
     }
     public void ToggleHand()
@@ -145,8 +145,17 @@ public class PlayerControl : MonoBehaviour {
     }
 
     #region Status //상태이상 스테이터스 관리
-
-    public bool isMoveAble = true; public bool isDrawAble = true;
+    private bool isMoveAble = true; private bool isDrawAble = true;
+    public bool IsMoveAble
+    {
+        get { return isMoveAble; }
+        set { isMoveAble = value; }
+    }
+    public bool IsDrawAble
+    {
+        get { return isDrawAble; }
+        set { isDrawAble = value; }
+    }
 
     private Debuffs debuff;
     public void SetDebuff(Debuffs d)

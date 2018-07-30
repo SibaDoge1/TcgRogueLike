@@ -64,7 +64,7 @@ public class Bozz : Enemy {
         //TODO : DROP CARD TEMP
         if (UnityEngine.Random.Range(0, 10) == 0)
         {
-            PlayerControl.instance.AddCard(new CardData_Stone(5, PlayerControl.Player,(Attribute)UnityEngine.Random.Range(1,4)));
+            PlayerControl.instance.AddCard(new Card_Stone(5, PlayerControl.Player,(Attribute)UnityEngine.Random.Range(1,4)));
         }
         else if (UnityEngine.Random.Range(0, 5) == 0)
         {

@@ -21,7 +21,7 @@ public abstract class Enemy : Character {
     {
         ClearRangeList();
 		currentRoom.OnEnemyDead (this);
-        if(!InputModule.IsPlayerTurn)
+        if(GameManager.instance.CurrentTurn == Turn.ENEMY)
         OnEndTurn();
 		base.OnDieCallback ();
 	}

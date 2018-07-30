@@ -28,8 +28,8 @@ public class CardObject : MonoBehaviour {
 	private new Collider2D collider;
 	private Transform rendererParent;
 	private SpriteRenderer spriteRenderer;
-	private CardData data;
-	public void Init(CardData data_, Sprite sprite_){
+	private Card data;
+	public void Init(Card data_, Sprite sprite_){
 		data = data_;
 		spriteRenderer.sprite = sprite_;
 		txt_name.text = data.CardName;
@@ -104,7 +104,7 @@ public class CardObject : MonoBehaviour {
 		hand.ChooseRollback ();
 		data.CancelPreview ();
 
-		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && InputModule.IsPlayerTurn) {
+		if (((Vector2)transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER) {
 			hand.RemoveCard (this);
 			ActiveSelf ();
 			Destroy (gameObject);
@@ -162,10 +162,10 @@ public class CardObject : MonoBehaviour {
 
 	#region Private
 	private void ActiveSelf(){
-		if (InputModule.IsPlayerTurn) {
+		if (GameManager.instance.CurrentTurn == Turn.PLAYER) {
 			data.CardActive ();
 			if (data.IsConsumeTurn ()) {
-				PlayerControl.instance.EndPlayerTurn();
+				GameManager.instance.OnEndPlayerTurn();
 			}
 		}
 	}

@@ -4,9 +4,9 @@ using UnityEngine;
 using Arch;
 
 
-public class CardData_Attack : CardData {
-	public CardData_Attack(){}
-	public CardData_Attack(int index,Player pl,Attribute atr) : base(index,pl){
+public class Card_Attack : Card {
+	public Card_Attack(){}
+	public Card_Attack(int index,Player pl,Attribute atr) : base(index,pl){
 		range = 1;
 		target = 1;
         cardAtr = atr;
@@ -61,8 +61,8 @@ public class CardData_Attack : CardData {
     }
 }
 
-public class CardData_Sword : CardData_Attack {
-	public CardData_Sword(int index,Player pl, Attribute atr) : base(index,pl,atr)
+public class Card_Sword : Card_Attack {
+	public Card_Sword(int index,Player pl, Attribute atr) : base(index,pl,atr)
 	{
 		damage = 5;
 		range = 1;
@@ -97,9 +97,9 @@ public class CardData_Sword : CardData_Attack {
         }
     }
 }
-public class CardData_BFSword : CardData_Attack
+public class Card_BFSword : Card_Attack
 {
-    public CardData_BFSword(int index, Player pl, Attribute atr) : base(index, pl,atr)
+    public Card_BFSword(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 10;
         range = 1;
@@ -143,9 +143,9 @@ public class CardData_BFSword : CardData_Attack
 }
 
 
-public class CardData_Stone : CardData_Attack
+public class Card_Stone : Card_Attack
 {
-    public CardData_Stone(int index, Player pl, Attribute atr) : base(index, pl,atr)
+    public Card_Stone(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 5;
         //Set ImageInfo
@@ -184,9 +184,9 @@ public class CardData_Stone : CardData_Attack
     }
 }
 
-public class CardData_Arrow : CardData_Attack
+public class Card_Arrow : Card_Attack
 {
-    public CardData_Arrow(int index, Player pl, Attribute atr) : base(index, pl,atr)
+    public Card_Arrow(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
         damage = 10;
         //Set ImageInfo

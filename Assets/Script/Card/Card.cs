@@ -11,10 +11,10 @@ public enum Attribute
     VAYU
 }
 public enum CardAbilityType{Attack, Heal, Util}
-public class CardData {
+public class Card {
     
-	protected CardData(){}
-	public CardData(int cardIndex,Player pl)
+	protected Card(){}
+	public Card(int cardIndex,Player pl)
     {
 		cardName = CardDatabase.cardNames [cardIndex];
 		spritePath = CardDatabase.cardSpritePaths [cardIndex];

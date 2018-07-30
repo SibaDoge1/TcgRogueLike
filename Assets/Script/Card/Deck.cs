@@ -6,20 +6,21 @@ using UnityEngine.UI;
 public class Deck : MonoBehaviour {
 
 	public Text txt_RemainCard;
-	public List<CardData> deck;
+	public List<Card> deck;
 
 	public CardObject Draw(){
 		if (deck.Count <= 0) {
 			return null;
 		}
-		CardData c = deck [deck.Count - 1];
+		Card c = deck [deck.Count - 1];
 		deck.RemoveAt(deck.Count - 1);
 		RefreshText ();
 		return c.Instantiate ();
 	}
 
-	public void Load(){
-		deck = new List<CardData> (PlayerData.deck);
+	public void Load()
+    {
+		deck = new List<Card> (PlayerData.deck);
 		Shuffle ();
 		deck.Add (deck [0]);
 		deck [0] = new CardData_Reload (0,PlayerControl.Player);
@@ -29,7 +30,7 @@ public class Deck : MonoBehaviour {
 	#region Private
 
 	private void Shuffle(){
-		CardData temp;
+		Card temp;
 		int randIndex;
 		for (int i = 0; i < deck.Count - 1; i++) {
 			randIndex = Random.Range (0, deck.Count);

@@ -104,7 +104,7 @@ public static class MapGenerator
 
     private static void BuildRooms()
     {
-        BuildRoom.SetRoomData(newMap);
+        BuildRoom.Init(newMap);
         roomQueue = new Queue<Room>();
         Room startRoom = BuildRoom.Build(RoomType.DEFAULT, "start");
         roomQueue.Enqueue(startRoom);

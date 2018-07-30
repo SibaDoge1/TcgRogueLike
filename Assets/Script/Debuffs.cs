@@ -27,12 +27,12 @@ public class Debuff_Move : Debuffs
     public override void Active()
     {
         turn = 3;
-        PlayerControl.instance.isMoveAble = false;
+        PlayerControl.instance.IsMoveAble = false;
         effect = EffectDelegate.instance.MadeEffect(StatusEffectType.Spider, PlayerControl.Player);
     }
     public override void OnDestroy()
     {
-        PlayerControl.instance.isMoveAble = true;
+        PlayerControl.instance.IsMoveAble = true;
         EffectDelegate.instance.DestroyEffect(effect);
     }
 }
@@ -40,13 +40,13 @@ public class Debuff_Draw : Debuffs
 {
     public override void Active()
     {
-        PlayerControl.instance.isDrawAble = false;
+        PlayerControl.instance.IsDrawAble = false;
         turn = 3;
         //TODO : MAKE EFFECT
     }
     public override void OnDestroy()
     {
-        PlayerControl.instance.isDrawAble = true;
+        PlayerControl.instance.IsDrawAble = true;
         //TODO : ERASE EFFECT
     }
 }
