@@ -27,11 +27,11 @@ public class ManekingHand : Enemy {
     protected override void SetActionLists()
     {
         DelayList = new List<Action>() {new Action(DelayAction) };
-        moveList = new List<Action>() { new Action(MoveToWard) };
+        moveList = new List<Action>() { new Action(MoveToward) };
         attackList = new List<Action>() { new Action(Attack) };
     }
 
-         IEnumerator MoveToWard()
+         IEnumerator MoveToward()
         {
             MoveTo(PathFinding.GeneratePath(this, PlayerControl.Player)[0].pos);
             PlayAnimation("Idle");

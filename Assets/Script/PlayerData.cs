@@ -24,7 +24,11 @@ public static class PlayerData
             {
                 akashaGage = value - 10;
                 AkashaCount++;            
-            }else
+            }else if(value<0)
+            {
+                akashaGage = 0;
+            }
+            else
             {
                 akashaGage = value;
             }

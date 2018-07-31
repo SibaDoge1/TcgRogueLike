@@ -21,19 +21,19 @@ public class Player : Character
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0,1);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(0,1);
         }
         else if (door.Dir == Direction.EAST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(1, 0);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(1, 0);
         }
         else if (door.Dir == Direction.WEST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(-1, 0);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(-1, 0);
         }
         else//_room == currentRoom.SouthRoom
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0,-1);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(0,-1);
         }
 
         SetRoom(door.TargetRoom,temp);        
@@ -64,5 +64,9 @@ public class Player : Character
           UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
-
+    public override bool GetDamage(int damage, Entity atker = null)
+    {
+        PlayerData.AkashaGage -= 5;
+        return base.GetDamage(damage, atker);
+    }
 }

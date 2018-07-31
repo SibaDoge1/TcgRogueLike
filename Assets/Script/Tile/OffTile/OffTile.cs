@@ -6,18 +6,18 @@ using Arch;
 
 public abstract class OffTile : MonoBehaviour
 {
-    protected Tile thisTile;
-    public virtual Tile ThisTile
+    protected Tile currentTile;
+    public virtual Tile CurrentTile
     {
         get
         {
-            return thisTile;
+            return currentTile;
         }
         set
         {
-            thisTile = value;
-            transform.parent = thisTile.transform;
-            transform.position = thisTile.transform.position;
+            currentTile = value;
+            transform.parent = currentTile.transform;
+            transform.position = currentTile.transform.position;
         }
     }
     public abstract void SomethingUpOnThis(Entity ot);

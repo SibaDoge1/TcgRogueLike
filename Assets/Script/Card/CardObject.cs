@@ -165,7 +165,7 @@ public class CardObject : MonoBehaviour {
 		if (GameManager.instance.CurrentTurn == Turn.PLAYER) {
 			data.CardActive ();
 			if (data.IsConsumeTurn ()) {
-				GameManager.instance.OnEndPlayerTurn();
+				PlayerControl.instance.EndPlayerTurn();
 			}
 		}
 	}

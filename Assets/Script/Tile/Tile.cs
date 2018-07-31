@@ -29,7 +29,7 @@ namespace Arch{
                 if (_offTile != null && offTile is EventLayer)
                     return;
 
-                _offTile = value; _offTile.ThisTile = this;
+                _offTile = value; _offTile.CurrentTile = this;
             }
         }
 

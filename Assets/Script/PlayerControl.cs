@@ -27,7 +27,7 @@ public class PlayerControl : MonoBehaviour {
 
     public void EndTurnButton()
     {
-        if(GameManager.instance.CurrentTurn == Turn.PLAYER)
+        if(GameManager.instance.CurrentTurn == Turn.PLAYER && player.currentRoom.IsEnemyAlive())
         {
             NaturalDraw();
             GameManager.instance.OnEndPlayerTurn();
@@ -58,7 +58,7 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw Each Turn (Check Remain Monsters)
 	/// </summary>
 	public void NaturalDraw(){
-		if (hand.CurrentHandCount < Config.instance.HandMax && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
+		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.DrawHand (deck.Draw ());
 		}
 	}
@@ -102,9 +102,8 @@ public class PlayerControl : MonoBehaviour {
 	/// <summary>
 	/// Call from Player(Move) or CardObject(Card) or EndTurnButton
 	/// </summary>
-	public void EndPlayerTurn(float t = 0.12f){
-        GameManager.instance.OnEndPlayerTurn (t);
-
+	public void EndPlayerTurn(){
+        GameManager.instance.OnEndPlayerTurn ();
     }
     #endregion
 
@@ -116,7 +115,10 @@ public class PlayerControl : MonoBehaviour {
         }
         else if (player.MoveTo(player.pos + Vector2Int.left))
         {
-            NaturalDraw();
+            if(player.currentRoom.IsEnemyAlive())
+            {
+                NaturalDraw();
+            }
             GameManager.instance.OnEndPlayerTurn();
         }
     }
@@ -129,7 +131,10 @@ public class PlayerControl : MonoBehaviour {
         }
         else if(player.MoveTo(player.pos + Vector2Int.up))
         {
-            NaturalDraw();
+            if (player.currentRoom.IsEnemyAlive())
+            {
+                NaturalDraw();
+            }
             GameManager.instance.OnEndPlayerTurn();
         }
     }
@@ -141,7 +146,10 @@ public class PlayerControl : MonoBehaviour {
         }
         else if(player.MoveTo(player.pos + Vector2Int.right))
         {
-            NaturalDraw();
+            if (player.currentRoom.IsEnemyAlive())
+            {
+                NaturalDraw();
+            }
             GameManager.instance.OnEndPlayerTurn();
         }
     }
@@ -153,7 +161,10 @@ public class PlayerControl : MonoBehaviour {
         }
         else if(player.MoveTo(player.pos + Vector2Int.down))
         {
-            NaturalDraw();
+            if (player.currentRoom.IsEnemyAlive())
+            {
+                NaturalDraw();
+            }
             GameManager.instance.OnEndPlayerTurn();
         }
     }
@@ -168,7 +179,7 @@ public class PlayerControl : MonoBehaviour {
     /// </summary>
     public void StationField()
     {
-        if(PlayerData.AkashaCount>0 && GameManager.instance.CurrentTurn == Turn.PLAYER)
+        if(PlayerData.AkashaCount>0 && GameManager.instance.CurrentTurn == Turn.PLAYER && player.currentRoom.IsEnemyAlive())
         {
             PlayerData.AkashaCount--;
             player.GetHeal(2);

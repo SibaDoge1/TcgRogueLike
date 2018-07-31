@@ -21,36 +21,25 @@ public class Room : MonoBehaviour
         get { return isVisited; }
         set { isVisited = value; }
     }
-	private bool isCleared = false;
-	public bool IsCleares{
-		get{ return isCleared; }
-	}
 
 
-	public void SetStartRoom(){
-		isCleared = true;
+
+	public void SetStartRoom()
+    {
         OpenDoors();
 	}
 
 	public void OnEnemyDead(Enemy enemy){
 		enemyList.Remove (enemy);
-		if (enemyList.Count != 0) {
-			for (int i = 0; i < enemyList.Count; i++) {
-				if (enemyList [i] != null) {	//하나라도 남아있으면
-					return;
-				}
-			}
+		if (enemyList.Count > 0) {
+            return;
 		}
 		//Enemy All Dead
-		isCleared = true;
 		OpenDoors ();
 		GameManager.instance.OnPlayerClearRoom ();
 	}
 
 	public bool IsEnemyAlive(){
-		if (enemyList == null) {
-			return false;
-		}
 		return enemyList.Count > 0;
 	}
 
@@ -110,8 +99,16 @@ public class Room : MonoBehaviour
         for (int i = 0; i < doorList.Count; i++)
         {
             if (doorList[i].TargetRoom != null)
-                doorList[i].ThisTile.OnTileObj.Destroy();
+                doorList[i].CurrentTile.OnTileObj.Destroy();
         }
     }
-    
+    public virtual List<Vector2Int> GetEnemyPoses()
+    {
+        List<Vector2Int> v = new List<Vector2Int>();
+       foreach(Enemy e in enemyList)
+        {
+            v.Add(e.pos);
+        }
+        return v;
+    }
 }

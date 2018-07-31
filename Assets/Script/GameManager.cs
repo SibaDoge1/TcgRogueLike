@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour {
         PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
         EnemyControl.instance.SetRoom (currentFloor.StartRoom);
 
-        MinimapTexture.DrawDoors(currentFloor.CurrentRoom);
-        MinimapTexture.DrawPlayerPos(PlayerControl.Player.transform.position);
+        MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
+        MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
 
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
@@ -73,33 +73,28 @@ public class GameManager : MonoBehaviour {
     }
 
 	public void OnPlayerClearRoom(){
-        PlayerData.AkashaGage = 0;
+        //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
-        MinimapTexture.DrawDoors (currentFloor.CurrentRoom);
+        MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
 	}
 
 
     /// <summary>
-    /// 반드시 PlayerControler 클래스에서만 호출하도록 할것
+    /// 호출하자마자 Turn은 EnemyTurn으로 바꾸고
+    /// float나 코루틴 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
+    /// +)반드시 PlayerControler 클래스에서만 호출하도록 할것
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public void OnEndPlayerTurn(float time = 0.12f)
+    public void OnEndPlayerTurn()
     {
         CurrentTurn = Turn.ENEMY;
-        if (playerTurnDelay != null)
-        {
-            StopCoroutine(playerTurnDelay);
-        }
-        playerTurnDelay = StartCoroutine(PlayerTurnDelay(time));
-    }
-    Coroutine playerTurnDelay;
-    IEnumerator PlayerTurnDelay(float time)
-    {
-        yield return new WaitForSeconds(time);
+        MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
         EnemyControl.instance.EnemyTurn();
-        MinimapTexture.DrawPlayerPos(PlayerControl.Player.transform.position);
     }
+
+
+
 
     /// <summary>
     /// 반드시 EnemyControler 클래스에서만 호출하도록 할것
@@ -108,7 +103,7 @@ public class GameManager : MonoBehaviour {
     {
         currentTurn = Turn.PLAYER;
         PlayerControl.instance.CountDebuff();
-
+        MinimapTexture.DrawEnemies(GetCurrentRoom().transform.position, GetCurrentRoom().GetEnemyPoses());
     }
 
     public void GameOver()
