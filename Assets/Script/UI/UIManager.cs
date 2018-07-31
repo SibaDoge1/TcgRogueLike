@@ -15,29 +15,42 @@ public class UIManager : MonoBehaviour
         instance = this;
         GameOverPanel = transform.Find("GameOver").GetComponent<Image>();
         message = GameOverPanel.transform.Find("Text").GetComponent<Text>();
-        fullHp = transform.Find("StatusUI").Find("Hp").GetComponent<Image>();
+        fullHp = transform.Find("HpUI").Find("Hp").GetComponent<Image>();
         currentHp = fullHp.transform.Find("current").GetComponent<Image>();
-        hpText = fullHp.transform.Find("hpText").GetComponent<Text>();
+        hpText = fullHp.transform.Find("text").GetComponent<Text>();
         MapUI = transform.Find("MapUI");
         fullMapPanel = MapUI.Find("FullMapPanel").gameObject;
         miniMap = MapUI.Find("MiniMapPanel").Find("MiniMap").GetComponent<RawImage>();
         fullMap = fullMapPanel.transform.Find("FullMap").GetComponent<RawImage>();
 
+        fullAkasha = transform.Find("AkashaUI").Find("Akasha").GetComponent<Image>();
+        currentAkasha = fullAkasha.transform.Find("current").GetComponent<Image>();
+        akashaText = fullAkasha.transform.Find("text").GetComponent<Text>();
+        akashaCount = fullAkasha.transform.Find("akashaCount").GetComponent<Text>();
+
         GameOverPanel.gameObject.SetActive(false);
     }
-    Image fullHp, currentHp;
-    Text hpText,message;
+    Image fullHp, currentHp, fullAkasha,currentAkasha;
+    Text hpText,message,akashaText,akashaCount;
     Image GameOverPanel;
 
     Transform MapUI;
     GameObject fullMapPanel;
-    RawImage miniMap;
-    RawImage fullMap;
+    RawImage miniMap, fullMap;
 
 	public void HpUpdate(int currentHp_, int fullHp_)
     {     
 		currentHp.fillAmount = currentHp_ / (float) fullHp_;
 		hpText.text = currentHp_ + "/" + fullHp_;
+    }
+    public void AkashaUpdate(int current,int full)
+    {
+        currentAkasha.fillAmount = current / (float)full;
+        akashaText.text = current + "/" + full;
+    }
+    public void AkashaCountUpdate(int count)
+    {
+        akashaCount.text = "X" + count;
     }
     public void GameOver()
     {

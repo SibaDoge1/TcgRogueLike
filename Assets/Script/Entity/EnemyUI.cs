@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class CharacterUI : MonoBehaviour {
+public class EnemyUI : MonoBehaviour {
 
     Image fullHpUI;
     Image currentHpUI;

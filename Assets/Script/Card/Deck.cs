@@ -20,7 +20,7 @@ public class Deck : MonoBehaviour {
 
 	public void Load()
     {
-		deck = new List<Card> (PlayerData.deck);
+		deck = new List<Card> (PlayerData.PlayerCards);
 		Shuffle ();
 		deck.Add (deck [0]);
 		deck [0] = new CardData_Reload (0,PlayerControl.Player);

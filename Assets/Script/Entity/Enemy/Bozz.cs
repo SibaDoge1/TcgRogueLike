@@ -8,7 +8,6 @@ public class Bozz : Enemy {
     protected override void Start()
     {
         base.Start();
-        _fullHp = SettingHp; _currentHp = SettingHp;
         
     }
     #region AI
@@ -42,10 +41,11 @@ public class Bozz : Enemy {
 
           IEnumerator AttackThenRangeOffAction()
         {
-            PlayAnimation("Attack"); EffectDelegate.instance.MadeEffect(CardEffectType.Hit, rangeList[0].transform);
+            PlayAnimation("Attack"); 
             if (TileUtils.AI_SquareFind(currentTile,1))
             {
                 PlayerControl.Player.GetDamage(atk);
+                EffectDelegate.instance.MadeEffect(CardEffectType.Hit, PlayerControl.Player);
             }
             ClearRangeList();
             yield return null;
@@ -59,17 +59,5 @@ public class Bozz : Enemy {
         }
     
     #endregion
-    protected override void OnDieCallback()
-    {
-        //TODO : DROP CARD TEMP
-        if (UnityEngine.Random.Range(0, 10) == 0)
-        {
-            PlayerControl.instance.AddCard(new Card_Stone(5, PlayerControl.Player,(Attribute)UnityEngine.Random.Range(1,4)));
-        }
-        else if (UnityEngine.Random.Range(0, 5) == 0)
-        {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.Player));
-        }
-        base.OnDieCallback();
-    }
+
 }

@@ -109,8 +109,8 @@ public class Room : MonoBehaviour
 	{
         for (int i = 0; i < doorList.Count; i++)
         {
-            if(doorList[i].TargetRoom != null)
-            doorList[i].ThisTile.OnTileObj.currentHp = 0;
+            if (doorList[i].TargetRoom != null)
+                doorList[i].ThisTile.OnTileObj.Destroy();
         }
     }
     

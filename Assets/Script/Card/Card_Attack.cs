@@ -46,17 +46,13 @@ public class Card_Attack : Card {
     /// <summary>
     /// AtkCard에서 데미지를 가할때는 이함수로 할것
     /// </summary>
-    protected void DamageToTarget(Entity target,int dam)
+    protected void DamageToTarget(Enemy target,float dam)
     {
-        Enemy etarget = target as Enemy;
-        if(etarget != null)
+        if(target != null)
         {
-            etarget.GetDamage(dam * AtrCompare(cardAtr,etarget.Atr),player);
-            //etarget.AtrCheck(cardAtr);
-        }
-        else
-        {
-            target.GetDamage(dam);
+            int atr = AtrCompare(cardAtr, target.Atr);
+            PlayerData.AkashaGage += atr;
+            target.GetDamage(dam * atr * player.Atk, player);
         }
     }
 }
@@ -70,12 +66,12 @@ public class Card_Sword : Card_Attack {
 		cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
 	}
 	public override void CardActive (){
-		Entity target = null;
-		if (TileUtils.IsHitableAround (player.currentTile, range)) {
-			target = TileUtils.AutoTarget (player.currentTile, range);
+		Enemy enemy = null;
+		if (TileUtils.IsEnemyAround (player.currentTile, range)) {
+            enemy = TileUtils.AutoTarget (player.currentTile, range);
 
-            DamageToTarget(target,damage);
-            EffectDelegate.instance.MadeEffect (effectType, target);
+            DamageToTarget(enemy, damage);
+            EffectDelegate.instance.MadeEffect (effectType, enemy);
 		}
 	}
 
@@ -109,10 +105,10 @@ public class Card_BFSword : Card_Attack
     public override void CardActive()
     {
 
-        if (TileUtils.IsHitableAround(player.currentTile, range))
+        if (TileUtils.IsEnemyAround(player.currentTile, range))
         {
-            List<Entity> targets = TileUtils.GetNearEnemies(player.currentTile, range);
-            foreach (Entity e in targets)
+            List<Enemy> targets = TileUtils.GetNearEnemies(player.currentTile, range);
+            foreach (Enemy e in targets)
             {
                 DamageToTarget(e,damage);
                 EffectDelegate.instance.MadeEffect(CardEffectType.Slash, e.transform.position);
@@ -154,7 +150,7 @@ public class Card_Stone : Card_Attack
     }
     public override void CardActive()
     {
-        Entity target = TileUtils.AutoTarget(player.currentTile, range);
+        Enemy target = TileUtils.AutoTarget(player.currentTile, range);
         if (target != null)
         {
             DamageToTarget(target, damage);
@@ -195,7 +191,7 @@ public class Card_Arrow : Card_Attack
     }
     public override void CardActive()
     {
-        Entity target = TileUtils.AutoTarget(player.currentTile, range);
+        Enemy target = TileUtils.AutoTarget(player.currentTile, range);
         if (target != null)
         {
             DamageToTarget(target, damage);

@@ -11,19 +11,26 @@ public abstract class Enemy : Character {
 
     public Attribute Atr;
 
+    protected EnemyUI enemyUI;
     protected virtual void Start()
     {
-		enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
-        characterUI.SetAtt(Atr);
+        enemyUI = transform.Find("Canvas").GetComponent<EnemyUI>();
+        enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
+        enemyUI.SetAtt(Atr);
         SetActionLists();
+        fullHp = SettingHp; currentHp = SettingHp;
+        Atk = SettingAtk; Def = SettingDef;
     }
     protected override void OnDieCallback ()
     {
         ClearRangeList();
 		currentRoom.OnEnemyDead (this);
+        EffectDelegate.instance.MadeEffect(CardEffectType.Blood, currentTile);
         if(GameManager.instance.CurrentTurn == Turn.ENEMY)
-        OnEndTurn();
-		base.OnDieCallback ();
+        {
+            OnEndTurn();
+        }
+        base.OnDieCallback ();
 	}
     public override void SetRoom(Room room, Tile _pos)
     {
@@ -35,18 +42,34 @@ public abstract class Enemy : Character {
         base.SetRoom(room, _pos);
         currentRoom.enemyList.Add(this);
     }
-    protected override void OnEndTurn()
+    protected virtual void OnEndTurn()
     {
-        base.OnEndTurn();
         EnemyControl.instance.EnemyEndCallBack();
     }
-
-
     protected virtual void PlayAnimation(string s)
     {
         enemyAnimator.Play(s);
     }
 
+    protected override void SetLocalScale(int x)
+    {
+        base.SetLocalScale(x);
+        enemyUI.SetLocalScale(x);
+    }
+
+    public override int CurrentHp
+    {
+        get
+        {
+            return base.CurrentHp;
+        }
+
+        set
+        {
+            base.CurrentHp = value;
+            enemyUI.HpOn(FullHp, value);
+        }
+    }
     protected virtual void ClearRangeList()
     {
         if (rangeList != null)
@@ -55,11 +78,6 @@ public abstract class Enemy : Character {
             rangeList = new List<GameObject>();
         }
     }
-
-
-
-
-
 
     #region AI ActRoutine 
     protected enum State

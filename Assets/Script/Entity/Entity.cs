@@ -9,43 +9,7 @@ public abstract class Entity : MonoBehaviour {
 	public Tile currentTile;
     public Vector2Int pos;
 
-    protected int _fullHp=1;
-    protected int _currentHp=1;
-    protected bool isHitable = true;
 
-    public bool IsHitable
-    {
-        get
-        {
-            return isHitable;
-        }
-    }
-    public virtual int fullHp
-    {
-        get
-        {
-            return _fullHp;
-        }
-        set
-        {
-            _fullHp = value;
-        }
-    }
-    public virtual int currentHp
-    {
-        get
-        {
-            return _currentHp;
-        }
-        set
-        {
-            HpEffect(value);
-            if (value < fullHp)
-                _currentHp = value;
-            else
-                _currentHp = fullHp;
-        }
-    }
 
     protected SpriteRenderer sprite;
 	protected virtual void  Awake () {
@@ -133,33 +97,10 @@ public abstract class Entity : MonoBehaviour {
     }
     #endregion
 
-	protected virtual void OnEndTurn(){
-		
-	}
 
 
-    /// <summary>
-    /// 체력이 달았으면 true반환 아니면 false반환
-    /// </summary>
-    public virtual bool GetDamage(int damage,Entity atker = null)
+    public void Destroy()
     {
-        currentHp -= damage;
-        return true;
-    }
-    public virtual bool GetDamage(float damage, Entity atker = null)
-    {
-        return GetDamage((int)damage,atker);
-    }
-
-
-    protected virtual void HpEffect(int value)
-    {
-        EffectDelegate.instance.MadeEffect(value - currentHp, transform.position);
-
-        if (value <= 0)
-        {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, transform.position);
-            OnDieCallback();
-        }
+        OnDieCallback();
     }
 }

@@ -8,7 +8,7 @@ public class SpiderBoss : Enemy {
     protected override void Start()
     {
         base.Start();
-        _fullHp = SettingHp; _currentHp = SettingHp;
+        fullHp = SettingHp; currentHp = SettingHp;
         spider = Resources.Load("Fields/Entity/105") as GameObject;
     }
 
@@ -121,6 +121,7 @@ public class SpiderBoss : Enemy {
     #endregion
     protected override void OnDieCallback()
     {
-        UIManager.instance.GameWin();
+        GameManager.instance.GameWin();
+        base.OnDieCallback();
     }
 }

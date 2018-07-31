@@ -30,13 +30,13 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
-		PlayerData.deck.Clear();
+		PlayerData.Clear();
 		for (int i = 0; i < 9; i++) {
-			PlayerData.deck.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
+			PlayerData.PlayerCards.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
 		}
-        PlayerData.deck.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
-		PlayerData.deck.Add (new CardData_Tumble (4, PlayerControl.Player));
-		PlayerData.deck.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
+        PlayerData.PlayerCards.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
+		PlayerData.PlayerCards.Add (new CardData_Tumble (4, PlayerControl.Player));
+		PlayerData.PlayerCards.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
        
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
 
@@ -48,6 +48,9 @@ public class GameManager : MonoBehaviour {
 
         MinimapTexture.DrawDoors(currentFloor.CurrentRoom);
         MinimapTexture.DrawPlayerPos(PlayerControl.Player.transform.position);
+
+        UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
+        UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
     }
 
 
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour {
     }
 
 	public void OnPlayerClearRoom(){
+        PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
         MinimapTexture.DrawDoors (currentFloor.CurrentRoom);
 	}
@@ -107,7 +111,14 @@ public class GameManager : MonoBehaviour {
 
     }
 
-
+    public void GameOver()
+    {
+        UIManager.instance.GameOver();
+    }
+    public void GameWin()
+    {
+        UIManager.instance.GameWin();
+    }
     public void ReGame()
     {
         SceneManager.LoadScene(0);

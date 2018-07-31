@@ -248,8 +248,8 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
   SettingHp: 10
-  atk: 1
-  def: 0
+  SettingAtk: 1
+  SettingDef: 0
   Atr: 3
 --- !u!114 &114576290056380422
 MonoBehaviour:

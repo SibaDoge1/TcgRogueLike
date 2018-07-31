@@ -7,7 +7,7 @@ using UnityEngine;
     protected override void Start()
     {
         base.Start();
-        _fullHp = SettingHp; _currentHp = SettingHp;
+        fullHp = SettingHp; currentHp = SettingHp;
     }
 
     #region AI
@@ -55,20 +55,7 @@ using UnityEngine;
     }
     #endregion
 
-    protected override void OnDieCallback()
-    {
-        //TODO : DROP CARD TEMP
-        if (UnityEngine.Random.Range(0, 8) == 0)
-        {
-            PlayerControl.instance.AddCard(new Card_Stone(5, PlayerControl.Player, (Attribute)UnityEngine.Random.Range(1, 4)));
-        }
-        else if (UnityEngine.Random.Range(0, 12) == 0)
-        {
-            PlayerControl.instance.AddCard(new CardData_Bandage(2, PlayerControl.Player));
-        }
 
-        base.OnDieCallback();
-    }
 
 }
 

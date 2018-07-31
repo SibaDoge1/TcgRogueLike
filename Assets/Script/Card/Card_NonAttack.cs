@@ -22,7 +22,7 @@ public class CardData_Reload : Card_NonAttack{
 
     int reloadAmount=1;
 	public override void CardActive(){
-        player.currentHp -= 1; 
+        player.CurrentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}
 
@@ -44,7 +44,7 @@ public class CardData_Bandage : Card_NonAttack{
 	int healAmount = 3;
 
 	public override void CardActive (){
-        player.currentHp += 3;
+        player.CurrentHp += 3;
 		EffectDelegate.instance.MadeEffect (effectType, PlayerControl.Player);
     }
 
@@ -64,7 +64,7 @@ public class CardData_Portion : Card_NonAttack
     }
     public override void CardActive()
     {
-        player.currentHp += 99;
+        player.CurrentHp += 99;
         EffectDelegate.instance.MadeEffect(effectType, PlayerControl.Player);
     }
 

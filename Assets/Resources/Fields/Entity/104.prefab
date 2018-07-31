@@ -388,8 +388,8 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
   SettingHp: 50
-  atk: 2
-  def: 0
+  SettingAtk: 2
+  SettingDef: 0
   Atr: 4
 --- !u!212 &212801773338313338
 SpriteRenderer:

@@ -115,28 +115,28 @@ public static class TileUtils
     /// 근처의 적 리스트 가져옵니다.
     /// </summary>
 
-    public static List<Entity> GetNearEnemies(Tile center,int radius)
+    public static List<Enemy> GetNearEnemies(Tile center,int radius)
     {
-        List<Entity> targets = new List<Entity>();
+        List<Enemy> targets = new List<Enemy>();
         List<Tile> range = SquareRange(center, radius);
         for(int i=0; i<range.Count;i++)
         {
-            if(range[i].OnTileObj && range[i].OnTileObj.IsHitable)
+            if(range[i].OnTileObj && range[i].OnTileObj is Enemy)
             {
-                targets.Add(range[i].OnTileObj);
+                targets.Add(range[i].OnTileObj as Enemy);
             }
         }
         return targets;
     }
-    public static Entity AutoTarget(Tile center, int radius)
+    public static Enemy AutoTarget(Tile center, int radius)
     {
-        List<Entity> targets = new List<Entity>();
+        List<Enemy> targets = new List<Enemy>();
         List<Tile> range = SquareRange(center, radius);
         for (int i = 0; i < range.Count; i++)
         {
-            if (range[i].OnTileObj && range[i].OnTileObj.IsHitable)
+            if (range[i].OnTileObj && range[i].OnTileObj is Enemy)
             {
-                targets.Add(range[i].OnTileObj);
+                targets.Add(range[i].OnTileObj as Enemy);
             }
         }
 		if (targets.Count >0)
@@ -144,13 +144,12 @@ public static class TileUtils
 		else
 			return null;
     }
-	public static bool IsHitableAround(Tile center, int radius)
+	public static bool IsEnemyAround(Tile center, int radius)
 	{
-		List<Entity> targets = new List<Entity>();
 		List<Tile> range = SquareRange(center, radius);
 		for (int i = 0; i < range.Count; i++)
 		{
-			if (range[i].OnTileObj && range[i].OnTileObj.IsHitable)
+			if (range[i].OnTileObj && range[i].OnTileObj is Enemy)
 			{
 				return true;
 			}

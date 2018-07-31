@@ -6,14 +6,14 @@ public abstract class Character : Entity {
     [Header("Setting")]
     [SerializeField]
     protected int SettingHp;
-    public int atk;
-    public int def;
+    [SerializeField]
+    protected int SettingAtk;
+    [SerializeField]
+    protected int SettingDef;
 
-    protected CharacterUI characterUI;
     protected override void Awake()
     {
         base.Awake();
-        characterUI = transform.Find("Canvas").GetComponent<CharacterUI>();
     }
     public override bool MoveTo(Vector2Int _pos)
     {
@@ -21,45 +21,95 @@ public abstract class Character : Entity {
         SetLocalScale(xOffset);
 		return  base.MoveTo(_pos);
     }
-    protected void SetLocalScale(int x)
+    protected virtual void SetLocalScale(int x)
     {
         if(x>0)
         {
             transform.localScale = new Vector3(1, 1, 1);
-            characterUI.SetLocalScale(x);
         }
         else if (x<0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
-            characterUI.SetLocalScale(x);
         }
     }
 
 
 
-    public override bool GetDamage(int damage, Entity atker = null)
+    public virtual bool GetDamage(int damage, Entity atker = null)
     {
-        int rest = damage - def;
-        if (rest > 0)
-        {
-            base.GetDamage(rest);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        
+            int rest = damage - def;
+            if (rest > 0)
+            {
+                CurrentHp -= rest;
+                return true;
+            }
+        
+        return false;
+
     }
-    public override bool GetDamage(float damage, Entity atker = null)
+    public virtual bool GetDamage(float damage, Entity atker = null)
     {
         return GetDamage((int)damage,atker);
     }
-    protected override void HpEffect(int value)
+    public virtual bool GetHeal(int heal)
     {
-        base.HpEffect(value);
-        if (value < fullHp)
+        CurrentHp += heal;
+        return true;
+    }
+    public virtual bool GetHeal(float heal)
+    {
+        CurrentHp += (int)heal;
+        return true;
+    }
+    protected int fullHp = 1;
+    protected int currentHp = 1;
+    public virtual int FullHp
+    {
+        get
         {
-            characterUI.HpOn(fullHp, value);
+            return fullHp;
         }
+        set
+        {
+            fullHp = value;
+        }
+    }
+    public virtual int CurrentHp
+    {
+        get
+        {
+            return currentHp;
+        }
+        set
+        {
+            DamageEffect(value - CurrentHp);
+
+            if (value<=0)
+            {
+                OnDieCallback();
+            }
+            if (value < FullHp)
+                currentHp = value;
+            else
+                currentHp = FullHp;
+        }
+    }
+
+    protected int atk;
+    protected int def;
+    public int Atk
+    {
+        get { return atk; }
+        set { atk = value; }
+    }
+    public int Def
+    {
+        get { return def; }
+        set { def = value; }
+    }
+    protected virtual void DamageEffect(int value)
+    {
+        EffectDelegate.instance.MadeEffect(value, transform.position);
     }
 }

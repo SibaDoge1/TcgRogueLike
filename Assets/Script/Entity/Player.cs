@@ -7,14 +7,13 @@ public class Player : Character
 {
     private void Start()
     {
-        _fullHp = SettingHp; _currentHp = SettingHp;
-        UIManager.instance.HpUpdate(currentHp, fullHp);
+        FullHp = SettingHp; CurrentHp = SettingHp;
+        Atk = SettingAtk; Def = SettingDef;
     }
     //문을 통해서 이동
     public void EnterRoom(Door door)
     {
         Vector2Int temp;
-        bool isFlipped=false;
 
         if (currentRoom != null)
            currentTile.OnTileObj = null;
@@ -27,24 +26,17 @@ public class Player : Character
         else if (door.Dir == Direction.EAST)
         {
             temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(1, 0);
-            //isFlipped = true;
         }
         else if (door.Dir == Direction.WEST)
         {
             temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(-1, 0);
-            //isFlipped = true;
         }
         else//_room == currentRoom.SouthRoom
         {
             temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0,-1);
         }
 
-        SetRoom(door.TargetRoom,temp);
-
-        if (isFlipped)
-        {
-            SetLocalScale((int)-transform.localScale.x);
-        }
+        SetRoom(door.TargetRoom,temp);        
 
 		GameManager.instance.SetCurrentRoom (door.TargetRoom);
 		GameManager.instance.OnPlayerEnterRoom ();
@@ -52,34 +44,25 @@ public class Player : Character
 	protected override void OnDieCallback()
     {
         base.OnDieCallback();
-        UIManager.instance.GameOver();
+        GameManager.instance.GameOver();
     }
-    public override int fullHp
-    {
-        get
-        {
-            return base.fullHp;
-        }
 
+    public override int FullHp
+    {
         set
         {
-            base.fullHp = value;
+            base.FullHp = value;
             UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
 
-    public override int currentHp
+    public override int CurrentHp
     {
-        set { base.currentHp = value;
-            UIManager.instance.HpUpdate(currentHp, fullHp); }
-    }
-    public override bool MoveTo(Vector2Int _pos)
-    {
-        return base.MoveTo(_pos);
+        set
+        {
+          base.CurrentHp = value;
+          UIManager.instance.HpUpdate(currentHp, fullHp);
+        }
     }
 
-    protected override void OnEndTurn ()
-    {
-		GameManager.instance.OnEndPlayerTurn ();
-	}
 }

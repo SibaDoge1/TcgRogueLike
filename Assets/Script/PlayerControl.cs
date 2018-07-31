@@ -27,8 +27,11 @@ public class PlayerControl : MonoBehaviour {
 
     public void EndTurnButton()
     {
-        NaturalDraw();
-        GameManager.instance.OnEndPlayerTurn();
+        if(GameManager.instance.CurrentTurn == Turn.PLAYER)
+        {
+            NaturalDraw();
+            GameManager.instance.OnEndPlayerTurn();
+        }
     }
 
 	#region Card
@@ -59,14 +62,29 @@ public class PlayerControl : MonoBehaviour {
 			hand.DrawHand (deck.Draw ());
 		}
 	}
-
+    /*
+    /// <summary>
+    /// *핸드에 해당 카드 추가, 덱에 추가 아님
+    /// </summary>
+    /// <param name="cData"></param>
 	public void AddCard(Card cData){
 		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.AddHand (cData.Instantiate ());
 		}
-	}
+	}*/
 
-	public void ReLoadDeck(){
+    /// <summary>
+    /// 덱에 카드 추가
+    /// </summary>
+    /// <param name="cData"></param>
+    public void AddToDeck(Card cData)
+    {
+        PlayerData.PlayerCards.Add(cData);
+        deck.Load();
+    }
+
+
+    public void ReLoadDeck(){
         hand.RemoveAll();
 		deck.Load ();
         hand.DrawHand(deck.Draw());
@@ -144,6 +162,20 @@ public class PlayerControl : MonoBehaviour {
         hand.ToggleHand();
     }
 
+
+    /// <summary>
+    /// 역장
+    /// </summary>
+    public void StationField()
+    {
+        if(PlayerData.AkashaCount>0 && GameManager.instance.CurrentTurn == Turn.PLAYER)
+        {
+            PlayerData.AkashaCount--;
+            player.GetHeal(2);
+            EndTurnButton();
+        }
+    }
+
     #region Status //상태이상 스테이터스 관리
     private bool isMoveAble = true; private bool isDrawAble = true;
     public bool IsMoveAble
@@ -179,6 +211,5 @@ public class PlayerControl : MonoBehaviour {
         debuff.OnDestroy();
         debuff = null;
     }
-    
     #endregion
 }
