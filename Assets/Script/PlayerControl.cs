@@ -34,9 +34,12 @@ public class PlayerControl : MonoBehaviour {
         }
     }
 
-	#region Card
-	public Deck deck;
-	public HandCard hand;
+    #region Card
+    public GameDeck _deck;
+    public HandUI _hand;
+
+	public GameDeck deck { get { return _deck; } set { _deck = value; } }
+	public HandUI hand { get { return _hand; } set { _hand = value; } }
 
 	/// <summary>
 	/// Draw Anyway even if Hand is Full
@@ -77,9 +80,9 @@ public class PlayerControl : MonoBehaviour {
     /// 덱에 카드 추가
     /// </summary>
     /// <param name="cData"></param>
-    public void AddToDeck(Card cData)
+    public void AddToDeck(CardData cData)
     {
-        PlayerData.PlayerCards.Add(cData);
+        PlayerData.Deck.Add(cData);
         deck.Load();
     }
 
@@ -92,12 +95,6 @@ public class PlayerControl : MonoBehaviour {
         hand.DrawHand(deck.Draw());
     }
 
-    /// <summary>
-    /// Call from GameManager
-    /// </summary>
-    public void OnStartPlayerTurn(){
-		hand.CheckAvailable ();
-	}
 
 	/// <summary>
 	/// Call from Player(Move) or CardObject(Card) or EndTurnButton

@@ -2,26 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandCard : MonoBehaviour {
+public class HandUI : MonoBehaviour {
 	private Vector3 originLocalPosition;
-	void Awake(){
+	void Awake()
+    {
 		originLocalPosition = transform.localPosition;
+        drawStartPosition = transform.Find("CardDrawPosition");
+        cardFoldPosition = transform.Find("CardFoldPosition");
+        cardinfo = transform.Find("CardInfoPanel").GetComponent<CardInfo>();
 	}
 
 
 	public int CurrentHandCount{
 		get{ return hand.Count; }
 	}
-	public Transform drawStartPosition;
-	public Transform cardFoldPosition;
+	private Transform drawStartPosition;
+    private Transform cardFoldPosition;
+    private CardInfo cardinfo;
+
 	private List<CardObject> hand = new List<CardObject> ();
 	private bool isHided = false;
 
+    public void CardInfoOn(CardData c)
+    {
+        cardinfo.gameObject.SetActive(true);
+        cardinfo.SetText(c.CardName,c.CardExplain);
+    }
+    public void CardInfoOff()
+    {
+        cardinfo.gameObject.SetActive(false);
+    }
 	//Add from Deck
 	public void DrawHand(CardObject cardObject){
 		if(cardObject == null){
 			return;
 		}
+
 		cardObject.SetParent (this);
 		cardObject.transform.position = drawStartPosition.position;
 		cardObject.transform.localScale = Vector3.one;

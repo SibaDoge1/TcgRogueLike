@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_NonAttack : Card {
-	public Card_NonAttack(){}
-	public Card_NonAttack(int index,Player pl) : base(index,pl){
+public class CardData_NonAttack : CardData {
+	public CardData_NonAttack(){}
+	public CardData_NonAttack(int index,Player pl) : base(index,pl){
 
 	}
 
@@ -14,7 +14,7 @@ public class Card_NonAttack : Card {
 	}
 }
 
-public class CardData_Reload : Card_NonAttack{
+public class CardData_Reload : CardData_NonAttack{
 	public CardData_Reload(){}
 	public CardData_Reload(int index,Player pl) : base(index,pl){
 		cardExplain = "체력을 "+ reloadAmount + "잃고 내 덱을 처음 상태로 복구합니다.";
@@ -34,7 +34,7 @@ public class CardData_Reload : Card_NonAttack{
 	}
 }
 
-public class CardData_Bandage : Card_NonAttack{
+public class CardData_Bandage : CardData_NonAttack{
 	public CardData_Bandage(){}
 	public CardData_Bandage(int index,Player pl) : base(index,pl){
 		cardExplain = "자신의 hp를" + healAmount + "만큼 회복합니다.";
@@ -55,7 +55,7 @@ public class CardData_Bandage : Card_NonAttack{
 		return healAmount.ToString();
 	}
 }
-public class CardData_Portion : Card_NonAttack
+public class CardData_Portion : CardData_NonAttack
 {
     public CardData_Portion(int index, Player pl) : base(index, pl)
     {
@@ -77,7 +77,7 @@ public class CardData_Portion : Card_NonAttack
         return "All";
     }
 }
-public class CardData_Tumble : Card_NonAttack
+public class CardData_Tumble : CardData_NonAttack
 {
     int cardNum = 3;
 

@@ -11,18 +11,27 @@ public enum Attribute
     VAYU
 }
 public enum CardAbilityType{Attack, Heal, Util}
-public class Card {
+public class CardData {
     
-	protected Card(){}
-	public Card(int cardIndex,Player pl)
+	protected CardData(){}
+	public CardData(int cardIndex,Player pl)
     {
+        index = cardIndex;
 		cardName = CardDatabase.cardNames [cardIndex];
 		spritePath = CardDatabase.cardSpritePaths [cardIndex];
         player = pl;
 	}
-
+    protected int index;
+    public int Index
+    {
+        get { return index; }
+    }
     protected Player player;
 	protected string spritePath;
+    public string SpritePath
+    {
+        get { return spritePath; }
+    }
 	protected string cardName;
 	public string CardName {
 		get { return cardName; }
@@ -39,13 +48,19 @@ public class Card {
 		
 	protected CardEffectType effectType;
 
-	public CardObject Instantiate(){
+	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
 		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(CardDatabase.cardObjectPath)as GameObject).GetComponent<CardObject> ();
-		cardObject.Init (this, Resources.Load<Sprite> (CardDatabase.cardResourcePath + spritePath));
+		cardObject.SetCardData(this);
 		return cardObject;
 	}
-
+    public EditCardObject InstantiateDeckCard()
+    {
+        EditCardObject cardObject;
+        cardObject = InstantiateDelegate.ProxyInstantiate(Resources.Load(CardDatabase.editCardObjectPath) as GameObject).GetComponent<EditCardObject>();
+        cardObject.SetCardData(this);
+        return cardObject;
+    }
 
 	public virtual void CardActive(){//Room Parameter
 		

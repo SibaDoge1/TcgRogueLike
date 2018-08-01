@@ -31,13 +31,18 @@ public class GameManager : MonoBehaviour {
 	private void Start() {	//Start of Everything
 		//DECK CONSTRUCTION
 		PlayerData.Clear();
-		for (int i = 0; i < 9; i++) {
-			PlayerData.PlayerCards.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
+		for (int i = 0; i < 18; i++) {
+			PlayerData.Deck.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
 		}
-        PlayerData.PlayerCards.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
-		PlayerData.PlayerCards.Add (new CardData_Tumble (4, PlayerControl.Player));
-		PlayerData.PlayerCards.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
+        PlayerData.Deck.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
+		PlayerData.Deck.Add (new CardData_Tumble (4, PlayerControl.Player));
+		PlayerData.Deck.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
        
+        for(int i=0; i<4; i++)
+        {
+            PlayerData.AttainCards.Add(new Card_BFSword(3, PlayerControl.Player, Attribute.AK));
+        }
+
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
 
         MinimapTexture.Init(currentFloor);
@@ -117,6 +122,23 @@ public class GameManager : MonoBehaviour {
     public void ReGame()
     {
         SceneManager.LoadScene(0);
+    }
+
+    private bool isGamePaused;
+    public bool IsGamePaused
+    {
+        get { return isGamePaused; }
+        set { isGamePaused = value; }
+    }
+    public void GamePauseOn()
+    {
+        isGamePaused = true;
+        Time.timeScale = 0;
+    }
+    public void GamePauseOff()
+    {
+        isGamePaused = false;
+        Time.timeScale = 1;
     }
 
 }

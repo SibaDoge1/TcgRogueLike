@@ -17,8 +17,8 @@ public class SaveData {
     Vector2Int playerPos;
 
     //PlayerData
-    public static List<Card> deck;
-    public static List<Card> hand;
+    public static List<CardData> deck;
+    public static List<CardData> hand;
     public static int hp;
     public static int atk;
     public static int def;

@@ -7,11 +7,17 @@ using UnityEngine;
 /// </summary>
 public static class PlayerData
 {
-    static List<Card> playerCards = new List<Card>();
-    public static List<Card> PlayerCards
+    static List<CardData> deck = new List<CardData>();
+    public static List<CardData> Deck
     {
-        get { return playerCards; }
-        set { playerCards = value; }
+        get { return deck; }
+        set { deck = value; }
+    }
+    static List<CardData> attainCards = new List<CardData>();
+    public static List<CardData> AttainCards
+    {
+        get { return attainCards; }
+        set { attainCards = value; }
     }
 
     static int akashaGage;
@@ -47,7 +53,7 @@ public static class PlayerData
     }
     public static void Clear()
     {
-        playerCards.Clear();
+        deck.Clear();
         akashaGage = 0;
         akashaCount = 0;
     }

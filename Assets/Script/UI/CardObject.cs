@@ -1,0 +1,204 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+public delegate void LocateCallback();
+public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHandler{
+
+    private HandUI hand;
+    private CardRender render;
+    private Image thisImage;
+    private CardData data;
+
+    protected void Awake()
+    {
+        render = transform.Find("render").GetComponent<CardRender>();
+        thisImage = GetComponent<Image>();
+    }
+
+
+
+	public void SetCardData(CardData data_){
+		data = data_;
+        render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data_.SpritePath);
+
+		CardAbilityType a = data.GetCardAbilityType ();
+		switch (a) {
+		case CardAbilityType.Attack:
+			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconAtk");
+                {//속성 불러오기
+                    render.Img_Attribute.enabled = true;
+                    Attribute at = data.CardAtr;
+                    switch (at)
+                    {
+                        case Attribute.AK:
+                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/akasha1");
+                            break;
+                        case Attribute.APAS:
+                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/apas1");
+                            break;
+                        case Attribute.PRITHVI:
+                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/prithivi1");
+                            break;
+                        case Attribute.TEJAS:
+                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/tejas1");
+                            break;
+                        case Attribute.VAYU:
+                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/vayu1");
+                            break;
+                    }
+                }
+                break;
+		case CardAbilityType.Heal:
+			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconHeal");
+			break;
+		case CardAbilityType.Util:
+			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
+			break;
+		}
+	}
+
+	public void SetParent(HandUI hand_)
+    {
+		hand = hand_;
+		transform.SetParent(hand.transform);
+	}
+
+	public bool IsAvailable()
+    {
+		return data.IsAvailable ();
+	}
+
+
+	#region UserInput
+	private const float handYOffset = -0.8f;
+	private Vector3 originPos;
+	private Quaternion originRot;
+	private const int DragThreshold = 40;
+	private const int ActiveThreshold = 80;
+    public void OnPointerDown(PointerEventData ped){
+		hand.ChooseOne ();
+		data.CardEffectPreview ();
+
+        hand.CardInfoOn(data);
+
+        if (locateRoutine != null) {
+			StopCoroutine (locateRoutine);
+		}
+		base.transform.rotation = Quaternion.identity;
+	}
+
+	public void OnPointerUp(PointerEventData ped){
+		hand.ChooseRollback ();
+		data.CancelPreview ();
+        hand.CardInfoOff();
+
+        if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.GetCurrentRoom().IsEnemyAlive()) {
+            hand.RemoveCard (this);
+            ActiveSelf();
+            Destroy(gameObject);
+		} else {
+            transform.localScale = Vector3.one;
+            //transform.localPosition = originPos;
+            locateRoutine = StartCoroutine(LocateRoutine(originPos, originRot, null));
+		}
+	}
+
+    public void OnDrag(PointerEventData ped){
+		Vector2 touchPos = ped.position;
+		base.transform.position = touchPos;
+
+
+
+        if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > DragThreshold) {
+            transform.transform.localScale = new Vector3(0.6f, 0.6f, 1f);
+		} else
+        {
+            transform.transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+    }
+	#endregion
+
+	public void SetLocation(int total, int target, bool isHided){
+		if (locateRoutine != null) {
+			StopCoroutine (locateRoutine);
+		}
+		originPos = GetPosition (total, target);
+		//originRot = Quaternion.Euler (new Vector3 (0, 0, GetRotation (total, target)));
+
+		if (isHided) {
+			locateRoutine = StartCoroutine (LocateRoutine (new Vector3 (0, handYOffset, -target * 0.5f), Quaternion.identity, null));
+			DisableInteraction ();
+		} else {
+			locateRoutine = StartCoroutine (LocateRoutine (originPos, originRot, EnableInteraction));
+		}
+	}
+    public void Remove()
+    {
+        hand.RemoveCard(this);
+        Destroy(gameObject);
+    }
+
+	private void EnableInteraction(){
+        thisImage.raycastTarget = true;
+	}
+	private void DisableInteraction(){
+        thisImage.raycastTarget = false;
+	}
+
+	#region Private
+	private void ActiveSelf(){
+		if (GameManager.instance.CurrentTurn == Turn.PLAYER) {
+			data.CardActive ();
+			if (data.IsConsumeTurn ()) {
+				PlayerControl.instance.EndPlayerTurn();
+			}
+		}
+	}
+
+	private Coroutine locateRoutine;
+	private IEnumerator LocateRoutine(Vector3 targetPosition, Quaternion targetRotation, LocateCallback callBack){
+
+		float timer = 0;
+		while (true) {
+			timer += Time.deltaTime;
+			if (timer > 1) {
+				base.transform.localPosition = targetPosition;
+				//base.transform.rotation = targetRotation;
+				transform.localScale = Vector3.one;
+				break;
+			}
+			base.transform.localPosition = Vector3.Lerp (base.transform.localPosition, targetPosition, 0.1f);
+			//base.transform.rotation = Quaternion.Slerp (base.transform.rotation, targetRotation, 0.1f);
+			transform.localScale = Vector3.Lerp (transform.localScale, Vector3.one, 0.1f);
+			yield return null;
+		}
+
+		if (callBack != null) {
+			callBack ();
+		}
+	}
+
+	/*private const float maxRotation = 30f;
+	private static float GetRotation(int total, int target){
+		if (total < 4) {
+			return 0;
+		} else {
+			return 0.5f * maxRotation - (maxRotation / (total - 1)) * target;
+		}
+	}*/
+		
+	private static Vector3 GetPosition(int total, int target)
+    {
+		if (total == 1) {
+			return new Vector3 (0, handYOffset * 120, 0);
+		}
+		float totalInterval = 0.3f+total*0.4f;
+		Vector3 result = new Vector3(-totalInterval + (totalInterval * 2 / (total - 1)) * target, handYOffset);
+		//result.x = -totalInterval + (totalInterval * 2 / (total - 1)) * target;
+        //result.y = Mathf.Sqrt(100 - result.x * result.x) + handYOffset-10;
+        return result * 120;
+	}
+	#endregion
+}

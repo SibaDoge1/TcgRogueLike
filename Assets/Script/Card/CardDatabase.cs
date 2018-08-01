@@ -6,6 +6,7 @@ public static class CardDatabase {
 
 	public const string cardResourcePath = "Card/";
 	public const string cardObjectPath = "Card/CardBase";
+    public const string editCardObjectPath = "Card/EditCard";
 	public static readonly string[] cardSpritePaths = {
 		"card_reload",
 		"card_sword",

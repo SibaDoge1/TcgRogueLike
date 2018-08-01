@@ -41,6 +41,7 @@ public class EnemyUI : MonoBehaviour {
         if(hpRoutine!=null)
        StopCoroutine(hpRoutine);
 
+        if(this.gameObject.activeInHierarchy)
        hpRoutine = StartCoroutine(HpUpdateRoutine(fullHp, currentHp));
     }
     public void SetLocalScale(int x)

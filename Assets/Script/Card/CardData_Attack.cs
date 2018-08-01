@@ -4,9 +4,9 @@ using UnityEngine;
 using Arch;
 
 
-public class Card_Attack : Card {
-	public Card_Attack(){}
-	public Card_Attack(int index,Player pl,Attribute atr) : base(index,pl){
+public class CardData_Attack : CardData {
+	public CardData_Attack(){}
+	public CardData_Attack(int index,Player pl,Attribute atr) : base(index,pl){
 		range = 1;
 		target = 1;
         cardAtr = atr;
@@ -57,7 +57,7 @@ public class Card_Attack : Card {
     }
 }
 
-public class Card_Sword : Card_Attack {
+public class Card_Sword : CardData_Attack {
 	public Card_Sword(int index,Player pl, Attribute atr) : base(index,pl,atr)
 	{
 		damage = 5;
@@ -93,7 +93,7 @@ public class Card_Sword : Card_Attack {
         }
     }
 }
-public class Card_BFSword : Card_Attack
+public class Card_BFSword : CardData_Attack
 {
     public Card_BFSword(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
@@ -139,7 +139,7 @@ public class Card_BFSword : Card_Attack
 }
 
 
-public class Card_Stone : Card_Attack
+public class Card_Stone : CardData_Attack
 {
     public Card_Stone(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
@@ -180,7 +180,7 @@ public class Card_Stone : Card_Attack
     }
 }
 
-public class Card_Arrow : Card_Attack
+public class Card_Arrow : CardData_Attack
 {
     public Card_Arrow(int index, Player pl, Attribute atr) : base(index, pl,atr)
     {
