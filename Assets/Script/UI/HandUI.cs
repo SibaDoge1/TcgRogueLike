@@ -9,7 +9,7 @@ public class HandUI : MonoBehaviour {
 		originLocalPosition = transform.localPosition;
         drawStartPosition = transform.Find("CardDrawPosition");
         cardFoldPosition = transform.Find("CardFoldPosition");
-        cardinfo = transform.Find("CardInfoPanel").GetComponent<CardInfo>();
+        cardinfo = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
 	}
 
 
@@ -18,7 +18,7 @@ public class HandUI : MonoBehaviour {
 	}
 	private Transform drawStartPosition;
     private Transform cardFoldPosition;
-    private CardInfo cardinfo;
+    private CardInfoPanel cardinfo;
 
 	private List<CardObject> hand = new List<CardObject> ();
 	private bool isHided = false;

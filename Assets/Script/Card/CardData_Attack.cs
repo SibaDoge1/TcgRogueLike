@@ -4,30 +4,21 @@ using UnityEngine;
 using Arch;
 
 
-public class CardData_Attack : CardData {
-	public CardData_Attack(){}
-	public CardData_Attack(int index,Player pl,Attribute atr) : base(index,pl){
-		range = 1;
-		target = 1;
-        cardAtr = atr;
-	}
+public abstract class CardData_Attack : CardData {
+
+
+    protected Figure figure;
 
 	protected int range;
-	protected int target;
 	protected int damage;
 
     protected List<GameObject> ranges = new List<GameObject>();
-    public override void CardActive (){
-		int validTarget = target;
-		//Check target in range
-		for (int i = 0; i < validTarget; i++) {			
-		}
-	}
 
 	public override CardAbilityType GetCardAbilityType (){
 		return CardAbilityType.Attack;
 	}
-	public override string GetCardAbilityValue (){
+	public  string GetCardAttackValue ()
+    {
 		return damage.ToString();
 	}
 
@@ -57,18 +48,20 @@ public class CardData_Attack : CardData {
     }
 }
 
-public class Card_Sword : CardData_Attack {
-	public Card_Sword(int index,Player pl, Attribute atr) : base(index,pl,atr)
+public class Card_CroAtt : CardData_Attack {
+	public Card_CroAtt() 
 	{
+        index = 0;
 		damage = 5;
 		range = 1;
-		//Set ImageInfo
-		cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
+        cardAtr = (Attribute)Random.Range(2, 6);
+        figure = Figure.CROSS;
+        SetData();
 	}
-	public override void CardActive (){
+	public override void CardActive(){
 		Enemy enemy = null;
-		if (TileUtils.IsEnemyAround (player.currentTile, range)) {
-            enemy = TileUtils.AutoTarget (player.currentTile, range);
+		if (TileUtils.IsEnemyInRange (player.currentTile, range, figure)) {
+            enemy = TileUtils.AutoTarget (player.currentTile, range, figure);
 
             DamageToTarget(enemy, damage);
             EffectDelegate.instance.MadeEffect (effectType, enemy);
@@ -77,7 +70,7 @@ public class Card_Sword : CardData_Attack {
 
     protected List<Tile> targetTiles;
 	public override void CardEffectPreview (){
-		targetTiles = TileUtils.SquareRange (player.currentTile, range);
+		targetTiles = TileUtils.Range (player.currentTile, range, figure);
 		for(int i = 0; i < targetTiles.Count; i++){
             ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
             if (ranges[i] != null)
@@ -93,83 +86,44 @@ public class Card_Sword : CardData_Attack {
         }
     }
 }
-public class Card_BFSword : CardData_Attack
+
+
+public class Card_XAtt : CardData_Attack
 {
-    public Card_BFSword(int index, Player pl, Attribute atr) : base(index, pl,atr)
+    public Card_XAtt()
     {
-        damage = 10;
-        range = 1;
-        //Set ImageInfo
-        cardExplain = range + "의 범위의 모든 적에게+" + damage + "의 데미지를 줍니다.";
-    }
-    public override void CardActive()
-    {
-
-        if (TileUtils.IsEnemyAround(player.currentTile, range))
-        {
-            List<Enemy> targets = TileUtils.GetNearEnemies(player.currentTile, range);
-            foreach (Enemy e in targets)
-            {
-                DamageToTarget(e,damage);
-                EffectDelegate.instance.MadeEffect(CardEffectType.Slash, e.transform.position);
-            }
-        }
-    }
-
-    private List<Tile> targetTiles;
-    public override void CardEffectPreview()
-    {
-        targetTiles = TileUtils.SquareRange(player.currentTile, range);
-        for (int i = 0; i < targetTiles.Count; i++)
-        {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
-        }
-    }
-    public override void CancelPreview()
-    {
-        for (int i = 0; i < targetTiles.Count; i++)
-        {
-            EffectDelegate.instance.DestroyEffect(ranges);
-        }
-    }
-}
-
-
-public class Card_Stone : CardData_Attack
-{
-    public Card_Stone(int index, Player pl, Attribute atr) : base(index, pl,atr)
-    {
+        index = 1;
         damage = 5;
-        //Set ImageInfo
-        range = 3;
-        cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
+        range = 1;
+        cardAtr = (Attribute)Random.Range(2, 6);
+        figure = Figure.X;
+        SetData();
     }
     public override void CardActive()
     {
-        Enemy target = TileUtils.AutoTarget(player.currentTile, range);
-        if (target != null)
+        Enemy enemy = null;
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
-            DamageToTarget(target, damage);
-            EffectDelegate.instance.MadeBullet(BulletType.Stone, PlayerControl.Player.transform.position, target.transform);
+            enemy = TileUtils.AutoTarget(player.currentTile, range, figure);
+
+            DamageToTarget(enemy, damage);
+            EffectDelegate.instance.MadeEffect(effectType, enemy);
         }
     }
 
-    private List<Tile> targetTiles;
+    protected List<Tile> targetTiles;
     public override void CardEffectPreview()
     {
-        targetTiles = TileUtils.SquareRange(player.currentTile, range);
+        targetTiles = TileUtils.Range(player.currentTile, range, figure);
         for (int i = 0; i < targetTiles.Count; i++)
         {
             ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if(ranges[i] != null)
+            if (ranges[i] != null)
             {
                 ranges[i].transform.parent = player.transform;
             }
         }
+
     }
     public override void CancelPreview()
     {
@@ -180,28 +134,40 @@ public class Card_Stone : CardData_Attack
     }
 }
 
-public class Card_Arrow : CardData_Attack
+public class Card_SquAtt : CardData_Attack
 {
-    public Card_Arrow(int index, Player pl, Attribute atr) : base(index, pl,atr)
+    public Card_SquAtt() 
     {
-        damage = 10;
-        //Set ImageInfo
-        range = 5;
-        cardExplain = range + "의 범위중 한 적에게+" + damage + "의 데미지를 줍니다.";
+        cardAtr = (Attribute)Random.Range(2, 6);
+        index = 2;
+        damage = 5;
+        range = 1;
+        figure = Figure.SQUARE;
+        SetData();
     }
     public override void CardActive()
     {
-        Enemy target = TileUtils.AutoTarget(player.currentTile, range);
-        if (target != null)
+
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
-            DamageToTarget(target, damage);
-            EffectDelegate.instance.MadeBullet(BulletType.Arrow, player.transform.position, target.transform);
+            Enemy enemy = TileUtils.AutoTarget(player.currentTile, range, figure);
+            DamageToTarget(enemy,damage);
+
+            /*
+             List<Enemy> targets = TileUtils.GetNearEnemies(player.currentTile, range);
+             foreach (Enemy e in targets)
+             {
+                 DamageToTarget(e,damage);
+                 EffectDelegate.instance.MadeEffect(CardEffectType.Slash, e.transform.position);
+             }
+             */
         }
     }
+
     private List<Tile> targetTiles;
     public override void CardEffectPreview()
     {
-        targetTiles = TileUtils.SquareRange(player.currentTile, range);
+        targetTiles = TileUtils.Range(player.currentTile, range, figure);
         for (int i = 0; i < targetTiles.Count; i++)
         {
             ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
@@ -219,4 +185,192 @@ public class Card_Arrow : CardData_Attack
         }
     }
 }
+public class Card_SquAttAll : CardData_Attack
+{
+    public Card_SquAttAll()
+    {
+        cardAtr = Attribute.TEJAS;
+        index = 3;
+        damage = 5;
+        range = 1;
+        figure = Figure.SQUARE;
+        SetData();
+    }
+    public override void CardActive()
+    {
+
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
+        {
+
+            List<Enemy> targets = TileUtils.GetEnemies(player.currentTile, range, figure);
+             foreach (Enemy e in targets)
+             {
+                 DamageToTarget(e,damage);
+                 EffectDelegate.instance.MadeEffect(CardEffectType.Slash, e.transform.position);
+             }           
+        }
+    }
+
+    private List<Tile> targetTiles;
+    public override void CardEffectPreview()
+    {
+        targetTiles = TileUtils.Range(player.currentTile, range, figure);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
+        }
+    }
+    public override void CancelPreview()
+    {
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            EffectDelegate.instance.DestroyEffect(ranges);
+        }
+    }
+}
+public class Card_Mid3Att : CardData_Attack
+{
+    int num = 3;
+    public Card_Mid3Att()
+    {
+        cardAtr = Attribute.VAYU;
+        index = 4;
+        damage = 5;
+        SetData();
+    }
+    public override void CardActive()
+    {
+        List<Tile> tiles = TileUtils.EmptySquareRange(player.currentTile, 2);
+        if(TileUtils.IsEnemyInRange(tiles))
+        {
+           List<Enemy> targets = TileUtils.GetEnemies(tiles, num);
+            for(int i=0; i<targets.Count;i++)
+            {
+                EffectDelegate.instance.MadeEffect(CardEffectType.Slash, targets[i].currentTile);
+                DamageToTarget(targets[i], damage);
+            }
+        }
+        
+    }
+
+    private List<Tile> targetTiles;
+    public override void CardEffectPreview()
+    {
+        targetTiles = TileUtils.EmptySquareRange(player.currentTile, 2);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
+        }
+    }
+    public override void CancelPreview()
+    {
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            EffectDelegate.instance.DestroyEffect(ranges);
+        }
+    }
+}
+public class Card_PierceAtt : CardData_Attack
+{
+    int num = 3;
+    public Card_PierceAtt()
+    {
+        cardAtr = Attribute.APAS;
+        index = 5;
+        damage = 5;
+        figure = Figure.CROSS;
+        range = 2;
+        SetData();
+    }
+    public override void CardActive()
+    {
+        if(TileUtils.IsEnemyInRange(player.currentTile,range,figure))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for(int i=0;i<enemies.Count;i++)
+            {
+                EffectDelegate.instance.MadeEffect(CardEffectType.Slash, enemies[i].currentTile);
+                DamageToTarget(enemies[i], damage);
+            }
+        }
+
+
+    }
+
+    private List<Tile> targetTiles;
+    public override void CardEffectPreview()
+    {
+        targetTiles = TileUtils.Range(player.currentTile, 2, figure);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
+        }
+    }
+    public override void CancelPreview()
+    {
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            EffectDelegate.instance.DestroyEffect(ranges);
+        }
+    }
+}
+public class Card_StrSquAllAtr : CardData_Attack
+{
+    public Card_StrSquAllAtr()
+    {
+        cardAtr = Attribute.PRITHVI;
+        index = 6;
+        damage = 10;
+        figure = Figure.SQUARE;
+        range = 1;
+        SetData();
+    }
+    public override void CardActive()
+    {
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                EffectDelegate.instance.MadeEffect(CardEffectType.Slash, enemies[i].currentTile);
+                DamageToTarget(enemies[i], damage);
+            }
+        }
+    }
+
+    private List<Tile> targetTiles;
+    public override void CardEffectPreview()
+    {
+        targetTiles = TileUtils.Range(player.currentTile, range, figure);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+            if (ranges[i] != null)
+            {
+                ranges[i].transform.parent = player.transform;
+            }
+        }
+    }
+    public override void CancelPreview()
+    {
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            EffectDelegate.instance.DestroyEffect(ranges);
+        }
+    }
+}
+
+
 

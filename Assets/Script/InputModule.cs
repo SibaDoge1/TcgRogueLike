@@ -5,10 +5,7 @@ using Arch;
 using UnityEngine.EventSystems;
 
 public class InputModule : MonoBehaviour {
-	private static InputModule instance;
-	void Awake(){
-		instance = this;
-	}
+
 
 	void Start(){
 		StartCoroutine (TileSelectRoutine ());

@@ -23,7 +23,7 @@ public class GameDeck : MonoBehaviour {
 		remainDeck = new List<CardData> (PlayerData.Deck);
 		Shuffle ();
 		remainDeck.Add (remainDeck [0]);
-		remainDeck [0] = new CardData_Reload (0,PlayerControl.Player);
+		remainDeck [0] = new CardData_Reload ();
 		RefreshText ();
 	}
 

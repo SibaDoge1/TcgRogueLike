@@ -28,20 +28,28 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	private void Start() {	//Start of Everything
-		//DECK CONSTRUCTION
-		PlayerData.Clear();
-		for (int i = 0; i < 18; i++) {
-			PlayerData.Deck.Add (new Card_Sword (1,PlayerControl.Player,(Attribute)Random.Range(0,4)));
+	private void Start() {  //Start of Everything
+        #region DeckConStruction
+        PlayerData.Clear();
+		for (int i = 0; i < 2; i++) {
+			PlayerData.Deck.Add (new Card_StrSquAllAtr());
 		}
-        PlayerData.Deck.Add (new Card_BFSword (3, PlayerControl.Player,Attribute.AK));
-		PlayerData.Deck.Add (new CardData_Tumble (4, PlayerControl.Player));
-		PlayerData.Deck.Add (new Card_Arrow (7, PlayerControl.Player, Attribute.AK));
-       
-        for(int i=0; i<4; i++)
+        for (int i = 0; i < 2; i++)
         {
-            PlayerData.AttainCards.Add(new Card_BFSword(3, PlayerControl.Player, Attribute.AK));
+            PlayerData.Deck.Add(new Card_StrSquAllAtr());
         }
+        for (int i = 0; i < 2; i++)
+        {
+            PlayerData.Deck.Add(new Card_StrSquAllAtr());
+        }
+        #endregion
+
+        #region AttainPool
+        for (int i=0; i<4; i++)
+        {
+            PlayerData.AttainCards.Add(new Card_SquAtt());
+        }
+        #endregion
 
         currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
 

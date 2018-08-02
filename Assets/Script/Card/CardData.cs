@@ -4,29 +4,24 @@ using UnityEngine;
 
 public enum Attribute
 {
-	AK,//NONE
-	PRITHVI,
+    NONE,
+    AK,
+    PRITHVI,
     APAS,
-	TEJAS,
+    TEJAS,
     VAYU
 }
-public enum CardAbilityType{Attack, Heal, Util}
-public class CardData {
-    
-	protected CardData(){}
-	public CardData(int cardIndex,Player pl)
-    {
-        index = cardIndex;
-		cardName = CardDatabase.cardNames [cardIndex];
-		spritePath = CardDatabase.cardSpritePaths [cardIndex];
-        player = pl;
-	}
+public enum CardAbilityType{Attack, Util}
+public  class CardData {
+    protected Attribute cardAtr;
+    public Attribute CardAtr { get { return cardAtr; } }
+
     protected int index;
     public int Index
     {
         get { return index; }
     }
-    protected Player player;
+    protected Player player = PlayerControl.Player;
 	protected string spritePath;
     public string SpritePath
     {
@@ -37,21 +32,22 @@ public class CardData {
 		get { return cardName; }
 	}
 
-    protected Attribute cardAtr = Attribute.AK;
-    public Attribute CardAtr { get { return cardAtr; } }
-
-
     protected string cardExplain;
 	public string CardExplain {
 		get { return cardExplain; }
 	}
-		
+	protected virtual void SetData()
+    {
+        cardName = CardDatabase.cardNames[index];
+        spritePath = CardDatabase.cardSpritePaths[index];
+        cardExplain = CardDatabase.cardInfos[index];
+    }
 	protected CardEffectType effectType;
 
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
 		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(CardDatabase.cardObjectPath)as GameObject).GetComponent<CardObject> ();
-		cardObject.SetCardData(this);
+        cardObject.SetCardData(this);
 		return cardObject;
 	}
     public EditCardObject InstantiateDeckCard()
@@ -83,7 +79,5 @@ public class CardData {
 	public virtual CardAbilityType GetCardAbilityType(){
 		return CardAbilityType.Attack;
 	}
-	public virtual string GetCardAbilityValue(){
-		return "0";
-	}
+
 }

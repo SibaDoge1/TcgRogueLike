@@ -6,90 +6,88 @@ using UnityEngine.UI;
 public class DeckEditUI : MonoBehaviour
 {
     private RectTransform rect;
-    private CardInfo cardinfo;
+    private CardInfoPanel cardinfoPanel;
     private Vector3 offPos = new Vector3(0, 2000, 0);
     private bool isEditOk=false;
     public bool IsEditOk { get { return isEditOk; } }
-    private bool isEdited=false;
+
     private List<EditCardObject> deckCardObjects;
     private List<EditCardObject> attainCardObjects;
     private List<CardData> deck;
     private List<CardData> attain;
    
+    
+
     RectTransform deckViewPort;
     public RectTransform DeckViewPort { get { return deckViewPort; } }
     RectTransform attainViewPort;
     public RectTransform AttainViewPort { get { return attainViewPort; } }
 
+    Text currentMode;
+    Text buttonText;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
         deckViewPort = transform.Find("DeckPanel").Find("DeckCardPool").Find("viewport").GetComponent<RectTransform>();
         attainViewPort = transform.Find("DeckPanel").Find("AttainCardPool").Find("viewport").GetComponent<RectTransform>();
+        cardinfoPanel = transform.Find("DeckPanel").Find("CardInfoPanel").GetComponent<CardInfoPanel>();
 
-        cardinfo = transform.Find("DeckPanel").Find("CardInfoPanel").GetComponent<CardInfo>();
+        currentMode = transform.Find("DeckPanel").Find("Texts").Find("currentMode").GetComponent<Text>();
+        buttonText = transform.Find("DeckPanel").Find("Buttons").Find("exit").Find("Text").GetComponent<Text>();
     }
-    #region CardInfo
+
+    #region CardInfoPanel
     public void CardInfoOn(CardData c)
     {
-        cardinfo.gameObject.SetActive(true);
-        cardinfo.SetText(c.CardName,c.CardExplain);
+        cardinfoPanel.gameObject.SetActive(true);
+        cardinfoPanel.SetText(c.CardName,c.CardExplain);
     }
     public void CardInfoOff()
     {
-        cardinfo.gameObject.SetActive(false);
+        cardinfoPanel.gameObject.SetActive(false);
     }
     public void CardInfoUnknown()
     {
-        cardinfo.gameObject.SetActive(true);
-        cardinfo.SetUnknown();
+        cardinfoPanel.gameObject.SetActive(true);
+        cardinfoPanel.SetUnknown();
     }
     #endregion
-    public void On(bool b)
+
+    public void On(bool ok)
     {
+        isEditOk = ok;
         rect.anchoredPosition = Vector3.zero;
-        
         MakeCardObjects();
-        isEditOk = b;
-        isEdited = false;
+        SetTexts(isEditOk);
     }
     public void Off()
     {
         DeleteAllObjects();
-        isEditOk = false;
         rect.anchoredPosition = offPos;
-        if (isEdited)
+        if (isEditOk)
         {
-            PlayerData.Deck = new List<CardData>(deck);
-            PlayerData.AttainCards.Clear();
+            PlayerData.Deck = deck;
+            PlayerData.AttainCards = GetUnReavealedCards(attainCardObjects);
             PlayerControl.instance.ReLoadDeck();
-        }
+        }  
     }
 
     public void MoveToDeck(EditCardObject ec)
     {
-        isEdited = true;
-        attain.Remove(ec.GetData());
+        attain.Remove(ec.GetCardData());
         attainCardObjects.Remove(ec);
-
-        deck.Add(ec.GetData());
+        deck.Add(ec.GetCardData());
         deckCardObjects.Add(ec);
-
         ec.SetParent(deckViewPort, true);
-
         SortCards();
     }
     public void MoveToAttain(EditCardObject ec)
     {
-        isEdited = true;
-        deck.Remove(ec.GetData());
+        deck.Remove(ec.GetCardData());
         deckCardObjects.Remove(ec);
-
-        attain.Add(ec.GetData());
+        attain.Add(ec.GetCardData());
         attainCardObjects.Add(ec);
-
         ec.SetParent(AttainViewPort, false);
-
         SortCards();
     }
 
@@ -100,10 +98,27 @@ public class DeckEditUI : MonoBehaviour
             StartCoroutine(RevealCardsRoutine());
         }
     }
-    
-    
-    
+
+
+
+
     #region private
+    /// <summary>
+    /// Temp
+    /// </summary>
+    private void SetTexts(bool bo)
+    {
+        if (bo)
+        {
+            currentMode.text = "수정모드";
+            buttonText.text = "편성완료";
+        }
+        else
+        {
+            currentMode.text = "뷰 모드";
+            buttonText.text = "나가기";
+        }
+    }
     private void MakeCardObjects()
     {
         deck = new List<CardData>(PlayerData.Deck);
@@ -149,17 +164,21 @@ public class DeckEditUI : MonoBehaviour
         isRunningRoutine = true;
         for (int i = 0; i < attainCardObjects.Count; i++)
         {
-            attainCardObjects[i].SetSpriteRender();
-            yield return new WaitForSeconds(0.5f);
+            if(!attainCardObjects[i].IsReavealed)
+            {
+                attainCardObjects[i].SetSpriteRender();
+                yield return new WaitForSeconds(0.5f);
+            }
         }
         isRunningRoutine = false;
+        yield return null;
     }
     private void SortCards()
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = A.GetData().Index * 1000 + (int)A.GetData().CardAtr;
-            int bIndex = B.GetData().Index * 1000 + (int)B.GetData().CardAtr;
+            int aIndex = A.GetCardData().Index * 1000 + (int)A.GetCardData().CardAtr;
+            int bIndex = B.GetCardData().Index * 1000 + (int)B.GetCardData().CardAtr;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -168,8 +187,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = A.GetData().Index * 1000 + (int)A.GetData().CardAtr;
-            int bIndex = B.GetData().Index * 1000 + (int)B.GetData().CardAtr;
+            int aIndex = A.GetCardData().Index * 1000 + (int)A.GetCardData().CardAtr;
+            int bIndex = B.GetCardData().Index * 1000 + (int)B.GetCardData().CardAtr;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -185,5 +204,20 @@ public class DeckEditUI : MonoBehaviour
             attainCardObjects[i].SetLocation(i);
         }
     }
+    private List<CardData> GetUnReavealedCards(List<EditCardObject> cd)
+    {
+        List<CardData> temp = new List<CardData>();
+        for(int i=0; i<cd.Count;i++)
+        {
+            if(!cd[i].IsReavealed)
+            {
+                temp.Add(cd[i].GetCardData());
+            }
+        }
+        return temp;
+
+    }
+
+
     #endregion
 }

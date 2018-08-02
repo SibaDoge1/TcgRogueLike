@@ -8,13 +8,13 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
     private HandUI hand;
     private CardRender render;
-    private Image thisImage;
+    private Image rayCaster;
     private CardData data;
 
     protected void Awake()
     {
         render = transform.Find("render").GetComponent<CardRender>();
-        thisImage = GetComponent<Image>();
+        rayCaster = render.transform.Find("Frame").GetComponent<Image>();
     }
 
 
@@ -49,10 +49,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
                             break;
                     }
                 }
-                break;
-		case CardAbilityType.Heal:
-			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconHeal");
-			break;
+                break;		
 		case CardAbilityType.Util:
 			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
 			break;
@@ -74,9 +71,8 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	#region UserInput
 	private const float handYOffset = -0.8f;
 	private Vector3 originPos;
-	private Quaternion originRot;
 	private const int DragThreshold = 40;
-	private const int ActiveThreshold = 80;
+	private const int ActiveThreshold = 200;
     public void OnPointerDown(PointerEventData ped){
 		hand.ChooseOne ();
 		data.CardEffectPreview ();
@@ -101,7 +97,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		} else {
             transform.localScale = Vector3.one;
             //transform.localPosition = originPos;
-            locateRoutine = StartCoroutine(LocateRoutine(originPos, originRot, null));
+            locateRoutine = StartCoroutine(LocateRoutine(originPos,  null));
 		}
 	}
 
@@ -128,10 +124,10 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		//originRot = Quaternion.Euler (new Vector3 (0, 0, GetRotation (total, target)));
 
 		if (isHided) {
-			locateRoutine = StartCoroutine (LocateRoutine (new Vector3 (0, handYOffset, -target * 0.5f), Quaternion.identity, null));
+			locateRoutine = StartCoroutine (LocateRoutine (new Vector3 (0, handYOffset, -target * 0.5f), null));
 			DisableInteraction ();
 		} else {
-			locateRoutine = StartCoroutine (LocateRoutine (originPos, originRot, EnableInteraction));
+			locateRoutine = StartCoroutine (LocateRoutine (originPos,  EnableInteraction));
 		}
 	}
     public void Remove()
@@ -141,14 +137,14 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     }
 
 	private void EnableInteraction(){
-        thisImage.raycastTarget = true;
-	}
-	private void DisableInteraction(){
-        thisImage.raycastTarget = false;
-	}
+        rayCaster.raycastTarget = true;
+    }
+    private void DisableInteraction(){
+        rayCaster.raycastTarget = false;
+    }
 
-	#region Private
-	private void ActiveSelf(){
+    #region Private
+    private void ActiveSelf(){
 		if (GameManager.instance.CurrentTurn == Turn.PLAYER) {
 			data.CardActive ();
 			if (data.IsConsumeTurn ()) {
@@ -158,7 +154,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
 	private Coroutine locateRoutine;
-	private IEnumerator LocateRoutine(Vector3 targetPosition, Quaternion targetRotation, LocateCallback callBack){
+	private IEnumerator LocateRoutine(Vector3 targetPosition, LocateCallback callBack){
 
 		float timer = 0;
 		while (true) {
@@ -194,7 +190,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		if (total == 1) {
 			return new Vector3 (0, handYOffset * 120, 0);
 		}
-		float totalInterval = 0.3f+total*0.4f;
+		float totalInterval = total*0.5f;
 		Vector3 result = new Vector3(-totalInterval + (totalInterval * 2 / (total - 1)) * target, handYOffset);
 		//result.x = -totalInterval + (totalInterval * 2 / (total - 1)) * target;
         //result.y = Mathf.Sqrt(100 - result.x * result.x) + handYOffset-10;

@@ -47,7 +47,7 @@ public  static class MinimapTexture
 
         texture.SetPixels(resetColorArray);
 
-
+        firstTime = true;
         UIManager.instance.SetMapTexture(texture, textureSize);
     }
 
@@ -116,15 +116,14 @@ public  static class MinimapTexture
 
     static bool firstTime = true;
     static  public  void DrawPlayerPos(Vector3 roomPos, Vector2Int pPos)
-    { 
+    {
         Vector2Int oldPos = playerMapPos;
-
         if (firstTime)
         {
             firstTime = false;
         }
         else
-        {
+        {            
             texture.SetPixel(oldPos.x, oldPos.y, tileColor);
         }
 

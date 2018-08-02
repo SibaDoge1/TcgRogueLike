@@ -14,7 +14,7 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
     private CardData data;
     private Transform viewPort;
     private RectTransform rect;
-    public CardData GetData()
+    public CardData GetCardData()
     {
         return data;
     }
@@ -22,6 +22,8 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
     private Image thisImage;
     protected bool isOnDeck;
     protected bool isReavealed;
+    public bool IsReavealed
+    { get { return isReavealed; } }
 
     protected  void Awake()
     {
@@ -66,9 +68,6 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
                     }
                 }
                 break;
-            case CardAbilityType.Heal:
-                render.Img_Ability.sprite = Resources.Load<Sprite>("Card/Icon/iconHeal");
-                break;
             case CardAbilityType.Util:
                 render.Img_Ability.sprite = Resources.Load<Sprite>("Card/Icon/iconUtil");
                 break;
@@ -87,11 +86,9 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
 
 
     #region UserInput
-    private Vector3 originPos;
 
     public void OnPointerDown(PointerEventData ped)
     {
-        originPos = rect.anchoredPosition;
         if (isReavealed)
         {
             deckEditUI.CardInfoOn(data);
@@ -108,7 +105,7 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
             if (isOnDeck)
             {
                 Vector3 v = deckEditUI.AttainViewPort.InverseTransformPoint(ped.position);    
-                if (deckEditUI.AttainViewPort.rect.Contains(v))
+                if (deckEditUI.AttainViewPort.rect.Contains(v) && isReavealed)
                 {
                     deckEditUI.MoveToAttain(this);
                 }else
@@ -118,7 +115,7 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
             }else
             {
                 Vector3 v = deckEditUI.DeckViewPort.InverseTransformPoint(ped.position);
-                if (deckEditUI.DeckViewPort.rect.Contains(v))
+                if (deckEditUI.DeckViewPort.rect.Contains(v) && isReavealed)
                 {
                     deckEditUI.MoveToDeck(this);
                 }
@@ -195,31 +192,8 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
     private void ReturnToViewPort(int i)
     {
         rect.SetParent(viewPort);
-        rect.anchoredPosition = originPos;
-        //StartCoroutine(ReturnToViewPortRoutine(i));
+        rect.anchoredPosition = GetLocalPosition(i);
     }
 
-    /*IEnumerator ReturnToViewPortRoutine(int i)
-    {       
-        rect.SetParent(viewPort.parent.parent);
-        Vector3 oP = transform.position;
-        
-        float _time = 0f;
-        while (true)
-        {
-            _time += Time.deltaTime * speed;
-            if (_time < 1f)
-            {
-                transform.position = Vector3.Lerp(oP, originPos, _time);
-            }
-            else
-            {
-                break;
-            }
-            yield return null;
-        }
-        rect.SetParent(viewPort);
-        rect.anchoredPosition = GetLocalPosition(i);
-    }*/
     #endregion
 }

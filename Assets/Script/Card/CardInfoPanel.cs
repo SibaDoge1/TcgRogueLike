@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardInfo : MonoBehaviour {
+public class CardInfoPanel : MonoBehaviour {
 
     private Text text;
     private void Awake()

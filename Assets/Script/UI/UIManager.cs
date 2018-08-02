@@ -22,8 +22,6 @@ public class UIManager : MonoBehaviour
     }
     AkashaUI akashaUI;
     HpUI hpUI;
-     
-
     GameOverUI gameOverUI;
     DeckEditUI deckUI;
     MapUI mapUI;
@@ -61,7 +59,6 @@ public class UIManager : MonoBehaviour
     {
         deckUI.Off();
     }
-
     /// <summary>
     /// 맵 이미지에 텍스쳐 설정, 크기 설정
     /// </summary>
