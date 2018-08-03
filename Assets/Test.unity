@@ -1119,8 +1119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HandMax: 5
-  UseCustomDeck: 0
-  CustomDeck: []
+  UseCustomDeck: 1
+  CustomDeck:
+  - Card_SquAttAll
+  - Card_SquAttAll
+  - Card_SquAttAll
   floorNum: 1
   roomNum: 15
   RoomTestMode: 0

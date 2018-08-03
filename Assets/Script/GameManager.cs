@@ -24,25 +24,17 @@ public class GameManager : MonoBehaviour {
 			instance = this;
 		} else {
 			Destroy (this);
-			Debug.LogError ("SingleTone Error");
+			UnityEngine.Debug.LogError ("SingleTone Error");
 		}
 	}
 
 	private void Start() {  //Start of Everything
-        #region DeckConStruction
         PlayerData.Clear();
-		for (int i = 0; i < 2; i++) {
-			PlayerData.Deck.Add (new Card_StrSquAllAtr());
-		}
-        for (int i = 0; i < 2; i++)
+        BuildDeck();
+        for(int i=0; i<10;i++)
         {
-            PlayerData.Deck.Add(new Card_StrSquAllAtr());
+            PlayerData.AttainCards.Add(new Card_CroAtt());
         }
-        for (int i = 0; i < 2; i++)
-        {
-            PlayerData.Deck.Add(new Card_StrSquAllAtr());
-        }
-        #endregion
 
         #region AttainPool
         for (int i=0; i<4; i++)
@@ -65,7 +57,7 @@ public class GameManager : MonoBehaviour {
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
     }
-
+    
 
     public Map currentFloor;
 	public Room GetCurrentRoom(){
@@ -89,7 +81,9 @@ public class GameManager : MonoBehaviour {
         //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
         MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
-	}
+        //TODO : Room CLear CardPool
+        PlayerData.AttainCards.Add(new Card_CroAtt());
+    }
 
 
     /// <summary>
@@ -149,4 +143,47 @@ public class GameManager : MonoBehaviour {
         Time.timeScale = 1;
     }
 
+    #region private
+    private void BuildDeck()
+    {
+        if(Config.instance.UseCustomDeck)
+        {
+            string[] temp = Config.instance.CustomDeck;
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if(System.Type.GetType(temp[i]) != null)
+                {
+                    var c = System.Activator.CreateInstance(System.Type.GetType(temp[i]));
+                    if(c is CardData)
+                    {
+                        PlayerData.Deck.Add(c as CardData);
+                    }else
+                    {
+                        UnityEngine.Debug.Log("Card String Error");
+                    }
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("Card String Error");
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                PlayerData.Deck.Add(new Card_SquAtt());
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                PlayerData.Deck.Add(new Card_CroAtt());
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                PlayerData.Deck.Add(new Card_XAtt());
+            }
+        }
+    }
+
+    #endregion
 }
