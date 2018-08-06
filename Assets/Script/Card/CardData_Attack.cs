@@ -190,6 +190,7 @@ public class Card_SquAttAll : CardData_Attack
     public Card_SquAttAll()
     {
         cardAtr = Attribute.TEJAS;
+        rating = Rating.R4;
         index = 3;
         damage = 5;
         range = 1;
@@ -239,6 +240,7 @@ public class Card_Mid3Att : CardData_Attack
     {
         cardAtr = Attribute.VAYU;
         index = 4;
+        rating = Rating.R4;
         damage = 5;
         SetData();
     }
@@ -283,6 +285,7 @@ public class Card_PierceAtt : CardData_Attack
     int num = 3;
     public Card_PierceAtt()
     {
+        rating = Rating.R4;
         cardAtr = Attribute.APAS;
         index = 5;
         damage = 5;
@@ -326,10 +329,11 @@ public class Card_PierceAtt : CardData_Attack
         }
     }
 }
-public class Card_StrSquAllAtr : CardData_Attack
+public class Card_StrSquAllAtt : CardData_Attack
 {
-    public Card_StrSquAllAtr()
+    public Card_StrSquAllAtt()
     {
+        rating = Rating.R4;
         cardAtr = Attribute.PRITHVI;
         index = 6;
         damage = 10;

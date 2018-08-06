@@ -7,25 +7,27 @@ public enum CardEffectType{Slash, Blood, Heal, Hit}
 public enum BulletType{Stone, Arrow}
 public enum StatusEffectType {Spider}
 public enum RangeEffectType {CARD,ENEMY}
+public enum UIEffect {AttainR5,AttainR4}
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
-	void Awake(){
+	void Awake()
+    {
 		instance = this;
 	}
 
 
-	[NamedArrayAttribute (new string[]{
-		"Slash", "Blood", "Heal", "Hit"
-	})]
+
 	public GameObject[] effectPrefabs;
-	[NamedArrayAttribute (new string[]{
-		"Stone", "Arrow"
-	})]
 	public GameObject[] bulletPrefabs;
     public GameObject[] rangeLayer;
     public GameObject[] statusEffectPrefab;
+    public GameObject[] UIEffect;
     public GameObject textEffectPrefab;
 
+    public GameObject MadeEffect(UIEffect eType,Transform parent)
+    {
+        return Instantiate(UIEffect[(int)eType], parent);
+    }
     public GameObject MadeEffect(CardEffectType eType, Transform parent){
         return Instantiate(effectPrefabs [(int)eType], parent);
 	}

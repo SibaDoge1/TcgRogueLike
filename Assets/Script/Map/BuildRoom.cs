@@ -28,7 +28,7 @@ public static class BuildRoom
 
         roomData = CsvParser.ReadRoom(1, type, name);
         size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
-        Debug.Log(size);
+
         room.size = size;
         tiles = new Tile[size.x, size.y];
         room.SetTileArray(tiles);
@@ -51,7 +51,7 @@ public static class BuildRoom
 
         roomData = GetRoomData(type);
         size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
-        Debug.Log(size);
+
 
         room.size = size;
         tiles = new Tile[size.x, size.y];

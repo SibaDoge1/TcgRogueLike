@@ -10,10 +10,11 @@ using UnityEngine.SceneManagement;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
+    public static Transform canvas;
     private void Awake()
     {
         instance = this;
-       
+        canvas = transform;
         mapUI = transform.Find("MapUI").GetComponent<MapUI>();
         hpUI = transform.Find("HpUI").GetComponent<HpUI>();
         akashaUI = transform.Find("AkashaUI").GetComponent<AkashaUI>();
@@ -54,10 +55,12 @@ public class UIManager : MonoBehaviour
     public void DeckEditUIOn(bool b = false)
     {
         deckUI.On(b);
+        GameManager.instance.IsInputOk = false;
     }
     public void DeckEditUIOff()
     {
         deckUI.Off();
+        GameManager.instance.IsInputOk = true;
     }
     /// <summary>
     /// 맵 이미지에 텍스쳐 설정, 크기 설정

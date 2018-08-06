@@ -39,7 +39,7 @@ public class InputModule : MonoBehaviour {
         IEnumerator TileSelectRoutine(){
 		while (true) {
 
-            if (GameManager.instance.CurrentTurn==Turn.PLAYER)        
+            if (GameManager.instance.CurrentTurn==Turn.PLAYER && GameManager.instance.IsInputOk)        
             {
                 if (Input.GetKeyDown(KeyCode.W))
                 {

@@ -11,10 +11,20 @@ public enum Attribute
     TEJAS,
     VAYU
 }
+public enum Rating
+{
+    R5,
+    R4,
+    R3,
+    R2,
+    R1
+}
 public enum CardAbilityType{Attack, Util}
 public  class CardData {
     protected Attribute cardAtr;
     public Attribute CardAtr { get { return cardAtr; } }
+    protected Rating rating = Rating.R5;
+    public Rating Rating {get { return rating; } }
 
     protected int index;
     public int Index
@@ -79,5 +89,30 @@ public  class CardData {
 	public virtual CardAbilityType GetCardAbilityType(){
 		return CardAbilityType.Attack;
 	}
-
+    /// <summary>
+    /// 클래스명으로 카드 가져오기, 나중에 번호로 가져오기도 만들것
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public static CardData GetCardByName(string s)
+    {
+        if (System.Type.GetType(s) != null)
+        {
+            var c = System.Activator.CreateInstance(System.Type.GetType(s));
+            if (c is CardData)
+            {
+                return (c as CardData);
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Card String Error");
+                return null;
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Card String Error");
+            return null;
+        }
+    }
 }

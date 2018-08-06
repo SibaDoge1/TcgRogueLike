@@ -77,13 +77,23 @@ public class PlayerControl : MonoBehaviour {
 	}*/
 
     /// <summary>
-    /// 덱에 카드 추가
+    /// 인벤토리에 카드 추가, 애니메이션 재생
     /// </summary>
     /// <param name="cData"></param>
-    public void AddToDeck(CardData cData)
+    public void AddToAttain(CardData cData)
     {
-        PlayerData.Deck.Add(cData);
-        deck.Load();
+        PlayerData.AttainCards.Add(cData);
+        switch(cData.Rating)
+        {
+            case Rating.R5:
+                EffectDelegate.instance.MadeEffect(UIEffect.AttainR5, UIManager.canvas);
+                break;
+            case Rating.R4:
+                EffectDelegate.instance.MadeEffect(UIEffect.AttainR4, UIManager.canvas);
+                break;
+            default:
+                break;
+        }
     }
 
 

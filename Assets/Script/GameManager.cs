@@ -16,6 +16,13 @@ public class GameManager : MonoBehaviour {
         get { return currentTurn; }
         set { currentTurn = value; }
     }
+    private bool isInputOk = true;
+    public bool IsInputOk
+    {
+        get { return isInputOk; }
+        set { isInputOk = value; }
+    }
+    
 
 
     public static GameManager instance;
@@ -27,15 +34,20 @@ public class GameManager : MonoBehaviour {
 			UnityEngine.Debug.LogError ("SingleTone Error");
 		}
 	}
-
-	private void Start() {  //Start of Everything
-        PlayerData.Clear();
-        BuildDeck();
-        for(int i=0; i<10;i++)
+    //Start of Everything
+    private void Start()
+    {
+        if(Config.instance.UseRandomSeed)
         {
-            PlayerData.AttainCards.Add(new Card_CroAtt());
+            MyRandom.SetSeed(Random.Range(int.MinValue,int.MaxValue));
+        }
+        else
+        {
+            MyRandom.SetSeed(Config.instance.Seed);
         }
 
+        PlayerData.Clear();
+        BuildDeck();
         #region AttainPool
         for (int i=0; i<4; i++)
         {
@@ -81,8 +93,7 @@ public class GameManager : MonoBehaviour {
         //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
         MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
-        //TODO : Room CLear CardPool
-        PlayerData.AttainCards.Add(new Card_CroAtt());
+        GetRandomCardToAttain(currentFloor.floor);
     }
 
 
@@ -151,20 +162,13 @@ public class GameManager : MonoBehaviour {
             string[] temp = Config.instance.CustomDeck;
             for (int i = 0; i < temp.Length; i++)
             {
-                if(System.Type.GetType(temp[i]) != null)
+                var c = CardData.GetCardByName(temp[i]);
+                if(c == null)
                 {
-                    var c = System.Activator.CreateInstance(System.Type.GetType(temp[i]));
-                    if(c is CardData)
-                    {
-                        PlayerData.Deck.Add(c as CardData);
-                    }else
-                    {
-                        UnityEngine.Debug.Log("Card String Error");
-                    }
-                }
-                else
+                    Debug.Log("ERROR : 커스텀덱의 카드명을 확인해주세요");
+                }else
                 {
-                    UnityEngine.Debug.Log("Card String Error");
+                    PlayerData.Deck.Add(CardData.GetCardByName(temp[i]));
                 }
             }
         }
@@ -184,6 +188,19 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-
+    private void GetRandomCardToAttain(int floor)
+    {
+        if(floor ==1)
+        {
+            if (MyRandom.RandomEvent(85,15) == 1) // R5풀,R4풀 17:3 확률
+            {
+                PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R5Pool[Random.Range(0, CardDatabase.R5Pool.Length)]));
+            }
+            else
+            {
+                PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R4Pool[Random.Range(0, CardDatabase.R4Pool.Length)]));
+            }
+        }
+    }
     #endregion
 }

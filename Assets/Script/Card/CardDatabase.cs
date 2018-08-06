@@ -41,4 +41,17 @@ public static class CardDatabase {
         "범위 내에서 5데미지만큼 전부 공격합니다.",
         "범위 내에서 10데미지만큼 전부 공격합니다."
     };
+    public static readonly string[] R5Pool =
+    {
+        "Card_CroAtt",
+        "Card_XAtt",
+        "Card_SquAtt"
+    };
+    public static readonly string[] R4Pool =
+    {
+        "Card_SquAttAll",
+        "Card_Mid3Att",
+        "Card_PierceAtt",
+        "Card_StrSquAllAtt"
+    };
 }

@@ -6,29 +6,39 @@ using UnityEngine.EventSystems;
 
 
 
-public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, IPointerUpHandler
+public class EditCardObject : Button
 {
 
     private int index;
-    private CardRender render;
+    public int Index
+    {
+        get { return index; }
+        set { index = value; }
+    }
+    private bool isReavealed;
+    public bool IsReavealed
+    { get { return isReavealed; } }
+    private bool isOnDeck;
+
+
     private CardData data;
-    private Transform viewPort;
-    private RectTransform rect;
     public CardData GetCardData()
     {
         return data;
     }
     private DeckEditUI deckEditUI;
-    private Image thisImage;
-    protected bool isOnDeck;
-    protected bool isReavealed;
-    public bool IsReavealed
-    { get { return isReavealed; } }
-
-    protected  void Awake()
+    private CardRender render;
+    private Image highLightImage;
+    bool isSelected;
+    public bool IsSelected {
+        get { return isSelected; }
+        set {isSelected = value; }
+    }
+    protected  override void Awake()
     {
-        rect = GetComponent<RectTransform>();
-        thisImage = GetComponent<Image>();
+        onClick.AddListener(OnClickThis);
+        highLightImage = transform.Find("HighLight").GetComponent<Image>();
+        highLightImage.enabled = false;
         render = transform.Find("render").GetComponent<CardRender>();
     }
 
@@ -78,122 +88,65 @@ public class EditCardObject : MonoBehaviour, IDragHandler, IPointerDownHandler, 
     {
         deckEditUI = de;
     }
+
     public void SetParent(Transform vp, bool isDeck)
     {
+        transform.SetParent(vp);
         isOnDeck = isDeck;
-        viewPort = vp;
     }
 
-
-    #region UserInput
-
-    public void OnPointerDown(PointerEventData ped)
+    public void OnClickThis()
     {
         if (isReavealed)
         {
             deckEditUI.CardInfoOn(data);
-        }else
+        }
+        else
         {
             deckEditUI.CardInfoUnknown();
         }
-    }
 
-    public void OnPointerUp(PointerEventData ped)
-    {
-        if (deckEditUI.IsEditOk)
+        if (deckEditUI.IsEditOk && IsReavealed)
         {
-            if (isOnDeck)
+            if (isSelected)
             {
-                Vector3 v = deckEditUI.AttainViewPort.InverseTransformPoint(ped.position);    
-                if (deckEditUI.AttainViewPort.rect.Contains(v) && isReavealed)
+                if (isOnDeck)
                 {
-                    deckEditUI.MoveToAttain(this);
-                }else
-                {
-                    ReturnToViewPort(index);
-                }
-            }else
-            {
-                Vector3 v = deckEditUI.DeckViewPort.InverseTransformPoint(ped.position);
-                if (deckEditUI.DeckViewPort.rect.Contains(v) && isReavealed)
-                {
-                    deckEditUI.MoveToDeck(this);
+                    deckEditUI.DeckCardSelectOff(this);
                 }
                 else
                 {
-                    ReturnToViewPort(index);
+                    deckEditUI.AttainCardSelectOff(this);
+                }
+            }
+            else
+            {
+                if (isOnDeck)
+                {
+                    deckEditUI.DeckCardSelect(this);
+                }
+                else
+                {
+                    deckEditUI.AttainCardSelect(this);
                 }
             }
         }
     }
-
-    public void OnDrag(PointerEventData ped)
+    public void HighLightOn()
     {
-        if(deckEditUI.IsEditOk)
-        {
-            transform.position = ped.position;
-            transform.SetParent(viewPort.parent.parent);
-        }
+        isSelected = true;
+        highLightImage.enabled = true;
     }
-    #endregion
-
-
-    private void EnableInteraction()
+    public void HighLightOff()
     {
-        thisImage.raycastTarget = true;
-    }
-    private void DisableInteraction()
-    {
-        thisImage.raycastTarget = false;
-    }
-    public void SetLocation(int i)
-    {
-        index = i;
-        if(locateRoutine != null)
-        {
-            StopCoroutine(locateRoutine);
-        }
-        locateRoutine = StartCoroutine(LocateRoutine(GetLocalPosition(i)));
-    }
-    #region Private
-
-    float speed = 3.5f;
-    private Coroutine locateRoutine;
-    private IEnumerator LocateRoutine(Vector3 targetPosition)
-    {
-        rect.SetParent(viewPort);
-
-        Vector3 oP = rect.anchoredPosition;
-        float _time = 0f;
-        while (true)
-        {
-            _time += Time.deltaTime * speed;
-            if(_time<1f)
-            {
-                rect.anchoredPosition = Vector3.Lerp(oP, targetPosition, _time);
-            }else
-            {
-                break;
-            }
-            yield return null;
-        }
-        rect.anchoredPosition = targetPosition;
-    }
-    private  Vector3 GetLocalPosition(int i)
-    {
-        Vector3 offset = new Vector3(120, -140);
-
-        if (i==0)
-        {
-            return offset ;
-        }
-        return new Vector3(i%3*180,i/3*(-200)) + offset;
-    }
-    private void ReturnToViewPort(int i)
-    {
-        rect.SetParent(viewPort);
-        rect.anchoredPosition = GetLocalPosition(i);
+        isSelected = false;
+        highLightImage.enabled = false;
     }
 
-    #endregion
+    public void Locate(int i)
+    {
+        transform.SetSiblingIndex(i);
+    }
+
+
 }
