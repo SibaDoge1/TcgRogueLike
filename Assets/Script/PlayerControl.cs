@@ -35,11 +35,11 @@ public class PlayerControl : MonoBehaviour {
     }
 
     #region Card
-    public GameDeck _deck;
-    public HandUI _hand;
+    private Deck _deck;
+    private Hand _hand;
 
-	public GameDeck deck { get { return _deck; } set { _deck = value; } }
-	public HandUI hand { get { return _hand; } set { _hand = value; } }
+	public Deck deck { get { return _deck; } set { _deck = value; } }
+	public Hand hand { get { return _hand; } set { _hand = value; } }
 
 	/// <summary>
 	/// Draw Anyway even if Hand is Full

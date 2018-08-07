@@ -62,7 +62,7 @@ public class DeckEditUI : MonoBehaviour
         rect.anchoredPosition = Vector3.zero;
         SetTexts(isEditOk);
         MakeCardObjects();
-
+        ExitButton.interactable = true;
         if (ok)
         {
             RevealAttainCards();
@@ -74,6 +74,7 @@ public class DeckEditUI : MonoBehaviour
     public void Off()
     {
         StartCoroutine(OffRoutine());
+        ExitButton.interactable = false;
     }
     bool isMoveable;
 
@@ -109,7 +110,7 @@ public class DeckEditUI : MonoBehaviour
 
     public void RevealAttainCards()
     {
-       StartCoroutine(RevealCardsRoutine());        
+       StartCoroutine(RevealCardsRoutine());
     }
     public void DeckCardSelectOff(EditCardObject ec)
     {

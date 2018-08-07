@@ -23,7 +23,7 @@ public static class CsvParser
     public static string[,] ReadRoom(int floor,RoomType rt,string name)
     {
         string[] line = ReadString("RoomData/Floor"+floor+"/"+rt.ToString()+"/"+name);
-        int row, collum, type;
+        int row, collum;
 
         row = Int32.Parse(line[0].Split(',')[0]); collum = Int32.Parse(line[0].Split(',')[1]);
         string[,] roomData = new string[row, collum];

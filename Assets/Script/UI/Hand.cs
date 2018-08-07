@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandUI : MonoBehaviour {
+public class Hand : MonoBehaviour {
 	private Vector3 originLocalPosition;
 	void Awake()
     {
@@ -87,7 +87,7 @@ public class HandUI : MonoBehaviour {
 	private IEnumerator HandRoutine(bool isHided){
 		float timer = 0;
 		Vector3 targetScale = Vector3.one;
-		Vector3 targetPosition = Vector3.zero;
+		Vector3 targetPosition = new Vector3(500,-300,0);
 		targetPosition.z = 10;
 		if (isHided) {
 			targetScale = Vector3.one * 0.3f;

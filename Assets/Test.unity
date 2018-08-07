@@ -1128,7 +1128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b21de209a18bad4280afca6bce6f892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseRandomSeed: 1
+  UseRandomSeed: 0
   Seed: 0
   HandMax: 5
   UseCustomDeck: 0
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   floorNum: 1
   roomNum: 15
   RoomTestMode: 1
-  TestRoomType: 0
+  TestRoomType: 5
   TestRoomName: test_shop
 --- !u!1 &650573370
 GameObject:
@@ -5482,5 +5482,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52d5a46ac6c10e749bd53ad4ae5c2e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _deck: {fileID: 1797572640}
-  _hand: {fileID: 1817783667}

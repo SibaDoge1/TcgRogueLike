@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameDeck : MonoBehaviour {
+public class Deck : MonoBehaviour {
 
 	public Text txt_RemainCard;
 	public List<CardData> remainDeck;

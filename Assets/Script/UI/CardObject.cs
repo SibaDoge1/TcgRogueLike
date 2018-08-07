@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public delegate void LocateCallback();
 public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPointerUpHandler{
 
-    private HandUI hand;
+    private Hand hand;
     private CardRender render;
     private Image rayCaster;
     private CardData data;
@@ -56,7 +56,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		}
 	}
 
-	public void SetParent(HandUI hand_)
+	public void SetParent(Hand hand_)
     {
 		hand = hand_;
 		transform.SetParent(hand.transform);

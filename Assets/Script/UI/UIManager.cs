@@ -20,16 +20,21 @@ public class UIManager : MonoBehaviour
         akashaUI = transform.Find("AkashaUI").GetComponent<AkashaUI>();
         deckUI = transform.Find("Deck").GetComponent<DeckEditUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
+
+        deck = transform.Find("Deck").GetComponent<Deck>();
+        hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
     }
     AkashaUI akashaUI;
     HpUI hpUI;
     GameOverUI gameOverUI;
     DeckEditUI deckUI;
     MapUI mapUI;
+    Deck deck;
+    Hand hand;
 
-  
 
-	public void HpUpdate(int currentHp_, int fullHp_)
+    #region Status
+    public void HpUpdate(int currentHp_, int fullHp_)
     {
         hpUI.HpUpdate(currentHp_, fullHp_);
     }
@@ -41,17 +46,9 @@ public class UIManager : MonoBehaviour
     {
         akashaUI.AkashaCountUpdate(count);
     }
+    #endregion
 
-    public void GameOver()
-    {
-        gameOverUI.On();
-        gameOverUI.SetText("You Died");
-    }
-    public void GameWin()
-    {
-        gameOverUI.On();
-        gameOverUI.SetText("이겼닭! 오늘 저녁은 치킨이다!");
-    }
+    #region DeckEdit
     public void DeckEditUIOn(bool b = false)
     {
         deckUI.On(b);
@@ -62,21 +59,24 @@ public class UIManager : MonoBehaviour
         deckUI.Off();
         GameManager.instance.IsInputOk = true;
     }
+    #endregion
+
+    #region Map
     /// <summary>
     /// 맵 이미지에 텍스쳐 설정, 크기 설정
     /// </summary>
-    public void SetMapTexture(Texture2D texture,Vector2Int size)
+    public void SetMapTexture(Texture2D texture, Vector2Int size)
     {
         mapUI.SetMapTexture(texture, size);
     }
     /// <summary>
     /// 미니맵 움직이기 target 포지션으로 코루틴써서 옮김
     /// </summary>
-    public void MoveMiniMap(Vector3 origin,Vector3 target)
+    public void MoveMiniMap(Vector3 origin, Vector3 target)
     {
         mapUI.MoveMiniMap(origin, target);
     }
-    
+
 
     public void OpenFullMap()
     {
@@ -86,4 +86,26 @@ public class UIManager : MonoBehaviour
     {
         mapUI.CloseFullMap();
     }
+    #endregion
+
+    public Deck GetDeck()
+    {
+        return deck;
+    }
+    public Hand GetHand()
+    {
+        return hand;
+    }
+    public void GameOver()
+    {
+        gameOverUI.On();
+        gameOverUI.SetText("You Died");
+    }
+    public void GameWin()
+    {
+        gameOverUI.On();
+        gameOverUI.SetText("이겼닭! 오늘 저녁은 치킨이다!");
+    }
+
+  
 }

@@ -12,11 +12,12 @@ public enum Direction
 }
 public enum RoomType
 {
-    DEFAULT,
+    START,
     BATTLE,
     EVENT,
     BOSS,
     SHOP,
+    TEST
 }
 
 public static class MapGenerator 
@@ -106,7 +107,7 @@ public static class MapGenerator
     {
         BuildRoom.Init(newMap);
         roomQueue = new Queue<Room>();
-        Room startRoom = BuildRoom.Build(RoomType.DEFAULT, "start");
+        Room startRoom = BuildRoom.Build(RoomType.START, "start");
         roomQueue.Enqueue(startRoom);
 
         if (Config.instance.RoomTestMode)

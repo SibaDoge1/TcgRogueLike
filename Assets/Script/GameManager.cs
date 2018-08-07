@@ -59,8 +59,8 @@ public class GameManager : MonoBehaviour {
 
         MinimapTexture.Init(currentFloor);
 
-        PlayerControl.instance.ReLoadDeck();
-        PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
+        SetingtPlayer();
+
         EnemyControl.instance.SetRoom (currentFloor.StartRoom);
 
         MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
@@ -201,6 +201,14 @@ public class GameManager : MonoBehaviour {
                 PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R4Pool[Random.Range(0, CardDatabase.R4Pool.Length)]));
             }
         }
+    }
+
+    private void SetingtPlayer()
+    {
+        PlayerControl.instance.deck = UIManager.instance.GetDeck();
+        PlayerControl.instance.hand = UIManager.instance.GetHand();
+        PlayerControl.instance.ReLoadDeck();
+        PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
     }
     #endregion
 }

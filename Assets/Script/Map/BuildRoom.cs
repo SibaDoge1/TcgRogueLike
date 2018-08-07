@@ -108,7 +108,7 @@ public static class BuildRoom
     {
         switch(rt)
         {
-            case RoomType.DEFAULT:
+            case RoomType.START:
                 return CsvParser.ReadRoom(newMap.floor, rt, defaultRoomName[Random.Range(0, defaultRoomName.Count)]);
             case RoomType.BATTLE:
                 return CsvParser.ReadRoom(newMap.floor, rt, battleRoomName[Random.Range(0, battleRoomName.Count)]);
