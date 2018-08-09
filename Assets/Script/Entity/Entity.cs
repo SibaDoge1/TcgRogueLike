@@ -100,7 +100,7 @@ public abstract class Entity : MonoBehaviour {
 
 
 
-    public void Destroy()
+    public void DestroyThis()
     {
         OnDieCallback();
     }

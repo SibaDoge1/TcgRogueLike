@@ -28,12 +28,12 @@ public class Debuff_Move : Debuffs
     {
         turn = 3;
         PlayerControl.instance.IsMoveAble = false;
-        effect = EffectDelegate.instance.MadeEffect(StatusEffectType.Spider, PlayerControl.Player);
+        UIManager.instance.ErrorPopUpOn(this);
     }
     public override void OnDestroy()
     {
         PlayerControl.instance.IsMoveAble = true;
-        EffectDelegate.instance.DestroyEffect(effect);
+        UIManager.instance.ErrorPopUpOff();
     }
 }
 public class Debuff_Draw : Debuffs

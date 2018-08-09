@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TempShop : EventLayer
+public class TempShop : OffTile
 {
     public override void SomethingUpOnThis(Entity ot)
     {
         if(ot is Player)
         {
             UIManager.instance.DeckEditUIOn(true);
+            ot.currentRoom.OpenDoors();
+            PlayerData.AkashaCount += 1;
+            DestroyThis();
         }
     }
 }

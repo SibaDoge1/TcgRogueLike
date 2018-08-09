@@ -6,6 +6,9 @@ using Arch;
 
 public abstract class OffTile : MonoBehaviour
 {
+     
+    public bool isEvent;
+
     protected Tile currentTile;
     public virtual Tile CurrentTile
     {
@@ -21,4 +24,13 @@ public abstract class OffTile : MonoBehaviour
         }
     }
     public abstract void SomethingUpOnThis(Entity ot);
+    public virtual void DestroyThis()
+    {
+        currentTile.offTile = null;
+        Destroy(gameObject);
+    }
+    public virtual bool IsStandAble(Entity et)
+    {
+        return true;
+    }
 }

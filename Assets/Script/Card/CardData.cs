@@ -57,7 +57,7 @@ public  class CardData {
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
 		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(CardDatabase.cardObjectPath)as GameObject).GetComponent<CardObject> ();
-        cardObject.SetCardData(this);
+        cardObject.SetCardRender(this);
 		return cardObject;
 	}
     public EditCardObject InstantiateDeckCard()

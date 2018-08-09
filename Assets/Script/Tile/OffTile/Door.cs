@@ -4,10 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public class Door : EventLayer
+public class Door : OffTile
 {
+    SpriteRenderer sprite;
+    public Sprite opened;
+    public Sprite closed;
+    bool isOpen;
 
     private Room targetRoom;
+    protected void Awake()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+        isEvent = true;
+    }
     public Room TargetRoom
     {
         get{ return targetRoom;}
@@ -29,4 +38,41 @@ public class Door : EventLayer
 			(ot as Player).EnterRoom(this);
         }
     }
+    public void Open()
+    {
+        sprite.sprite = opened;
+        isOpen = true;
+    }
+    /// <summary>
+    /// 문뚤리면 공사
+    /// </summary>
+    public void Pave()
+    {
+        isOpen = false;
+        currentTile.OnTileObj.DestroyThis();
+        switch(Dir)
+        {
+            case Direction.NORTH:
+                break;
+            case Direction.SOUTH:
+                break;
+            case Direction.EAST:
+                break;
+            case Direction.WEST:
+                break;
+        }
+    }
+    public override bool IsStandAble(Entity et)
+    {
+        if(et is Structure)
+        {
+            return true;
+        }       
+        else
+        {
+            Debug.Log(isOpen);
+            return isOpen;
+        }
+    }
+    
 }

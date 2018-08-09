@@ -4,17 +4,38 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HpUI : MonoBehaviour {
-    Image fullHp, currentHp;
+    Transform[] fullHps,currentHps;
     Text hpText;
     // Use this for initialization
-    void Awake () {
-        fullHp = transform.Find("Hp").GetComponent<Image>();
-        currentHp = fullHp.transform.Find("current").GetComponent<Image>();
-        hpText = fullHp.transform.Find("text").GetComponent<Text>();
+    void Awake ()
+    {      
+        fullHps = transform.Find("Full").GetComponentsInChildren<Transform>();
+        currentHps = transform.Find("Current").GetComponentsInChildren<Transform>();
+        hpText = transform.Find("text").GetComponent<Text>();
     }
     public void HpUpdate(int currentHp_, int fullHp_)
     {
-        currentHp.fillAmount = currentHp_ / (float)fullHp_;
+        for(int i=0; i< fullHps.Length;i++)
+        {
+            if(i<=fullHp_)
+            {
+                fullHps[i].gameObject.SetActive(true);
+            }else
+            {
+                fullHps[i].gameObject.SetActive(false);
+            }
+        }
+        for(int i=0; i<currentHps.Length;i++)
+        {
+            if(i<=currentHp_)
+            {
+                currentHps[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                currentHps[i].gameObject.SetActive(false);
+            }
+        }
         hpText.text = currentHp_ + "/" + fullHp_;
     }
 

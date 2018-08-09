@@ -44,6 +44,7 @@ public class DeckEditUI : MonoBehaviour
     {
         cardinfoPanel.gameObject.SetActive(true);
         cardinfoPanel.SetText(c.CardName,c.CardExplain);
+        cardinfoPanel.SetRender(c.SpritePath);
     }
     public void CardInfoOff()
     {

@@ -22,7 +22,9 @@ public class Config : MonoBehaviour
 
     [Header("Map Settings")]
     public int floorNum = 1;
-    public int roomNum;
+    public int battleRoomNum;
+    public int eventRoomNum;
+    public int shopRoomNum;
 
     [Header("TestMode")]
     public bool RoomTestMode;

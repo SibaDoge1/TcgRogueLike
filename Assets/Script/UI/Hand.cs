@@ -27,6 +27,7 @@ public class Hand : MonoBehaviour {
     {
         cardinfo.gameObject.SetActive(true);
         cardinfo.SetText(c.CardName,c.CardExplain);
+        cardinfo.SetRender(c.SpritePath);
     }
     public void CardInfoOff()
     {
@@ -87,11 +88,11 @@ public class Hand : MonoBehaviour {
 	private IEnumerator HandRoutine(bool isHided){
 		float timer = 0;
 		Vector3 targetScale = Vector3.one;
-		Vector3 targetPosition = new Vector3(500,-300,0);
+		Vector3 targetPosition = new Vector3(0,0,0);
 		targetPosition.z = 10;
 		if (isHided) {
 			targetScale = Vector3.one * 0.3f;
-			targetPosition = new Vector3 (5f, -2.5f, 10f);
+			targetPosition = cardFoldPosition.position;
 		}
 		while (true) {
 			timer += Time.deltaTime;

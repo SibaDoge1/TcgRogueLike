@@ -37,31 +37,17 @@ public class GameManager : MonoBehaviour {
     //Start of Everything
     private void Start()
     {
-        if(Config.instance.UseRandomSeed)
-        {
-            MyRandom.SetSeed(Random.Range(int.MinValue,int.MaxValue));
-        }
-        else
-        {
-            MyRandom.SetSeed(Config.instance.Seed);
-        }
+        SetSeed();
 
+        PlayerControl player = MakePlayer();
         PlayerData.Clear();
         BuildDeck();
-        #region AttainPool
-        for (int i=0; i<4; i++)
-        {
-            PlayerData.AttainCards.Add(new Card_SquAtt());
-        }
-        #endregion
 
-        currentFloor = MapGenerator.GetNewMap(Config.instance.floorNum,Config.instance.roomNum);
+        currentMap = GetMap();
+        MinimapTexture.Init(CurrentMap);
+        SetingtPlayer(player);
 
-        MinimapTexture.Init(currentFloor);
-
-        SetingtPlayer();
-
-        EnemyControl.instance.SetRoom (currentFloor.StartRoom);
+        EnemyControl.instance.SetRoom (CurrentMap.StartRoom);
 
         MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
         MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
@@ -69,23 +55,27 @@ public class GameManager : MonoBehaviour {
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
     }
-    
 
-    public Map currentFloor;
+    private Map currentMap;
+    public Map CurrentMap
+    {
+        get { return currentMap; }
+        set { currentMap = value; }
+    }
 	public Room GetCurrentRoom(){
-		return currentFloor.CurrentRoom;
+		return CurrentMap.CurrentRoom;
 	}
 	public void SetCurrentRoom(Room room_){
-		currentFloor.CurrentRoom = room_;
+        CurrentMap.CurrentRoom = room_;
 	}
     
 	public void OnPlayerEnterRoom()
     {
-		if (currentFloor.CurrentRoom.IsVisited == false)
+		if (CurrentMap.CurrentRoom.IsVisited == false)
         {
-            currentFloor.CurrentRoom.IsVisited = true;
-            EnemyControl.instance.SetRoom (currentFloor.CurrentRoom);
-			MinimapTexture.DrawRoom (currentFloor.CurrentRoom);
+            CurrentMap.CurrentRoom.IsVisited = true;
+            EnemyControl.instance.SetRoom (CurrentMap.CurrentRoom);
+			MinimapTexture.DrawRoom (CurrentMap.CurrentRoom);
 		}
     }
 
@@ -93,7 +83,7 @@ public class GameManager : MonoBehaviour {
         //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
         MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
-        GetRandomCardToAttain(currentFloor.floor);
+        GetRandomCardToAttain(CurrentMap.Floor);
     }
 
 
@@ -202,13 +192,40 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
-
-    private void SetingtPlayer()
+    private PlayerControl MakePlayer()
     {
-        PlayerControl.instance.deck = UIManager.instance.GetDeck();
-        PlayerControl.instance.hand = UIManager.instance.GetHand();
-        PlayerControl.instance.ReLoadDeck();
-        PlayerControl.instance.InitPlayer(currentFloor.StartRoom);
+        return Instantiate(ResourceLoader.instance.LoadPlayer()).GetComponent<PlayerControl>();
+    }
+    private void SetingtPlayer(PlayerControl pc)
+    {
+        pc.deck = UIManager.instance.GetDeck();
+        pc.hand = UIManager.instance.GetHand();
+        pc.ReLoadDeck();
+        pc.InitPlayer(CurrentMap.StartRoom);
+    }
+    private void SetSeed()
+    {
+        if (Config.instance.UseRandomSeed)
+        {
+            MyRandom.SetSeed(Random.Range(int.MinValue, int.MaxValue));
+        }
+        else
+        {
+            MyRandom.SetSeed(Config.instance.Seed);
+        }
+    }
+    private Map GetMap()
+    {
+        if (Config.instance.RoomTestMode)
+        {
+              return MapGenerator.instance.GetTestMap(Config.instance.floorNum,
+                Config.instance.TestRoomType, Config.instance.TestRoomName);
+        }
+        else
+        {
+            return MapGenerator.instance.GetMap(Config.instance.floorNum,
+                Config.instance.battleRoomNum, Config.instance.eventRoomNum, Config.instance.shopRoomNum);
+        }
     }
     #endregion
 }

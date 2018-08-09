@@ -29,9 +29,9 @@ public  static class MinimapTexture
 
     static public  void Init(Map map)
     {
-        minBorder = map.minBorder;
-        maxBorder = map.maxBorder;
-        space = MapGenerator.space;
+        minBorder = map.MinBorder;
+        maxBorder = map.MaxBorder;
+        space = MapGenerator.instance.space;
         playerMapPos = new Vector2Int(-1, -1);
         textureSize = maxBorder - minBorder + new Vector2Int(space*2,space*2);
         texture = new Texture2D(textureSize.x,textureSize.y);

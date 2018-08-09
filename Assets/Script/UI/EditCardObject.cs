@@ -50,11 +50,12 @@ public class EditCardObject : Button
     {
         isReavealed = true;
         render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath);
+        render.Name.text = data.CardName;
+
         CardAbilityType a = data.GetCardAbilityType();
         switch (a)
         {
             case CardAbilityType.Attack:
-                render.Img_Ability.sprite = Resources.Load<Sprite>("Card/Icon/iconAtk");
                 {//속성 불러오기
                     render.Img_Attribute.enabled = true;
                     Attribute at = data.CardAtr;
@@ -79,7 +80,6 @@ public class EditCardObject : Button
                 }
                 break;
             case CardAbilityType.Util:
-                render.Img_Ability.sprite = Resources.Load<Sprite>("Card/Icon/iconUtil");
                 break;
         }
     }

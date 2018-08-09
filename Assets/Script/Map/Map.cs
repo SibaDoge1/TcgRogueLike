@@ -10,9 +10,16 @@ public class Map : MonoBehaviour{
     {
         startRoom = startRoom_;
         currentRoom = startRoom;
+        StartRoom.OpenDoors();
     }
-
-	private List<Room> room;
+    public void Init(int fl,int ba,int ev,int sh)
+    {
+        floor = fl;
+        battleRoomNum = ba;
+        eventRoomNum = ev;
+        shopRoomNum = sh;
+    }
+    private List<Room> room;
     public List<Room> Rooms
     {
         get { return room; }
@@ -31,11 +38,44 @@ public class Map : MonoBehaviour{
         set { currentRoom = value; }
     }
 
-    public int floor;//층 수
-    public int roomNum;//방갯수
+    #region variables
+    private int floor;//층 수
+    public int Floor
+    {
+        get { return floor; }
+        set { floor = value; }
+    }
+    private int battleRoomNum;
+    public int BattleRoomNum
+    {
+        get { return battleRoomNum; }
+        set { battleRoomNum = value; }
+    }
+    private int shopRoomNum;
+    public int ShopRoomNum
+    {
+        get { return shopRoomNum; }
+        set { shopRoomNum = value; }
+    }
+    private int eventRoomNum;
+    public int EventRoomNum
+    {
+        get { return eventRoomNum; }
+        set { eventRoomNum = value; }
+    }
 
-    public Vector2Int minBorder;
-    public Vector2Int maxBorder;
-
+    private Vector2Int minBorder;
+    public Vector2Int MinBorder
+    {
+        get { return minBorder; }
+        set { minBorder = value; }
+    }
+    private Vector2Int maxBorder;
+    public Vector2Int MaxBorder
+    {
+        get { return maxBorder; }
+        set { maxBorder = value; }
+    }
+    #endregion
 
 }

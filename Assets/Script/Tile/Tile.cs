@@ -26,30 +26,35 @@ namespace Arch{
             { return _offTile; }
             set
             {
-                if (_offTile != null && offTile is EventLayer)
+                if (_offTile != null && _offTile.isEvent)
                     return;
 
-                _offTile = value; _offTile.CurrentTile = this;
+                _offTile = value;
+
+                if(_offTile !=null)
+                _offTile.CurrentTile = this;
             }
         }
 
-	    #endregion
-	    /// <summary>
-	    /// Defalut : GroundTile
-	    /// </summary>
-	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
+
+        #endregion
+
+
+        public void SetTile(Vector2Int _pos,Vector2Int roomSize)
 		{
 			pos = _pos;
 			transform.localPosition = new Vector3(pos.x,pos.y, 0);
 
-            name = "Tile" + _pos;
 		}
 	
 	    public bool IsStandAble(Entity ot)
 		{			
-				if (onTileObj != null) {
+				if (onTileObj != null || (offTile != null && !offTile.IsStandAble(ot)))
+                {
 					return false;
-				} else {
+				} 
+                else
+                {
 					return true;
 				}			
 		}
@@ -59,5 +64,6 @@ namespace Arch{
 				offTile.SomethingUpOnThis (ot);
 			}
 		}       
+
 	}
 }

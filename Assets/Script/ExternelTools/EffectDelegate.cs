@@ -5,7 +5,6 @@ using Arch;
 
 public enum CardEffectType{Slash, Blood, Heal, Hit}
 public enum BulletType{Stone, Arrow}
-public enum StatusEffectType {Spider}
 public enum RangeEffectType {CARD,ENEMY}
 public enum UIEffect {AttainR5,AttainR4}
 public class EffectDelegate : MonoBehaviour {
@@ -20,7 +19,6 @@ public class EffectDelegate : MonoBehaviour {
 	public GameObject[] effectPrefabs;
 	public GameObject[] bulletPrefabs;
     public GameObject[] rangeLayer;
-    public GameObject[] statusEffectPrefab;
     public GameObject[] UIEffect;
     public GameObject textEffectPrefab;
 
@@ -40,15 +38,7 @@ public class EffectDelegate : MonoBehaviour {
 	public GameObject MadeEffect(CardEffectType eType, Tile targetTile){
         return Instantiate(effectPrefabs [(int)eType], targetTile.transform.position, Quaternion.identity);
 	}
-	public GameObject MadeEffect(StatusEffectType eType, Entity parent)
-    {
-        return Instantiate(statusEffectPrefab[(int)eType], parent.transform);
-    }
-    public GameObject MadeEffect(StatusEffectType eType, Transform parent)
-    {
-        MadeEffect(StatusEffectType.Spider, PlayerControl.Player);
-        return Instantiate(statusEffectPrefab[(int)eType], parent);
-    }
+
     public void DestroyEffect(GameObject go)
     {
         DestroyImmediate(go);

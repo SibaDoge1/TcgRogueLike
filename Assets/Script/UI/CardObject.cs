@@ -19,14 +19,13 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
 
 
-	public void SetCardData(CardData data_){
+	public void SetCardRender(CardData data_){
 		data = data_;
         render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data_.SpritePath);
-
+        render.Name.text = data.CardName;
 		CardAbilityType a = data.GetCardAbilityType ();
 		switch (a) {
 		case CardAbilityType.Attack:
-			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconAtk");
                 {//속성 불러오기
                     render.Img_Attribute.enabled = true;
                     Attribute at = data.CardAtr;
@@ -49,10 +48,9 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
                             break;
                     }
                 }
-                break;		
-		case CardAbilityType.Util:
-			render.Img_Ability.sprite = Resources.Load<Sprite> ("Card/Icon/iconUtil");
-			break;
+                break;
+            case CardAbilityType.Util:
+                break;
 		}
 	}
 

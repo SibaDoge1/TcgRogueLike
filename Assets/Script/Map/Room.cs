@@ -22,13 +22,6 @@ public class Room : MonoBehaviour
         set { isVisited = value; }
     }
 
-
-
-	public void SetStartRoom()
-    {
-        OpenDoors();
-	}
-
 	public void OnEnemyDead(Enemy enemy){
 		enemyList.Remove (enemy);
 		if (enemyList.Count > 0) {
@@ -82,13 +75,17 @@ public class Room : MonoBehaviour
 		
 	}
 
-    public void DeleteDoors()
+    public void PaveDoors()
     {
         for (int i = doorList.Count-1; i >= 0; i--)
         {
             if (doorList[i].TargetRoom == null)
             {
+                doorList[i].DestroyThis();
                 doorList.RemoveAt(i);
+            }else
+            {
+                doorList[i].Pave();
             }
         }
     }
@@ -99,7 +96,7 @@ public class Room : MonoBehaviour
         for (int i = 0; i < doorList.Count; i++)
         {
             if (doorList[i].TargetRoom != null)
-                doorList[i].CurrentTile.OnTileObj.Destroy();
+                doorList[i].Open();
         }
     }
     public virtual List<Vector2Int> GetEnemyPoses()

@@ -9,7 +9,7 @@ public class SpiderBoss : Enemy {
     {
         base.Start();
         fullHp = SettingHp; currentHp = SettingHp;
-        spider = Resources.Load("Fields/Entity/105") as GameObject;
+        spider = ResourceLoader.instance.LoadEntity(4005);
     }
 
     #region AI

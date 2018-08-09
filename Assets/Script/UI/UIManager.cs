@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
 
         deck = transform.Find("Deck").GetComponent<Deck>();
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
+
+        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
     }
     AkashaUI akashaUI;
     HpUI hpUI;
@@ -31,7 +33,7 @@ public class UIManager : MonoBehaviour
     MapUI mapUI;
     Deck deck;
     Hand hand;
-
+    ErrorPopUpUI error;
 
     #region Status
     public void HpUpdate(int currentHp_, int fullHp_)
@@ -88,6 +90,14 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    public void ErrorPopUpOn(Debuffs de)
+    {
+        error.gameObject.SetActive(true);
+    }
+    public void ErrorPopUpOff()
+    {
+        error.gameObject.SetActive(false);
+    }
     public Deck GetDeck()
     {
         return deck;
