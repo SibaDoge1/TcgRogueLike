@@ -5,7 +5,9 @@ using UnityEngine;
 /// <summary>
 /// 맵 데이터를 가지고있는 클래스 입니다.
 /// </summary>
-public class Map : MonoBehaviour{
+public class Map : MonoBehaviour
+{
+
     public void SetStartRoom(Room startRoom_)
     {
         startRoom = startRoom_;
@@ -78,4 +80,12 @@ public class Map : MonoBehaviour{
     }
     #endregion
 
+    public void SetRoomOn(Room room)
+    {
+        room.gameObject.SetActive(true);
+    }
+    public void SetRoomOff(Room room)
+    {
+        room.gameObject.SetActive(false);
+    }
 }

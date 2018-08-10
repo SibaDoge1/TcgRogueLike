@@ -15,9 +15,10 @@ public class PlayerControl : MonoBehaviour {
 	public void InitPlayer(Room room)
 	{
 		CameraFollow.instance.PlayerTrace(player);
-		player.SetRoom(room, new Vector2Int(3,3));
+		player.SetRoom(room, new Vector2Int(11,11));
+        
 		GameManager.instance.SetCurrentRoom (room);
-		GameManager.instance.OnPlayerEnterRoom ();
+		GameManager.instance.OnPlayerEnterRoom (room);
     }
 
     private static Player player;

@@ -75,17 +75,14 @@ public class Room : MonoBehaviour
 		
 	}
 
-    public void PaveDoors()
+    public void DestroyDoors()
     {
         for (int i = doorList.Count-1; i >= 0; i--)
         {
             if (doorList[i].TargetRoom == null)
             {
-                doorList[i].DestroyThis();
+                doorList[i].DestroyDoor();
                 doorList.RemoveAt(i);
-            }else
-            {
-                doorList[i].Pave();
             }
         }
     }
@@ -107,5 +104,13 @@ public class Room : MonoBehaviour
             v.Add(e.pos);
         }
         return v;
+    }
+    public void SetRoomOn()
+    {
+        gameObject.SetActive(true);
+    }
+    public void SetRoomOff()
+    {
+
     }
 }

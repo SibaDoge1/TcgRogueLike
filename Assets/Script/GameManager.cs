@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour {
         CurrentMap.CurrentRoom = room_;
 	}
     
-	public void OnPlayerEnterRoom()
+	public void OnPlayerEnterRoom(Room old,Room newRoom)
     {
 		if (CurrentMap.CurrentRoom.IsVisited == false)
         {
@@ -77,9 +77,20 @@ public class GameManager : MonoBehaviour {
             EnemyControl.instance.SetRoom (CurrentMap.CurrentRoom);
 			MinimapTexture.DrawRoom (CurrentMap.CurrentRoom);
 		}
+        currentMap.SetRoomOff(old);
+        currentMap.SetRoomOn(newRoom);
     }
-
-	public void OnPlayerClearRoom(){
+    public void OnPlayerEnterRoom(Room newRoom)
+    {
+        if (CurrentMap.CurrentRoom.IsVisited == false)
+        {
+            CurrentMap.CurrentRoom.IsVisited = true;
+            EnemyControl.instance.SetRoom(CurrentMap.CurrentRoom);
+            MinimapTexture.DrawRoom(CurrentMap.CurrentRoom);
+        }
+        currentMap.SetRoomOn(newRoom);
+    }
+    public void OnPlayerClearRoom(){
         //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
         MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);

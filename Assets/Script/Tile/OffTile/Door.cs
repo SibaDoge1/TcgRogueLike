@@ -9,6 +9,8 @@ public class Door : OffTile
     SpriteRenderer sprite;
     public Sprite opened;
     public Sprite closed;
+    public Sprite broken;
+
     bool isOpen;
 
     private Room targetRoom;
@@ -61,6 +63,10 @@ public class Door : OffTile
             case Direction.WEST:
                 break;
         }
+    }
+    public void DestroyDoor()
+    {
+        sprite.sprite = broken;
     }
     public override bool IsStandAble(Entity et)
     {

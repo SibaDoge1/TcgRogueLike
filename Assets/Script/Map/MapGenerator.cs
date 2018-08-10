@@ -41,7 +41,7 @@ public class MapGenerator : MonoBehaviour
 
         for (int i = 0; i < currentRooms.Count; i++)
         {
-            currentRooms[i].PaveDoors();
+            currentRooms[i].DestroyDoors();
         }
 
         currentMap.Rooms = currentRooms;
@@ -49,6 +49,11 @@ public class MapGenerator : MonoBehaviour
 
         currentMap.MaxBorder = GetMaxBorders();
         currentMap.MinBorder = GetMinBorders();
+
+        for(int i=0;i< currentRooms.Count;i++)
+        {
+            currentMap.SetRoomOff(currentRooms[i]);
+        }
 
         return currentMap;
     }
@@ -64,7 +69,7 @@ public class MapGenerator : MonoBehaviour
 
         for (int i = 0; i < currentRooms.Count; i++)
         {
-            currentRooms[i].PaveDoors();
+            currentRooms[i].DestroyDoors();
         }
 
         currentMap.Rooms = currentRooms;

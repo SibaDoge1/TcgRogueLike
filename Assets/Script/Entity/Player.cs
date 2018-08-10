@@ -18,6 +18,8 @@ public class Player : Character
         if (currentRoom != null)
            currentTile.OnTileObj = null;
 
+        Room old = currentRoom;
+
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
@@ -36,10 +38,10 @@ public class Player : Character
             temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(0,-1);
         }
 
-        SetRoom(door.TargetRoom,temp);        
+        SetRoom(door.TargetRoom,temp);
 
-		GameManager.instance.SetCurrentRoom (door.TargetRoom);
-		GameManager.instance.OnPlayerEnterRoom ();
+        GameManager.instance.SetCurrentRoom (door.TargetRoom);
+		GameManager.instance.OnPlayerEnterRoom (old,currentRoom );
     }
 	protected override void OnDieCallback()
     {
