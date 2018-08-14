@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour {
     }
     
 
-
     public static GameManager instance;
     private void Awake(){
         if (instance == null) {
@@ -49,11 +48,13 @@ public class GameManager : MonoBehaviour {
 
         EnemyControl.instance.SetRoom (CurrentMap.StartRoom);
 
-        MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
+        //MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
         MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
 
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
+        IsInputOk = false;
+        UIManager.instance.ShowTextUI("GameStart!", new CallBack(delegate () { IsInputOk = true; }));
     }
 
     private Map currentMap;
@@ -93,7 +94,7 @@ public class GameManager : MonoBehaviour {
     public void OnPlayerClearRoom(){
         //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
-        MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
+        //MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
         GetRandomCardToAttain(CurrentMap.Floor);
     }
 
@@ -101,17 +102,25 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// 호출하자마자 Turn은 EnemyTurn으로 바꾸고
     /// float나 코루틴 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
-    /// +)반드시 PlayerControler 클래스에서만 호출하도록 할것
     /// </summary>
     /// <param name="time"></param>
     /// <returns></returns>
-    public void OnEndPlayerTurn()
+    public void OnEndPlayerTurn(float time = 0.1f)
+    {
+        if(act!=null)
+        {
+            StopCoroutine(act);
+        }
+       act = StartCoroutine(EndTurnDelay(time));
+    }
+    Coroutine act;
+    IEnumerator EndTurnDelay(float time)
     {
         CurrentTurn = Turn.ENEMY;
+        yield return new WaitForSeconds(time);
         MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
         EnemyControl.instance.EnemyTurn();
     }
-
 
 
 

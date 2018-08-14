@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+public delegate void CallBack();
+
 /// <summary>
 /// UI MANAGER 
 /// </summary>
@@ -23,9 +25,10 @@ public class UIManager : MonoBehaviour
 
         deck = transform.Find("Deck").GetComponent<Deck>();
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
-
+        textUI = transform.Find("TextUI").GetComponent<TextUI>();
         error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
     }
+    TextUI textUI;
     AkashaUI akashaUI;
     HpUI hpUI;
     GameOverUI gameOverUI;
@@ -115,6 +118,10 @@ public class UIManager : MonoBehaviour
     {
         gameOverUI.On();
         gameOverUI.SetText("이겼닭! 오늘 저녁은 치킨이다!");
+    }
+    public void ShowTextUI(string s,CallBack cb)
+    {
+        textUI.SetString(s, cb);
     }
 
   

@@ -6,6 +6,8 @@ namespace Arch{
 	public class Tile :MonoBehaviour
 	{
         #region variables
+        public int objectNum;
+
         public List<Tile> neighbours;
 
 	    public Vector2Int pos;
@@ -35,8 +37,6 @@ namespace Arch{
                 _offTile.CurrentTile = this;
             }
         }
-
-
         #endregion
 
 

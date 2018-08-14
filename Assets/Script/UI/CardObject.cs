@@ -24,27 +24,25 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
         render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data_.SpritePath);
         render.Name.text = data.CardName;
 		CardAbilityType a = data.GetCardAbilityType ();
-		switch (a) {
+        render.SetRank((int)data.Rating);
+
+        switch (a) {
 		case CardAbilityType.Attack:
                 {//속성 불러오기
-                    render.Img_Attribute.enabled = true;
                     Attribute at = data.CardAtr;
                     switch (at)
                     {
-                        case Attribute.AK:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/akasha1");
-                            break;
                         case Attribute.APAS:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/apas1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_a");
                             break;
                         case Attribute.PRITHVI:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/prithivi1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_p");
                             break;
                         case Attribute.TEJAS:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/tejas1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_t");
                             break;
                         case Attribute.VAYU:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/vayu1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_v");
                             break;
                     }
                 }
@@ -152,7 +150,8 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
 	private Coroutine locateRoutine;
-	private IEnumerator LocateRoutine(Vector3 targetPosition, LocateCallback callBack){
+	private IEnumerator LocateRoutine(Vector3 targetPosition, LocateCallback callBack)
+    {
 
 		float timer = 0;
 		while (true) {

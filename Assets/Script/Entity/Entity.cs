@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public abstract class Entity : MonoBehaviour {
-
+public abstract class Entity : MonoBehaviour
+{
+    public int objectNum;
     public Room currentRoom;
 	public Tile currentTile;
     public Vector2Int pos;
@@ -80,7 +81,8 @@ public abstract class Entity : MonoBehaviour {
 		float timer = 0;
         Vector3 originPos = currentRoom.GetTile(origin).transform.localPosition;
         Vector3 targetPos = currentRoom.GetTile(target).transform.localPosition;
-		while (true) {
+		while (true)
+        {
 			timer += Time.deltaTime * moveSpeed;
 			if (timer > 1) {
 				break;

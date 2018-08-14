@@ -51,30 +51,26 @@ public class EditCardObject : Button
         isReavealed = true;
         render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath);
         render.Name.text = data.CardName;
-
+        render.SetRank((int)data.Rating);
         CardAbilityType a = data.GetCardAbilityType();
         switch (a)
         {
             case CardAbilityType.Attack:
                 {//속성 불러오기
-                    render.Img_Attribute.enabled = true;
                     Attribute at = data.CardAtr;
                     switch (at)
                     {
-                        case Attribute.AK:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/akasha1");
-                            break;
                         case Attribute.APAS:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/apas1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_a");
                             break;
                         case Attribute.PRITHVI:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/prithivi1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_p");
                             break;
                         case Attribute.TEJAS:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/tejas1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_t");
                             break;
                         case Attribute.VAYU:
-                            render.Img_Attribute.sprite = Resources.Load<Sprite>("Attribute/vayu1");
+                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_v");
                             break;
                     }
                 }

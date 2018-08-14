@@ -54,12 +54,15 @@ public class Card_CroAtt : CardData_Attack {
         index = 0;
 		damage = 5;
 		range = 1;
-        cardAtr = (Attribute)Random.Range(2, 6);
+        cardAtr = (Attribute)Random.Range(0, 3);
         figure = Figure.CROSS;
         SetData();
 	}
-	public override void CardActive(){
-		Enemy enemy = null;
+	public override void CardActive()
+    {
+        base.CardActive();
+
+        Enemy enemy = null;
 		if (TileUtils.IsEnemyInRange (player.currentTile, range, figure)) {
             enemy = TileUtils.AutoTarget (player.currentTile, range, figure);
 
@@ -95,12 +98,14 @@ public class Card_XAtt : CardData_Attack
         index = 1;
         damage = 5;
         range = 1;
-        cardAtr = (Attribute)Random.Range(2, 6);
+        cardAtr = (Attribute)Random.Range(0, 3);
         figure = Figure.X;
         SetData();
     }
     public override void CardActive()
     {
+        base.CardActive();
+
         Enemy enemy = null;
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
@@ -138,7 +143,7 @@ public class Card_SquAtt : CardData_Attack
 {
     public Card_SquAtt() 
     {
-        cardAtr = (Attribute)Random.Range(2, 6);
+        cardAtr = (Attribute)Random.Range(0, 3);
         index = 2;
         damage = 5;
         range = 1;
@@ -147,6 +152,7 @@ public class Card_SquAtt : CardData_Attack
     }
     public override void CardActive()
     {
+        base.CardActive();
 
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
@@ -189,8 +195,9 @@ public class Card_SquAttAll : CardData_Attack
 {
     public Card_SquAttAll()
     {
+        rating = Rating.R1;
+
         cardAtr = Attribute.TEJAS;
-        rating = Rating.R4;
         index = 3;
         damage = 5;
         range = 1;
@@ -199,6 +206,7 @@ public class Card_SquAttAll : CardData_Attack
     }
     public override void CardActive()
     {
+        base.CardActive();
 
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
@@ -238,14 +246,17 @@ public class Card_Mid3Att : CardData_Attack
     int num = 3;
     public Card_Mid3Att()
     {
+        rating = Rating.R1;
+
         cardAtr = Attribute.VAYU;
         index = 4;
-        rating = Rating.R4;
         damage = 5;
         SetData();
     }
     public override void CardActive()
     {
+        base.CardActive();
+
         List<Tile> tiles = TileUtils.EmptySquareRange(player.currentTile, 2);
         if(TileUtils.IsEnemyInRange(tiles))
         {
@@ -285,7 +296,7 @@ public class Card_PierceAtt : CardData_Attack
     int num = 3;
     public Card_PierceAtt()
     {
-        rating = Rating.R4;
+        rating = Rating.R1;
         cardAtr = Attribute.APAS;
         index = 5;
         damage = 5;
@@ -295,7 +306,9 @@ public class Card_PierceAtt : CardData_Attack
     }
     public override void CardActive()
     {
-        if(TileUtils.IsEnemyInRange(player.currentTile,range,figure))
+        base.CardActive();
+
+        if (TileUtils.IsEnemyInRange(player.currentTile,range,figure))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for(int i=0;i<enemies.Count;i++)
@@ -333,7 +346,7 @@ public class Card_StrSquAllAtt : CardData_Attack
 {
     public Card_StrSquAllAtt()
     {
-        rating = Rating.R4;
+        rating = Rating.R1;
         cardAtr = Attribute.PRITHVI;
         index = 6;
         damage = 10;
@@ -343,6 +356,7 @@ public class Card_StrSquAllAtt : CardData_Attack
     }
     public override void CardActive()
     {
+        base.CardActive();
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);

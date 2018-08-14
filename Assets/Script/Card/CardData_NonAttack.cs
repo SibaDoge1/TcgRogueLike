@@ -28,7 +28,7 @@ public class CardData_Reload : CardData_NonAttack{
         cardExplain = CardDatabase.reloadInfoPath;
     }
 
-    public override void CardActive(){
+     public override void CardActive(){
         player.CurrentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}

@@ -16,7 +16,7 @@ public  static class MinimapTexture
 	private static readonly Color tileColor = Color.blue;
     private static readonly Color playerColor = Color.green;
     private static readonly Color enemyColor = Color.red;
-
+    private static readonly Color doorColor = new Color(139/255f,69/255f,19/255f);
     static int space;
 
 
@@ -58,61 +58,28 @@ public  static class MinimapTexture
         {
             for(int j=0;j<room.size.x;j++)
             {
-                Arch.Tile t = room.GetTile(new Vector2Int(i, j));
-                if (t == null)
-                    texture.SetPixel(pos.x+i,pos.y+j, emptyColor);
+                Arch.Tile t = room.GetTile(new Vector2Int(j, i));
+                if (t.objectNum == 0 && t.OnTileObj == null && t.offTile==null)
+                    texture.SetPixel(pos.x+j,pos.y+i, emptyColor);
                 else
                 {
-                    if(t.OnTileObj is Structure)
+                    if(t.offTile is Door && !((Door)t.offTile).IsDestroyed)
                     {
-                        texture.SetPixel(pos.x + i, pos.y + j, wallColor);
+                        texture.SetPixel(pos.x + j, pos.y + i,doorColor);
+                    }
+                    else if(t.OnTileObj is Structure)
+                    {
+                        texture.SetPixel(pos.x + j, pos.y + i, wallColor);
                     }else
                     {
-                        texture.SetPixel(pos.x + i, pos.y + j, tileColor);
+                        texture.SetPixel(pos.x + j, pos.y + i, tileColor);
                     }
                 }
             }
         }
         texture.Apply();
     }
-
-    static public void DrawDoors(Vector3 roomPos,List<Door> doorList)
-    {
-        foreach(Door d in doorList)
-        {
-            Vector2Int pos = RoomPosToMapPos(roomPos, d.CurrentTile.pos);
-            texture.SetPixel(pos.x,pos.y, tileColor);
-            switch (d.Dir)
-            {
-                case Direction.NORTH:
-                    for(int i=1; i<space;i++)
-                    {
-                        texture.SetPixel(pos.x, pos.y + i, wallColor);
-                    }
-                    break;
-                case Direction.EAST:
-                    for (int i = 1; i < space; i++)
-                    {
-                        texture.SetPixel(pos.x+i, pos.y, wallColor);
-                    }
-                    break;
-                case Direction.SOUTH:
-                    for (int i = 1; i < space; i++)
-                    {
-                        texture.SetPixel(pos.x, pos.y - i, wallColor);
-                    }
-                    break;
-                case Direction.WEST:
-                    for (int i = 1; i < space; i++)
-                    {
-                        texture.SetPixel(pos.x-i, pos.y, wallColor);
-                    }
-                    break;
-            }
-        }
-        texture.Apply();
-
-    }
+    
 
     static bool firstTime = true;
     static  public  void DrawPlayerPos(Vector3 roomPos, Vector2Int pPos)
@@ -171,3 +138,40 @@ static Vector2Int WorldPosToMapPos(Vector3 pos)
     return new Vector2Int((int)pos.x,(int)pos.y) - minBorder + new Vector2Int(space,space);
 }
 }
+/*static public void DrawDoors(Vector3 roomPos,List<Door> doorList)
+{
+    foreach(Door d in doorList)
+    {
+        Vector2Int pos = RoomPosToMapPos(roomPos, d.CurrentTile.pos);
+        texture.SetPixel(pos.x,pos.y, tileColor);
+        switch (d.Dir)
+        {
+            case Direction.NORTH:
+                for(int i=1; i<=space;i++)
+                {
+                    texture.SetPixel(pos.x, pos.y + i, doorColor);
+                }
+                break;
+            case Direction.EAST:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x+i, pos.y, doorColor);
+                }
+                break;
+            case Direction.SOUTH:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x, pos.y - i, doorColor);
+                }
+                break;
+            case Direction.WEST:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x-i, pos.y, doorColor);
+                }
+                break;
+        }
+    }
+    texture.Apply();
+
+}*/

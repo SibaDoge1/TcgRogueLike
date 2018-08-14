@@ -6,7 +6,7 @@ using Arch;
 
 public abstract class OffTile : MonoBehaviour
 {
-     
+    public int objectNum;
     public bool isEvent;
 
     protected Tile currentTile;

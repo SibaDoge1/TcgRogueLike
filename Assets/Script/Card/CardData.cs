@@ -4,8 +4,6 @@ using UnityEngine;
 
 public enum Attribute
 {
-    NONE,
-    AK,
     PRITHVI,
     APAS,
     TEJAS,
@@ -13,17 +11,18 @@ public enum Attribute
 }
 public enum Rating
 {
-    R5,
-    R4,
-    R3,
+    R0,
+    R1,
     R2,
-    R1
+    R3,
+    R4,
+    R5
 }
 public enum CardAbilityType{Attack, Util}
 public  class CardData {
     protected Attribute cardAtr;
     public Attribute CardAtr { get { return cardAtr; } }
-    protected Rating rating = Rating.R5;
+    protected Rating rating = Rating.R0;
     public Rating Rating {get { return rating; } }
 
     protected int index;
@@ -68,11 +67,13 @@ public  class CardData {
         return cardObject;
     }
 
-	public virtual void CardActive(){//Room Parameter
-		
+	public virtual void CardActive()
+    {
+        PlayerData.AkashaCount -= (int)rating;
 	}
 
-	public virtual bool IsAvailable(){//Room Parameter
+	public virtual bool IsAvailable()
+    {
 		return false;
 	}
 

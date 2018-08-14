@@ -10,7 +10,11 @@ public class Door : OffTile
     public Sprite opened;
     public Sprite closed;
     public Sprite broken;
-
+    private bool isDestroyed;
+    public bool IsDestroyed
+    {
+        get { return isDestroyed; }
+    }
     bool isOpen;
 
     private Room targetRoom;
@@ -51,34 +55,15 @@ public class Door : OffTile
     public void Pave()
     {
         isOpen = false;
-        currentTile.OnTileObj.DestroyThis();
-        switch(Dir)
-        {
-            case Direction.NORTH:
-                break;
-            case Direction.SOUTH:
-                break;
-            case Direction.EAST:
-                break;
-            case Direction.WEST:
-                break;
-        }
     }
     public void DestroyDoor()
     {
+        isDestroyed = true;
         sprite.sprite = broken;
     }
     public override bool IsStandAble(Entity et)
     {
-        if(et is Structure)
-        {
-            return true;
-        }       
-        else
-        {
-            Debug.Log(isOpen);
-            return isOpen;
-        }
+        return isOpen;
     }
     
 }

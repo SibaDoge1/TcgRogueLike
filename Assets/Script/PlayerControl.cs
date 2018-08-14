@@ -28,7 +28,7 @@ public class PlayerControl : MonoBehaviour {
 
     public void EndTurnButton()
     {
-        if(GameManager.instance.CurrentTurn == Turn.PLAYER && player.currentRoom.IsEnemyAlive())
+        if (GameManager.instance.CurrentTurn == Turn.PLAYER && player.currentRoom.IsEnemyAlive())
         {
             NaturalDraw();
             GameManager.instance.OnEndPlayerTurn();
@@ -193,9 +193,11 @@ public class PlayerControl : MonoBehaviour {
             player.GetHeal(2);
             EndTurnButton();
         }
-    }
+    } 
 
-    #region Status //상태이상 스테이터스 관리
+
+    #region statusRegion //상태이상 스테이터스 관리
+    
     private bool isMoveAble = true; private bool isDrawAble = true;
     public bool IsMoveAble
     {

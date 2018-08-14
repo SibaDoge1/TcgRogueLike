@@ -77,7 +77,6 @@ public class DeckEditUI : MonoBehaviour
         StartCoroutine(OffRoutine());
         ExitButton.interactable = false;
     }
-    bool isMoveable;
 
     public void ExchangeCards()
     {

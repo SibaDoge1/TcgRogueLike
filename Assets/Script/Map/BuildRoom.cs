@@ -24,7 +24,7 @@ public static class BuildRoom
         room.roomType = type;
 
         roomData = CsvParser.ReadRoom(1, type, name);
-        size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
+        size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
         room.size = size;
         tiles = new Tile[size.x, size.y];
@@ -47,7 +47,7 @@ public static class BuildRoom
         room.roomType = type;
 
         roomData = GetRoomData(type);
-        size = new Vector2Int(roomData.GetLength(1), roomData.GetLength(0));
+        size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
 
         room.size = size;
@@ -98,7 +98,7 @@ public static class BuildRoom
         {
             for (int j = 0; j < size.x; j++)
             {
-                string[] temp = roomData[i,j].Split('/');
+                string[] temp = roomData[j,i].Split('/');
                 tile = int.Parse(temp[0]);
                 offtile = int.Parse(temp[1]);
                 entity = int.Parse(temp[2]);
@@ -108,12 +108,12 @@ public static class BuildRoom
                     Tile tempTile = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadTile(tile), room.transform).GetComponent<Tile>();
                     tempTile.SetTile(new Vector2Int(j, (size.y - 1) - i), size);
                     tiles[j, (size.y-1)-i] = tempTile;
-
+                    tempTile.objectNum = tile;
                     if (offtile != 0)
                     {
                         OffTile ot = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadOffTile(offtile), tempTile.transform).GetComponent<OffTile>();
                         tempTile.offTile = ot;
-
+                        ot.objectNum = offtile;
                         if (offtile < 5)//문
                         {
                             room.doorList.Add(ot as Door);
@@ -124,6 +124,7 @@ public static class BuildRoom
                     {
                         Entity et = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadEntity(entity)).GetComponent<Entity>();
                         et.SetRoom(room, new Vector2Int(j, (size.y - 1) - i));
+                        et.objectNum = entity;
                     }                     
 
             }

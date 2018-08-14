@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-
+public delegate IEnumerator Action();
 public abstract class Enemy : Character {
-    protected delegate IEnumerator Action();
     protected Animator enemyAnimator;
     protected List<GameObject> rangeList = new List<GameObject>();
 
