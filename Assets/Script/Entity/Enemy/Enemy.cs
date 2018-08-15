@@ -7,19 +7,35 @@ public delegate IEnumerator Action();
 public abstract class Enemy : Character {
     protected Animator enemyAnimator;
     protected List<GameObject> rangeList = new List<GameObject>();
+    protected EnemyUI enemyUI;
 
+    public bool dontAffectByView;
     public Attribute Atr;
 
-    protected EnemyUI enemyUI;
-    protected virtual void Start()
+    protected override void Awake()
     {
+        base.Awake();
         enemyUI = transform.Find("Canvas").GetComponent<EnemyUI>();
-        enemyAnimator = transform.Find ("Renderer").GetComponent<Animator> ();
-        enemyUI.SetAtt(Atr);
-        SetActionLists();
+        enemyAnimator = transform.Find("Renderer").GetComponent<Animator>();
+
+
         fullHp = SettingHp; currentHp = SettingHp;
         Atk = SettingAtk; Def = SettingDef;
+        if(dontAffectByView)
+        {
+            currentState = State.DELAY;
+        }
+        else
+        {
+            currentState = State.OFF;
+        }
     }
+    protected virtual void Start()
+    {
+        enemyUI.SetAtt(Atr);
+        SetActionLists();
+    }
+
     protected override void OnDieCallback ()
     {
         ClearRangeList();
@@ -81,17 +97,28 @@ public abstract class Enemy : Character {
     #region AI ActRoutine 
     protected enum State
     {
-        DELAY, THINK, ACT
+       OFF, DELAY, THINK, ACT
     }
     protected State currentState;
     private int delayCount; private int actCount;
 
     protected List<Action> DelayList;
     protected List<Action> currentActionList;
-    
+
 
     public IEnumerator AIRoutine()
     {
+        if(currentState == State.OFF)
+        {
+            if(TileUtils.AI_SquareFind(currentTile,4))
+            {
+                currentState = State.DELAY;
+            }else
+            {
+                OnEndTurn();
+                yield break;
+            }      
+        }
         if (currentState == State.DELAY)
         {
             if(DelayList != null)

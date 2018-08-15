@@ -71,11 +71,12 @@ public class Player : Character
         set
         {
           base.CurrentHp = value;
-          UIManager.instance.HpUpdate(currentHp, fullHp);
+            UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
     public override bool GetDamage(int damage, Entity atker = null)
     {
+        MyCamera.instance.ShakeCamera();
         PlayerData.AkashaGage -= 5;
         return base.GetDamage(damage, atker);
     }

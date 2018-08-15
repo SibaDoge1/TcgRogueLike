@@ -5,11 +5,6 @@ using UnityEngine;
 
 public class RabbitEye : Enemy {
 
-    protected override void Start()
-    {
-        base.Start();
-        fullHp = SettingHp; currentHp = SettingHp;
-    }
 
     #region AI
     protected override void Think()

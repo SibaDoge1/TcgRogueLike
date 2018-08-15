@@ -5,10 +5,12 @@ using Arch;
 public class SpiderBoss : Enemy {
 
     GameObject spider;
+    protected override void Awake()
+    {
+        base.Awake();
+    }
     protected override void Start()
     {
-        base.Start();
-        fullHp = SettingHp; currentHp = SettingHp;
         spider = ResourceLoader.instance.LoadEntity(4005);
     }
 

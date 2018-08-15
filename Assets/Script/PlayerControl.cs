@@ -14,7 +14,7 @@ public class PlayerControl : MonoBehaviour {
 
 	public void InitPlayer(Room room)
 	{
-		CameraFollow.instance.PlayerTrace(player);
+		MyCamera.instance.PlayerTrace(player);
         player.EnterRoom(room);
     }
 

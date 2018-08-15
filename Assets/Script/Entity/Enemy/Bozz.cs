@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class Bozz : Enemy {
 
-    protected override void Start()
-    {
-        base.Start();
-        
-    }
+ 
     #region AI
 
     protected override void Think()

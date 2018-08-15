@@ -72,5 +72,12 @@ public class EnemyUI : MonoBehaviour {
         attImage.enabled = true;
         //attImage.sprite = Resources.Load<Sprite>("Attribute/dontknow");
     }
-
+    public void ActionImageOn()
+    {
+        actionImage.enabled = true;
+    }
+    public void ActionImageOff()
+    {
+        actionImage.enabled = false;
+    }
 }

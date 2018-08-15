@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class ManekingHand : Enemy {
 
-    protected override void Start()
-    {
-        base.Start();
-        fullHp =SettingHp; currentHp =SettingHp;
-    }
+
 
     #region AI
     protected override void Think()
