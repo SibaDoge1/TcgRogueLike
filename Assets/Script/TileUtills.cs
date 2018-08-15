@@ -43,10 +43,10 @@ public static class TileUtils
 
         for (int i = 1; i <= radius; i++)
         {
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x+i, y + i)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x-i, y - i)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + i, y-i)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - i, y+i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x+i, y + i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x-i, y - i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + i, y-i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - i, y+i)));
         }
         for (int i = crossList.Count - 1; i >= 0; i--)
         {
@@ -67,10 +67,10 @@ public static class TileUtils
 
         for (int i = 1; i <= radius; i++)
         {
-			crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + i)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y - i)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + i, y)));
-            crossList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - i, y)));
+			crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - i)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + i, y)));
+            crossList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - i, y)));
         }
 		for (int i = crossList.Count - 1; i >= 0; i--) {
 			if (crossList [i] == null) {
@@ -93,14 +93,14 @@ public static class TileUtils
             {
                 if (j == 0)
                 {
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y - i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - i)));
 
                 }
                 else
                 {
 
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - j, y - i)));
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + j, y - i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - j, y - i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + j, y - i)));
                 }
             }
         }
@@ -113,12 +113,12 @@ public static class TileUtils
             {
                 if (j == 0)
                 {
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x, y + i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + i)));
                 }
                 else
                 {
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x - j, y + i)));
-                    circleList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + j, y + i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - j, y + i)));
+                    circleList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + j, y + i)));
                 }
             }
         }
@@ -136,7 +136,7 @@ public static class TileUtils
         {
             for (int j = -radius; j <= radius; j++)
             {
-                squareList.Add(GameManager.instance.GetCurrentRoom().GetTile(new Vector2Int(x + i, y + j)));
+                squareList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + i, y + j)));
             }
         }
         squareList.Remove(center);

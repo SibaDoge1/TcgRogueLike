@@ -27,7 +27,7 @@ public static class CsvParser
 
         row = Int32.Parse(line[0].Split(',')[0]); collum = Int32.Parse(line[0].Split(',')[1]);
         string[,] roomData = new string[row, collum];
-        Debug.Log(row+","+collum);
+
         for (int loop = 0; loop < collum; loop++)
         {
 

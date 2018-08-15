@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public struct CardDrops
+{
+    public float lowerCard;
+    public float higherCard;
+}
+
 public class Config : MonoBehaviour
 {
     public static Config instance;
@@ -10,6 +17,9 @@ public class Config : MonoBehaviour
     {
         instance = this;
     }
+    [Header("DropRate")]
+    public CardDrops[] DropRate;
+
     [Header("Seed")]
     public bool UseRandomSeed;
     public int Seed;

@@ -19,9 +19,8 @@ public class Hand : MonoBehaviour {
 	private Transform drawStartPosition;
     private Transform cardFoldPosition;
     private CardInfoPanel cardinfo;
-
+    private bool isHided;
 	private List<CardObject> hand = new List<CardObject> ();
-	private bool isHided = false;
 
     public void CardInfoOn(CardData c)
     {
@@ -107,13 +106,32 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	public void ToggleHand(){
-		if(isHided){
-			ShowAll ();
+	public void ToggleHand()
+    {
+		if(isHided)
+        {
+            ShowAll();
 		}else{
-			HideAll ();
-		}
-	}
+            HideAll();
+        }
+    }
+    public void EnableCards(bool enable)
+    {
+        if(enable)
+        {
+            for(int i=0; i<hand.Count;i++)
+            {
+                hand[i].EnableInteraction(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < hand.Count; i++)
+            {
+                hand[i].EnableInteraction(false);
+            }
+        }
+    }
 
 	public void RemoveCard(CardObject co){
 		hand.Remove (co);

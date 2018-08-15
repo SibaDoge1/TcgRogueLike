@@ -12,9 +12,9 @@ public class Room : MonoBehaviour
     public Vector2Int size;
     public List<Door> doorList;
 	Tile[,] tiles;
-
     public RoomType roomType;
 	public List<Enemy> enemyList = new List<Enemy>();
+
     private bool isVisited = false;
     public bool IsVisited
     {

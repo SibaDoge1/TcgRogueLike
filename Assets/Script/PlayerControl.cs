@@ -15,10 +15,7 @@ public class PlayerControl : MonoBehaviour {
 	public void InitPlayer(Room room)
 	{
 		CameraFollow.instance.PlayerTrace(player);
-		player.SetRoom(room, new Vector2Int(11,11));
-        
-		GameManager.instance.SetCurrentRoom (room);
-		GameManager.instance.OnPlayerEnterRoom (room);
+        player.EnterRoom(room);
     }
 
     private static Player player;
@@ -107,12 +104,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
 
-	/// <summary>
-	/// Call from Player(Move) or CardObject(Card) or EndTurnButton
-	/// </summary>
-	public void EndPlayerTurn(){
-        GameManager.instance.OnEndPlayerTurn ();
-    }
+
+
     #endregion
 
     public void MoveLeft()
@@ -180,7 +173,10 @@ public class PlayerControl : MonoBehaviour {
     {
         hand.ToggleHand();
     }
-
+    public void EnableCards(bool enable)
+    {
+        hand.EnableCards(enable);
+    }
 
     /// <summary>
     /// 역장

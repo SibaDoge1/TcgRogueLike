@@ -18,8 +18,8 @@ public class UIManager : MonoBehaviour
         instance = this;
         canvas = transform;
         mapUI = transform.Find("MapUI").GetComponent<MapUI>();
-        hpUI = transform.Find("HpUI").GetComponent<HpUI>();
-        akashaUI = transform.Find("AkashaUI").GetComponent<AkashaUI>();
+        hpUI = transform.Find("StatusUI").Find("HpUI").GetComponent<HpUI>();
+        akashaUI = transform.Find("StatusUI").Find("AkashaUI").GetComponent<AkashaUI>();
         deckUI = transform.Find("Deck").GetComponent<DeckEditUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
 

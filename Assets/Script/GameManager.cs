@@ -48,8 +48,7 @@ public class GameManager : MonoBehaviour {
 
         EnemyControl.instance.SetRoom (CurrentMap.StartRoom);
 
-        //MinimapTexture.DrawDoors(GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
-        MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
+        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
 
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
@@ -61,41 +60,38 @@ public class GameManager : MonoBehaviour {
     public Map CurrentMap
     {
         get { return currentMap; }
-        set { currentMap = value; }
     }
-	public Room GetCurrentRoom(){
+	public Room CurrentRoom(){
 		return CurrentMap.CurrentRoom;
 	}
-	public void SetCurrentRoom(Room room_){
-        CurrentMap.CurrentRoom = room_;
-	}
-    
-	public void OnPlayerEnterRoom(Room old,Room newRoom)
+	public void SetCurrentRoom(Room room_)
     {
-		if (CurrentMap.CurrentRoom.IsVisited == false)
+        if(currentMap.CurrentRoom != null)
         {
-            CurrentMap.CurrentRoom.IsVisited = true;
-            EnemyControl.instance.SetRoom (CurrentMap.CurrentRoom);
-			MinimapTexture.DrawRoom (CurrentMap.CurrentRoom);
-		}
-        currentMap.SetRoomOff(old);
-        currentMap.SetRoomOn(newRoom);
+            currentMap.SetRoomOff(currentMap.CurrentRoom);
+        }
+        CurrentMap.CurrentRoom = room_;
+        currentMap.SetRoomOn(CurrentMap.CurrentRoom);
     }
+
     public void OnPlayerEnterRoom(Room newRoom)
     {
-        if (CurrentMap.CurrentRoom.IsVisited == false)
+
+        if (newRoom.IsVisited == false)
         {
-            CurrentMap.CurrentRoom.IsVisited = true;
-            EnemyControl.instance.SetRoom(CurrentMap.CurrentRoom);
-            MinimapTexture.DrawRoom(CurrentMap.CurrentRoom);
-        }
-        currentMap.SetRoomOn(newRoom);
+            newRoom.IsVisited = true;
+            EnemyControl.instance.SetRoom (newRoom);
+			MinimapTexture.DrawRoom (newRoom);
+		}
+       SetCurrentRoom(newRoom);
     }
+
     public void OnPlayerClearRoom(){
-        //PlayerData.AkashaGage = 0;
         PlayerControl.instance.ReLoadDeck();
-        //MinimapTexture.DrawDoors (GetCurrentRoom().transform.position, GetCurrentRoom().doorList);
-        GetRandomCardToAttain(CurrentMap.Floor);
+        if(CurrentRoom().roomType == RoomType.BATTLE)
+        {
+            GetRandomCardToAttain(CurrentMap.Floor);
+        }
     }
 
 
@@ -116,9 +112,10 @@ public class GameManager : MonoBehaviour {
     Coroutine act;
     IEnumerator EndTurnDelay(float time)
     {
+        //PlayerControl.instance.EnableCards(false);
         CurrentTurn = Turn.ENEMY;
         yield return new WaitForSeconds(time);
-        MinimapTexture.DrawPlayerPos(GetCurrentRoom().transform.position, PlayerControl.Player.pos);
+        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
         EnemyControl.instance.EnemyTurn();
     }
 
@@ -129,9 +126,10 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void OnEndEnemyTurn()
     {
+        //PlayerControl.instance.EnableCards(true);
         currentTurn = Turn.PLAYER;
         PlayerControl.instance.CountDebuff();
-        MinimapTexture.DrawEnemies(GetCurrentRoom().transform.position, GetCurrentRoom().GetEnemyPoses());
+        MinimapTexture.DrawEnemies(CurrentRoom().transform.position, CurrentRoom().GetEnemyPoses());
     }
 
     public void GameOver()
@@ -200,9 +198,9 @@ public class GameManager : MonoBehaviour {
     }
     private void GetRandomCardToAttain(int floor)
     {
-        if(floor ==1)
+        if (floor == 1)
         {
-            if (MyRandom.RandomEvent(85,15) == 1) // R5풀,R4풀 17:3 확률
+            if (MyRandom.RandomEvent(Config.instance.DropRate[0].lowerCard, Config.instance.DropRate[0].higherCard) == 1) // R5풀,R4풀 17:3 확률
             {
                 PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R5Pool[Random.Range(0, CardDatabase.R5Pool.Length)]));
             }

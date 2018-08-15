@@ -9,7 +9,7 @@ public class CardRender : MonoBehaviour {
     private Image img_Graphic;
     private Image[] ranks;
     private Text thisName;
-
+    static Color gray = new Color(133, 133, 133);
     public Text Name
     { get { return thisName; } }
     public Image Img_Frame
@@ -30,8 +30,20 @@ public class CardRender : MonoBehaviour {
     {
         for(int i=0; i<(5-rank);i++)
         {
-            Debug.Log("CALLED");
             ranks[i].gameObject.SetActive(false);
+        }
+    }
+    public void SetEnable(bool enable)
+    {
+        Debug.Log("isCalled?" + enable);
+        if(enable)
+        {
+            img_Frame.raycastTarget = true;
+            img_Frame.color = Color.white;
+        }else
+        {
+            img_Frame.raycastTarget = false;
+            img_Frame.color = Color.black;
         }
     }
 }

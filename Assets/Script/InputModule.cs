@@ -15,10 +15,6 @@ public class InputModule : MonoBehaviour {
     {
         while(true)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                PlayerControl.instance.ToggleHand();
-            }
         #if UNITY_EDITOR
               if(Input.GetKeyDown(KeyCode.F1))
             {

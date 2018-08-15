@@ -17,9 +17,6 @@ public class Player : Character
 
         if (currentRoom != null)
            currentTile.OnTileObj = null;
-
-        Room old = currentRoom;
-
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
@@ -40,8 +37,19 @@ public class Player : Character
 
         SetRoom(door.TargetRoom,temp);
 
-        GameManager.instance.SetCurrentRoom (door.TargetRoom);
-		GameManager.instance.OnPlayerEnterRoom (old,currentRoom );
+		GameManager.instance.OnPlayerEnterRoom(currentRoom );
+    }
+    //워프하듯 이동
+    public void EnterRoom(Room room)
+    {
+        if (currentRoom != null)
+            currentTile.OnTileObj = null;
+
+        SetRoom(room, new Vector2Int(room.size.x/2,room.size.y/2));
+
+
+         GameManager.instance.OnPlayerEnterRoom(currentRoom);
+        
     }
 	protected override void OnDieCallback()
     {
