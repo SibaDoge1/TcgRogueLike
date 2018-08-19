@@ -9,7 +9,9 @@ public class OffTile_5002 : OffTile
     {
         if (ot is Player)
         {
-            UIManager.instance.ShowTextUI("미니맵 - 우상단 표시", null);
+            string[] vs = new string[1];
+            vs[0] = "미니맵 - 우상단 표시";
+            UIManager.instance.ShowTextUI(vs, null);
         }
     }
 }

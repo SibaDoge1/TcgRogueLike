@@ -8,15 +8,12 @@ public class OffTile_5005 : OffTile {
     {
         if (ot is Player)
         {
-            UIManager.instance.ShowTextUI("카드 획득 - 방 클리어 시 랜덤한 미감정 카드 1장 획득", Method1);
+            string[] vs = new string[3];
+            vs[0] = "카드 획득 - 방 클리어 시 랜덤한 미감정 카드 1장 획득";
+            vs[1] = "미감정 카드 -감정 후 덱 편성 전까지 사용 불가";
+            vs[2] = "덱 확인 - 좌상단 아이콘 클릭으로 덱과 획득 카드 확인";
+            UIManager.instance.ShowTextUI(vs, null);
         }
     }
-    private void Method1()
-    {
-        UIManager.instance.ShowTextUI("미감정 카드 - 감정 후 덱 편성 전까지 사용 불가", Method2);
-    }
-    private void Method2()
-    {
-        UIManager.instance.ShowTextUI("덱 확인 - 좌상단 아이콘 클릭으로 덱과 획득 카드 확인", null);
-    }
+
 }

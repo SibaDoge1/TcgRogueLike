@@ -229,13 +229,13 @@ public class MapGenerator : MonoBehaviour
         for (int i = 0; i < room1.doorList.Count; i++)
         {
             if (room1.doorList[i].TargetRoom == null)
-            {
-                room1Door = room1.doorList[Random.Range(0, room1.doorList.Count)];
+            {              
+                room1Door = room1.doorList[i];
                 break;
             }
             if (i == room1.doorList.Count - 1)
             {
-                return false;
+                return false;    
             }
         }
 
@@ -289,11 +289,23 @@ public class MapGenerator : MonoBehaviour
             room1Door.ConnectedDoor = room2Door;
             room2Door.TargetRoom = room1;
             room2Door.ConnectedDoor = room1Door;
+            ShuffleDoor(room1);
+            ShuffleDoor(room2);
             return true;
         }
-
+        
     }
 
+    private void ShuffleDoor(Room room)
+    {
+        for(int i=0; i<room.doorList.Count;i++)
+        {
+            OffTile_Door var = room.doorList[i];
+            int ranNum = Random.Range(i, room.doorList.Count);
+            room.doorList[i] = room.doorList[ranNum];
+            room.doorList[ranNum] = var;
+        }
+    }
     /// <summary>
     /// 해당위치에 room을 놓았을때 다른 방들이랑 겹칠까?
     /// </summary>

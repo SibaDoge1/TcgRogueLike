@@ -8,15 +8,12 @@ public class Offtile_5001 : OffTile {
     {
         if (ot is Player)
         {
-            UIManager.instance.ShowTextUI("기본조작 - 키보드 & 마우스", Method1);              
+            string[] vs = new string[3];
+            vs[0] = "기본조작 - 키보드 & 마우스";
+            vs[1] = "이동 - WASD";
+            vs[2] = "활성화된 포탈 - 연결된 방으로 이동";
+            UIManager.instance.ShowTextUI(vs, null);              
         }
     }      
-    private void Method1()
-    {
-        UIManager.instance.ShowTextUI("이동 - WASD", Method2);
-    }
-    private void Method2()
-    {
-        UIManager.instance.ShowTextUI("활성화된 포탈 - 연결된 방으로 이동", null);
-    }
+
 }

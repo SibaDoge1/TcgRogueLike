@@ -119,10 +119,13 @@ public class UIManager : MonoBehaviour
         gameOverUI.On();
         gameOverUI.SetText("이겼닭! 오늘 저녁은 치킨이다!");
     }
-    public void ShowTextUI(string s,CallBack cb)
+
+    public void ShowTextUI(string[] s, CallBack cb)
     {
         textUI.StartText(s, cb);
     }
-
-  
+    public void GoNext()
+    {
+        textUI.GoNext();
+    }
 }

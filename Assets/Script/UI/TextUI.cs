@@ -12,46 +12,64 @@ public class TextUI : MonoBehaviour
     Color clearWhite = new Color(1, 1, 1, 0);
     Animator anime;
     GameObject sound;
+    string[] strings;
+    int counter;
+    CallBack cb = null;
+
     private void Awake()
     {
         anime = GetComponent<Animator>();
         text = GetComponent<Text>();
     }
     
-    public void StartText(string s,CallBack cb = null)
+    public void StartText(string[] s,CallBack callback)
     {
-        if(stringRoutine !=null)
+        strings = s;
+        cb = callback;
+        stringRoutine = StartCoroutine(ShowString(s[0]));
+        GameManager.instance.IsInputOk = false;
+    }
+    public void GoNext()
+    {
+        if(strings == null)
+        {
+            return; 
+        }
+
+        counter++;
+        if(counter>=strings.Length)
+        {
+            if(cb!=null)
+            {
+                cb();
+            }
+            ResetString();
+        }else
         {
             StopCoroutine(stringRoutine);
-            if(sound != null)
-            {
-                Destroy(sound);
-            }
+            stringRoutine = StartCoroutine(ShowString(strings[counter]));
         }
-       sound = SoundDelegate.instance.PlayEffectSound(EffectSoundType.Text,Camera.main.transform.position);
-       stringRoutine =  StartCoroutine(ShowString(s,cb));
     }
-    public void ResetString()
+    private void ResetString()
     {
+        StopCoroutine(stringRoutine);
         text.text = "";
+        strings = null;
+        counter = 0;
+        GameManager.instance.IsInputOk = true;
     }
+
     Coroutine stringRoutine;
-    IEnumerator ShowString(string s, CallBack cb = null)
+    IEnumerator ShowString(string s)
     {
-        anime.Play("default", -1, 0f);
+        //anime.Play("default", -1, 0f);
         for (int i=0; i<=s.Length;i++)
         {
             text.text = s.Substring(0, i);
             yield return new WaitForSeconds(1/speed);
         }
-        yield return new WaitForSeconds(1f);
-        //DO ANIMATION
-        anime.Play("ColorLerp",-1,0f);
         Destroy(sound);
-
-        if (cb!=null)
-        {
-            cb();
-        }
     }
+    
+
 }

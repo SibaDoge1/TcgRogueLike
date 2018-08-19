@@ -19,10 +19,9 @@ public class InputModule : MonoBehaviour {
             {
                 GameManager.instance.ReGame();
             }
-
               if(Input.GetKeyDown(KeyCode.Space))
             {
-                PlayerControl.instance.ToggleHand();
+                UIManager.instance.GoNext();
             }
             yield return null;
         }
