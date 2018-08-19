@@ -46,7 +46,6 @@ using UnityEngine;
     {
         PlayerControl.Player.GetDamage(atk);
         PlayAnimation("Attack");
-        EffectDelegate.instance.MadeEffect(CardEffectType.Hit, PlayerControl.Player.currentTile);
         yield return null;
     }
     #endregion

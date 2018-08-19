@@ -63,7 +63,7 @@ public  static class MinimapTexture
                     texture.SetPixel(pos.x+j,pos.y+i, emptyColor);
                 else
                 {
-                    if(t.offTile is Door && !((Door)t.offTile).IsDestroyed)
+                    if(t.offTile is OffTile_Door && !((OffTile_Door)t.offTile).IsDestroyed)
                     {
                         texture.SetPixel(pos.x + j, pos.y + i,doorColor);
                     }

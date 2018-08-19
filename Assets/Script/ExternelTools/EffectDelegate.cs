@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public enum CardEffectType{Slash, Blood, Heal, Hit}
-public enum BulletType{Stone, Arrow}
+public enum CardEffectType{Shield, Blood, Heal, Hit}
 public enum RangeEffectType {CARD,ENEMY}
-public enum UIEffect {AttainR5,AttainR4}
+public enum UIEffect {AttainR0,AttainR1}
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
 	void Awake()
@@ -68,12 +67,6 @@ public class EffectDelegate : MonoBehaviour {
             textEffectPrefab, targetTile.transform.position, Quaternion.identity);
         go.GetComponent<EffectText>()
             .Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
-        return go;
-    }
-
-	public GameObject MadeBullet(BulletType bType, Vector3 startPos, Transform target){
-        GameObject go = (Instantiate(bulletPrefabs[(int)bType], startPos, Quaternion.identity) as GameObject);
-        go.GetComponent<Bullet>().Shoot(target);
         return go;
     }
 

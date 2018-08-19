@@ -41,7 +41,6 @@ public class Bozz : Enemy {
             if (TileUtils.AI_SquareFind(currentTile,1))
             {
                 PlayerControl.Player.GetDamage(atk);
-                EffectDelegate.instance.MadeEffect(CardEffectType.Hit, PlayerControl.Player);
             }
             ClearRangeList();
             yield return null;

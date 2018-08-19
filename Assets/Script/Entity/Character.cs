@@ -11,6 +11,7 @@ public abstract class Character : Entity {
     [SerializeField]
     protected int SettingDef;
 
+
     protected override void Awake()
     {
         base.Awake();

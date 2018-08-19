@@ -15,18 +15,15 @@ public class InputModule : MonoBehaviour {
     {
         while(true)
         {
-        #if UNITY_EDITOR
-              if(Input.GetKeyDown(KeyCode.F1))
+              if(Input.GetKeyDown(KeyCode.F5))
             {
                 GameManager.instance.ReGame();
             }
-        #else
-            if (Input.GetKey(KeyCode.LeftControl) && Input.GetKey(KeyCode.R))
-            {
-                GameManager.instance.ReGame();
-            }
-        #endif
 
+              if(Input.GetKeyDown(KeyCode.Space))
+            {
+                PlayerControl.instance.ToggleHand();
+            }
             yield return null;
         }
 
@@ -34,7 +31,6 @@ public class InputModule : MonoBehaviour {
      }
         IEnumerator TileSelectRoutine(){
 		while (true) {
-
             if (GameManager.instance.CurrentTurn==Turn.PLAYER && GameManager.instance.IsInputOk)        
             {
                 if (Input.GetKeyDown(KeyCode.W))
@@ -53,14 +49,16 @@ public class InputModule : MonoBehaviour {
                 {
                     PlayerControl.instance.MoveLeft();
                 }
-                else if(Input.GetKeyDown(KeyCode.Q))
+                else if(Input.GetKeyDown(KeyCode.E))
                 {
                     PlayerControl.instance.EndTurnButton();
                 }
-            }         
+                else if (Input.GetKeyDown(KeyCode.Q))
+                {
+                    PlayerControl.instance.StationField();
+                }
+            }
             yield return null;
-
-
         }
     }
 }

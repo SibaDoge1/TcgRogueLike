@@ -144,8 +144,8 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
     #region Private
     private void ActiveSelf(){
-		if (GameManager.instance.CurrentTurn == Turn.PLAYER) {
-			data.CardActive ();
+		if (GameManager.instance.CurrentTurn == Turn.PLAYER && IsAvailable()) {
+			data.DoCard ();
 			if (data.IsConsumeTurn ()) {
                 GameManager.instance.OnEndPlayerTurn();
 			}

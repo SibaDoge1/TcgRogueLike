@@ -36,7 +36,6 @@ public class MyCamera : MonoBehaviour {
         {
             StopCoroutine(ShakeCameraRoutine());
         }
-        Debug.Log("SHAKE!");
         cameraShake = StartCoroutine(ShakeCameraRoutine());
     }
     Coroutine cameraShake;

@@ -25,6 +25,8 @@ public  class CardData {
     protected Rating rating = Rating.R0;
     public Rating Rating {get { return rating; } }
 
+    protected CardEffectType cardEffect = CardEffectType.Hit;
+    protected CardSoundType cardSound = CardSoundType.Hit;
     protected int index;
     public int Index
     {
@@ -51,7 +53,6 @@ public  class CardData {
         spritePath = CardDatabase.cardSpritePaths[index];
         cardExplain = CardDatabase.cardInfos[index];
     }
-	protected CardEffectType effectType;
 
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
@@ -67,21 +68,38 @@ public  class CardData {
         return cardObject;
     }
 
-	public virtual void CardActive()
+	protected virtual void CardActive()
+    {
+	}
+    public void DoCard()
+    {
+        ConsumeAkasha();
+        CardActive();
+    }
+
+    protected virtual void MakeEffect(Vector3 target)
+    {
+        EffectDelegate.instance.MadeEffect(cardEffect, target);
+    }
+    protected virtual void MakeSound(Vector3 target)
+    {
+        SoundDelegate.instance.PlayCardSound(cardSound, target);
+    }
+
+    protected virtual void ConsumeAkasha()
     {
         PlayerData.AkashaCount -= (int)rating;
-	}
-
-	public virtual bool IsAvailable()
+    }
+    public virtual bool IsAvailable()
     {
-		return false;
+		return (PlayerData.AkashaCount>=(int)rating)? true:false;
 	}
 
-	public virtual void CardEffectPreview(){
-		
+	public virtual void CardEffectPreview(){		
 	}
 	public virtual void CancelPreview(){
 	}
+    
 
 	public virtual bool IsConsumeTurn(){
 		return true;
@@ -90,6 +108,7 @@ public  class CardData {
 	public virtual CardAbilityType GetCardAbilityType(){
 		return CardAbilityType.Attack;
 	}
+
     /// <summary>
     /// 클래스명으로 카드 가져오기, 나중에 번호로 가져오기도 만들것
     /// </summary>

@@ -11,7 +11,7 @@ public class Player : Character
         Atk = SettingAtk; Def = SettingDef;
     }
     //문을 통해서 이동
-    public void EnterRoom(Door door)
+    public void EnterRoom(OffTile_Door door)
     {
         Vector2Int temp;
 
@@ -37,7 +37,7 @@ public class Player : Character
 
         SetRoom(door.TargetRoom,temp);
 
-		GameManager.instance.OnPlayerEnterRoom(currentRoom );
+		GameManager.instance.OnPlayerEnterRoom(currentRoom);
     }
     //워프하듯 이동
     public void EnterRoom(Room room)
@@ -76,7 +76,9 @@ public class Player : Character
     }
     public override bool GetDamage(int damage, Entity atker = null)
     {
+        SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
         MyCamera.instance.ShakeCamera();
+        EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
         PlayerData.AkashaGage -= 5;
         return base.GetDamage(damage, atker);
     }

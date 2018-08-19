@@ -46,7 +46,6 @@ public class RabbitEye : Enemy {
             if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
             {
             PlayerControl.Player.GetDamage(atk);
-            EffectDelegate.instance.MadeEffect(CardEffectType.Hit, PlayerControl.Player);
 
         }
         ClearRangeList();

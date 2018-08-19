@@ -129,18 +129,7 @@ public class DeckEditUI : MonoBehaviour
     {
         if(deckSelected.Count>=3)
         {
-            int min = int.MaxValue;
-            EditCardObject cardToRemove = null;
-            for(int i=0; i<deckSelected.Count;i++)//제일 가까운 인덱스 번호 카드 지우기
-            {
-                int c = Mathf.Abs(deckSelected[i].Index - ec.Index);
-                if(min>c)
-                {
-                    min = c;
-                    cardToRemove = deckSelected[i];
-                }
-            }
-            DeckCardSelectOff(cardToRemove);
+            return;
         }
         ec.HighLightOn();
         deckSelected.Add(ec);

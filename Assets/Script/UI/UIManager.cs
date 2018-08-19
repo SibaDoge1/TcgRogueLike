@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
     }
     public void ShowTextUI(string s,CallBack cb)
     {
-        textUI.SetString(s, cb);
+        textUI.StartText(s, cb);
     }
 
   

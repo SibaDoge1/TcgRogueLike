@@ -8,7 +8,6 @@ public class Hand : MonoBehaviour {
     {
 		originLocalPosition = transform.localPosition;
         drawStartPosition = transform.Find("CardDrawPosition");
-        cardFoldPosition = transform.Find("CardFoldPosition");
         cardinfo = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
 	}
 
@@ -17,7 +16,6 @@ public class Hand : MonoBehaviour {
 		get{ return hand.Count; }
 	}
 	private Transform drawStartPosition;
-    private Transform cardFoldPosition;
     private CardInfoPanel cardinfo;
     private bool isHided;
 	private List<CardObject> hand = new List<CardObject> ();
@@ -73,15 +71,6 @@ public class Hand : MonoBehaviour {
 		SetCardPosition ();
 	}
 
-	public void CheckAvailable(){
-		for (int i = 0; i < hand.Count; i++) {
-			if (hand [i].IsAvailable ()) {
-				//TODO : Available Effect
-			} else {
-				//TODO : Disable Effect
-			}
-		}
-	}
 
 	private Coroutine handRoutine;
 	private IEnumerator HandRoutine(bool isHided){
@@ -91,7 +80,7 @@ public class Hand : MonoBehaviour {
 		targetPosition.z = 10;
 		if (isHided) {
 			targetScale = Vector3.one * 0.3f;
-			targetPosition = cardFoldPosition.position;
+			targetPosition = new Vector3(0, -300, 0);
 		}
 		while (true) {
 			timer += Time.deltaTime;
@@ -178,7 +167,8 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	private void HideAll(){
+	private void HideAll()
+    {
 		isHided = true;
 		SetCardPosition ();
 		if (handRoutine != null) {

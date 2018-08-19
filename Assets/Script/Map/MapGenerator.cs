@@ -57,14 +57,31 @@ public class MapGenerator : MonoBehaviour
 
         return currentMap;
     }
+    public Map GetTutorialMap()
+    {
+        currentMap.Floor = 0;
+        currentRooms = new List<Room>();
+        BuildTutorialRooms();
+        SetRooms();
+
+        currentMap.Rooms = currentRooms;
+        currentMap.SetStartRoom(currentRooms[0]);
+
+        currentMap.MaxBorder = GetMaxBorders();
+        currentMap.MinBorder = GetMinBorders();
+
+        for (int i = 0; i < currentRooms.Count; i++)
+        {
+            currentMap.SetRoomOff(currentRooms[i]);
+        }
+        return currentMap;
+    }
     public Map GetTestMap(int floor, RoomType rt, string roomName)
     {
-
-        currentMap = GameObject.Find("Map").GetComponent<Map>();
         currentMap.Floor = floor;
 
         currentRooms = new List<Room>();
-        BuildTestRoom();
+        BuildTestRoom(rt,roomName);
         SetRooms();
 
         for (int i = 0; i < currentRooms.Count; i++)
@@ -90,6 +107,7 @@ public class MapGenerator : MonoBehaviour
     bool testMode;
     public int space = 3;
 
+    #region Interface
     private Vector2Int GetMaxBorders()
     {
         int maxX = 0; int maxY = 0;
@@ -125,15 +143,7 @@ public class MapGenerator : MonoBehaviour
         }
         return new Vector2Int(minX, minY);
     }
-
-    private void GetRoomData(int floor)
-    {
-        TextAsset[] res = Resources.LoadAll("RoomData/Floor" + floor) as TextAsset[];
-        for (int i = 0; i < res.Length; i++)
-        {
-            Debug.Log(res[i].text);
-        }
-    }
+    #endregion
 
     private void BuildRooms()
     {
@@ -161,9 +171,8 @@ public class MapGenerator : MonoBehaviour
 
         Room bossRoom = BuildRoom.Build(RoomType.BOSS, "boss");
         roomQueue.Enqueue(bossRoom);
-
     }
-    private void BuildTestRoom()
+    private void BuildTestRoom(RoomType rt, string s)
     {
         BuildRoom.Init(currentMap);
         roomQueue = new Queue<Room>();
@@ -171,15 +180,29 @@ public class MapGenerator : MonoBehaviour
         Room startRoom = BuildRoom.Build(RoomType.START, "start");
         roomQueue.Enqueue(startRoom);
 
-        Room testRoom = BuildRoom.Build(Config.instance.TestRoomType, Config.instance.TestRoomName);
+        Room testRoom = BuildRoom.Build(rt, s);
         roomQueue.Enqueue(testRoom);
     }
-
+    private void BuildTutorialRooms()
+    {
+        BuildRoom.Init(currentMap);
+        roomQueue = new Queue<Room>();
+        for(int i=1; i<=4;i++)
+        {
+            Room tutorialRooms = BuildRoom.Build(RoomType.TEST, "tuto" + i);
+            roomQueue.Enqueue(tutorialRooms);
+            if(i==2)
+            {
+                tutorialRooms.roomType = RoomType.BATTLE;
+            }
+        }
+        
+    }
     private void SetRooms()
     {
         Room cur = roomQueue.Dequeue();
         currentRooms.Add(cur);
-        while (roomQueue.Count > 0)
+        while (roomQueue.Count > 1)
         {
             cur = roomQueue.Dequeue();
             while (!ConnectRoom(currentRooms[Random.Range(0, currentRooms.Count)], cur))
@@ -187,13 +210,22 @@ public class MapGenerator : MonoBehaviour
             }
             currentRooms.Add(cur);
         }
+
+        cur = roomQueue.Dequeue();//ADD BOSS ROOM
+        int target = currentRooms.Count - 1;
+        while(!ConnectRoom(currentRooms[target], cur))
+        {
+            target--;
+        }
+        currentRooms.Add(cur);
+
     }
 
 
 
     private bool ConnectRoom(Room room1, Room room2)
     {
-        Door room1Door = null;
+        OffTile_Door room1Door = null;
         for (int i = 0; i < room1.doorList.Count; i++)
         {
             if (room1.doorList[i].TargetRoom == null)
@@ -208,7 +240,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         Direction opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
-        Door room2Door = null;
+        OffTile_Door room2Door = null;
 
         for (int i = 0; i < room2.doorList.Count; i++)
         {

@@ -23,7 +23,7 @@ public static class BuildRoom
         room = InstantiateDelegate.Instantiate(Resources.Load("Room") as GameObject, currentMap.transform).GetComponent<Room>();
         room.roomType = type;
 
-        roomData = CsvParser.ReadRoom(1, type, name);
+        roomData = CsvParser.ReadRoom(currentMap.Floor, type, name);
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
         room.size = size;
@@ -60,6 +60,7 @@ public static class BuildRoom
         roomData = null;
         return room;
     }
+
     /// <summary>
     /// 현재 층의 룸정보파일들의 파일 이름들만 받아서 저장
     /// </summary>
@@ -116,7 +117,7 @@ public static class BuildRoom
                         ot.objectNum = offtile;
                         if (offtile < 5)//문
                         {
-                            room.doorList.Add(ot as Door);
+                            room.doorList.Add(ot as OffTile_Door);
                         }
                     }
 

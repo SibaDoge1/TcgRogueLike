@@ -36,7 +36,6 @@ public static class CsvParser
             for (int loop2 = 0; loop2 < row; loop2++)
             {
                 roomData[loop2, loop] = split[loop2];
-
             }
         }        
         return roomData;
@@ -59,14 +58,13 @@ public static class CsvParser
             row = Int32.Parse(line[0].Split(',')[0]); collum = Int32.Parse(line[0].Split(',')[1]);
             string[,] roomData = new string[row, collum];
 
-            for (int loop = 0; loop < row; loop++)
+            for (int loop = 0; loop < collum; loop++)
             {
                 string[] split = line[loop + 1].Split(',');
 
-
-                for (int loop2 = 0; loop2 < collum; loop2++)
+                for (int loop2 = 0; loop2 < row; loop2++)
                 {
-                    roomData[loop, loop2] = split[loop2];
+                    roomData[loop2, loop] = split[loop2];
                 }
             }
             dataList.Add(roomData);

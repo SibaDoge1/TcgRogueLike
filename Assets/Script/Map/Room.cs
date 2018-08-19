@@ -10,7 +10,7 @@ using Arch;
 public class Room : MonoBehaviour
 {
     public Vector2Int size;
-    public List<Door> doorList;
+    public List<OffTile_Door> doorList;
 	Tile[,] tiles;
     public RoomType roomType;
 	public List<Enemy> enemyList = new List<Enemy>();
@@ -104,13 +104,5 @@ public class Room : MonoBehaviour
             v.Add(e.pos);
         }
         return v;
-    }
-    public void SetRoomOn()
-    {
-        gameObject.SetActive(true);
-    }
-    public void SetRoomOff()
-    {
-
     }
 }

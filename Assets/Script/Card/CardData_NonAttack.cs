@@ -10,9 +10,6 @@ public class CardData_NonAttack : CardData {
     {
         return CardAbilityType.Util;
     }
-    public override void CardActive (){
-
-	}
 }
 
 public class CardData_Reload : CardData_NonAttack{
@@ -27,8 +24,7 @@ public class CardData_Reload : CardData_NonAttack{
         spritePath = CardDatabase.reloadSpritePath;
         cardExplain = CardDatabase.reloadInfoPath;
     }
-
-     public override void CardActive(){
+    protected override void CardActive(){
         player.CurrentHp -= 1; 
 		PlayerControl.instance.ReLoadDeck ();
 	}

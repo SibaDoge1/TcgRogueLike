@@ -95,7 +95,6 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator WebAttack()
     {
-        EffectDelegate.instance.MadeEffect(CardEffectType.Hit, aimedTile);
         if(PlayerControl.Player.currentTile == aimedTile)
         {
             PlayerControl.instance.SetDebuff(new Debuff_Move());
