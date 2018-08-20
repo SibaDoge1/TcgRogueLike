@@ -11,19 +11,21 @@ public class TextUI : MonoBehaviour
     Text text;
     Color clearWhite = new Color(1, 1, 1, 0);
     Animator anime;
-    GameObject sound;
+    AudioSource sound;
     string[] strings;
     int counter;
     CallBack cb = null;
 
     private void Awake()
     {
+        sound = GetComponent<AudioSource>();
         anime = GetComponent<Animator>();
         text = GetComponent<Text>();
     }
     
     public void StartText(string[] s,CallBack callback)
     {
+        Debug.Log("START");
         strings = s;
         cb = callback;
         stringRoutine = StartCoroutine(ShowString(s[0]));
@@ -35,9 +37,12 @@ public class TextUI : MonoBehaviour
         {
             return; 
         }
-
+        text.enabled = false;
         counter++;
-        if(counter>=strings.Length)
+        sound.Stop();
+        StopCoroutine(stringRoutine);
+
+        if (counter>=strings.Length)
         {
             if(cb!=null)
             {
@@ -46,14 +51,11 @@ public class TextUI : MonoBehaviour
             ResetString();
         }else
         {
-            StopCoroutine(stringRoutine);
             stringRoutine = StartCoroutine(ShowString(strings[counter]));
         }
     }
     private void ResetString()
     {
-        StopCoroutine(stringRoutine);
-        text.text = "";
         strings = null;
         counter = 0;
         GameManager.instance.IsInputOk = true;
@@ -62,13 +64,25 @@ public class TextUI : MonoBehaviour
     Coroutine stringRoutine;
     IEnumerator ShowString(string s)
     {
-        //anime.Play("default", -1, 0f);
-        for (int i=0; i<=s.Length;i++)
+        text.text = "";
+        text.enabled = true;
+        sound.Play();
+
+        float oneWordTime = 0;
+        int counter = 0;
+        while(counter < s.Length)
         {
-            text.text = s.Substring(0, i);
-            yield return new WaitForSeconds(1/speed);
+            yield return null;
+            oneWordTime += Time.deltaTime;
+
+            if(oneWordTime>=1/speed)
+            {
+                counter++;
+                oneWordTime = 0;
+                text.text = s.Substring(0, counter);
+            }
         }
-        Destroy(sound);
+        sound.Stop();
     }
     
 

@@ -47,7 +47,6 @@ public abstract class Entity : MonoBehaviour
         pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-        currentTile.SomethingUpOnThis(this);
         transform.localPosition = currentTile.transform.localPosition;
         return true;
 	}

@@ -25,6 +25,7 @@ public class Hand : MonoBehaviour {
         cardinfo.gameObject.SetActive(true);
         cardinfo.SetText(c.CardName,c.CardExplain);
         cardinfo.SetRender(c.SpritePath);
+        cardinfo.SetAttribute(c.CardAtr);
     }
     public void CardInfoOff()
     {

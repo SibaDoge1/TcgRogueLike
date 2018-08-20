@@ -11,6 +11,7 @@ public class SpiderBoss : Enemy {
     }
     protected override void Start()
     {
+        base.Start();
         spider = ResourceLoader.instance.LoadEntity(4005);
     }
 

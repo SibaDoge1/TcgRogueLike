@@ -17,16 +17,18 @@ public class InputModule : MonoBehaviour {
         {
               if(Input.GetKeyDown(KeyCode.F5))
             {
-                GameManager.instance.ReGame();
+                GameManager.instance.LoadLevel(GameManager.instance.CurrentMap.Floor);
+            }
+              if(Input.GetMouseButtonDown(1))
+            {
+                UIManager.instance.TextUIGoNext();
             }
               if(Input.GetKeyDown(KeyCode.Space))
             {
-                UIManager.instance.GoNext();
+                PlayerControl.instance.ToggleHand();
             }
             yield return null;
         }
-
-
      }
         IEnumerator TileSelectRoutine(){
 		while (true) {

@@ -18,36 +18,11 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
 	public void SetCardRender(CardData data_){
 		data = data_;
-        render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data_.SpritePath);
         render.Name.text = data.CardName;
-		CardAbilityType a = data.GetCardAbilityType ();
         render.SetRank((int)data.Rating);
-
-        switch (a) {
-		case CardAbilityType.Attack:
-                {//속성 불러오기
-                    Attribute at = data.CardAtr;
-                    switch (at)
-                    {
-                        case Attribute.APAS:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_a");
-                            break;
-                        case Attribute.PRITHVI:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_p");
-                            break;
-                        case Attribute.TEJAS:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_t");
-                            break;
-                        case Attribute.VAYU:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_v");
-                            break;
-                    }
-                }
-                break;
-            case CardAbilityType.Util:
-                break;
-		}
-	}
+        render.SetAttribute(data.CardAtr);
+        render.SetGraphic(Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath));
+    }
 
 	public void SetParent(Hand hand_)
     {
@@ -66,7 +41,13 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	private Vector3 originPos;
 	private const int DragThreshold = 40;
 	private const int ActiveThreshold = 200;
-    public void OnPointerDown(PointerEventData ped){
+    public void OnPointerDown(PointerEventData ped)
+    {
+        if(!GameManager.instance.IsInputOk)
+        {
+            return;
+        }
+
 		hand.ChooseOne ();
 		data.CardEffectPreview ();
 
@@ -79,7 +60,12 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
 	public void OnPointerUp(PointerEventData ped){
-		hand.ChooseRollback ();
+        if (!GameManager.instance.IsInputOk)
+        {
+            return;
+        }
+
+        hand.ChooseRollback ();
 		data.CancelPreview ();
         hand.CardInfoOff();
 
@@ -95,7 +81,12 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
     public void OnDrag(PointerEventData ped){
-		Vector2 touchPos = ped.position;
+        if (!GameManager.instance.IsInputOk)
+        {
+            return;
+        }
+
+        Vector2 touchPos = ped.position;
 		base.transform.position = touchPos;
 
 

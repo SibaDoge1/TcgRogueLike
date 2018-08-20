@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
         akashaUI = transform.Find("StatusUI").Find("AkashaUI").GetComponent<AkashaUI>();
         deckUI = transform.Find("Deck").GetComponent<DeckEditUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
+        gameWinUI = transform.Find("GameWinUI").GetComponent<GameWinUI>();
 
         deck = transform.Find("Deck").GetComponent<Deck>();
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
@@ -37,6 +38,7 @@ public class UIManager : MonoBehaviour
     Deck deck;
     Hand hand;
     ErrorPopUpUI error;
+    GameWinUI gameWinUI;
 
     #region Status
     public void HpUpdate(int currentHp_, int fullHp_)
@@ -56,6 +58,9 @@ public class UIManager : MonoBehaviour
     #region DeckEdit
     public void DeckEditUIOn(bool b = false)
     {
+        if (!GameManager.instance.IsInputOk)
+            return;
+
         deckUI.On(b);
         GameManager.instance.IsInputOk = false;
     }
@@ -63,6 +68,10 @@ public class UIManager : MonoBehaviour
     {
         deckUI.Off();
         GameManager.instance.IsInputOk = true;
+    }
+    public void ExchangeButton()
+    {
+        deckUI.ExchangeCards();
     }
     #endregion
 
@@ -109,22 +118,20 @@ public class UIManager : MonoBehaviour
     {
         return hand;
     }
-    public void GameOver()
+    public void GameOverUIOn()
     {
         gameOverUI.On();
-        gameOverUI.SetText("You Died");
     }
-    public void GameWin()
+    public void GameWinUIOn()
     {
-        gameOverUI.On();
-        gameOverUI.SetText("이겼닭! 오늘 저녁은 치킨이다!");
+        gameWinUI.On();
     }
 
     public void ShowTextUI(string[] s, CallBack cb)
     {
         textUI.StartText(s, cb);
     }
-    public void GoNext()
+    public void TextUIGoNext()
     {
         textUI.GoNext();
     }

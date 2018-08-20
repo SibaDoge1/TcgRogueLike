@@ -21,15 +21,12 @@ public enum RoomType
 
 public class MapGenerator : MonoBehaviour
 {
-    public static MapGenerator instance;
-    private void Awake()
-    {
-        instance = this;
-        currentMap = GetComponent<Map>();
-    }
+
     #region Interface
     public Map GetMap(int floor, int baNum, int evNum, int shNum)
     {
+        currentMap = GetComponent<Map>();
+
         currentMap.Floor = floor;
         currentMap.BattleRoomNum = baNum;
         currentMap.EventRoomNum = evNum;
@@ -59,6 +56,8 @@ public class MapGenerator : MonoBehaviour
     }
     public Map GetTutorialMap()
     {
+        currentMap = GetComponent<Map>();
+
         currentMap.Floor = 0;
         currentRooms = new List<Room>();
         BuildTutorialRooms();
@@ -78,9 +77,10 @@ public class MapGenerator : MonoBehaviour
     }
     public Map GetTestMap(int floor, RoomType rt, string roomName)
     {
+        currentMap = GetComponent<Map>();
+
         currentMap.Floor = floor;
 
-        currentRooms = new List<Room>();
         BuildTestRoom(rt,roomName);
         SetRooms();
 
@@ -200,6 +200,9 @@ public class MapGenerator : MonoBehaviour
     }
     private void SetRooms()
     {
+
+        currentRooms = new List<Room>();
+
         Room cur = roomQueue.Dequeue();
         currentRooms.Add(cur);
         while (roomQueue.Count > 1)
@@ -215,6 +218,11 @@ public class MapGenerator : MonoBehaviour
         int target = currentRooms.Count - 1;
         while(!ConnectRoom(currentRooms[target], cur))
         {
+            if(target == 0)
+            {
+                GameManager.instance.LoadLevel(currentMap.Floor);
+                return;
+            }
             target--;
         }
         currentRooms.Add(cur);
@@ -223,8 +231,10 @@ public class MapGenerator : MonoBehaviour
 
 
 
+
     private bool ConnectRoom(Room room1, Room room2)
     {
+
         OffTile_Door room1Door = null;
         for (int i = 0; i < room1.doorList.Count; i++)
         {

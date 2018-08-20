@@ -53,10 +53,14 @@ namespace Arch{
                 {
 					return false;
 				} 
+                else if(objectNum == 0 && ot is Character)
+                {
+					return false;
+				}
                 else
                 {
-					return true;
-				}			
+                return true;
+                 }
 		}
     	public void SomethingUpOnThis (Entity ot)
 		{

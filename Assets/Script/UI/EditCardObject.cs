@@ -49,36 +49,13 @@ public class EditCardObject : Button
     public void SetSpriteRender()
     {
         isReavealed = true;
-        render.Img_Graphic.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath);
         render.Name.text = data.CardName;
         render.SetRank((int)data.Rating);
-        CardAbilityType a = data.GetCardAbilityType();
-        switch (a)
-        {
-            case CardAbilityType.Attack:
-                {//속성 불러오기
-                    Attribute at = data.CardAtr;
-                    switch (at)
-                    {
-                        case Attribute.APAS:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_a");
-                            break;
-                        case Attribute.PRITHVI:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_p");
-                            break;
-                        case Attribute.TEJAS:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_t");
-                            break;
-                        case Attribute.VAYU:
-                            render.Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_v");
-                            break;
-                    }
-                }
-                break;
-            case CardAbilityType.Util:
-                break;
-        }
+        render.SetAttribute(data.CardAtr);
+        render.SetGraphic(Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath));
+
     }
+
 
     public void SetDeckUI(DeckEditUI de)
     {

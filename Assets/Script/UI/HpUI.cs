@@ -15,9 +15,9 @@ public class HpUI : MonoBehaviour {
     }
     public void HpUpdate(int currentHp_, int fullHp_)
     {
-        for(int i=0; i< fullHps.Length;i++)
+        for(int i=1; i<fullHps.Length;i++)
         {
-            if(i<fullHp_)
+            if(i<=fullHp_)
             {
                 fullHps[i].gameObject.SetActive(true);
             }else
@@ -25,9 +25,9 @@ public class HpUI : MonoBehaviour {
                 fullHps[i].gameObject.SetActive(false);
             }
         }
-        for(int i=0; i<currentHps.Length;i++)
+        for(int i=1; i<currentHps.Length;i++)
         {
-            if(i<currentHp_)
+            if(i<=currentHp_)
             {
                 currentHps[i].gameObject.SetActive(true);
             }

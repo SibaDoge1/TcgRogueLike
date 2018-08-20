@@ -8,7 +8,13 @@ public struct CardDrops
     public float lowerCard;
     public float higherCard;
 }
-
+[System.Serializable]
+public struct LevelSetting
+{
+    public int battleRoomNum;
+    public int eventRoomNum;
+    public int shopRoomNum;
+}
 public class Config : MonoBehaviour
 {
     public static Config instance;
@@ -30,11 +36,10 @@ public class Config : MonoBehaviour
     public bool UseCustomDeck;
     public string[] CustomDeck;
 
-    [Header("Map Settings")]
+    [Header("StartFloor")]
     public int floorNum = 1;
-    public int battleRoomNum;
-    public int eventRoomNum;
-    public int shopRoomNum;
+    [Header("Level Settings")]
+    public LevelSetting[] LevelSettings;
 
     [Header("TestMode")]
     public bool RoomTestMode;

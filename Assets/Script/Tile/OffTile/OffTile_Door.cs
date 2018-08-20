@@ -7,6 +7,15 @@ using Arch;
 public class OffTile_Door : OffTile
 {
     SpriteRenderer sprite;
+    SpriteRenderer Sprite
+    {
+        get {
+            if (sprite == null)
+                return GetComponent<SpriteRenderer>();
+            else
+                return sprite;              
+            }
+    }
     public Sprite opened;
     public Sprite closed;
     public Sprite broken;
@@ -46,7 +55,7 @@ public class OffTile_Door : OffTile
     }
     public void Open()
     {
-        sprite.sprite = opened;
+        Sprite.sprite = opened;
         isOpen = true;
     }
     /// <summary>
@@ -59,7 +68,8 @@ public class OffTile_Door : OffTile
     public void DestroyDoor()
     {
         isDestroyed = true;
-        sprite.sprite = broken;
+        Sprite.sprite = broken;
+        Sprite.sortingOrder += 999; ///다른 Ontile에 가려지는거 막기
     }
     public override bool IsStandAble(Entity et)
     {

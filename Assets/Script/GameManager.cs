@@ -48,9 +48,17 @@ public class GameManager : MonoBehaviour
         PlayerData.Clear();
         BuildDeck();
 
-        currentMap = GetMap();
+        LoadLevel(Config.instance.floorNum);
+    }
+
+    public void LoadLevel(int level)
+    {
+        DestroyMap();
+
+        currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
+        SetMap(level);
         MinimapTexture.Init(CurrentMap);
-        SetingtPlayer(player);
+        SetingtPlayer(PlayerControl.instance);
 
         EnemyControl.instance.SetRoom(CurrentMap.StartRoom);
 
@@ -59,10 +67,9 @@ public class GameManager : MonoBehaviour
         UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
 
-        SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
-
+        if (currentMap.Floor == 1)
+            SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
     }
-
     private Map currentMap;
     public Map CurrentMap
     {
@@ -148,20 +155,17 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GameOver, Camera.main.transform.position);
-        UIManager.instance.GameOver();
+        UIManager.instance.GameOverUIOn();
     }
     public void GameWin()
     {
-        UIManager.instance.GameWin();
+        UIManager.instance.GameWinUIOn();
     }
     public void ReGame()
     {
-        SceneManager.LoadScene(currentMap.Floor);
+        SceneManager.LoadScene(0);
     }
-    public void LoadScene(int floor)
-    {
-        SceneManager.LoadScene(floor);
-    }
+
 
     private bool isGamePaused;
     public bool IsGamePaused
@@ -251,21 +255,24 @@ public class GameManager : MonoBehaviour
             MyRandom.SetSeed(Config.instance.Seed);
         }
     }
-    private Map GetMap()
+
+    private void SetMap(int level)
     {
+        MapGenerator mapGenerator = currentMap.GetComponent<MapGenerator>();
+
         if (Config.instance.RoomTestMode)
         {
-            return MapGenerator.instance.GetTestMap(Config.instance.floorNum,
+            mapGenerator.GetTestMap(level,
               Config.instance.TestRoomType, Config.instance.TestRoomName);
         }
-        else if (Config.instance.floorNum == 0)
+        else if (level == 0)
         {
-            return MapGenerator.instance.GetTutorialMap();
+            mapGenerator.GetTutorialMap();
         }
         else
         {
-            return MapGenerator.instance.GetMap(Config.instance.floorNum,
-                Config.instance.battleRoomNum, Config.instance.eventRoomNum, Config.instance.shopRoomNum);
+            mapGenerator.GetMap(level,
+                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum, Config.instance.LevelSettings[level].shopRoomNum);
         }
     }
     private void PlayBossBGM(int floor)
@@ -277,6 +284,16 @@ public class GameManager : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void DestroyMap()
+    {
+        PlayerControl.instance.transform.SetParent(null);
+        if(currentMap != null)
+        {
+            //GameObject old = currentMap.gameObject;
+            Destroy(currentMap.gameObject);
         }
     }
     #endregion

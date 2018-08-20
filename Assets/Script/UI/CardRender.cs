@@ -25,7 +25,29 @@ public class CardRender : MonoBehaviour {
         img_Graphic = transform.Find("Graphic").GetComponent<Image>();
         ranks = transform.Find("Rank").GetComponentsInChildren<Image>();
     }
-
+    public void SetGraphic(Sprite sprite)
+    {
+        Img_Graphic.sprite = sprite;
+    }
+    public void SetAttribute(Attribute attribute)
+    {
+            switch (attribute)
+            {
+                case Attribute.APAS:
+                    Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_a");
+                    break;
+                case Attribute.PRITHVI:
+                    Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_p");
+                    break;
+                case Attribute.TEJAS:
+                    Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_t");
+                    break;
+                case Attribute.VAYU:
+                    Img_Frame.sprite = Resources.Load<Sprite>("Card/card_basic_v");
+                    break;
+            }
+    }
+    
     public void SetRank(int rank)
     {
         for(int i=0; i<(5-rank);i++)

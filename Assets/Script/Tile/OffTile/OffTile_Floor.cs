@@ -10,7 +10,7 @@ public class OffTile_Floor : OffTile
     {
         if (ot is Player)
         {
-            GameManager.instance.LoadScene(targetFloor);
+            GameManager.instance.LoadLevel(targetFloor);
         }
    }
 }

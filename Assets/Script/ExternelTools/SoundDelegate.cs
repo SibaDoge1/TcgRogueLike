@@ -18,7 +18,6 @@ public enum EffectSoundType
     RoomClear,
     RoomMove,
     GameOver,
-    Text
 }
 public class SoundDelegate : MonoBehaviour {
     #region variables

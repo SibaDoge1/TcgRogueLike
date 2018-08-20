@@ -82,4 +82,5 @@ public class Player : Character
         PlayerData.AkashaGage -= 5;
         return base.GetDamage(damage, atker);
     }
+
 }

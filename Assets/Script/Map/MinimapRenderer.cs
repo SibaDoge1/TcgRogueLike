@@ -31,7 +31,7 @@ public  static class MinimapTexture
     {
         minBorder = map.MinBorder;
         maxBorder = map.MaxBorder;
-        space = MapGenerator.instance.space;
+        space = map.GetComponent<MapGenerator>().space;
         playerMapPos = new Vector2Int(-1, -1);
         textureSize = maxBorder - minBorder + new Vector2Int(space*2,space*2);
         texture = new Texture2D(textureSize.x,textureSize.y);
