@@ -79,7 +79,7 @@ public class Player : Character
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
         MyCamera.instance.ShakeCamera();
         EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
-        PlayerData.AkashaGage -= 5;
+        //PlayerData.AkashaGage -= 5;
         return base.GetDamage(damage, atker);
     }
 

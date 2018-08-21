@@ -32,7 +32,6 @@ public class MapGenerator : MonoBehaviour
         currentMap.EventRoomNum = evNum;
         currentMap.ShopRoomNum = shNum;
 
-        currentRooms = new List<Room>();
         BuildRooms();
         SetRooms();
 
@@ -57,9 +56,8 @@ public class MapGenerator : MonoBehaviour
     public Map GetTutorialMap()
     {
         currentMap = GetComponent<Map>();
-
         currentMap.Floor = 0;
-        currentRooms = new List<Room>();
+
         BuildTutorialRooms();
         SetRooms();
 
@@ -78,7 +76,6 @@ public class MapGenerator : MonoBehaviour
     public Map GetTestMap(int floor, RoomType rt, string roomName)
     {
         currentMap = GetComponent<Map>();
-
         currentMap.Floor = floor;
 
         BuildTestRoom(rt,roomName);
@@ -103,7 +100,7 @@ public class MapGenerator : MonoBehaviour
     Map currentMap;
     int roomNum;
     List<Room> currentRooms;//현재 놓여진 방들
-    Queue<Room> roomQueue;//놓아야 하는 방들
+    List<Room> roomsToSet;//놓아야 하는 방들
     bool testMode;
     public int space = 3;
 
@@ -148,49 +145,49 @@ public class MapGenerator : MonoBehaviour
     private void BuildRooms()
     {
         BuildRoom.Init(currentMap);
-        roomQueue = new Queue<Room>();
+        roomsToSet = new List<Room>();
 
         Room startRoom = BuildRoom.Build(RoomType.START, "start");
-        roomQueue.Enqueue(startRoom);
+        roomsToSet.Add(startRoom);
 
         for (int i = 0; i < currentMap.BattleRoomNum; i++)
         {
             Room battleRoom = BuildRoom.Build(RoomType.BATTLE);
-            roomQueue.Enqueue(battleRoom);
+            roomsToSet.Add(battleRoom);
         }
         for (int i = 0; i < currentMap.ShopRoomNum; i++)
         {
             Room shopRoom = BuildRoom.Build(RoomType.SHOP);
-            roomQueue.Enqueue(shopRoom);
+            roomsToSet.Add(shopRoom);
         }
         for (int i = 0; i < currentMap.EventRoomNum; i++)
         {
             Room eventRoom = BuildRoom.Build(RoomType.EVENT);
-            roomQueue.Enqueue(eventRoom);
+            roomsToSet.Add(eventRoom);
         }
 
         Room bossRoom = BuildRoom.Build(RoomType.BOSS, "boss");
-        roomQueue.Enqueue(bossRoom);
+        roomsToSet.Add(bossRoom);
     }
     private void BuildTestRoom(RoomType rt, string s)
     {
         BuildRoom.Init(currentMap);
-        roomQueue = new Queue<Room>();
+        roomsToSet = new List<Room>();
 
         Room startRoom = BuildRoom.Build(RoomType.START, "start");
-        roomQueue.Enqueue(startRoom);
+        roomsToSet.Add(startRoom);
 
         Room testRoom = BuildRoom.Build(rt, s);
-        roomQueue.Enqueue(testRoom);
+        roomsToSet.Add(testRoom);
     }
     private void BuildTutorialRooms()
     {
         BuildRoom.Init(currentMap);
-        roomQueue = new Queue<Room>();
-        for(int i=1; i<=4;i++)
+        roomsToSet = new List<Room>();
+        for (int i=1; i<=4;i++)
         {
             Room tutorialRooms = BuildRoom.Build(RoomType.TEST, "tuto" + i);
-            roomQueue.Enqueue(tutorialRooms);
+            roomsToSet.Add(tutorialRooms);
             if(i==2)
             {
                 tutorialRooms.roomType = RoomType.BATTLE;
@@ -200,16 +197,25 @@ public class MapGenerator : MonoBehaviour
     }
     private void SetRooms()
     {
-
         currentRooms = new List<Room>();
-
+        Queue<Room> roomQueue = new Queue<Room>(roomsToSet);
         Room cur = roomQueue.Dequeue();
         currentRooms.Add(cur);
+        int buildingCount = 200;
         while (roomQueue.Count > 1)
         {
             cur = roomQueue.Dequeue();
             while (!ConnectRoom(currentRooms[Random.Range(0, currentRooms.Count)], cur))
             {
+                buildingCount--;
+                if(buildingCount<=0)
+                {
+                    Debug.Log("Rooms are not fit well So restart");
+                    DestroyRooms();
+                    BuildRooms();
+                    SetRooms();
+                    return;
+                }
             }
             currentRooms.Add(cur);
         }
@@ -220,15 +226,24 @@ public class MapGenerator : MonoBehaviour
         {
             if(target == 0)
             {
-                GameManager.instance.LoadLevel(currentMap.Floor);
+                Debug.Log("Rooms are not fit well So restart");
+                DestroyRooms();
+                BuildRooms();
+                SetRooms();
                 return;
             }
             target--;
         }
         currentRooms.Add(cur);
-
     }
 
+    private void DestroyRooms()
+    {
+        foreach(Room r in roomsToSet)
+        {
+            Destroy(r.gameObject);
+        }
+    }
 
 
 

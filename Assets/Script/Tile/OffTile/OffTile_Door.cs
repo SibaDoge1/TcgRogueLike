@@ -58,11 +58,9 @@ public class OffTile_Door : OffTile
         Sprite.sprite = opened;
         isOpen = true;
     }
-    /// <summary>
-    /// 문뚤리면 공사
-    /// </summary>
-    public void Pave()
+    public void Close()
     {
+        sprite.sprite = closed;
         isOpen = false;
     }
     public void DestroyDoor()
@@ -71,6 +69,7 @@ public class OffTile_Door : OffTile
         Sprite.sprite = broken;
         Sprite.sortingOrder += 999; ///다른 Ontile에 가려지는거 막기
     }
+
     public override bool IsStandAble(Entity et)
     {
         return isOpen;

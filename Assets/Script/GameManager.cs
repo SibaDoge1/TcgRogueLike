@@ -51,13 +51,14 @@ public class GameManager : MonoBehaviour
         LoadLevel(Config.instance.floorNum);
     }
 
+
     public void LoadLevel(int level)
     {
         DestroyMap();
-
         currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
+
         SetMap(level);
-        MinimapTexture.Init(CurrentMap);
+        MinimapTexture.Init(currentMap);
         SetingtPlayer(PlayerControl.instance);
 
         EnemyControl.instance.SetRoom(CurrentMap.StartRoom);
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
         if (currentMap.Floor == 1)
             SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
     }
+
     private Map currentMap;
     public Map CurrentMap
     {
@@ -98,6 +100,12 @@ public class GameManager : MonoBehaviour
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
             SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomMove, Camera.main.transform.position);
+
+            if (newRoom.roomType == RoomType.SHOP || newRoom.roomType == RoomType.EVENT || newRoom.roomType == RoomType.START)
+            {
+                newRoom.OpenDoors();
+            }
+
             if (newRoom.roomType == RoomType.BOSS)
             {
                 PlayBossBGM(currentMap.Floor);

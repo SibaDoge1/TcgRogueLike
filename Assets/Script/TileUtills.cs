@@ -124,6 +124,13 @@ public static class TileUtils
         }
 
         circleList.Remove(center);
+        for (int i = circleList.Count - 1; i >= 0; i--)
+        {
+            if (circleList[i] == null)
+            {
+                circleList.RemoveAt(i);
+            }
+        }
 
         return circleList;
     }

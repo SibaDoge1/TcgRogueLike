@@ -59,6 +59,7 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw Each Turn (Check Remain Monsters)
 	/// </summary>
 	public void NaturalDraw(){
+        Debug.Log(hand);
 		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.DrawHand (deck.Draw ());
 		}
@@ -95,7 +96,8 @@ public class PlayerControl : MonoBehaviour {
     }
 
 
-    public void ReLoadDeck(){
+    public void ReLoadDeck()
+    {
         hand.RemoveAll();
 		deck.Load ();
         hand.DrawHand(deck.Draw());
@@ -187,7 +189,6 @@ public class PlayerControl : MonoBehaviour {
         {
             PlayerData.AkashaCount--;
             player.GetHeal(2);
-            EndTurnButton();
         }
     } 
 

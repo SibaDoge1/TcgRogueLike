@@ -181,6 +181,7 @@ public class Card_SquAtt : CardData_Attack
         }
     }
 }
+
 public class Card_SquAttAll : CardData_Attack
 {
     public Card_SquAttAll()
@@ -221,6 +222,7 @@ public class Card_SquAttAll : CardData_Attack
         }
     }
 }
+
 public class Card_Mid3Att : CardData_Attack
 {
     int num = 3;

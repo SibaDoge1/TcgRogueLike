@@ -11,7 +11,7 @@ public class Map : MonoBehaviour
     public void SetStartRoom(Room startRoom_)
     {
         startRoom = startRoom_;
-        StartRoom.OpenDoors();
+        //StartRoom.OpenDoors();
     }
     public void Init(int fl,int ba,int ev,int sh)
     {

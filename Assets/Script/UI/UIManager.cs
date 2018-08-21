@@ -135,4 +135,5 @@ public class UIManager : MonoBehaviour
     {
         textUI.GoNext();
     }
+
 }

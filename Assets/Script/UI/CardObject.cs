@@ -69,7 +69,8 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		data.CancelPreview ();
         hand.CardInfoOff();
 
-        if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.CurrentRoom().IsEnemyAlive()) {
+        if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.CurrentRoom().IsEnemyAlive() && IsAvailable())
+        {
             hand.RemoveCard (this);
             ActiveSelf();
             Destroy(gameObject);
@@ -134,13 +135,13 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     }
 
     #region Private
-    private void ActiveSelf(){
-		if (GameManager.instance.CurrentTurn == Turn.PLAYER && IsAvailable()) {
+    private void ActiveSelf()
+    {
 			data.DoCard ();
-			if (data.IsConsumeTurn ()) {
-                GameManager.instance.OnEndPlayerTurn();
-			}
-		}
+        if (data.IsConsumeTurn())
+        {
+            GameManager.instance.OnEndPlayerTurn();
+        }
 	}
 
 	private Coroutine locateRoutine;
@@ -170,7 +171,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		if (total == 1) {
 			return new Vector3 (0, handYOffset * 120, 0);
 		}
-		float totalInterval = total*0.5f;
+		float totalInterval = total*0.5f + (total * total)/(24);
 		Vector3 result = new Vector3(-totalInterval + (totalInterval * 2 / (total - 1)) * target, handYOffset);
 		//result.x = -totalInterval + (totalInterval * 2 / (total - 1)) * target;
         //result.y = Mathf.Sqrt(100 - result.x * result.x) + handYOffset-10;
