@@ -8,7 +8,7 @@ public class CardData_NonAttack : CardData {
 
     public override CardAbilityType GetCardAbilityType()
     {
-        return CardAbilityType.Util;
+        return CardAbilityType.NonAttack;
     }
 }
 

@@ -49,10 +49,7 @@ public class UIManager : MonoBehaviour
     {
         akashaUI.AkashaUpdate(current, full);
     }
-    public void AkashaCountUpdate(int count)
-    {
-        akashaUI.AkashaCountUpdate(count);
-    }
+
     #endregion
 
     #region DeckEdit

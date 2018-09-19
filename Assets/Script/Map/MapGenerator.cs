@@ -224,7 +224,7 @@ public class MapGenerator : MonoBehaviour
         int target = currentRooms.Count - 1;
         while(!ConnectRoom(currentRooms[target], cur))
         {
-            if(target == 0)
+            if(target == 1)
             {
                 Debug.Log("Rooms are not fit well So restart");
                 DestroyRooms();

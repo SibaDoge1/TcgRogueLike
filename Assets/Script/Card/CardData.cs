@@ -18,7 +18,7 @@ public enum Rating
     R4,
     R5
 }
-public enum CardAbilityType{Attack, Util}
+public enum CardAbilityType{Attack, NonAttack}
 public  class CardData {
     protected Attribute cardAtr;
     public Attribute CardAtr { get { return cardAtr; } }
@@ -88,11 +88,11 @@ public  class CardData {
 
     protected virtual void ConsumeAkasha()
     {
-        PlayerData.AkashaCount -= (int)rating;
+        PlayerData.AkashaGage -= (int)rating;
     }
     public virtual bool IsAvailable()
     {
-		return (PlayerData.AkashaCount>=(int)rating)? true:false;
+		return (PlayerData.AkashaGage>=(int)rating)? true:false;
 	}
 
 	public virtual void CardEffectPreview(){		

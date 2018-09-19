@@ -4,19 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class AkashaUI : MonoBehaviour {
-    Text akashaText, akashaCount;
+    Text akashaText;
     Transform[] currents;
     // Use this for initialization
     void Awake () {
         currents = transform.Find("Akasha").GetComponentsInChildren<Transform>();
         akashaText = transform.Find("text").GetComponent<Text>();
-        akashaCount = transform.Find("akashaCount").GetComponent<Text>();
     }
 	public void AkashaUpdate(int current,int full)
     {
-        for(int i =0; i<currents.Length;i++)
+        for(int i =1; i<currents.Length;i++)
         {
-            if(i<current)
+            if(i<=current)
             {
                 currents[i].gameObject.SetActive(true);
             }else
@@ -26,9 +25,6 @@ public class AkashaUI : MonoBehaviour {
         }
         akashaText.text = current/ (float)full *100 +"%";
     }
-    public void AkashaCountUpdate(int count)
-    {
-        akashaCount.text = "X" + count;
-    }
+
 	
 }

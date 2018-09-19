@@ -12,12 +12,6 @@ public class PlayerControl : MonoBehaviour {
     }
      
 
-	public void InitPlayer(Room room)
-	{
-		MyCamera.instance.PlayerTrace(player);
-        player.EnterRoom(room);
-    }
-
     private static Player player;
 	public static Player Player{
 		get{ return player; }
@@ -29,6 +23,7 @@ public class PlayerControl : MonoBehaviour {
         {
             NaturalDraw();
             GameManager.instance.OnEndPlayerTurn();
+            PlayerData.AkashaGage += 2;
         }
     }
 
@@ -121,6 +116,7 @@ public class PlayerControl : MonoBehaviour {
             if(player.currentRoom.IsEnemyAlive())
             {
                 NaturalDraw();
+                PlayerData.AkashaGage -= 1;
             }
             GameManager.instance.OnEndPlayerTurn();
         }
@@ -137,6 +133,7 @@ public class PlayerControl : MonoBehaviour {
             if (player.currentRoom.IsEnemyAlive())
             {
                 NaturalDraw();
+                PlayerData.AkashaGage -= 1;
             }
             GameManager.instance.OnEndPlayerTurn();
         }
@@ -152,6 +149,7 @@ public class PlayerControl : MonoBehaviour {
             if (player.currentRoom.IsEnemyAlive())
             {
                 NaturalDraw();
+                PlayerData.AkashaGage -= 1;
             }
             GameManager.instance.OnEndPlayerTurn();
         }
@@ -167,6 +165,7 @@ public class PlayerControl : MonoBehaviour {
             if (player.currentRoom.IsEnemyAlive())
             {
                 NaturalDraw();
+                PlayerData.AkashaGage -= 1;
             }
             GameManager.instance.OnEndPlayerTurn();
         }
@@ -180,6 +179,7 @@ public class PlayerControl : MonoBehaviour {
         hand.EnableCards(enable);
     }
 
+    /*
     /// <summary>
     /// 역장
     /// </summary>
@@ -191,7 +191,7 @@ public class PlayerControl : MonoBehaviour {
             player.GetHeal(2);
         }
     } 
-
+    */
 
     #region statusRegion //상태이상 스테이터스 관리
     

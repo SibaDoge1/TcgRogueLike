@@ -61,9 +61,8 @@ public abstract class CardData_Attack : CardData {
         {
             MakeEffect(target.transform.position);
             MakeSound(target.transform.position);
-            int atr = AtrCompare(cardAtr, target.Atr);
-            PlayerData.AkashaGage += atr;
-            target.GetDamage(dam * atr * player.Atk, player);
+            //int atr = AtrCompare(cardAtr, target.Atr);
+            target.GetDamage(dam * player.Atk, player);
         }
     }
 
@@ -73,17 +72,19 @@ public abstract class CardData_Attack : CardData {
 public class Card_CroAtt : CardData_Attack {
 	public Card_CroAtt() 
 	{
-        InitCard(Rating.R0, (Attribute)Random.Range(0, 3), Figure.CROSS, 0, 5, 1);
+        InitCard(Rating.R0, Attribute.APAS, Figure.CROSS, 0, 5, 1);
 	}
     protected override void CardActive()
     {
-        Enemy enemy = null;
-		if (TileUtils.IsEnemyInRange (player.currentTile, range, figure)) {
-            enemy = TileUtils.AutoTarget (player.currentTile, range, figure);
-
-            DamageToTarget(enemy, damage);
-		}
-	}
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], damage);
+            }
+        }
+    }
 
     protected List<Tile> targetTiles;
 	public override void CardEffectPreview (){
@@ -109,16 +110,17 @@ public class Card_XAtt : CardData_Attack
 {
     public Card_XAtt()
     {
-        InitCard(Rating.R0, (Attribute)Random.Range(0,3),Figure.X,1,5,1);
+        InitCard(Rating.R0, Attribute.PRITHVI , Figure.X,1,5,1);
     }
     protected override void CardActive()
     {
-        Enemy enemy = null;
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
-            enemy = TileUtils.AutoTarget(player.currentTile, range, figure);
-
-            DamageToTarget(enemy, damage);
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], damage);
+            }
         }
     }
 
@@ -149,14 +151,17 @@ public class Card_SquAtt : CardData_Attack
 {
     public Card_SquAtt() 
     {
-        InitCard(Rating.R0, (Attribute)Random.Range(0, 3),Figure.SQUARE,2,5,1);
+        InitCard(Rating.R0, Attribute.TEJAS, Figure.SQUARE,2,5,1);
     }
     protected override void CardActive()
     {
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
-            Enemy enemy = TileUtils.AutoTarget(player.currentTile, range, figure);
-            DamageToTarget(enemy,damage);
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], damage);
+            }
         }
     }
 
@@ -186,18 +191,17 @@ public class Card_SquAttAll : CardData_Attack
 {
     public Card_SquAttAll()
     {
-        InitCard(Rating.R1, Attribute.TEJAS, Figure.SQUARE, 3, 5, 1);
+        InitCard(Rating.R1, Attribute.VAYU, Figure.SQUARE, 3, 5, 1);
     }
     protected override void CardActive()
     {
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
-
-            List<Enemy> targets = TileUtils.GetEnemies(player.currentTile, range, figure);
-             foreach (Enemy e in targets)
-             {
-                 DamageToTarget(e,damage);
-             }           
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], damage);
+            }
         }
     }
 
@@ -233,15 +237,14 @@ public class Card_Mid3Att : CardData_Attack
     protected override void CardActive()
     {
         List<Tile> tiles = TileUtils.EmptySquareRange(player.currentTile, 2);
-        if(TileUtils.IsEnemyInRange(tiles))
+        for(int i=0; i<tiles.Count;i++)
         {
-           List<Enemy> targets = TileUtils.GetEnemies(tiles, num);
-            for(int i=0; i<targets.Count;i++)
+            if(tiles[i].OnTileObj != null && tiles[i].OnTileObj is Enemy)
             {
-                DamageToTarget(targets[i], damage);
+                DamageToTarget(tiles[i].OnTileObj as Enemy,damage);
             }
         }
-        
+
     }
 
     private List<Tile> targetTiles;
@@ -275,10 +278,10 @@ public class Card_PierceAtt : CardData_Attack
     protected override void CardActive()
     {
 
-        if (TileUtils.IsEnemyInRange(player.currentTile,range,figure))
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
-            for(int i=0;i<enemies.Count;i++)
+            for (int i = 0; i < enemies.Count; i++)
             {
                 DamageToTarget(enemies[i], damage);
             }
@@ -316,7 +319,6 @@ public class Card_StrSquAllAtt : CardData_Attack
     }
     protected override void CardActive()
     {
-        base.CardActive();
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);

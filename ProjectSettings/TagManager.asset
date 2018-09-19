@@ -41,30 +41,30 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: WorldUI
-    uniqueID: 3665753965
-    locked: 0
-  - name: Effect
-    uniqueID: 200816457
-    locked: 0
-  - name: Card
-    uniqueID: 15772777
-    locked: 0
   - name: UI
     uniqueID: 115360141
     locked: 0
   - name: Tile
     uniqueID: 2798838609
     locked: 0
-  - name: OffTile
-    uniqueID: 1116843935
+  - name: Range
+    uniqueID: 2684136117
     locked: 0
   - name: Entity(Wall)
     uniqueID: 3048300917
+    locked: 0
+  - name: OffTile
+    uniqueID: 1116843935
     locked: 0
   - name: Entity(Structure)
     uniqueID: 3174531655
     locked: 0
   - name: Entity(Character)
     uniqueID: 1113074499
+    locked: 0
+  - name: WorldUI
+    uniqueID: 3665753965
+    locked: 0
+  - name: Effect
+    uniqueID: 3072091491
     locked: 0

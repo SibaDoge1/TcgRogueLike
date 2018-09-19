@@ -6,9 +6,8 @@ public class EnemyUI : MonoBehaviour {
 
     Image fullHpUI;
     Image currentHpUI;
-    Image attImage;
+    //Image attImage;
     Image actionImage;
-    // Use this for initialization
     Coroutine hpRoutine;
 
     Color originColor;
@@ -19,9 +18,9 @@ public class EnemyUI : MonoBehaviour {
 
         originColor = currentHpUI.color;
 
-        attImage = transform.Find("Atr").GetComponent<Image>();
+        //attImage = transform.Find("Atr").GetComponent<Image>();
         actionImage = transform.Find("action").GetComponent<Image>();
-        attImage.color = Color.clear;
+        //attImage.color = Color.clear;
         fullHpUI.color = Color.clear;
         currentHpUI.color = Color.clear;
 
@@ -47,8 +46,7 @@ public class EnemyUI : MonoBehaviour {
     }
 
 
-    Sprite attSprite;
-    bool isDiscovered;
+   /* Sprite attSprite;
     public void SetAtt(Attribute at)
     {
         switch(at)
@@ -71,7 +69,8 @@ public class EnemyUI : MonoBehaviour {
         attImage.sprite = attSprite;
         attImage.enabled = true;
         //attImage.sprite = Resources.Load<Sprite>("Attribute/dontknow");
-    }
+    }*/
+
     public void ActionImageOn()
     {
         actionImage.enabled = true;

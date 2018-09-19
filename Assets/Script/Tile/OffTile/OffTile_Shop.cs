@@ -10,7 +10,6 @@ public class OffTile_Shop : OffTile
         {
             UIManager.instance.DeckEditUIOn(true);
             ot.currentRoom.OpenDoors();
-            PlayerData.AkashaCount += 1;
             DestroyThis();
         }
     }

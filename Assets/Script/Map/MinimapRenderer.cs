@@ -8,9 +8,6 @@ using UnityEngine.UI;
 /// </summary>
 public  static class MinimapTexture 
 {
-
-
-
     private static readonly Color emptyColor = Color.clear;
     private static readonly Color wallColor = Color.white;
 	private static readonly Color tileColor = Color.blue;
@@ -36,6 +33,7 @@ public  static class MinimapTexture
         textureSize = maxBorder - minBorder + new Vector2Int(space*2,space*2);
         texture = new Texture2D(textureSize.x,textureSize.y);
         texture.filterMode = FilterMode.Point;
+        enemyPoses = new List<Vector2Int>();
 
         Color resetColor = Color.clear;
         Color[] resetColorArray = texture.GetPixels();

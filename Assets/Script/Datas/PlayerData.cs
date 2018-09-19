@@ -28,8 +28,7 @@ public static class PlayerData
         {
             if(value>=10)
             {
-                akashaGage = value - 10;
-                AkashaCount++;            
+                akashaGage = 10;
             }else if(value<0)
             {
                 akashaGage = 0;
@@ -41,20 +40,11 @@ public static class PlayerData
             UIManager.instance.AkashaUpdate(AkashaGage,10);
         }
     }
-    static int akashaCount;
-    public static int AkashaCount
-    {
-        get { return akashaCount; }
-        set
-        {           
-            akashaCount = value;
-            UIManager.instance.AkashaCountUpdate(AkashaCount);
-        }
-    }
+
     public static void Clear()
     {
         deck.Clear();
+        attainCards.Clear();
         akashaGage = 0;
-        akashaCount = 0;
     }
 }

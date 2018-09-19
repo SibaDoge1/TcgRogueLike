@@ -24,13 +24,13 @@ public class GameOverUI : MonoBehaviour {
         rect.anchoredPosition = offPos;
     }
     private void GameOverCallback()
-    {
+    {       
         GameManager.instance.ReGame();
     }
     IEnumerator Waiter()
     {
         yield return new WaitForSeconds(1f);
         rect.anchoredPosition = Vector3.zero;
-        animator.Play("GameOver");
+        animator.Play("GameOver",-1,0f);
     }
 }

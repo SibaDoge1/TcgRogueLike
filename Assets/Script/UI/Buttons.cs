@@ -11,7 +11,6 @@ public class Buttons : MonoBehaviour
     }
     public void StationFieldButton()
     {
-        PlayerControl.instance.StationField();
         PlayerControl.instance.EndTurnButton();
     }
 }

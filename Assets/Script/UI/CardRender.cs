@@ -16,6 +16,7 @@ public class CardRender : MonoBehaviour {
     { get { return img_Frame; } }
     public Image Img_Graphic
     { get { return img_Graphic; }}
+    public Attribute attribute;
 
     // Use this for initialization
     void Awake ()
@@ -29,8 +30,9 @@ public class CardRender : MonoBehaviour {
     {
         Img_Graphic.sprite = sprite;
     }
-    public void SetAttribute(Attribute attribute)
+    public void SetAttribute(Attribute _attribute)
     {
+        attribute = _attribute;
             switch (attribute)
             {
                 case Attribute.APAS:
@@ -57,7 +59,6 @@ public class CardRender : MonoBehaviour {
     }
     public void SetEnable(bool enable)
     {
-        Debug.Log("isCalled?" + enable);
         if(enable)
         {
             img_Frame.raycastTarget = true;

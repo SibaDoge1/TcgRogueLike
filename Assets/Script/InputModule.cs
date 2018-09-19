@@ -15,11 +15,16 @@ public class InputModule : MonoBehaviour {
     {
         while(true)
         {
-              if(Input.GetKeyDown(KeyCode.F5))
+              if(Input.GetKeyDown(KeyCode.F1))
             {
-                GameManager.instance.LoadLevel(GameManager.instance.CurrentMap.Floor);
+                GameManager.instance.LoadLevel(1);
             }
-              if(Input.GetMouseButtonDown(1))
+
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                GameManager.instance.ReGame();
+            }
+            if (Input.GetMouseButtonDown(1))
             {
                 UIManager.instance.TextUIGoNext();
             }
@@ -54,10 +59,11 @@ public class InputModule : MonoBehaviour {
                 {
                     PlayerControl.instance.EndTurnButton();
                 }
+                /*
                 else if (Input.GetKeyDown(KeyCode.Q))
                 {
                     PlayerControl.instance.StationField();
-                }
+                }*/
             }
             yield return null;
         }

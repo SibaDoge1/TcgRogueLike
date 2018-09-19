@@ -10,7 +10,7 @@ public abstract class Enemy : Character {
     protected EnemyUI enemyUI;
 
     public bool dontAffectByView;
-    public Attribute Atr;
+    //public Attribute Atr;
 
     protected override void Awake()
     {
@@ -32,7 +32,7 @@ public abstract class Enemy : Character {
     }
     protected virtual void Start()
     {
-        enemyUI.SetAtt(Atr);
+        //enemyUI.SetAtt(Atr);
         SetActionLists();
     }
 

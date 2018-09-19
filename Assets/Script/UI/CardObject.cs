@@ -8,15 +8,18 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     private Hand hand;
     private CardRender render;
     private CardData data;
-
     protected void Awake()
     {
         render = transform.Find("render").GetComponent<CardRender>();
     }
 
+    private void Update()
+    {
+        EnableInteraction(data.IsAvailable());
+    }
 
 
-	public void SetCardRender(CardData data_){
+    public void SetCardRender(CardData data_){
 		data = data_;
         render.Name.text = data.CardName;
         render.SetRank((int)data.Rating);
@@ -131,7 +134,6 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
         {
             render.SetEnable(false);
         }
-
     }
 
     #region Private

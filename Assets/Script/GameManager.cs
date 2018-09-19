@@ -8,6 +8,7 @@ public enum Turn
     PLAYER,
     ENEMY
 }
+
 public class GameManager : MonoBehaviour
 {
 
@@ -44,20 +45,21 @@ public class GameManager : MonoBehaviour
     {
         SetSeed();
 
-        PlayerControl player = MakePlayer();
+        MakePlayer();
         PlayerData.Clear();
         BuildDeck();
 
         LoadLevel(Config.instance.floorNum);
     }
 
-
+    
     public void LoadLevel(int level)
     {
+        StopAllCoroutines();
         DestroyMap();
         currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
-
         SetMap(level);
+
         MinimapTexture.Init(currentMap);
         SetingtPlayer(PlayerControl.instance);
 
@@ -65,11 +67,11 @@ public class GameManager : MonoBehaviour
 
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
 
-        UIManager.instance.AkashaCountUpdate(PlayerData.AkashaCount);
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
 
         if (currentMap.Floor == 1)
             SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
+
     }
 
     private Map currentMap;
@@ -101,7 +103,7 @@ public class GameManager : MonoBehaviour
             MinimapTexture.DrawRoom(newRoom);
             SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomMove, Camera.main.transform.position);
 
-            if (newRoom.roomType == RoomType.SHOP || newRoom.roomType == RoomType.EVENT || newRoom.roomType == RoomType.START)
+            if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
             {
                 newRoom.OpenDoors();
             }
@@ -118,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerControl.instance.ReLoadDeck();
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomClear, Camera.main.transform.position);
+        PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE)
         {
             GetRandomCardToAttain(CurrentMap.Floor);
@@ -131,17 +134,11 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void OnEndPlayerTurn(float time = 0.1f)
     {
-        if (act != null)
-        {
-            StopCoroutine(act);
-        }
-        act = StartCoroutine(EndTurnDelay(time));
+        CurrentTurn = Turn.ENEMY;
+        StartCoroutine(EndTurnDelay(time));
     }
-    Coroutine act;
     IEnumerator EndTurnDelay(float time)
     {
-        //PlayerControl.instance.EnableCards(false);
-        CurrentTurn = Turn.ENEMY;
         yield return new WaitForSeconds(time);
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
         EnemyControl.instance.EnemyTurn();
@@ -164,9 +161,11 @@ public class GameManager : MonoBehaviour
     {
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GameOver, Camera.main.transform.position);
         UIManager.instance.GameOverUIOn();
+        IsInputOk = false;
     }
     public void GameWin()
     {
+        IsInputOk = false;
         UIManager.instance.GameWinUIOn();
     }
     public void ReGame()
@@ -183,12 +182,12 @@ public class GameManager : MonoBehaviour
     }
     public void GamePauseOn()
     {
-        isGamePaused = true;
+        isInputOk = false;
         Time.timeScale = 0;
     }
     public void GamePauseOff()
     {
-        isGamePaused = false;
+        isGamePaused = true;
         Time.timeScale = 1;
     }
 
@@ -247,10 +246,13 @@ public class GameManager : MonoBehaviour
     }
     private void SetingtPlayer(PlayerControl pc)
     {
+        pc.gameObject.SetActive(true);
         pc.deck = UIManager.instance.GetDeck();
         pc.hand = UIManager.instance.GetHand();
         pc.ReLoadDeck();
-        pc.InitPlayer(CurrentMap.StartRoom);
+        Player player = pc.GetComponent<Player>();
+        MyCamera.instance.PlayerTrace(player);
+        player.EnterRoom(CurrentMap.StartRoom);
     }
     private void SetSeed()
     {
@@ -304,5 +306,6 @@ public class GameManager : MonoBehaviour
             Destroy(currentMap.gameObject);
         }
     }
+
     #endregion
 }
