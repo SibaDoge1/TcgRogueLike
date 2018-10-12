@@ -15,7 +15,7 @@ public class SaveData {
 
 
     //PlayerData
-    public static List<CardData> deck;
+    public static List<Card> deck;
     public static int hp;
     public static int atk;
     public static int def;

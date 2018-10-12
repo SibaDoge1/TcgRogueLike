@@ -4,7 +4,7 @@ using UnityEngine;
 using Arch;
 
 public enum CardEffectType{Shield, Blood, Heal, Hit}
-public enum RangeEffectType {CARD,ENEMY}
+public enum RangeEffectType {CARD,ENEMY,DIR}
 public enum UIEffect {AttainR0,AttainR1}
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
@@ -72,13 +72,14 @@ public class EffectDelegate : MonoBehaviour {
 
     public GameObject MadeEffect(RangeEffectType range, Tile targetTile)
     {
-        if (targetTile == null || targetTile.OnTileObj is Structure)
+        if (targetTile == null || targetTile.OnTileObj is Structure )
             return null;
         GameObject go = Instantiate(rangeLayer[(int)range],
      targetTile.transform.position, Quaternion.identity);
 
         return go;        
     }
+
     public void DestroyEffect(List<GameObject> go)
     {
         if(go != null)

@@ -2,56 +2,133 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class CardDatabase {
+/// <summary>
+/// 카드 데이터,몬스터 데이터,정보 데이터,카드풀 데이터
+/// </summary>
+public static class Database
+{
 
-    public const string reloadSpritePath = "reload";
-    public const string reloadNamePath = "리로드";
-    public const string reloadInfoPath = "리로드하고 1의 데미지를 받습니다.";
-
-
+    /*
     public const string cardResourcePath = "Card/Graphic/";
 	public const string cardObjectPath = "Card/CardBase";
     public const string editCardObjectPath = "Card/EditCard";
-	public static readonly string[] cardSpritePaths = 
+    */
+
+     static Dictionary<int, CardData> cardDatas;
+     static Dictionary<int, CardPoolData> cardPoolDatas;
+     static Dictionary<int, MonsterData> monsterDatas;
+
+    public static void ReadDatas()
     {
-        "cross",
-        "x",
-        "square",
-        "squareAll",
-        "mid3Att",
-        "pierce",
-        "strSquareAll"
-	};
-	public static readonly string[] cardNames = {
-        "십자공격",
-        "X자 공격",
-        "광범위 공격",
-        "광범위 총공격",
-        "중범위 3공격",
-        "관통 공격",
-        "강한 광역공격"
-	};
-    public static readonly string[] cardInfos =
+        cardDatas = CsvParser.ReadCardData("Data/CardData/CardData");
+        cardPoolDatas = CsvParser.ReadCardPoolData("Data/CardPoolData/CardPool");
+        //monsterDatas = CsvParser.ReadMonsterData();
+    }
+    public static CardData GetCardData(int i)
     {
-        "범위 내에서 5데미지만큼 오토타겟 합니다.",
-        "범위 내에서 5데미지만큼 오토타겟 합니다.",
-        "범위 내에서 5데미지만큼 오토타겟 합니다.",
-        "범위 내에서 5데미지만큼 전부 공격 합니다.",
-        "범위 내에서 5데미지만큼 3마리 공격 합니다.",
-        "범위 내에서 5데미지만큼 전부 공격합니다.",
-        "범위 내에서 10데미지만큼 전부 공격합니다."
-    };
-    public static readonly string[] R5Pool =
+        return cardDatas[i];
+    }
+    public static CardPoolData GetCardPool(int i)
     {
-        "Card_CroAtt",
-        "Card_XAtt",
-        "Card_SquAtt"
-    };
-    public static readonly string[] R4Pool =
+        return cardPoolDatas[i];
+    }
+    public static MonsterData GetMonsterData(int i)
     {
-        "Card_SquAttAll",
-        "Card_Mid3Att",
-        "Card_PierceAtt",
-        "Card_StrSquAllAtt"
-    };
+        return monsterDatas[i];
+    }
+    
 }
+public class CardData
+{
+    public readonly byte num;
+    public readonly string name;
+    public readonly byte cost;
+    public readonly byte attribute;
+    public readonly byte dropRate;
+
+    public readonly int val1;
+    public readonly int val2;
+    public readonly int val3;
+
+    public readonly string info;
+    public readonly string spritePath;
+
+    public CardData(string[] data)
+    {
+        num = byte.Parse(data[0]);
+        name = data[1];
+        cost = byte.Parse(data[2]);
+        attribute = byte.Parse(data[3]);
+        dropRate = byte.Parse(data[4]);
+
+        val1 = int.Parse(data[5]);
+        val2 = int.Parse(data[6]);
+        val3 = int.Parse(data[7]);
+
+        info = data[8];
+        spritePath = data[9];
+    }
+}
+public class CardPoolData
+{
+    public readonly byte num;
+    public readonly int value;
+    public readonly List<int> cardPool = new List<int>();
+
+    public CardPoolData(string[] data)
+    {
+        num = byte.Parse(data[0]);
+        value = int.Parse(data[1]);
+        string[] d = data[2].Split('/');
+        for(int i=0; i<d.Length;i++)
+        {
+            cardPool.Add(int.Parse(d[i]));
+        }
+    }
+}
+
+public class MonsterData
+{
+    public readonly byte num;
+    public readonly int hp;
+    public readonly int atk;
+    public readonly int def;
+    public readonly byte rank;
+    public readonly bool vision;
+    public readonly byte visionDistance;
+    public readonly string spritePath;
+
+    public MonsterData(string[] data)
+    {
+        num = byte.Parse(data[0]);
+        hp = int.Parse(data[1]);
+        atk = int.Parse(data[2]);
+        def = int.Parse(data[3]);
+        rank = byte.Parse(data[4]);
+        vision = bool.Parse(data[5]);
+        visionDistance = byte.Parse(data[6]);
+        spritePath = data[7];
+    }
+}
+
+public class InfoData
+{
+    public readonly byte num;
+    public readonly string title;
+    public readonly string info;
+    public readonly string spritePath;
+
+    public InfoData(string[] data)
+    {
+        num = byte.Parse(data[0]);
+        title = data[1];
+        info = data[2];
+        spritePath = data[3];
+    }
+}
+/*
+ToDo : 타일 , 벽 블럭 -> prefab 여러개 만들어서 쓰지말고
+어차피 sprite만 다르니까 생성할때 스프라이트 path만 번호로 지정하도록 변경
+OffTile -> Inspector에서 SpritePath 지정 아니면 그냥 Prefab에 박자
+*/ 
+

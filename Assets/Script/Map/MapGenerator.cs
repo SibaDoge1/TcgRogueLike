@@ -94,17 +94,6 @@ public class MapGenerator : MonoBehaviour
 
         return currentMap;
     }
-    #endregion
-
-
-    Map currentMap;
-    int roomNum;
-    List<Room> currentRooms;//현재 놓여진 방들
-    List<Room> roomsToSet;//놓아야 하는 방들
-    bool testMode;
-    public int space = 3;
-
-    #region Interface
     private Vector2Int GetMaxBorders()
     {
         int maxX = 0; int maxY = 0;
@@ -141,6 +130,16 @@ public class MapGenerator : MonoBehaviour
         return new Vector2Int(minX, minY);
     }
     #endregion
+
+
+    Map currentMap;
+    int roomNum;
+    List<Room> currentRooms;//현재 놓여진 방들
+    List<Room> roomsToSet;//놓아야 하는 방들
+    bool testMode;
+    public int space = 3;
+
+
 
     private void BuildRooms()
     {

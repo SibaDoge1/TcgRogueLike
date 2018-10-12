@@ -7,7 +7,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
     private Hand hand;
     private CardRender render;
-    private CardData data;
+    private Card data;
     protected void Awake()
     {
         render = transform.Find("render").GetComponent<CardRender>();
@@ -19,12 +19,12 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     }
 
 
-    public void SetCardRender(CardData data_){
+    public void SetCardRender(Card data_){
 		data = data_;
         render.Name.text = data.CardName;
         render.SetRank((int)data.Rating);
         render.SetAttribute(data.CardAtr);
-        render.SetGraphic(Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath));
+        render.SetGraphic(Resources.Load<Sprite>(Database.cardResourcePath + data.SpritePath));
     }
 
 	public void SetParent(Hand hand_)
@@ -46,7 +46,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	private const int ActiveThreshold = 200;
     public void OnPointerDown(PointerEventData ped)
     {
-        if(!GameManager.instance.IsInputOk)
+        if(!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
         {
             return;
         }
@@ -63,14 +63,14 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
 	public void OnPointerUp(PointerEventData ped){
-        if (!GameManager.instance.IsInputOk)
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
         {
             return;
         }
 
         hand.ChooseRollback ();
-		data.CancelPreview ();
-        hand.CardInfoOff();
+        hand.CardInfoOff();        
+        data.CancelPreview();
 
         if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.CurrentRoom().IsEnemyAlive() && IsAvailable())
         {
@@ -85,7 +85,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	}
 
     public void OnDrag(PointerEventData ped){
-        if (!GameManager.instance.IsInputOk)
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
         {
             return;
         }
@@ -139,10 +139,16 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     #region Private
     private void ActiveSelf()
     {
-			data.DoCard ();
-        if (data.IsConsumeTurn())
+        if(data.IsDirectionCard)
         {
-            GameManager.instance.OnEndPlayerTurn();
+            PlayerControl.instance.SelectedDirCard = data;
+        }else
+        {
+            data.DoCard();
+            if (data.IsConsumeTurn())
+            {
+                GameManager.instance.OnEndPlayerTurn();
+            }
         }
 	}
 

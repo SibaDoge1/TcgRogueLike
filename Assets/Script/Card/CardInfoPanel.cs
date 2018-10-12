@@ -29,7 +29,7 @@ public class CardInfoPanel : MonoBehaviour {
     }
     public void SetRender(string path)
     {
-        render.sprite = Resources.Load<Sprite>(CardDatabase.cardResourcePath + path);
+        render.sprite = Resources.Load<Sprite>(Database.cardResourcePath + path);
     }
     public void SetAttribute(Attribute attribute)
     {

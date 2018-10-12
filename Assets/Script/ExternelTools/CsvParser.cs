@@ -10,19 +10,26 @@ using System.IO;
 
 
 public static class CsvParser 
-{  
+{
     private static string[] ReadString(string path)
     {
         TextAsset csvTextAsset = Resources.Load(path) as TextAsset;
         return csvTextAsset.text.Split('\n');
     }
+    private static string[] ReadString(UnityEngine.Object ob)
+    {
+        TextAsset csvTextAsset = ob as TextAsset;
+        return csvTextAsset.text.Split('\n');
+    }
 
+
+    #region RoomData
     /// <summary>
     /// 방 한개 데이터 가져오기
     /// </summary>
     public static string[,] ReadRoom(int floor,RoomType rt,string name)
     {
-        string[] line = ReadString("RoomData/Floor"+floor+"/"+rt.ToString()+"/"+name);
+        string[] line = ReadString("Data/RoomData/Floor"+floor+"/"+rt.ToString()+"/"+name);
         int row, collum;
 
         row = Int32.Parse(line[0].Split(',')[0]); collum = Int32.Parse(line[0].Split(',')[1]);
@@ -41,14 +48,12 @@ public static class CsvParser
         return roomData;
     }
 
-    public static string [] ReadString(UnityEngine.Object ob)
-    {
-        TextAsset csvTextAsset = ob as TextAsset;
-        return csvTextAsset.text.Split('\n');
-    }
+    /// <summary>
+    /// 해당타입의 방 데이터를 모두 받아옴
+    /// </summary>
     public static List<string[,]> ReadRoom (int floor, RoomType rt)
     {
-        UnityEngine.Object[] Data = Resources.LoadAll("RoomData/Floor" + floor + "/"+rt.ToString());
+        UnityEngine.Object[] Data = Resources.LoadAll("Data/RoomData/Floor" + floor + "/"+rt.ToString());
         List<string[,]> dataList = new List<string[,]>();
         for (int i = 0; i < Data.Length; i++)
         {
@@ -72,5 +77,83 @@ public static class CsvParser
                
         return dataList;
     }
+    #endregion
+
+    #region CardData
+    /// <summary>
+    /// 카드 데이터 가져오기
+    /// </summary>
+    public static Dictionary<int,CardData> ReadCardData(string path)
+    {
+        string[] cardDataString = ReadString(path);
+        Dictionary<int, CardData> cardDatas = new Dictionary<int, CardData>();
+        int num = 1;
+        string[] split;
+
+        while (cardDataString[num].Length>12)
+        {
+            split = cardDataString[num].Split(',');            
+            cardDatas.Add(int.Parse(split[0]), new CardData(split));
+            num++;
+        }
+        return cardDatas;
+    }
+    /// <summary>
+    /// 카드풀 데이터
+    /// </summary>
+    public static Dictionary<int, CardPoolData> ReadCardPoolData(string path)
+    {
+        string[] dataString = ReadString(path);
+        Dictionary<int, CardPoolData> datas = new Dictionary<int, CardPoolData>();
+        int num = 1;
+        string[] split;
+
+        while (dataString[num].Length > 12)
+        {
+            split = dataString[num].Split(',');
+            datas.Add(int.Parse(split[0]), new CardPoolData(split));
+            num++;
+        }
+        return datas;
+    }
+    #endregion
+
+    #region MonsterData
+    /// <summary>
+    /// 몬스터 데이터
+    /// </summary>
+    public static Dictionary<int, MonsterData> ReadMonsterData(string path)
+    {
+        string[] dataString = ReadString(path);
+        Dictionary<int, MonsterData>datas = new Dictionary<int, MonsterData>();
+        int num = 1;
+        string[] split;
+
+        while (dataString[num].Length > 12)
+        {
+            split = dataString[num].Split(',');
+            datas.Add(int.Parse(split[0]), new MonsterData(split));
+            num++;
+        }
+        return datas;
+    }
+    #endregion
+    #region InfoData
+    public static Dictionary<int, InfoData> ReadInfoData(string path)
+    {
+        string[] dataString = ReadString(path);
+        Dictionary<int, InfoData> datas = new Dictionary<int, InfoData>();
+        int num = 1;
+        string[] split;
+
+        while (dataString[num].Length > 12)
+        {
+            split = dataString[num].Split(',');
+            datas.Add(int.Parse(split[0]), new InfoData(split));
+            num++;
+        }
+        return datas;
+    }
+    #endregion
 }
 

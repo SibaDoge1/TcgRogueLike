@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         SetSeed();
 
+        ReadDatas();
         MakePlayer();
         PlayerData.Clear();
         BuildDeck();
@@ -199,14 +200,14 @@ public class GameManager : MonoBehaviour
             string[] temp = Config.instance.CustomDeck;
             for (int i = 0; i < temp.Length; i++)
             {
-                var c = CardData.GetCardByName(temp[i]);
+                var c = Card.GetCardByName(temp[i]);
                 if (c == null)
                 {
                     Debug.Log("ERROR : 커스텀덱의 카드명을 확인해주세요");
                 }
                 else
                 {
-                    PlayerData.Deck.Add(CardData.GetCardByName(temp[i]));
+                    PlayerData.Deck.Add(Card.GetCardByName(temp[i]));
                 }
             }
         }
@@ -232,11 +233,11 @@ public class GameManager : MonoBehaviour
         {
             if (MyRandom.RandomEvent(Config.instance.DropRate[0].lowerCard, Config.instance.DropRate[0].higherCard) == 1) // R5풀,R4풀 17:3 확률
             {
-                PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R5Pool[Random.Range(0, CardDatabase.R5Pool.Length)]));
+                PlayerControl.instance.AddToAttain(Card.GetCardByName(Database.R5Pool[Random.Range(0, Database.R5Pool.Length)]));
             }
             else
             {
-                PlayerControl.instance.AddToAttain(CardData.GetCardByName(CardDatabase.R4Pool[Random.Range(0, CardDatabase.R4Pool.Length)]));
+                PlayerControl.instance.AddToAttain(Card.GetCardByName(Database.R4Pool[Random.Range(0, Database.R4Pool.Length)]));
             }
         }
     }
@@ -306,6 +307,10 @@ public class GameManager : MonoBehaviour
             Destroy(currentMap.gameObject);
         }
     }
-
+    private void ReadDatas()
+    {
+        Database.ReadDatas();
+        //todo : 룸데이터도 여기서 아예 읽어오자
+    }
     #endregion
 }

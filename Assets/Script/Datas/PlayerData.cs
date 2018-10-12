@@ -7,14 +7,14 @@ using UnityEngine;
 /// </summary>
 public static class PlayerData
 {
-    static List<CardData> deck = new List<CardData>();
-    public static List<CardData> Deck
+    static List<Card> deck = new List<Card>();
+    public static List<Card> Deck
     {
         get { return deck; }
         set { deck = value; }
     }
-    static List<CardData> attainCards = new List<CardData>();
-    public static List<CardData> AttainCards
+    static List<Card> attainCards = new List<Card>();
+    public static List<Card> AttainCards
     {
         get { return attainCards; }
         set { attainCards = value; }

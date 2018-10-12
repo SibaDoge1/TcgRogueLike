@@ -21,8 +21,8 @@ public class EditCardObject : Button
     private bool isOnDeck;
 
 
-    private CardData data;
-    public CardData GetCardData()
+    private Card data;
+    public Card GetCard()
     {
         return data;
     }
@@ -42,7 +42,7 @@ public class EditCardObject : Button
         render = transform.Find("render").GetComponent<CardRender>();
     }
 
-    public void SetCardData(CardData data_)
+    public void SetCard(Card data_)
     {      
         data = data_;              
     }
@@ -52,7 +52,7 @@ public class EditCardObject : Button
         render.Name.text = data.CardName;
         render.SetRank((int)data.Rating);
         render.SetAttribute(data.CardAtr);
-        render.SetGraphic(Resources.Load<Sprite>(CardDatabase.cardResourcePath + data.SpritePath));
+        render.SetGraphic(Resources.Load<Sprite>(Database.cardResourcePath + data.SpritePath));
 
     }
 

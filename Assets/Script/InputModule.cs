@@ -39,31 +39,48 @@ public class InputModule : MonoBehaviour {
 		while (true) {
             if (GameManager.instance.CurrentTurn==Turn.PLAYER && GameManager.instance.IsInputOk)        
             {
-                if (Input.GetKeyDown(KeyCode.W))
+                if(PlayerControl.instance.IsDirCardSelected)
                 {
-                    PlayerControl.instance.MoveUP();
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        PlayerControl.instance.DoDirCard(Direction.NORTH);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.D))
+                    {
+                        PlayerControl.instance.DoDirCard(Direction.EAST);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        PlayerControl.instance.DoDirCard(Direction.SOUTH);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        PlayerControl.instance.DoDirCard(Direction.WEST);
+                    }
                 }
-                else if (Input.GetKeyDown(KeyCode.D))
+                else
                 {
-                    PlayerControl.instance.MoveRight();
+                    if (Input.GetKeyDown(KeyCode.W))
+                    {
+                        PlayerControl.instance.MoveToDirection(Direction.NORTH);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.D))
+                    {
+                        PlayerControl.instance.MoveToDirection(Direction.EAST);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.S))
+                    {
+                        PlayerControl.instance.MoveToDirection(Direction.SOUTH);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.A))
+                    {
+                        PlayerControl.instance.MoveToDirection(Direction.WEST);
+                    }
+                    else if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        PlayerControl.instance.EndTurnButton();
+                    }
                 }
-                else if (Input.GetKeyDown(KeyCode.S))
-                {
-                    PlayerControl.instance.MoveDown();
-                }
-                else if (Input.GetKeyDown(KeyCode.A))
-                {
-                    PlayerControl.instance.MoveLeft();
-                }
-                else if(Input.GetKeyDown(KeyCode.E))
-                {
-                    PlayerControl.instance.EndTurnButton();
-                }
-                /*
-                else if (Input.GetKeyDown(KeyCode.Q))
-                {
-                    PlayerControl.instance.StationField();
-                }*/
             }
             yield return null;
         }

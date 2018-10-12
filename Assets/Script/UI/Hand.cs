@@ -20,7 +20,7 @@ public class Hand : MonoBehaviour {
     private bool isHided;
 	private List<CardObject> hand = new List<CardObject> ();
 
-    public void CardInfoOn(CardData c)
+    public void CardInfoOn(Card c)
     {
         cardinfo.gameObject.SetActive(true);
         cardinfo.SetText(c.CardName,c.CardExplain);

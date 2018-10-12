@@ -13,8 +13,8 @@ public class DeckEditUI : MonoBehaviour
     private bool isEditMode = false;
     private List<EditCardObject> deckCardObjects;
     private List<EditCardObject> attainCardObjects;
-    private List<CardData> deck;
-    private List<CardData> attain;
+    private List<Card> deck;
+    private List<Card> attain;
     private List<EditCardObject> deckSelected;
     private List<EditCardObject> attainSelected;
     
@@ -40,7 +40,7 @@ public class DeckEditUI : MonoBehaviour
     }
 
     #region CardInfoPanel
-    public void CardInfoOn(CardData c)
+    public void CardInfoOn(Card c)
     {
         cardinfoPanel.gameObject.SetActive(true);
         cardinfoPanel.SetText(c.CardName,c.CardExplain);
@@ -87,17 +87,17 @@ public class DeckEditUI : MonoBehaviour
             {
                 int di = deckSelected[i].Index;
                 int ai = attainSelected[i].Index;
-                deck.Remove(deckSelected[i].GetCardData());//덱에서 어테인으로
+                deck.Remove(deckSelected[i].GetCard());//덱에서 어테인으로
                 deckCardObjects.Remove(deckSelected[i]);
-                attain.Add(deckSelected[i].GetCardData());
+                attain.Add(deckSelected[i].GetCard());
                 attainCardObjects.Add(deckSelected[i]);
                 deckSelected[i].SetParent(attainViewPort, false);
                 deckSelected[i].Index = ai;
                 deckSelected[i].Locate(ai);
 
-                attain.Remove(attainSelected[i].GetCardData());//어테인에서 덱으로
+                attain.Remove(attainSelected[i].GetCard());//어테인에서 덱으로
                 attainCardObjects.Remove(attainSelected[i]);
-                deck.Add(attainSelected[i].GetCardData());
+                deck.Add(attainSelected[i].GetCard());
                 deckCardObjects.Add(attainSelected[i]);
                 attainSelected[i].SetParent(deckViewPort, true);
                 attainSelected[i].Index = di;
@@ -183,7 +183,7 @@ public class DeckEditUI : MonoBehaviour
     }
     private void MakeCardObjects()
     {
-        deck = new List<CardData>(PlayerData.Deck);
+        deck = new List<Card>(PlayerData.Deck);
         deckCardObjects = new List<EditCardObject>();
         for(int i=0; i<deck.Count;i++)
         {
@@ -196,7 +196,7 @@ public class DeckEditUI : MonoBehaviour
             deckCardObjects[i].SetSpriteRender();
         }
 
-        attain = new List<CardData>(PlayerData.AttainCards);
+        attain = new List<Card>(PlayerData.AttainCards);
         attainCardObjects = new List<EditCardObject>();
         for (int i = 0; i < attain.Count; i++)
         {
@@ -248,8 +248,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = (int)A.GetCardData().Rating * 40000 + A.GetCardData().Index * 200 + (int)A.GetCardData().CardAtr;
-            int bIndex = (int)B.GetCardData().Rating * 40000 + B.GetCardData().Index * 1000 + (int)B.GetCardData().CardAtr;
+            int aIndex = (int)A.GetCard().Rating * 40000 + A.GetCard().Index * 200 + (int)A.GetCard().CardAtr;
+            int bIndex = (int)B.GetCard().Rating * 40000 + B.GetCard().Index * 1000 + (int)B.GetCard().CardAtr;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -258,8 +258,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = (int)A.GetCardData().Rating*40000+A.GetCardData().Index * 200 + (int)A.GetCardData().CardAtr;
-            int bIndex = (int)B.GetCardData().Rating * 40000+B.GetCardData().Index * 1000 + (int)B.GetCardData().CardAtr;
+            int aIndex = (int)A.GetCard().Rating*40000+A.GetCard().Index * 200 + (int)A.GetCard().CardAtr;
+            int bIndex = (int)B.GetCard().Rating * 40000+B.GetCard().Index * 1000 + (int)B.GetCard().CardAtr;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
