@@ -3,34 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_NonAttack : Card {
+public abstract class Card_NonAttack : Card {
+
 	public Card_NonAttack(){}
 }
 
 public class Card_Reload : Card_NonAttack{
-	public Card_Reload()
+    protected override void SetIndex()
     {
-        SetData();
-	}
-
-    protected override void SetData()
-    {
-        cardName = Database.reloadNamePath;
-        spritePath = Database.reloadSpritePath;
-        cardExplain = Database.reloadInfoPath;
+        index = 8;
     }
+ 
     protected override void CardActive()
     {
 		PlayerControl.instance.ReLoadDeck ();
 	}
 }
-public class TempDirCard : Card_Attack
+public class Card_Teleport : Card_Attack
 {
-    public TempDirCard()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R1, Attribute.APAS, 7, 10);
+        index = 9;
         isDirectionCard = true;
     }
+
     protected override void CardActive(Direction dir)
     {
         Vector2Int d = Vector2Int.zero;

@@ -19,47 +19,50 @@ public enum Rating
     R5
 }
 public enum CardAbilityType{Attack, NonAttack}
-public  class Card
+public abstract class Card
 {
+    protected static Player player = PlayerControl.Player;
+    #region CardValues;
+
     protected bool isDirectionCard = false;
     public bool IsDirectionCard
     {
         get { return isDirectionCard; }
     }
-    protected Attribute cardAtr;
-    public Attribute CardAtr { get { return cardAtr; } }
-    protected Rating rating = Rating.R0;
-    public Rating Rating {get { return rating; } }
 
+    protected int index;
+    protected int val1;
+    protected int val2;
+    protected int val3;
+
+    protected CardData cardData;
+    public CardData CardData
+     {
+        get { return cardData; }
+    }
+    #endregion
     protected CardEffectType cardEffect = CardEffectType.Hit;
     protected CardSoundType cardSound = CardSoundType.Hit;
-    protected int index;
-    public int Index
-    {
-        get { return index; }
-    }
-    protected Player player = PlayerControl.Player;
-	protected string spritePath;
-    public string SpritePath
-    {
-        get { return spritePath; }
-    }
-	protected string cardName;
-	public string CardName {
-		get { return cardName; }
-	}
 
-    protected string cardExplain;
-	public string CardExplain {
-		get { return cardExplain; }
-	}
-   
-	protected virtual void SetData()
+    public Card()
     {
-        cardName = Database.cardNames[index];
-        spritePath = Database.cardSpritePaths[index];
-        cardExplain = Database.cardInfos[index];
+        SetIndex();
+        cardData = Database.GetCardData(index);
+        ValueReset();
     }
+    /// <summary>
+    /// 이 카드 객체의 value를 초기화
+    /// </summary>
+    public void ValueReset()
+    {
+        val1 = cardData.val1;
+        val2 = cardData.val2;
+        val3 = cardData.val3;
+    }
+    /// <summary>
+    /// 인덱스 처음에 초기화
+    /// </summary>
+    protected abstract void SetIndex();
 
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
@@ -103,11 +106,11 @@ public  class Card
 
     protected virtual void ConsumeAkasha()
     {
-        PlayerData.AkashaGage -= (int)rating;
+        PlayerData.AkashaGage -= (int)cardData.cost;
     }
     public virtual bool IsAvailable()
     {
-		return (PlayerData.AkashaGage>=(int)rating)? true:false;
+		return (PlayerData.AkashaGage>=(int)cardData.cost) ? true:false;
 	}
 
 	public virtual void CardEffectPreview(){		
@@ -130,6 +133,28 @@ public  class Card
         if (System.Type.GetType(s) != null)
         {
             var c = System.Activator.CreateInstance(System.Type.GetType(s));
+            if (c is Card)
+            {
+                return (c as Card);
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Card String Error");
+                return null;
+            }
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Card String Error");
+            return null;
+        }
+    }
+    public static Card GetCardByNum(int i)
+    {
+        
+        if (System.Type.GetType(Database.GetCardData(i).className) != null)
+        {
+            var c = System.Activator.CreateInstance(System.Type.GetType(Database.GetCardData(i).className));
             if (c is Card)
             {
                 return (c as Card);

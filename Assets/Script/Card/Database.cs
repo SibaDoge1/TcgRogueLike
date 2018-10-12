@@ -7,13 +7,10 @@ using UnityEngine;
 /// </summary>
 public static class Database
 {
-
-    /*
     public const string cardResourcePath = "Card/Graphic/";
 	public const string cardObjectPath = "Card/CardBase";
     public const string editCardObjectPath = "Card/EditCard";
-    */
-
+  
      static Dictionary<int, CardData> cardDatas;
      static Dictionary<int, CardPoolData> cardPoolDatas;
      static Dictionary<int, MonsterData> monsterDatas;
@@ -21,7 +18,7 @@ public static class Database
     public static void ReadDatas()
     {
         cardDatas = CsvParser.ReadCardData("Data/CardData/CardData");
-        cardPoolDatas = CsvParser.ReadCardPoolData("Data/CardPoolData/CardPool");
+        cardPoolDatas = CsvParser.ReadCardPoolData("Data/CardPoolData/CardPoolData");
         //monsterDatas = CsvParser.ReadMonsterData();
     }
     public static CardData GetCardData(int i)
@@ -29,7 +26,7 @@ public static class Database
         return cardDatas[i];
     }
     public static CardPoolData GetCardPool(int i)
-    {
+    { 
         return cardPoolDatas[i];
     }
     public static MonsterData GetMonsterData(int i)
@@ -44,7 +41,6 @@ public class CardData
     public readonly string name;
     public readonly byte cost;
     public readonly byte attribute;
-    public readonly byte dropRate;
 
     public readonly int val1;
     public readonly int val2;
@@ -52,6 +48,7 @@ public class CardData
 
     public readonly string info;
     public readonly string spritePath;
+    public readonly string className;
 
     public CardData(string[] data)
     {
@@ -59,14 +56,14 @@ public class CardData
         name = data[1];
         cost = byte.Parse(data[2]);
         attribute = byte.Parse(data[3]);
-        dropRate = byte.Parse(data[4]);
 
-        val1 = int.Parse(data[5]);
-        val2 = int.Parse(data[6]);
-        val3 = int.Parse(data[7]);
+        val1 = int.Parse(data[4]);
+        val2 = int.Parse(data[5]);
+        val3 = int.Parse(data[6]);
 
-        info = data[8];
-        spritePath = data[9];
+        info = data[7];
+        spritePath = data[8];
+        className = data[9];
     }
 }
 public class CardPoolData

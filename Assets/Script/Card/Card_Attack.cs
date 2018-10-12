@@ -6,37 +6,18 @@ using Arch;
 
 public abstract class Card_Attack : Card
 {
-
+    public Card_Attack() :base()
+    {
+        SetRangeData();
+    }
 
     protected Figure figure;
-
 	protected int range;
-	protected int damage;
 
     protected List<GameObject> ranges = new List<GameObject>();
 
-	public  string GetCardAttackValue ()
-    {
-		return damage.ToString();
-	}
-    protected void InitCard(Rating _rating, Attribute _atr, int _index, int _damage)
-    {
-        rating = _rating;
-        cardAtr = _atr;
-        index = _index;
-        damage = _damage;
-        SetData();
-    }
-    protected void InitCard(Rating _rating, Attribute _atr, Figure _figure, int _index, int _damage, int _range)
-    {
-        rating = _rating;
-        cardAtr = _atr;
-        figure = _figure;
-        index = _index;
-        damage = _damage;
-        range = _range;
-        SetData();
-    }
+    protected virtual void SetRangeData(){ }
+
     /// <summary>
     /// 속성 계산 판정기
     /// </summary>
@@ -71,11 +52,27 @@ public abstract class Card_Attack : Card
     }
 }
 
-public class Card_CroAtt : Card_Attack {
-	public Card_CroAtt() 
-	{
-        InitCard(Rating.R0, Attribute.APAS, Figure.CROSS, 0, 5, 1);
-	}
+public class Card_CroAtt : Card_Attack
+{
+    /// <summary>
+    /// 카드 클래스 정의시 해야할것 1
+    /// </summary>
+    protected override void SetIndex()
+    {
+        index = 1;
+    }
+    /// <summary>
+    /// 카드 클래스 정의시 해야할것 4(선택)
+    /// </summary>
+    protected override void SetRangeData()
+    {
+        range = 1;
+        figure = Figure.CROSS;
+    }
+
+    /// <summary>
+    /// 카드 클래스 정의시 해야할것 2
+    /// </summary>
     protected override void CardActive()
     {
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
@@ -83,11 +80,14 @@ public class Card_CroAtt : Card_Attack {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
     }
 
+    /// <summary>
+    /// 카드 클래스 정의시 해야할것 3(선택)
+    /// </summary>
     protected List<Tile> targetTiles;
 	public override void CardEffectPreview (){
 		targetTiles = TileUtils.Range (player.currentTile, range, figure);
@@ -98,7 +98,6 @@ public class Card_CroAtt : Card_Attack {
                 ranges[i].transform.parent = player.transform;
             }
         }
-
 	}
 
 }
@@ -106,9 +105,14 @@ public class Card_CroAtt : Card_Attack {
 
 public class Card_XAtt : Card_Attack
 {
-    public Card_XAtt()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R0, Attribute.PRITHVI , Figure.X,1,5,1);
+        index = 2;
+    }
+    protected override void SetRangeData()
+    {
+        range = 1;
+        figure = Figure.X;
     }
     protected override void CardActive()
     {
@@ -117,7 +121,7 @@ public class Card_XAtt : Card_Attack
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
     }
@@ -141,9 +145,14 @@ public class Card_XAtt : Card_Attack
 
 public class Card_SquAtt : Card_Attack
 {
-    public Card_SquAtt() 
+    protected override void SetIndex()
     {
-        InitCard(Rating.R0, Attribute.TEJAS, Figure.SQUARE,2,5,1);
+        index = 3;
+    }
+    protected override void SetRangeData()
+    {
+        range = 1;
+        figure = Figure.SQUARE;
     }
     protected override void CardActive()
     {
@@ -152,7 +161,7 @@ public class Card_SquAtt : Card_Attack
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
     }
@@ -175,9 +184,14 @@ public class Card_SquAtt : Card_Attack
 
 public class Card_SquAttAll : Card_Attack
 {
-    public Card_SquAttAll()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R1, Attribute.VAYU, Figure.SQUARE, 3, 5, 1);
+        index = 4;
+    }
+    protected override void SetRangeData()
+    {
+        range = 1;
+        figure = Figure.SQUARE;
     }
     protected override void CardActive()
     {
@@ -186,7 +200,7 @@ public class Card_SquAttAll : Card_Attack
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
     }
@@ -210,9 +224,9 @@ public class Card_SquAttAll : Card_Attack
 public class Card_Mid3Att : Card_Attack
 {
     int num = 3;
-    public Card_Mid3Att()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R1, Attribute.VAYU, 4, 5);
+        index = 5;
     }
     protected override void CardActive()
     {
@@ -221,7 +235,7 @@ public class Card_Mid3Att : Card_Attack
         {
             if(tiles[i].OnTileObj != null && tiles[i].OnTileObj is Enemy)
             {
-                DamageToTarget(tiles[i].OnTileObj as Enemy,damage);
+                DamageToTarget(tiles[i].OnTileObj as Enemy,val1);
             }
         }
 
@@ -244,10 +258,14 @@ public class Card_Mid3Att : Card_Attack
 }
 public class Card_PierceAtt : Card_Attack
 {
-    int num = 3;
-    public Card_PierceAtt()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R1, Attribute.APAS, Figure.CROSS, 5, 5, 2);
+        index = 6;
+    }
+    protected override void SetRangeData()
+    {
+        range = 3;
+        figure = Figure.CROSS;
     }
     protected override void CardActive()
     {
@@ -257,7 +275,7 @@ public class Card_PierceAtt : Card_Attack
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
 
@@ -280,9 +298,14 @@ public class Card_PierceAtt : Card_Attack
 }
 public class Card_StrSquAllAtt : Card_Attack
 {
-    public Card_StrSquAllAtt()
+    protected override void SetIndex()
     {
-        InitCard(Rating.R1,Attribute.PRITHVI,Figure.SQUARE,6,10,1);
+        index = 7;
+    }
+    protected override void SetRangeData()
+    {
+        range = 1;
+        figure = Figure.CROSS;
     }
     protected override void CardActive()
     {
@@ -291,7 +314,7 @@ public class Card_StrSquAllAtt : Card_Attack
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                DamageToTarget(enemies[i], damage);
+                DamageToTarget(enemies[i], val1);
             }
         }
     }
