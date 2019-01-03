@@ -5,7 +5,7 @@ using System;
 using System.IO;
 
 /// <summary>
-/// 맵 데이터 읽어오는 클래스 입니다.
+/// CSV 데이터 읽어오는 클래스 입니다.
 /// </summary>
 
 
@@ -85,14 +85,19 @@ public static class CsvParser
     /// </summary>
     public static Dictionary<int,CardData> ReadCardData(string path)
     {
-        string[] cardDataString = ReadString(path);
+        string[] dataString = ReadString(path);
         Dictionary<int, CardData> cardDatas = new Dictionary<int, CardData>();
         int num = 1;
         string[] split;
 
-        while (cardDataString[num].Length>12)
+
+        while (num < dataString.Length )
         {
-            split = cardDataString[num].Split(',');            
+            split = dataString[num].Split(',');
+            if(split[0].Length == 0)
+            {
+                break;
+            }
             cardDatas.Add(int.Parse(split[0]), new CardData(split));
             num++;
         }
@@ -108,9 +113,14 @@ public static class CsvParser
         int num = 1;
         string[] split;
 
-        while (dataString[num].Length > 12)
+
+        while (num < dataString.Length)
         {
             split = dataString[num].Split(',');
+            if (split[0].Length == 0)
+            {
+                break;
+            }
             datas.Add(int.Parse(split[0]), new CardPoolData(split));
             num++;
         }
@@ -129,9 +139,13 @@ public static class CsvParser
         int num = 1;
         string[] split;
 
-        while (dataString[num].Length > 12)
+        while (num < dataString.Length)
         {
             split = dataString[num].Split(',');
+            if (split[0].Length == 0)
+            {
+                break;
+            }
             datas.Add(int.Parse(split[0]), new MonsterData(split));
             num++;
         }
@@ -146,9 +160,13 @@ public static class CsvParser
         int num = 1;
         string[] split;
 
-        while (dataString[num].Length > 12)
+        while (num < dataString.Length)
         {
             split = dataString[num].Split(',');
+            if (split[0].Length == 0)
+            {
+                break;
+            }
             datas.Add(int.Parse(split[0]), new InfoData(split));
             num++;
         }

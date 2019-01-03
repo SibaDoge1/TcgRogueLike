@@ -57,7 +57,7 @@ public  static class MinimapTexture
             for(int j=0;j<room.size.x;j++)
             {
                 Arch.Tile t = room.GetTile(new Vector2Int(j, i));
-                if (t.objectNum == 0 && t.OnTileObj == null && t.offTile==null)
+                if (t.tileNum == 0 && t.OnTileObj == null && t.offTile==null)
                     texture.SetPixel(pos.x+j,pos.y+i, emptyColor);
                 else
                 {

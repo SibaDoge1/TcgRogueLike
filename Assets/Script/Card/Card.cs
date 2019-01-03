@@ -2,26 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Attribute
-{
-    PRITHVI,
-    APAS,
-    TEJAS,
-    VAYU
-}
-public enum Rating
-{
-    R0,
-    R1,
-    R2,
-    R3,
-    R4,
-    R5
-}
+
+
 public enum CardAbilityType{Attack, NonAttack}
+/// <summary>
+/// 카드 데이터
+/// </summary>
 public abstract class Card
 {
-    protected static Player player = PlayerControl.Player;
+    protected static Player player;
     #region CardValues;
 
     protected bool isDirectionCard = false;
@@ -43,12 +32,22 @@ public abstract class Card
     #endregion
     protected CardEffectType cardEffect = CardEffectType.Hit;
     protected CardSoundType cardSound = CardSoundType.Hit;
+    protected Figure figure;
+    protected int range;
 
+    protected List<GameObject> ranges = new List<GameObject>();
+    protected virtual void SetRangeData() { }
+    
+    public static void SetPlayer(Player p)
+    {
+        player = p;
+    }
     public Card()
     {
         SetIndex();
         cardData = Database.GetCardData(index);
         ValueReset();
+        SetRangeData();
     }
     /// <summary>
     /// 이 카드 객체의 value를 초기화
@@ -57,7 +56,28 @@ public abstract class Card
     {
         val1 = cardData.val1;
         val2 = cardData.val2;
-        val3 = cardData.val3;
+        val3 = cardData.val3; 
+    }
+    /// <summary>
+    /// Val값들 적용하여 Info string 리턴
+    /// </summary>
+    public string GetCardInfoString()
+    {
+        string[] s = string.Copy(cardData._info).Split('<','>');
+       for(int i=0; i< s.Length;i++)
+        {
+            if(s[i] == "val1" || s[i] == "Val1")
+            {
+                s[i] = "" + val1;
+            }else if(s[i] == "val2"  || s[i] == "Val2")
+            {
+                s[i] = "" + val2;
+            }else if (s[i] == "val3" || s[i] == "Val3")
+            {
+                s[i] = "" + val3;
+            }          
+        }
+        return string.Join("",s);
     }
     /// <summary>
     /// 인덱스 처음에 초기화
@@ -66,14 +86,14 @@ public abstract class Card
 
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
-		cardObject = InstantiateDelegate.ProxyInstantiate (Resources.Load(Database.cardObjectPath)as GameObject).GetComponent<CardObject> ();
+        cardObject = ArchLoader.instance.GetCardObject();
         cardObject.SetCardRender(this);
 		return cardObject;
 	}
     public EditCardObject InstantiateDeckCard()
     {
         EditCardObject cardObject;
-        cardObject = InstantiateDelegate.ProxyInstantiate(Resources.Load(Database.editCardObjectPath) as GameObject).GetComponent<EditCardObject>();
+        cardObject = ArchLoader.instance.GetEditCard();
         cardObject.SetCard(this);
         return cardObject;
     }
@@ -116,7 +136,9 @@ public abstract class Card
 	public virtual void CardEffectPreview(){		
 	}
 	public virtual void CancelPreview(){
-	}
+        EffectDelegate.instance.DestroyEffect(ranges);
+        ranges.Clear();
+    }
     
 
 	public virtual bool IsConsumeTurn(){
@@ -150,25 +172,7 @@ public abstract class Card
         }
     }
     public static Card GetCardByNum(int i)
-    {
-        
-        if (System.Type.GetType(Database.GetCardData(i).className) != null)
-        {
-            var c = System.Activator.CreateInstance(System.Type.GetType(Database.GetCardData(i).className));
-            if (c is Card)
-            {
-                return (c as Card);
-            }
-            else
-            {
-                UnityEngine.Debug.Log("Card String Error");
-                return null;
-            }
-        }
-        else
-        {
-            UnityEngine.Debug.Log("Card String Error");
-            return null;
-        }
+    {        
+        return GetCardByName(Database.GetCardData(i).className);      
     }
 }

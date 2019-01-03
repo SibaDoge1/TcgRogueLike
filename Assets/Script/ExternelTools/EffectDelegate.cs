@@ -72,7 +72,7 @@ public class EffectDelegate : MonoBehaviour {
 
     public GameObject MadeEffect(RangeEffectType range, Tile targetTile)
     {
-        if (targetTile == null || targetTile.OnTileObj is Structure )
+        if (targetTile == null || targetTile.OnTileObj is Structure || targetTile.tileNum ==0)
             return null;
         GameObject go = Instantiate(rangeLayer[(int)range],
      targetTile.transform.position, Quaternion.identity);

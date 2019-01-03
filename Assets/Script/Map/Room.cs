@@ -63,7 +63,9 @@ public class Room : MonoBehaviour
         if (p.x >= size.x || p.y >= size.y || p.x < 0 || p.y < 0)
             return null;
         else
-        return tiles[p.x, p.y];
+        {
+            return tiles[p.x, p.y];
+        }
     }
     public void SetTileArray(Tile[,] t)
     {

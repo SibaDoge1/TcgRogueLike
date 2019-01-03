@@ -6,7 +6,8 @@ namespace Arch{
 	public class Tile :MonoBehaviour
 	{
         #region variables
-        public int objectNum;
+       
+        public short tileNum;
 
         public List<Tile> neighbours;
 
@@ -39,21 +40,27 @@ namespace Arch{
         }
         #endregion
 
-
-        public void SetTile(Vector2Int _pos,Vector2Int roomSize)
-		{
-			pos = _pos;
-			transform.localPosition = new Vector3(pos.x,pos.y, 0);
-
-		}
-	
-	    public bool IsStandAble(Entity ot)
+        public void Init(short _tileNum)
+        {
+            tileNum = _tileNum;
+        }
+        public void SetSprite(Sprite _sprite)
+        {
+            GetComponent<SpriteRenderer>().sprite = _sprite;
+        }
+        public void SetRoom(Room room, Vector2Int _pos)
+        {
+            transform.SetParent(room.transform);
+            pos = _pos;
+            transform.localPosition = new Vector3(pos.x, pos.y, 0);
+        }
+        public bool IsStandAble(Entity ot)
 		{			
 				if (onTileObj != null || (offTile != null && !offTile.IsStandAble(ot)))
                 {
 					return false;
 				} 
-                else if(objectNum == 0 && ot is Character)
+                else if(tileNum == 0 && ot is Character)
                 {
 					return false;
 				}

@@ -91,12 +91,12 @@ public class PlayerControl : MonoBehaviour {
     public void AddToAttain(Card cData)
     {
         PlayerData.AttainCards.Add(cData);
-        switch(cData.Rating)
+        switch(cData.CardData.cost)
         {
-            case Rating.R0:
+            case 0:
                 EffectDelegate.instance.MadeEffect(UIEffect.AttainR0, UIManager.canvas);
                 break;
-            case Rating.R1:
+            case 1:
                 EffectDelegate.instance.MadeEffect(UIEffect.AttainR1, UIManager.canvas);
                 break;
             default:

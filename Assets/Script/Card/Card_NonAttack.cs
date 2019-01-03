@@ -11,7 +11,7 @@ public abstract class Card_NonAttack : Card {
 public class Card_Reload : Card_NonAttack{
     protected override void SetIndex()
     {
-        index = 8;
+        index = 0;
     }
  
     protected override void CardActive()
@@ -19,7 +19,7 @@ public class Card_Reload : Card_NonAttack{
 		PlayerControl.instance.ReLoadDeck ();
 	}
 }
-public class Card_Teleport : Card_Attack
+public class Card_Teleport : Card_NonAttack
 {
     protected override void SetIndex()
     {
@@ -67,11 +67,15 @@ public class Card_Teleport : Card_Attack
             }
         }
     }
-    public override void CancelPreview()
+}
+public class Card_Heal : Card_NonAttack
+{
+    protected override void SetIndex()
     {
-        for (int i = 0; i < targetTiles.Count; i++)
-        {
-            EffectDelegate.instance.DestroyEffect(ranges);
-        }
+        index = 10;
+    }
+    protected override void CardActive()
+    {
+        player.GetHeal(1);
     }
 }

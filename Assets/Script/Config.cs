@@ -3,12 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct CardDrops
-{
-    public float lowerCard;
-    public float higherCard;
-}
-[System.Serializable]
 public struct LevelSetting
 {
     public int battleRoomNum;
@@ -23,8 +17,7 @@ public class Config : MonoBehaviour
     {
         instance = this;
     }
-    [Header("DropRate")]
-    public CardDrops[] DropRate;
+
 
     [Header("Seed")]
     public bool UseRandomSeed;
@@ -33,8 +26,7 @@ public class Config : MonoBehaviour
     [Header("Deck Settings")]
     public int HandMax = 5;
 
-    public bool UseCustomDeck;
-    public string[] CustomDeck;
+
 
     [Header("StartFloor")]
     public int floorNum = 1;

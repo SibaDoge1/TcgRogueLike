@@ -10,8 +10,11 @@ public abstract class Enemy : Character {
     protected EnemyUI enemyUI;
 
     public bool dontAffectByView;
-    //public Attribute Atr;
 
+    public override void Init(short _entityNum)
+    {
+        base.Init(_entityNum);
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -72,7 +75,7 @@ public abstract class Enemy : Character {
         enemyUI.SetLocalScale(x);
     }
 
-    public override int CurrentHp
+    protected override int CurrentHp
     {
         get
         {

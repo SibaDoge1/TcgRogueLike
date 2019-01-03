@@ -6,24 +6,14 @@ using Arch;
 
 public abstract class Card_Attack : Card
 {
-    public Card_Attack() :base()
-    {
-        SetRangeData();
-    }
 
-    protected Figure figure;
-	protected int range;
-
-    protected List<GameObject> ranges = new List<GameObject>();
-
-    protected virtual void SetRangeData(){ }
 
     /// <summary>
     /// 속성 계산 판정기
     /// </summary>
-    private int AtrCompare(Attribute card, Attribute enemy)
+    private int AtrCompare(byte cardAttribute, byte enemyAttribute)
     {
-        if (card == enemy)
+        if (cardAttribute == enemyAttribute)
         {
             cardSound = CardSoundType.CriticalHit;
             return 2;
@@ -43,12 +33,6 @@ public abstract class Card_Attack : Card
             //int atr = AtrCompare(cardAtr, target.Atr);
             target.GetDamage(dam * player.Atk, player);
         }
-    }
-
-    public override void CancelPreview()
-    {
-        EffectDelegate.instance.DestroyEffect(ranges);
-        ranges.Clear();
     }
 }
 

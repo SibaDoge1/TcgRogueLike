@@ -8,8 +8,10 @@ public class InputModule : MonoBehaviour {
 
 
 	void Start(){
-		StartCoroutine (TileSelectRoutine ());
+#if UNITY_EDITOR
+        StartCoroutine (TileSelectRoutine ());
         StartCoroutine(KeyBoardInputs());
+#endif
     }
     IEnumerator KeyBoardInputs()
     {
@@ -23,14 +25,6 @@ public class InputModule : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.F5))
             {
                 GameManager.instance.ReGame();
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                UIManager.instance.TextUIGoNext();
-            }
-              if(Input.GetKeyDown(KeyCode.Space))
-            {
-                PlayerControl.instance.ToggleHand();
             }
             yield return null;
         }

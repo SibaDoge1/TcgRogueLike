@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
+        Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
         if (instance == null)
         {
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
         SetSeed();
 
         ReadDatas();
-        MakePlayer();
+        ArchLoader.instance.GetPlayer();
         PlayerData.Clear();
         BuildDeck();
 
@@ -72,7 +73,6 @@ public class GameManager : MonoBehaviour
 
         if (currentMap.Floor == 1)
             SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
-
     }
 
     private Map currentMap;
@@ -195,56 +195,21 @@ public class GameManager : MonoBehaviour
     #region private
     private void BuildDeck()
     {
-        if (Config.instance.UseCustomDeck)
+        CardPoolData startCards = Database.GetCardPool(0);
+        for(int i=0; i<startCards.cardPool.Count;i++)
         {
-            string[] temp = Config.instance.CustomDeck;
-            for (int i = 0; i < temp.Length; i++)
-            {
-                var c = Card.GetCardByName(temp[i]);
-                if (c == null)
-                {
-                    Debug.Log("ERROR : 커스텀덱의 카드명을 확인해주세요");
-                }
-                else
-                {
-                    PlayerData.Deck.Add(Card.GetCardByName(temp[i]));
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 2; i++)
-            {
-                PlayerData.Deck.Add(new Card_SquAtt());
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                PlayerData.Deck.Add(new Card_CroAtt());
-            }
-            for (int i = 0; i < 2; i++)
-            {
-                PlayerData.Deck.Add(new Card_XAtt());
-            }
+            PlayerData.Deck.Add(Card.GetCardByNum(startCards.cardPool[i]));
         }
     }
     private void GetRandomCardToAttain(int floor)
     {
+        //TODO : 몬스터 랭크에 따라 획득하도록 변경
         if (floor <= 1)
         {
-            if (MyRandom.RandomEvent(Config.instance.DropRate[0].lowerCard, Config.instance.DropRate[0].higherCard) == 1) // R5풀,R4풀 17:3 확률
-            {
-                PlayerControl.instance.AddToAttain(Card.GetCardByName(Database.R5Pool[Random.Range(0, Database.R5Pool.Length)]));
-            }
-            else
-            {
-                PlayerControl.instance.AddToAttain(Card.GetCardByName(Database.R4Pool[Random.Range(0, Database.R4Pool.Length)]));
-            }
+            PlayerControl.instance.AddToAttain(Database.GetCardPool(2).GetRandomCard());
         }
     }
-    private PlayerControl MakePlayer()
-    {
-        return Instantiate(ResourceLoader.instance.LoadPlayer()).GetComponent<PlayerControl>();
-    }
+
     private void SetingtPlayer(PlayerControl pc)
     {
         pc.gameObject.SetActive(true);
@@ -252,6 +217,7 @@ public class GameManager : MonoBehaviour
         pc.hand = UIManager.instance.GetHand();
         pc.ReLoadDeck();
         Player player = pc.GetComponent<Player>();
+        Card.SetPlayer(player);
         MyCamera.instance.PlayerTrace(player);
         player.EnterRoom(CurrentMap.StartRoom);
     }
@@ -275,10 +241,6 @@ public class GameManager : MonoBehaviour
         {
             mapGenerator.GetTestMap(level,
               Config.instance.TestRoomType, Config.instance.TestRoomName);
-        }
-        else if (level == 0)
-        {
-            mapGenerator.GetTutorialMap();
         }
         else
         {
@@ -309,8 +271,8 @@ public class GameManager : MonoBehaviour
     }
     private void ReadDatas()
     {
-        Database.ReadDatas();
-        //todo : 룸데이터도 여기서 아예 읽어오자
+        Database.ReadDatas();//todo : 룸데이터도 여기서 아예 읽어오자
+        ArchLoader.instance.StartCache();
     }
     #endregion
 }

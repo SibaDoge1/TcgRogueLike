@@ -10,12 +10,16 @@ public abstract class Entity : MonoBehaviour
 	public Tile currentTile;
     public Vector2Int pos;
 
+    public short entityNum;
 
-
-    protected SpriteRenderer sprite;
+    public virtual void Init(short _entityNum)
+    {
+        entityNum = _entityNum;
+        gameObject.name = "" + entityNum;
+    }
+    protected SpriteRenderer spriteRender;
 	protected virtual void  Awake () {
-        sprite = GetComponent<SpriteRenderer>();
-        
+        spriteRender = GetComponent<SpriteRenderer>();      
 	}
 	
 	public virtual void SetRoom(Room room,Vector2Int _pos)
@@ -36,7 +40,7 @@ public abstract class Entity : MonoBehaviour
 		{
 			return false;
 		}
-
+        
 		if (currentRoom.GetTile(pos) && currentRoom.GetTile(pos).OnTileObj == this)
 			currentRoom.GetTile(pos).OnTileObj = null;
 
@@ -54,7 +58,8 @@ public abstract class Entity : MonoBehaviour
     Coroutine moveAnim;
     public virtual bool MoveTo(Vector2Int _pos)
     {
-        if (!currentRoom.GetTile(_pos).IsStandAble(this))
+        
+        if (currentRoom.GetTile(_pos) == null ||!currentRoom.GetTile(_pos).IsStandAble(this))
         {
 			return false;
         }

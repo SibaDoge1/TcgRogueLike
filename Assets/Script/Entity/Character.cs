@@ -76,7 +76,7 @@ public abstract class Character : Entity {
             fullHp = value;
         }
     }
-    public virtual int CurrentHp
+    protected virtual int CurrentHp
     {
         get
         {

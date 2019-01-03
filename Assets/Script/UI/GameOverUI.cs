@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+/// <summary>
+/// GameOver UI
+/// </summary>
+/// 
 public class GameOverUI : MonoBehaviour {
 
     RectTransform rect;

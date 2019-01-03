@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour
         deck = transform.Find("Deck").GetComponent<Deck>();
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
-        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
+        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();   
     }
     TextUI textUI;
     AkashaUI akashaUI;

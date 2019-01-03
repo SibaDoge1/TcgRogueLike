@@ -66,11 +66,11 @@ public class Player : Character
         }
     }
 
-    public override int CurrentHp
+    protected override int CurrentHp
     {
         set
         {
-          base.CurrentHp = value;
+            base.CurrentHp = value;
             UIManager.instance.HpUpdate(currentHp, fullHp);
         }
     }
@@ -79,7 +79,6 @@ public class Player : Character
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
         MyCamera.instance.ShakeCamera();
         EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
-        //PlayerData.AkashaGage -= 5;
         return base.GetDamage(damage, atker);
     }
 

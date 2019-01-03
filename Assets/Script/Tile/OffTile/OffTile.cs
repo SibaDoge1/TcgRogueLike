@@ -6,7 +6,7 @@ using Arch;
 
 public abstract class OffTile : MonoBehaviour
 {
-    public int objectNum;
+    public int offTileNum;
     public bool isEvent;
 
     protected Tile currentTile;
@@ -32,5 +32,9 @@ public abstract class OffTile : MonoBehaviour
     public virtual bool IsStandAble(Entity et)
     {
         return true;
+    }
+    public virtual void Init(short num)
+    {
+        offTileNum = num;
     }
 }

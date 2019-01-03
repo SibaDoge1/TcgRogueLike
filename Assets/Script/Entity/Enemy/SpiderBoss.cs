@@ -4,7 +4,6 @@ using UnityEngine;
 using Arch;
 public class SpiderBoss : Enemy {
 
-    GameObject spider;
     protected override void Awake()
     {
         base.Awake();
@@ -12,7 +11,6 @@ public class SpiderBoss : Enemy {
     protected override void Start()
     {
         base.Start();
-        spider = ResourceLoader.instance.LoadEntity(4005);
     }
 
     #region AI
@@ -112,7 +110,7 @@ public class SpiderBoss : Enemy {
         {
             if(tiles[i].OnTileObj ==null)
             {
-                Entity e = InstantiateDelegate.Instantiate(spider).GetComponent<Entity>();
+                Entity e = ArchLoader.instance.GetEntity(4005);
                 e.SetRoom(currentRoom, tiles[i]);
             }
         }

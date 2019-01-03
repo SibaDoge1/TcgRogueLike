@@ -21,7 +21,6 @@ public enum RoomType
 
 public class MapGenerator : MonoBehaviour
 {
-
     #region Interface
     public Map GetMap(int floor, int baNum, int evNum, int shNum)
     {
@@ -41,7 +40,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         currentMap.Rooms = currentRooms;
-        currentMap.SetStartRoom(currentRooms[0]);
+        currentMap.SetStartRoom(startRoom);
 
         currentMap.MaxBorder = GetMaxBorders();
         currentMap.MinBorder = GetMinBorders();
@@ -51,26 +50,6 @@ public class MapGenerator : MonoBehaviour
             currentMap.SetRoomOff(currentRooms[i]);
         }
 
-        return currentMap;
-    }
-    public Map GetTutorialMap()
-    {
-        currentMap = GetComponent<Map>();
-        currentMap.Floor = 0;
-
-        BuildTutorialRooms();
-        SetRooms();
-
-        currentMap.Rooms = currentRooms;
-        currentMap.SetStartRoom(currentRooms[0]);
-
-        currentMap.MaxBorder = GetMaxBorders();
-        currentMap.MinBorder = GetMinBorders();
-
-        for (int i = 0; i < currentRooms.Count; i++)
-        {
-            currentMap.SetRoomOff(currentRooms[i]);
-        }
         return currentMap;
     }
     public Map GetTestMap(int floor, RoomType rt, string roomName)
@@ -87,7 +66,7 @@ public class MapGenerator : MonoBehaviour
         }
 
         currentMap.Rooms = currentRooms;
-        currentMap.SetStartRoom(currentRooms[0]);
+        currentMap.SetStartRoom(startRoom);
 
         currentMap.MaxBorder = GetMaxBorders();
         currentMap.MinBorder = GetMinBorders();
@@ -133,10 +112,9 @@ public class MapGenerator : MonoBehaviour
 
 
     Map currentMap;
-    int roomNum;
+    Room startRoom;
     List<Room> currentRooms;//현재 놓여진 방들
     List<Room> roomsToSet;//놓아야 하는 방들
-    bool testMode;
     public int space = 3;
 
 
@@ -146,7 +124,7 @@ public class MapGenerator : MonoBehaviour
         BuildRoom.Init(currentMap);
         roomsToSet = new List<Room>();
 
-        Room startRoom = BuildRoom.Build(RoomType.START, "start");
+        startRoom = BuildRoom.Build(RoomType.START, "start");
         roomsToSet.Add(startRoom);
 
         for (int i = 0; i < currentMap.BattleRoomNum; i++)
@@ -173,41 +151,28 @@ public class MapGenerator : MonoBehaviour
         BuildRoom.Init(currentMap);
         roomsToSet = new List<Room>();
 
-        Room startRoom = BuildRoom.Build(RoomType.START, "start");
+        startRoom = BuildRoom.Build(RoomType.START, "start");
         roomsToSet.Add(startRoom);
 
         Room testRoom = BuildRoom.Build(rt, s);
         roomsToSet.Add(testRoom);
     }
-    private void BuildTutorialRooms()
-    {
-        BuildRoom.Init(currentMap);
-        roomsToSet = new List<Room>();
-        for (int i=1; i<=4;i++)
-        {
-            Room tutorialRooms = BuildRoom.Build(RoomType.TEST, "tuto" + i);
-            roomsToSet.Add(tutorialRooms);
-            if(i==2)
-            {
-                tutorialRooms.roomType = RoomType.BATTLE;
-            }
-        }
-        
-    }
+
     private void SetRooms()
     {
         currentRooms = new List<Room>();
         Queue<Room> roomQueue = new Queue<Room>(roomsToSet);
         Room cur = roomQueue.Dequeue();
         currentRooms.Add(cur);
-        int buildingCount = 200;
+
         while (roomQueue.Count > 1)
         {
             cur = roomQueue.Dequeue();
-            while (!ConnectRoom(currentRooms[Random.Range(0, currentRooms.Count)], cur))
+            int loopNum = 0;
+            while (!ConnectRoom(currentRooms[loopNum], cur))
             {
-                buildingCount--;
-                if(buildingCount<=0)
+                loopNum++;
+                if (loopNum >= currentRooms.Count)
                 {
                     Debug.Log("Rooms are not fit well So restart");
                     DestroyRooms();
@@ -217,6 +182,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
             currentRooms.Add(cur);
+            ShuffleRoomList();
         }
 
         cur = roomQueue.Dequeue();//ADD BOSS ROOM
@@ -238,9 +204,9 @@ public class MapGenerator : MonoBehaviour
 
     private void DestroyRooms()
     {
-        foreach(Room r in roomsToSet)
+        for(int i=roomsToSet.Count-1; i>=0; i--)
         {
-            Destroy(r.gameObject);
+            Destroy(roomsToSet[i].gameObject);
         }
     }
 
@@ -328,6 +294,16 @@ public class MapGenerator : MonoBehaviour
             int ranNum = Random.Range(i, room.doorList.Count);
             room.doorList[i] = room.doorList[ranNum];
             room.doorList[ranNum] = var;
+        }
+    }
+    private void ShuffleRoomList()
+    {
+        for(int i=0; i<currentRooms.Count;i++)
+        {
+            Room var = currentRooms[i];
+            int ranNum = Random.Range(i, currentRooms.Count);
+            currentRooms[i] = currentRooms[ranNum];
+            currentRooms[ranNum] = var;
         }
     }
     /// <summary>

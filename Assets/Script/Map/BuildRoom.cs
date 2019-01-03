@@ -12,7 +12,7 @@ public static class BuildRoom
     static List<string[,]> shopRooms;
     static Vector2Int size;
     static Tile[,] tiles;
-    static Room room;
+    static Room currentRoom;
     static string[,] roomData;
 
     /// <summary>
@@ -20,21 +20,23 @@ public static class BuildRoom
     /// </summary>
     public static Room Build(RoomType type, string name)
     {
-        room = InstantiateDelegate.Instantiate(Resources.Load("Room") as GameObject, currentMap.transform).GetComponent<Room>();
-        room.roomType = type;
+
+        currentRoom = ArchLoader.instance.GetRoom();
+        currentRoom.transform.parent = currentMap.transform;
+        currentRoom.roomType = type;
 
         roomData = CsvParser.ReadRoom(currentMap.Floor, type, name);
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
-        room.size = size;
+        currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
-        room.SetTileArray(tiles);
+        currentRoom.SetTileArray(tiles);
 
         Draw();
         GenerateGraph();
 
         roomData = null;
-        return room;
+        return currentRoom;
     }
 
     /// <summary>
@@ -43,27 +45,25 @@ public static class BuildRoom
     public static Room Build(RoomType type)
     {
 
-        room = InstantiateDelegate.Instantiate(Resources.Load("Room") as GameObject, currentMap.transform).GetComponent<Room>();
-        room.roomType = type;
+        currentRoom = ArchLoader.instance.GetRoom();
+        currentRoom.transform.parent = currentMap.transform;
+        currentRoom.roomType = type;
 
         roomData = GetRoomData(type);
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
-
-        room.size = size;
+        currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
-        room.SetTileArray(tiles);
+        currentRoom.SetTileArray(tiles);
 
         Draw();
         GenerateGraph();
 
         roomData = null;
-        return room;
+        return currentRoom;
     }
 
-    /// <summary>
-    /// 현재 층의 룸정보파일들의 파일 이름들만 받아서 저장
-    /// </summary>
+
     public static void Init(Map map)
     {
         currentMap = map;
@@ -91,7 +91,7 @@ public static class BuildRoom
 
     static void Draw()
     {
-        int tile; int offtile;  int entity;
+        short tile; short offtile;  short entity;
 
 
         //string을 다시 tile , item, player , height 항목으로 나눕니다
@@ -100,34 +100,32 @@ public static class BuildRoom
             for (int j = 0; j < size.x; j++)
             {
                 string[] temp = roomData[j,i].Split('/');
-                tile = int.Parse(temp[0]);
-                offtile = int.Parse(temp[1]);
-                entity = int.Parse(temp[2]);
+                tile = short.Parse(temp[0]);
+                offtile = short.Parse(temp[1]);
+                entity = short.Parse(temp[2]);
 
-
-
-                    Tile tempTile = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadTile(tile), room.transform).GetComponent<Tile>();
-                    tempTile.SetTile(new Vector2Int(j, (size.y - 1) - i), size);
+                    Tile tempTile = ArchLoader.instance.GetTile(tile);
+                tempTile.Init(tile);
+                    tempTile.SetRoom(currentRoom, new Vector2Int(j, (size.y - 1) - i));
                     tiles[j, (size.y-1)-i] = tempTile;
-                    tempTile.objectNum = tile;
+
                     if (offtile != 0)
                     {
-                        OffTile ot = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadOffTile(offtile), tempTile.transform).GetComponent<OffTile>();
+                        OffTile ot = ArchLoader.instance.GetOffTile(offtile);
+                        ot.Init(offtile);
                         tempTile.offTile = ot;
-                        ot.objectNum = offtile;
                         if (offtile < 5)//문
                         {
-                            room.doorList.Add(ot as OffTile_Door);
+                            currentRoom.doorList.Add(ot as OffTile_Door);
                         }
                     }
 
                     if (entity != 0) //엔타이티
                     {
-                        Entity et = InstantiateDelegate.ProxyInstantiate(ResourceLoader.instance.LoadEntity(entity)).GetComponent<Entity>();
-                        et.SetRoom(room, new Vector2Int(j, (size.y - 1) - i));
-                        et.objectNum = entity;
+                        Entity et = ArchLoader.instance.GetEntity(entity);
+                        et.Init(entity);
+                        et.SetRoom(currentRoom, new Vector2Int(j, (size.y - 1) - i));
                     }                     
-
             }
         }
     }
@@ -138,7 +136,6 @@ public static class BuildRoom
     /// </summary>
      static void GenerateGraph()
     {
-        //TODO : HERE IS TEMP!
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)

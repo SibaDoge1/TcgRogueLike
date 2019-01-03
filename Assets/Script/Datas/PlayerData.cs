@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///  플레이어 데이터는 이곳에 저장한다 (Hp,Atk,Def제외) .
+/// 플레이어 데이터는 이곳에 저장한다 (Hp,Atk,Def는 PlayerClass에서).
 /// </summary>
 public static class PlayerData
 {

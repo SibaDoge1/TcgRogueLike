@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// Game Win UI
+/// </summary>
 public class GameWinUI : MonoBehaviour {
 
     RectTransform rect;
