@@ -15,6 +15,7 @@ public abstract class Character : Entity {
     protected override void Awake()
     {
         base.Awake();
+        spriteRender = GetComponentInChildren<SpriteRenderer>();
     }
     public override bool MoveTo(Vector2Int _pos)
     {

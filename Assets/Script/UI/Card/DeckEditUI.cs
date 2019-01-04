@@ -107,12 +107,12 @@ public class DeckEditUI : MonoBehaviour
                 attainSelected[i].Locate(di);
             }
          
-        for(int i=0; i<deckSelected.Count;i++)
+        for(int i=deckSelected.Count-1; i>=0;i--)
         {
             DeckCardSelectOff(deckSelected[i]);
         }
 
-        for (int i = 0; i < attainSelected.Count; i++)
+        for (int i = attainSelected.Count-1; i >= 0; i--)
         {
             AttainCardSelectOff(attainSelected[i]);
         }

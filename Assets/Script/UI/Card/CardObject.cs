@@ -49,15 +49,17 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 	private const int ActiveThreshold = 200;
     public void OnPointerDown(PointerEventData ped)
     {
-        if(!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
+        hand.SetJoyStick(false);
+        hand.CardInfoOn(data);
+        data.CardEffectPreview();
+
+
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected || !IsAvailable())
         {
             return;
         }
 
-		hand.ChooseOne ();
-		data.CardEffectPreview ();
-        hand.SetJoyStick(false);
-        hand.CardInfoOn(data);
+        hand.ChooseOne ();
 
         if (locateRoutine != null) {
 			StopCoroutine (locateRoutine);
@@ -65,16 +67,18 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		base.transform.rotation = Quaternion.identity;
 	}
 
-	public void OnPointerUp(PointerEventData ped){
-        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
+	public void OnPointerUp(PointerEventData ped)
+    {
+        hand.CardInfoOff();
+        hand.SetJoyStick(true);
+        data.CancelPreview();
+
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected || !IsAvailable())
         {
             return;
         }
 
         hand.ChooseRollback ();
-        hand.CardInfoOff();
-        hand.SetJoyStick(true);    
-        data.CancelPreview();
 
         if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.CurrentRoom().IsEnemyAlive() && IsAvailable())
         {
@@ -88,8 +92,10 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		}
 	}
 
-    public void OnDrag(PointerEventData ped){
-        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
+    public void OnDrag(PointerEventData ped)
+    {
+
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected || !IsAvailable())
         {
             return;
         }

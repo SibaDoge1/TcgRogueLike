@@ -29,8 +29,13 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
+        #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
+        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.SetResolution(1920, 1080, true);
+        #endregion
+
         if (instance == null)
         {
             instance = this;

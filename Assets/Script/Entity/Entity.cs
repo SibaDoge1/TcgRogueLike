@@ -51,7 +51,7 @@ public abstract class Entity : MonoBehaviour
         pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-        transform.localPosition = currentTile.transform.localPosition;
+        transform.localPosition = currentTile.transform.localPosition - (Vector3.back*_pos.y);
         return true;
 	}
 
@@ -71,6 +71,9 @@ public abstract class Entity : MonoBehaviour
         {
             StopCoroutine(moveAnim);
         }
+
+        if (spriteRender == null)
+            spriteRender = GetComponent<SpriteRenderer>();
         moveAnim = StartCoroutine(MoveAnimationRoutine(pos,_pos));
 
         pos = _pos;
@@ -84,8 +87,8 @@ public abstract class Entity : MonoBehaviour
     protected virtual IEnumerator MoveAnimationRoutine(Vector2Int origin,Vector2Int target){
 		float timer = 0;
         Vector3 originPos = currentRoom.GetTile(origin).transform.localPosition;
-        Vector3 targetPos = currentRoom.GetTile(target).transform.localPosition;
-		while (true)
+        Vector3 targetPos = currentRoom.GetTile(target).transform.localPosition - (Vector3.back * target.y);
+        while (true)
         {
 			timer += Time.deltaTime * moveSpeed;
 			if (timer > 1) {

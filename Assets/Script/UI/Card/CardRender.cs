@@ -63,11 +63,9 @@ public class CardRender : MonoBehaviour {
     {
         if(enable)
         {
-            img_Frame.raycastTarget = true;
             img_Frame.color = Color.white;
         }else
         {
-            img_Frame.raycastTarget = false;
             img_Frame.color = Color.black;
         }
     }
