@@ -9,7 +9,9 @@ public abstract class Enemy : Character {
     protected List<GameObject> rangeList = new List<GameObject>();
     protected EnemyUI enemyUI;
 
-    public bool dontAffectByView;
+    public bool dontAffectByView;//시야 유무
+    public bool isElite;//엘리트 몹인가?
+    public int value;
 
     public override void Init(short _entityNum)
     {
@@ -35,7 +37,6 @@ public abstract class Enemy : Character {
     }
     protected virtual void Start()
     {
-        //enemyUI.SetAtt(Atr);
         SetActionLists();
     }
 
@@ -48,6 +49,7 @@ public abstract class Enemy : Character {
         {
             OnEndTurn();
         }
+        currentRoom.RoomValue += value;
         base.OnDieCallback ();
 	}
     public override void SetRoom(Room room, Tile _pos)

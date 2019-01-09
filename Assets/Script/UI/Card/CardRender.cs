@@ -9,6 +9,8 @@ public class CardRender : MonoBehaviour {
 
     private Image img_Frame;
     private Image img_Graphic;
+    private Image img_Enable;
+    private Image img_Upgrade;
     private Image[] ranks;
     private Text thisName;
     static Color gray = new Color(133, 133, 133);
@@ -18,7 +20,7 @@ public class CardRender : MonoBehaviour {
     { get { return img_Frame; } }
     public Image Img_Graphic
     { get { return img_Graphic; }}
-    public byte attribute;
+    public CardType attribute;
 
     // Use this for initialization
     void Awake ()
@@ -27,27 +29,35 @@ public class CardRender : MonoBehaviour {
         img_Frame = transform.Find("Frame").GetComponent<Image>();
         img_Graphic = transform.Find("Graphic").GetComponent<Image>();
         ranks = transform.Find("Rank").GetComponentsInChildren<Image>();
+        img_Enable = transform.Find("enable").GetComponent<Image>();
+        img_Upgrade = transform.Find("upgrade").GetComponent<Image>();
     }
     public void SetGraphic(Sprite sprite)
     {
         Img_Graphic.sprite = sprite;
     }
-    public void SetAttribute(byte _attribute)
+    public void SetAttribute(CardType _attribute)
     {
         attribute = _attribute;
             switch (attribute)
             {
-                case 0:
-                Img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");
+                case CardType.A:
+                     Img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");
                     break;
-                case 1:
+                case CardType.P:
                     Img_Frame.sprite = ArchLoader.instance.GetCardFrame("p");
                 break;
-                case 2:
+                case CardType.T:
                     Img_Frame.sprite = ArchLoader.instance.GetCardFrame("t");
                 break;
-                case 3:
+                case CardType.V:
                     Img_Frame.sprite = ArchLoader.instance.GetCardFrame("v");
+                break;
+            case CardType.NONE:
+                    Img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");//추후에 교체
+                break;
+            case CardType.AKASHA:
+                    Img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");//추후에 교체
                 break;
             }
     }
@@ -59,14 +69,12 @@ public class CardRender : MonoBehaviour {
             ranks[i].gameObject.SetActive(false);
         }
     }
-    public void SetEnable(bool enable)
+    public void SetEnable(bool b)
     {
-        if(enable)
-        {
-            img_Frame.color = Color.white;
-        }else
-        {
-            img_Frame.color = Color.black;
-        }
+        img_Enable.enabled = !b;
+    }
+    public void SetUpgrade(bool b)
+    {
+        img_Upgrade.enabled = b;
     }
 }

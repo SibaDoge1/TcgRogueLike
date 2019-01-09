@@ -31,23 +31,30 @@ public class CardInfoPanel : MonoBehaviour {
     {
         render.sprite = ArchLoader.instance.GetCardSprite(path);
     }
-    public void SetAttribute(byte attribute)
+    public void SetAttribute(CardType attribute)
     {
-        switch(attribute)
+        switch (attribute)
         {
-            case 0:
+            case CardType.A:
                 cardAttribute.sprite = Resources.Load<Sprite>("Attribute/apas1");
                 break;
-            case 1:
+            case CardType.P:
                 cardAttribute.sprite = Resources.Load<Sprite>("Attribute/prithivi1");
                 break;
-            case 2:
+            case CardType.T:
                 cardAttribute.sprite = Resources.Load<Sprite>("Attribute/tejas1");
                 break;
-            case 3:
+            case CardType.V:
                 cardAttribute.sprite = Resources.Load<Sprite>("Attribute/vayu1");
                 break;
+            case CardType.NONE:
+                cardAttribute.sprite = Resources.Load<Sprite>("Attribute/apas1"); //추후에 교체
+                break;
+            case CardType.AKASHA:
+                cardAttribute.sprite = Resources.Load<Sprite>("Attribute/apas1");//추후에 교체
+                break;
         }
+        //TODO : Load방식 고쳐야함
     }
 
 }

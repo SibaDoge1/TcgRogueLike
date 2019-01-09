@@ -46,9 +46,9 @@ public class DeckEditUI : MonoBehaviour
     public void CardInfoOn(Card c)
     {
         cardinfoPanel.gameObject.SetActive(true);
-        cardinfoPanel.SetText(c.CardData.name,c.GetCardInfoString());
-        cardinfoPanel.SetRender(c.CardData.spritePath);
-        cardinfoPanel.SetAttribute(c.CardData.attribute);
+        cardinfoPanel.SetText(c.Name,c.Info);
+        cardinfoPanel.SetRender(c.SpritePath);
+        cardinfoPanel.SetAttribute(c.Type);
     }
     public void CardInfoOff()
     {
@@ -251,8 +251,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = A.GetCard().CardData.cost * 1000 + A.GetCard().CardData.num;
-            int bIndex = B.GetCard().CardData.cost * 1000 + B.GetCard().CardData.num;
+            int aIndex = A.GetCard().Index * 10 + A.GetCard().Cost;
+            int bIndex = B.GetCard().Index * 10 + B.GetCard().Cost;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -261,8 +261,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = A.GetCard().CardData.cost * 1000 + A.GetCard().CardData.num;
-            int bIndex = B.GetCard().CardData.cost * 1000 + B.GetCard().CardData.num;
+            int aIndex = A.GetCard().Index * 10 + A.GetCard().Cost;
+            int bIndex = B.GetCard().Index * 10 + B.GetCard().Cost;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)

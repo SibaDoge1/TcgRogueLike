@@ -6,10 +6,14 @@ using Arch;
 
 public enum Figure
 {
+    NONE,
     X,
     CROSS,
     CIRCLE,
-    SQUARE
+    SQUARE,
+    EMPTYSQUARE,
+    HORIZION,
+    VERTICAL
 }
 
 /// <summary>
@@ -22,6 +26,9 @@ public static class TileUtils
     {
         return Mathf.Abs(a.x - b.x)+ Mathf.Abs(a.y - b.y);
     }
+    /// <summary>
+    /// 가운데가 비어있는 사각형 범위의 타일을 가져옵니다.
+    /// </summary>
     public static List<Tile> EmptySquareRange(Tile center, int radius)
     {
         List<Tile> tiles = TileUtils.SquareRange(center, radius);
@@ -36,6 +43,9 @@ public static class TileUtils
 
         return tiles;
     }
+    /// <summary>
+    /// X범위로 가져옴
+    /// </summary>
     public static List<Tile> XRange(Tile center,int radius)
     {
         List<Tile> crossList = new List<Tile>();
@@ -57,6 +67,56 @@ public static class TileUtils
         }
         return crossList;
     }
+    /// <summary>
+    /// 가로범위 카드들 가져오기
+    /// </summary>
+    public static List<Tile> HorizonRange(Tile center, int radius)
+    {
+        List<Tile> horrizonList = new List<Tile>();
+        int x = (int)center.pos.x; int y = (int)center.pos.y;
+
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x -1 , y + radius)));
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + radius)));
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + radius)));
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - radius)));
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - radius)));
+        horrizonList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y - radius)));
+
+        for (int i = horrizonList.Count - 1; i >= 0; i--)
+        {
+            if (horrizonList[i] == null)
+            {
+                horrizonList.RemoveAt(i);
+            }
+        }
+        return horrizonList;
+    }
+
+    /// <summary>
+    /// 세로범위 카드들 가져오기
+    /// </summary>
+    public static List<Tile> VerticalRange(Tile center, int radius)
+    {
+        List<Tile> verticalList = new List<Tile>();
+        int x = (int)center.pos.x; int y = (int)center.pos.y;
+
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x+radius, y+1)));
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + radius, y)));
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + radius, y-1)));
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - radius, y+1)));
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - radius, y)));
+        verticalList.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - radius, y-1)));
+
+        for (int i = verticalList.Count - 1; i >= 0; i--)
+        {
+            if (verticalList[i] == null)
+            {
+                verticalList.RemoveAt(i);
+            }
+        }
+        return verticalList;
+    }
+
     /// <summary>
     /// 십자로 타일 가져오기
     /// </summary>
@@ -134,7 +194,9 @@ public static class TileUtils
 
         return circleList;
     }
-
+    /// <summary>
+    /// 꽉찬 네모모양으로 타일 가져오기
+    /// </summary>
     public static List<Tile> SquareRange(Tile center, int radius)
     {
         List<Tile> squareList = new List<Tile>();
@@ -172,6 +234,15 @@ public static class TileUtils
             case Figure.SQUARE:
                 range = SquareRange(center, radius);
                 break;
+            case Figure.EMPTYSQUARE:
+                range = EmptySquareRange(center, radius);
+                break;
+            case Figure.HORIZION:
+                range = HorizonRange(center, radius);
+                break;
+            case Figure.VERTICAL:
+                range = VerticalRange(center, radius);
+                break;
             default:
                 range = null;
                 break;
@@ -203,6 +274,15 @@ public static class TileUtils
             case Figure.SQUARE:
                 range = SquareRange(center, radius);
                 break;
+            case Figure.EMPTYSQUARE:
+                range = EmptySquareRange(center, radius);
+                break;
+            case Figure.HORIZION:
+                range = HorizonRange(center, radius);
+                break;
+            case Figure.VERTICAL:
+                range = VerticalRange(center, radius);
+                break;
             default:
                 range = new List<Tile>();
                 break;
@@ -216,6 +296,10 @@ public static class TileUtils
         }
         return targets;
     }
+
+    /// <summary>
+    /// 타일리스트에 있는 적들을 가져옴
+    /// </summary>
     public static List<Enemy> GetEnemies(List<Tile> range)
     {
         List<Enemy> targets = new List<Enemy>();
@@ -229,6 +313,10 @@ public static class TileUtils
         }
         return targets;
     }
+
+    /// <summary>
+    /// 타일리스트의 적들중 num수만큼만 가져옴
+    /// </summary>
     public static List<Enemy> GetEnemies(List<Tile> range,int num)
     {
         List<Enemy> enemies = new List<Enemy>();
@@ -259,6 +347,9 @@ public static class TileUtils
         return targets;
     }
 
+    /// <summary>
+    /// 오토타겟하여 주변의 적을 가져옴
+    /// </summary>
     public static Enemy AutoTarget(Tile center, int radius,Figure figure)
     {
         List<Enemy> targets = new List<Enemy>();
@@ -276,6 +367,15 @@ public static class TileUtils
                 break;
             case Figure.SQUARE:
                 range = SquareRange(center, radius);
+                break;
+            case Figure.EMPTYSQUARE:
+                range = EmptySquareRange(center, radius);
+                break;
+            case Figure.HORIZION:
+                range = HorizonRange(center, radius);
+                break;
+            case Figure.VERTICAL:
+                range = VerticalRange(center, radius);
                 break;
             default:
                 range = new List<Tile>();
@@ -310,6 +410,15 @@ public static class TileUtils
                 break;
             case Figure.SQUARE:
                 range = SquareRange(center, radius);
+                break;
+            case Figure.EMPTYSQUARE:
+                range = EmptySquareRange(center, radius);
+                break;
+            case Figure.HORIZION:
+                range = HorizonRange(center, radius);
+                break;
+            case Figure.VERTICAL:
+                range = VerticalRange(center, radius);
                 break;
             default:
                 range = new List<Tile>();

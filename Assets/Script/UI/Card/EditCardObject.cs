@@ -51,10 +51,14 @@ public class EditCardObject : Button
     public void SetSpriteRender()
     {
         isReavealed = true;
-        render.Name.text = data.CardData.name;
-        render.SetRank(data.CardData.cost);
-        render.SetAttribute(data.CardData.attribute);
-        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.CardData.spritePath));
+        render.Name.text = data.Name;
+        render.SetRank(data.Cost);
+        render.SetAttribute(data.Type);
+        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.SpritePath));
+        if (data is Card_Normal)
+        {
+            render.SetUpgrade((data as Card_Normal).IsUpgraded);
+        }
     }
 
 

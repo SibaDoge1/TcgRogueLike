@@ -1,11 +1,4 @@
 ﻿번호,이름,코스트,속성,val1,val2,val3,텍스트,이미지명,클래스명
-0,리로드,0,0,0,0,0,덱을 리로드 합니다.,reload,Card_Reload
-1,십자공격0,0,0,3,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,cross,Card_CroAtt
-2,X자공격0,0,0,3,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,x,Card_XAtt
-3,광역공격1,1,0,5,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,square,Card_SquAtt
-4,광역공격2,2,0,10,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,squareAll,Card_SquAttAll
-5,광역공격M2,2,0,10,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,mid3Att,Card_Mid3Att
-6,긴십자공격1,1,0,5,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,pierce,Card_PierceAtt
-7,광역공격3,3,0,15,0,0,범위의 적에게 <val1>만큼의 피해를 입힙니다.,strSquareAll,Card_StrSquAllAtt
-9,텔레포트,1,0,3,0,0,선택한 방향으로 <val1>칸 만큼 이동합니다.,pierce,Card_Teleport
-10,회복카드,2,0,2,0,0,<val1>만큼 회복합니다.,heal,Card_Heal
+1,리로드,0,0,0,0,0,덱을 리로드 합니다.,reload,Card_Reload
+2,텔레포트,1,0,3,0,0,선택한 방향으로 <val1>칸 만큼 이동합니다.,pierce,Card_Teleport
+3,회복카드,2,0,2,0,0,<val1>만큼 회복합니다.,heal,Card_Heal

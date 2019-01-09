@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CardType
+{
+    NONE,//기본카드 중 효과안붙음
+    V,//기본카드 효과
+    T,//기본카드 효과
+    P,//기본카드 효과
+    A,//기본카드 효과
+    AKASHA//특수카드
+}
 
-
-public enum CardAbilityType{Attack, NonAttack}
 /// <summary>
 /// 카드 데이터
 /// </summary>
@@ -20,69 +27,39 @@ public abstract class Card
     }
 
     protected int index;
+    public int Index { get { return index; } }
+
+    protected string name;
+    public string Name {get { return name; } }
+
+    protected int cost;
+    public int Cost { get { return cost; } }
+
+    protected CardType cardType = CardType.NONE;
+    public CardType Type { get { return cardType; } }
+
     protected int val1;
     protected int val2;
     protected int val3;
 
-    protected CardData cardData;
-    public CardData CardData
-     {
-        get { return cardData; }
-    }
-    #endregion
+    protected string info;
+    public string Info { get { return info; } }
+
+    protected string spritePath;
+    public string SpritePath { get { return spritePath; } }
+
     protected CardEffectType cardEffect = CardEffectType.Hit;
     protected CardSoundType cardSound = CardSoundType.Hit;
-    protected Figure figure;
-    protected int range;
+    #endregion
+
 
     protected List<GameObject> ranges = new List<GameObject>();
-    protected virtual void SetRangeData() { }
     
     public static void SetPlayer(Player p)
     {
         player = p;
     }
-    public Card()
-    {
-        SetIndex();
-        cardData = Database.GetCardData(index);
-        ValueReset();
-        SetRangeData();
-    }
-    /// <summary>
-    /// 이 카드 객체의 value를 초기화
-    /// </summary>
-    public void ValueReset()
-    {
-        val1 = cardData.val1;
-        val2 = cardData.val2;
-        val3 = cardData.val3; 
-    }
-    /// <summary>
-    /// Val값들 적용하여 Info string 리턴
-    /// </summary>
-    public string GetCardInfoString()
-    {
-        string[] s = string.Copy(cardData._info).Split('<','>');
-       for(int i=0; i< s.Length;i++)
-        {
-            if(s[i] == "val1" || s[i] == "Val1")
-            {
-                s[i] = "" + val1;
-            }else if(s[i] == "val2"  || s[i] == "Val2")
-            {
-                s[i] = "" + val2;
-            }else if (s[i] == "val3" || s[i] == "Val3")
-            {
-                s[i] = "" + val3;
-            }          
-        }
-        return string.Join("",s);
-    }
-    /// <summary>
-    /// 인덱스 처음에 초기화
-    /// </summary>
-    protected abstract void SetIndex();
+
 
 	public CardObject InstantiateHandCard(){
 		CardObject cardObject;
@@ -126,11 +103,11 @@ public abstract class Card
 
     protected virtual void ConsumeAkasha()
     {
-        PlayerData.AkashaGage -= (int)cardData.cost;
+        PlayerData.AkashaGage -= cost;
     }
     public virtual bool IsAvailable()
     {
-		return (PlayerData.AkashaGage>=(int)cardData.cost) ? true:false;
+		return (PlayerData.AkashaGage>=cost) ? true:false;
 	}
 
 	public virtual void CardEffectPreview(){		
@@ -146,18 +123,17 @@ public abstract class Card
 	}
 
     /// <summary>
-    /// 클래스명으로 카드 가져오기, 나중에 번호로 가져오기도 만들것
+    /// 스페셜 카드 가져오기
     /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static Card GetCardByName(string s)
+    private static Card GetSpecialCard(CardData cardData)
     {
-        if (System.Type.GetType(s) != null)
+        System.Type t = System.Type.GetType(cardData.className);
+        if (t != null)
         {
-            var c = System.Activator.CreateInstance(System.Type.GetType(s));
-            if (c is Card)
+            var c = System.Activator.CreateInstance(t,cardData);//해당 타입의 Instance 생성
+            if (c is Card_Special)
             {
-                return (c as Card);
+                return c as Card_Special;
             }
             else
             {
@@ -171,8 +147,30 @@ public abstract class Card
             return null;
         }
     }
+
     public static Card GetCardByNum(int i)
     {        
-        return GetCardByName(Database.GetCardData(i).className);      
+        if(i == 0)
+        {
+            return new Card_Normal();
+        }
+        else
+        {
+            return GetSpecialCard(Database.GetCardData(i));
+        }
+    }
+
+    /// <summary>
+    /// 공격카드에서 데미지를 가할때는 이함수로 할것
+    /// </summary>
+    protected void DamageToTarget(Enemy target, float dam)
+    {
+        if (target != null)
+        {
+            MakeEffect(target.transform.position);
+            MakeSound(target.transform.position);
+            target.GetDamage(dam * player.Atk, player);
+            PlayerData.AttackedTarget();
+        }
     }
 }

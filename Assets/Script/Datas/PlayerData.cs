@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 플레이어 데이터는 이곳에 저장한다 (Hp,Atk,Def는 PlayerClass에서).
+/// 플레이어 데이터는 이곳에 저장한다 (Hp,Atk,Def는 Player Class에서).
 /// </summary>
 public static class PlayerData
 {
@@ -39,6 +39,21 @@ public static class PlayerData
             }
             UIManager.instance.AkashaUpdate(AkashaGage,10);
         }
+    }
+
+    public static void AttackedTarget()
+    {
+        if(!isAttacked)
+        {
+            AkashaGage++;
+            isAttacked = true;
+        }
+    }
+
+    private static bool isAttacked = false;
+    public static void PlayerTurnStart()
+    {
+        isAttacked = false;
     }
 
     public static void Clear()

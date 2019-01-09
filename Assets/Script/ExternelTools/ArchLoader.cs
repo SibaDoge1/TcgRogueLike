@@ -147,8 +147,8 @@ public class ArchLoader : MonoBehaviour {
     Dictionary<string, Sprite> cardFrame = new Dictionary<string, Sprite>();
     public void CacheCardObject()
     {
-        cardObject = Resources.Load<GameObject>("Card/CardBase");
-        editCardObject = Resources.Load<GameObject>("Card/EditCard");
+        cardObject = Resources.Load<GameObject>("Card/CardObject");
+        editCardObject = Resources.Load<GameObject>("Card/EditCardObject");
 
         Sprite[] sprites = Resources.LoadAll<Sprite>("Card/Graphic");
         for(int i=0; i<sprites.Length;i++)

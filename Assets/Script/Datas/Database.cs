@@ -34,11 +34,10 @@ public static class Database
 }
 public class CardData
 {
-    public readonly byte num;
+    public readonly byte index;
     public readonly string name;
     public readonly byte cost;
     public readonly byte attribute;
-    //0->Apas , 1-> Prithivi, 2-> Tejas, 3->Vayu
     public readonly int val1;
     public readonly int val2;
     public readonly int val3;
@@ -49,7 +48,7 @@ public class CardData
 
     public CardData(string[] data)
     {
-        num = byte.Parse(data[0]);
+        index = byte.Parse(data[0]);
         name = data[1];
         cost = byte.Parse(data[2]);
         attribute = byte.Parse(data[3]);

@@ -36,7 +36,6 @@ public abstract class Character : Entity {
     }
 
 
-
     public virtual bool GetDamage(int damage, Entity atker = null)
     {
         

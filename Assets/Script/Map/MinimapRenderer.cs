@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public  static class MinimapTexture 
 {
     private static readonly Color emptyColor = Color.clear;
-    private static readonly Color wallColor = Color.white;
+    private static readonly Color wallColor = Color.clear;
 	private static readonly Color tileColor = Color.blue;
     private static readonly Color playerColor = Color.green;
     private static readonly Color enemyColor = Color.red;

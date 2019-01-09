@@ -13,6 +13,10 @@ public class Room : MonoBehaviour
     public List<OffTile_Door> doorList;
 	Tile[,] tiles;
     public RoomType roomType;
+    private int roomValue;
+    public int RoomValue
+    { get { return roomValue; } set { roomValue = value; } }
+
 	public List<Enemy> enemyList = new List<Enemy>();
 
     private bool isVisited = false;

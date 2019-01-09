@@ -3,27 +3,61 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Card_NonAttack : Card {
+public class Card_Special : Card
+{
+    public Card_Special(CardData cardData)
+    {
+        index = cardData.index;
+        name = cardData.name;
+        cost = cardData.cost;
+        cardType = CardType.AKASHA;
+        val1 = cardData.val1;
+        val2 = cardData.val2;
+        val3 = cardData.val3;
+        info = DataInfoToCardInfo(cardData._info);
+        spritePath = cardData.spritePath;
+    }
 
-	public Card_NonAttack(){}
+    private string DataInfoToCardInfo(string data)
+    {
+        string[] s = string.Copy(data).Split('<', '>');
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == "val1" || s[i] == "Val1")
+            {
+                s[i] = "" + val1;
+            }
+            else if (s[i] == "val2" || s[i] == "Val2")
+            {
+                s[i] = "" + val2;
+            }
+            else if (s[i] == "val3" || s[i] == "Val3")
+            {
+                s[i] = "" + val3;
+            }
+        }
+
+        return string.Join("", s);
+    }
 }
 
-public class Card_Reload : Card_NonAttack{
-    protected override void SetIndex()
+public class Card_Reload : Card_Special{
+    public Card_Reload(CardData cd) : base(cd)
     {
-        index = 0;
-    }
+
+    } 
  
     protected override void CardActive()
     {
+        PlayerControl.Player.GetDamage(1);
 		PlayerControl.instance.ReLoadDeck ();
 	}
 }
-public class Card_Teleport : Card_NonAttack
+public class Card_Teleport : Card_Special
 {
-    protected override void SetIndex()
+
+    public Card_Teleport(CardData cd) : base(cd)
     {
-        index = 9;
         isDirectionCard = true;
     }
 
@@ -46,7 +80,8 @@ public class Card_Teleport : Card_NonAttack
                 break;
         }
 
-        player.MoveTo(player.pos + d*3);
+        player.MoveTo(player.pos + d * 3);
+        
     }
 
     private List<Tile> targetTiles;
@@ -68,11 +103,11 @@ public class Card_Teleport : Card_NonAttack
         }
     }
 }
-public class Card_Heal : Card_NonAttack
+public class Card_Heal : Card_Special
 {
-    protected override void SetIndex()
+    public Card_Heal(CardData cd) : base(cd)
     {
-        index = 10;
+
     }
     protected override void CardActive()
     {

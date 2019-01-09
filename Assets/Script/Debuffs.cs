@@ -50,3 +50,4 @@ public class Debuff_Draw : Debuffs
         //TODO : ERASE EFFECT
     }
 }
+//게이지 충전 불가

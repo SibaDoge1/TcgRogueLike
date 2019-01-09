@@ -15,21 +15,21 @@ public class Hand : MonoBehaviour {
 
 
 	public int CurrentHandCount{
-		get{ return hand.Count; }
+		get{ return handList.Count; }
 	}
 
     public GameObject joyStick;
 	private Transform drawStartPosition;
     private CardInfoPanel cardinfo;
     private bool isHided;
-	private List<CardObject> hand = new List<CardObject> ();
+	private List<CardObject> handList = new List<CardObject> ();
 
     public void CardInfoOn(Card c)
     {
         cardinfo.gameObject.SetActive(true);
-        cardinfo.SetText(c.CardData.name,c.GetCardInfoString());
-        cardinfo.SetRender(c.CardData.spritePath);
-        cardinfo.SetAttribute(c.CardData.attribute);
+        cardinfo.SetText(c.Name,c.Info);
+        cardinfo.SetRender(c.SpritePath);
+        cardinfo.SetAttribute(c.Type);
     }
     public void CardInfoOff()
     {
@@ -49,7 +49,7 @@ public class Hand : MonoBehaviour {
 		cardObject.transform.position = drawStartPosition.position;
 		cardObject.transform.localScale = Vector3.one;
 
-		hand.Add (cardObject);
+		handList.Add (cardObject);
 		SetCardPosition ();
 	}
 
@@ -62,7 +62,7 @@ public class Hand : MonoBehaviour {
 		cardObject.transform.localPosition = Vector3.zero;
 		cardObject.transform.localScale = Vector3.one;
 
-		hand.Add (cardObject);
+		handList.Add (cardObject);
 		StartCoroutine (AddHandRoutine (cardObject));
 	}
 
@@ -117,29 +117,37 @@ public class Hand : MonoBehaviour {
     {
         if(enable)
         {
-            for(int i=0; i<hand.Count;i++)
+            for(int i=0; i<handList.Count;i++)
             {
-                hand[i].EnableInteraction(true);
+                handList[i].EnableInteraction(true);
             }
         }
         else
         {
-            for (int i = 0; i < hand.Count; i++)
+            for (int i = 0; i < handList.Count; i++)
             {
-                hand[i].EnableInteraction(false);
+                handList[i].EnableInteraction(false);
             }
         }
     }
 
+    /// <summary>
+    /// List에서 지우기만 , CardObject는 따로 Destroy 해줘야함
+    /// </summary>
 	public void RemoveCard(CardObject co){
-		hand.Remove (co);
+		handList.Remove (co);
 		SetCardPosition ();
 	}
+    public void RemoveLeftCard()
+    {
+        handList[0].Remove();
+        SetCardPosition();
+    }
     public void RemoveAll()
     {
-        for(int i = hand.Count-1; i>=0;i--)
+        for(int i = handList.Count-1; i>=0;i--)
         {
-            hand[i].Remove();
+            handList[i].Remove();
         }
     }
 
@@ -171,8 +179,8 @@ public class Hand : MonoBehaviour {
 	}
 	#region Private
 	private void SetCardPosition(){
-		for (int i = 0; i < hand.Count; i++) {
-			hand [i].SetLocation (hand.Count, i, isHided);
+		for (int i = 0; i < handList.Count; i++) {
+			handList [i].SetLocation (handList.Count, i, isHided);
 		}
 	}
 

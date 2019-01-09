@@ -23,7 +23,7 @@ public class Deck : MonoBehaviour {
 		remainDeck = new List<Card> (PlayerData.Deck);
 		Shuffle ();
 		remainDeck.Add (remainDeck [0]);
-		remainDeck [0] = new Card_Reload ();
+		remainDeck [0] = new Card_Reload (Database.GetCardData(1));//1번은 리로드
 		RefreshText ();
 	}
 

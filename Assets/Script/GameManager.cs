@@ -32,8 +32,7 @@ public class GameManager : MonoBehaviour
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
-        Screen.orientation = ScreenOrientation.Portrait;
-        Screen.SetResolution(1920, 1080, true);
+        Screen.orientation = ScreenOrientation.Landscape;
         #endregion
 
         if (instance == null)
@@ -129,7 +128,7 @@ public class GameManager : MonoBehaviour
         PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE)
         {
-            GetRandomCardToAttain(CurrentMap.Floor);
+            GetRandomCardToAttain(CurrentRoom().RoomValue);
         }
     }
 
@@ -160,6 +159,7 @@ public class GameManager : MonoBehaviour
         //PlayerControl.instance.EnableCards(true);
         currentTurn = Turn.PLAYER;
         PlayerControl.instance.CountDebuff();
+        PlayerData.PlayerTurnStart();
         MinimapTexture.DrawEnemies(CurrentRoom().transform.position, CurrentRoom().GetEnemyPoses());
     }
 
@@ -198,20 +198,20 @@ public class GameManager : MonoBehaviour
     }
 
     #region private
+    /// <summary>
+    /// 게임 시작시 덱 빌드
+    /// </summary>
     private void BuildDeck()
     {
-        CardPoolData startCards = Database.GetCardPool(0);
-        for(int i=0; i<startCards.cardPool.Count;i++)
-        {
-            PlayerData.Deck.Add(Card.GetCardByNum(startCards.cardPool[i]));
-        }
+        for(int i=0; i<12;i++) // 현재 랜덤으로 12장 생성
+          PlayerData.Deck.Add(Card.GetCardByNum(0));     
     }
-    private void GetRandomCardToAttain(int floor)
+    private void GetRandomCardToAttain(int value)
     {
         //TODO : 몬스터 랭크에 따라 획득하도록 변경
-        if (floor <= 1)
+        if (value <= 1)
         {
-            PlayerControl.instance.AddToAttain(Database.GetCardPool(2).GetRandomCard());
+            PlayerControl.instance.AddToAttain(Database.GetCardPool(0).GetRandomCard());
         }
     }
 

@@ -22,12 +22,16 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     }
 
 
-    public void SetCardRender(Card data_){
-		data = data_;
-        render.Name.text = data.CardData.name;
-        render.SetRank(data.CardData.cost);
-        render.SetAttribute(data.CardData.attribute);
-        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.CardData.spritePath));
+    public void SetCardRender(Card _data){
+		data = _data;
+        render.Name.text = data.Name;
+        render.SetRank(data.Cost);
+        render.SetAttribute(data.Type);
+        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.SpritePath));
+        if(_data is Card_Normal)
+        {
+            render.SetUpgrade((_data as Card_Normal).IsUpgraded);
+        }
     }
 
 	public void SetParent(Hand hand_)

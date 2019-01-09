@@ -49,48 +49,28 @@ using UnityEngine;
                     return odd;
             }
         }
+    /// <summary>
+    /// n%확률로 true 리턴
+    /// </summary>
 
-        /// <summary>
-        /// 가변인자로 여러개 받고 거기서 당첨된거 넘버로 변환
-        /// </summary>
-        /// <returns></returns>
-        public static int RandomEvent(params float[] list)
-      {
-        float total=0;
-        float adds = 0;
-        for (int i=0; i<list.Length;i++)
+        public static bool GetRandomBool(float n)
         {
-            total += list[i];
-        }
-        float num = Random.Range(1, total);
-        for (int i=0; i<list.Length;i++)
-        {
-            adds += list[i];
-            if(num <= adds)
+            float b = Random.Range(0, 100f);
+            if(b<=n)
             {
-                return i+1;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
-        return list.Length;
-    }
+    /// <summary>
+    /// 가변인자로 여러개 받고 거기서 당첨된 수 리턴
+    /// </summary>
     public static int RandomEvent(params int[] list)
-      {
-        int total = 0;
-        int adds = 0;
-        for (int i = 0; i < list.Length; i++)
-        {
-            total += list[i];
-        }
-        int num = Random.Range(1, total+1);
-        for (int i = 0; i < list.Length; i++)
-        {
-            adds += list[i];
-            if (num <= adds)
-            {
-                return i+1;
-            }
-        }
-        return list.Length;
+    {
+        return list[Random.Range(0,list.Length)];
     }
 }
 

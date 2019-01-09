@@ -23,7 +23,6 @@ public class PlayerControl : MonoBehaviour {
         {
             NaturalDraw();
             GameManager.instance.OnEndPlayerTurn();
-            PlayerData.AkashaGage += 2;
         }
     }
 
@@ -81,17 +80,21 @@ public class PlayerControl : MonoBehaviour {
 	public void NaturalDraw(){
 		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.DrawHand (deck.Draw ());
-		}
+		}else
+        {
+            hand.RemoveLeftCard();//가장왼쪽의 카드 제거
+            hand.DrawHand(deck.Draw());
+        }
 	}
 
     /// <summary>
-    /// 인벤토리에 카드 추가, 애니메이션 재생
+    /// Attain 카드 추가, 애니메이션 재생
     /// </summary>
     /// <param name="cData"></param>
     public void AddToAttain(Card cData)
     {
         PlayerData.AttainCards.Add(cData);
-        switch(cData.CardData.cost)
+        switch(cData.Cost)
         {
             case 0:
                 EffectDelegate.instance.MadeEffect(UIEffect.AttainR0, UIManager.canvas);
@@ -151,7 +154,10 @@ public class PlayerControl : MonoBehaviour {
                 if (player.currentRoom.IsEnemyAlive())
                 {
                     NaturalDraw();
-                    PlayerData.AkashaGage -= 1;
+                    if(PlayerData.AkashaGage<5)
+                    {
+                        PlayerData.AkashaGage += 1;
+                    }
                 }
                 GameManager.instance.OnEndPlayerTurn();
             }
