@@ -270,6 +270,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Changes: 데이터, 캐시 미리 하던거 메인메뉴씬으로 옮김
+    //Changes: readdata 함수 삭제
     #endregion
 }

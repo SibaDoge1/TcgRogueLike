@@ -5,9 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class LoadingManager : MonoBehaviour {
     
+    void Awake()
+    {
+       // DontDestroyOnLoad(this.gameObject);
+    }
+
     public void LoadScene()
     {
-        DontDestroyOnLoad(this.gameObject);
         gameObject.SetActive(true);
         StartCoroutine("LoadSceneRoutine");
     }
