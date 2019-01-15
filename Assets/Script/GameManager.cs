@@ -29,11 +29,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
-        #region 안드로이드 설정
-        Input.multiTouchEnabled = false;
-        Application.targetFrameRate = 60;
-        Screen.orientation = ScreenOrientation.Landscape;
-        #endregion
+        //Changes: 안드로이드 설정 메인메뉴씬으로 옮김
 
         if (instance == null)
         {
@@ -50,7 +46,6 @@ public class GameManager : MonoBehaviour
     {
         SetSeed();
 
-        ReadDatas();
         ArchLoader.instance.GetPlayer();
         PlayerData.Clear();
         BuildDeck();
@@ -274,10 +269,7 @@ public class GameManager : MonoBehaviour
             Destroy(currentMap.gameObject);
         }
     }
-    private void ReadDatas()
-    {
-        Database.ReadDatas();//todo : 룸데이터도 여기서 아예 읽어오자
-        ArchLoader.instance.StartCache();
-    }
+
+    //Changes: 데이터, 캐시 미리 하던거 메인메뉴씬으로 옮김
     #endregion
 }

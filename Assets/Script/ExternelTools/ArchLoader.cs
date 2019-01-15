@@ -7,21 +7,27 @@ using Arch;
 /// </summary>
 /// 
 public class ArchLoader : MonoBehaviour {
-
+    //Changes: 캐싱하고 파싱하는걸 메인메뉴씬으로 옮겨둠
     public static ArchLoader instance;
+    public bool isCached;
+
     private void Awake()
     {
         instance = this;
+        isCached = false;
+        DontDestroyOnLoad(this.gameObject);
     }
 
     public void StartCache()
     {
+        if (isCached) return;
         CacheEntity();
         CacheTile();
         CacheOffTile();
         CachePlayer();
         CacheRoom();
         CacheCardObject();
+        isCached = true;
     }
 
     #region Get
