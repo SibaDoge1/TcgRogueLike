@@ -62,7 +62,7 @@ public class Player : Character
         set
         {
             base.FullHp = value;
-            UIManager.instance.HpUpdate(currentHp, fullHp);
+            UIManager.instance.HpUpdate(currentHp);
         }
     }
 
@@ -71,7 +71,7 @@ public class Player : Character
         set
         {
             base.CurrentHp = value;
-            UIManager.instance.HpUpdate(currentHp, fullHp);
+            UIManager.instance.HpUpdate(currentHp);
         }
     }
     public override bool GetDamage(int damage, Entity atker = null)

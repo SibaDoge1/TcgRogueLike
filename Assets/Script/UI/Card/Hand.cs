@@ -10,7 +10,6 @@ public class Hand : MonoBehaviour {
     {
 		originLocalPosition = transform.localPosition;
         drawStartPosition = transform.Find("CardDrawPosition");
-        cardinfo = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
 	}
 
 
@@ -20,21 +19,9 @@ public class Hand : MonoBehaviour {
 
     public GameObject joyStick;
 	private Transform drawStartPosition;
-    private CardInfoPanel cardinfo;
     private bool isHided;
 	private List<CardObject> handList = new List<CardObject> ();
 
-    public void CardInfoOn(Card c)
-    {
-        cardinfo.gameObject.SetActive(true);
-        cardinfo.SetText(c.Name,c.Info);
-        cardinfo.SetRender(c.SpritePath);
-        cardinfo.SetAttribute(c.Type);
-    }
-    public void CardInfoOff()
-    {
-        cardinfo.gameObject.SetActive(false);
-    }
     public void SetJoyStick(bool b)
     {
         joyStick.gameObject.SetActive(b);

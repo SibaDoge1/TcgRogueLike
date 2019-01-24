@@ -67,13 +67,13 @@ public class GameManager : MonoBehaviour
         SetMap(level);
 
         MinimapTexture.Init(currentMap);
-        SetingtPlayer(PlayerControl.instance);
+        SettingtPlayer(PlayerControl.instance);
 
         EnemyControl.instance.SetRoom(CurrentMap.StartRoom);
 
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
 
-        UIManager.instance.AkashaUpdate(PlayerData.AkashaGage, 10);
+        UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
 
         if (currentMap.Floor == 1)
             SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
@@ -208,14 +208,10 @@ public class GameManager : MonoBehaviour
     }
     private void GetRandomCardToAttain(int value)
     {
-        //TODO : 몬스터 랭크에 따라 획득하도록 변경
-        if (value <= 1)
-        {
-            PlayerControl.instance.AddToAttain(Database.GetCardPool(0).GetRandomCard());
-        }
+        PlayerControl.instance.AddToAttain(Database.GetCardPoolByValue(value).GetRandomCard());       
     }
-
-    private void SetingtPlayer(PlayerControl pc)
+    
+    private void SettingtPlayer(PlayerControl pc)
     {
         pc.gameObject.SetActive(true);
         pc.deck = UIManager.instance.GetDeck();

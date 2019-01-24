@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Deck : MonoBehaviour {
 
-	public Text txt_RemainCard;
 	public List<Card> remainDeck;
 
 	public CardObject Draw(){
@@ -14,8 +13,8 @@ public class Deck : MonoBehaviour {
 		}
 		Card c = remainDeck [remainDeck.Count - 1];
 		remainDeck.RemoveAt(remainDeck.Count - 1);
-		RefreshText ();
-		return c.InstantiateHandCard ();
+        DrawCallBack();
+        return c.InstantiateHandCard ();
 	}
 
 	public void Load()
@@ -24,7 +23,7 @@ public class Deck : MonoBehaviour {
 		Shuffle ();
 		remainDeck.Add (remainDeck [0]);
 		remainDeck [0] = new Card_Reload (Database.GetCardData(1));//1번은 리로드
-		RefreshText ();
+		LoadCallBack ();
 	}
 
 	#region Private
@@ -40,8 +39,21 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	private void RefreshText(){
-		txt_RemainCard.text = "X " + remainDeck.Count; 
-	}
-	#endregion
+    public int DeckCount
+    {
+        get
+        {
+            return remainDeck.Count;
+        }
+    }
+    private void DrawCallBack()
+    {
+        UIManager.instance.SetCardNumber(remainDeck.Count);
+    }
+    private void LoadCallBack()
+    {
+        UIManager.instance.SetCardNumber(remainDeck.Count);
+    }
+
+    #endregion
 }

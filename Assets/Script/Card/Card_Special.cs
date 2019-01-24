@@ -10,7 +10,7 @@ public class Card_Special : Card
         index = cardData.index;
         name = cardData.name;
         cost = cardData.cost;
-        cardType = CardType.AKASHA;
+        cardType = CardType.S;
         val1 = cardData.val1;
         val2 = cardData.val2;
         val3 = cardData.val3;

@@ -30,6 +30,21 @@ public static class Database
     {
         return monsterDatas[i];
     }
+    public static CardPoolData GetCardPoolByValue(int value)
+    {
+        int offset = int.MaxValue;
+        int index = 0;
+         for(int i=0; i<cardPoolDatas.Count;i++)
+        {
+            int temp = Mathf.Abs(value - cardPoolDatas[i].value);
+            if(temp<offset)
+            {
+                offset = temp;
+                index = i;
+            }
+        }
+        return cardPoolDatas[index];
+    }
     
 }
 public class CardData

@@ -14,6 +14,12 @@ public class ArchLoader : MonoBehaviour {
         instance = this;
     }
 
+    private bool isCached;
+    public bool IsCached
+    {
+        get { return isCached; }
+    }
+
     public void StartCache()
     {
         CacheEntity();
@@ -22,9 +28,30 @@ public class ArchLoader : MonoBehaviour {
         CachePlayer();
         CacheRoom();
         CacheCardObject();
+        isCached = true;
     }
 
     #region Get
+    public Sprite GetCardAttribute(CardType type)
+    {
+        switch(type)
+        {
+            case CardType.A:
+                return attributes["akasha"];
+            case CardType.P:
+                return attributes["prithivi"];
+            case CardType.T:
+                return attributes["tejas"];
+            case CardType.V:
+                return attributes["vayu"];
+            case CardType.N:
+                return attributes["apas"];
+            case CardType.S:
+                return null;//temp
+            default :
+                return null;
+        }
+    }
     public CardObject GetCardObject()
     {
         return Instantiate(cardObject).GetComponent<CardObject>();
@@ -36,6 +63,10 @@ public class ArchLoader : MonoBehaviour {
     public Sprite GetCardSprite(string name)
     {
         return cardSprites[name];
+    }
+    public Sprite GetDoorSprite(string name)
+    {
+        return doorSprites[name];
     }
     public Sprite GetCardFrame(string name)
     {
@@ -79,12 +110,13 @@ public class ArchLoader : MonoBehaviour {
     }
     #endregion
 
+    #region Cache
     /// <summary>
     /// Entity들 로딩 , Structure는 이미지도 로딩
     /// </summary>
     Dictionary<int, Sprite> structureImages = new Dictionary<int, Sprite>();
     Dictionary<int, GameObject> enemies = new Dictionary<int, GameObject>();
-    public void CacheEntity()
+    private void CacheEntity()
     {
         GameObject[] objects = Resources.LoadAll<GameObject>("Fields/Entity");
         for (int i = 0; i < objects.Length; i++)
@@ -104,7 +136,7 @@ public class ArchLoader : MonoBehaviour {
 
     GameObject tile;
     Dictionary<int, Sprite> tileImages = new Dictionary<int, Sprite>();
-    public void CacheTile()
+    private void CacheTile()
     {
         tile = Resources.Load<GameObject>("Fields/Tile/tile");
         Sprite[] sprites = Resources.LoadAll<Sprite>("Graphic/Tile");
@@ -114,15 +146,22 @@ public class ArchLoader : MonoBehaviour {
         }
     }
     /// <summary>
-    /// Offtile들 로딩
+    /// Offtile들 로딩 , Door Sprite들도 로딩
     /// </summary>
     Dictionary<int, GameObject> offtiles = new Dictionary<int, GameObject>();
-    public void CacheOffTile()
+    Dictionary<string, Sprite> doorSprites = new Dictionary<string, Sprite>();
+    private void CacheOffTile()
     {
         GameObject[] objects = Resources.LoadAll<GameObject>("Fields/OffTile");
         for(int i=0; i<objects.Length;i++)
         {
             offtiles.Add(int.Parse(objects[i].name), objects[i]);
+        }
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Graphic/OffTile/Door");
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            doorSprites.Add(sprites[i].name, sprites[i]);
         }
     }
 
@@ -130,13 +169,13 @@ public class ArchLoader : MonoBehaviour {
     /// Player로딩
     /// </summary>
     GameObject player;
-    public void CachePlayer()
+    private void CachePlayer()
     {
         player =  Resources.Load<GameObject>("Player");
     }
 
     GameObject room;
-    public void CacheRoom()
+    private void CacheRoom()
     {
         room = Resources.Load<GameObject>("Room");
     }
@@ -145,7 +184,8 @@ public class ArchLoader : MonoBehaviour {
     GameObject editCardObject;
     Dictionary<string, Sprite> cardSprites = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> cardFrame = new Dictionary<string, Sprite>();
-    public void CacheCardObject()
+    Dictionary<string, Sprite> attributes = new Dictionary<string, Sprite>();
+    private void CacheCardObject()
     {
         cardObject = Resources.Load<GameObject>("Card/CardObject");
         editCardObject = Resources.Load<GameObject>("Card/EditCardObject");
@@ -161,6 +201,12 @@ public class ArchLoader : MonoBehaviour {
         {
             cardFrame.Add(sprites[i].name, sprites[i]);
         }
+
+        sprites = Resources.LoadAll<Sprite>("Attribute");
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            attributes.Add(sprites[i].name, sprites[i]);
+        }
     }
-    
+    #endregion
 }

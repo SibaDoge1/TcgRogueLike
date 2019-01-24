@@ -16,9 +16,6 @@ public class OffTile_Door : OffTile
                 return sprite;              
             }
     }
-    public Sprite opened;
-    public Sprite closed;
-    public Sprite broken;
     private bool isDestroyed;
     public bool IsDestroyed
     {
@@ -55,18 +52,29 @@ public class OffTile_Door : OffTile
     }
     public void Open()
     {
-        Sprite.sprite = opened;
+        switch (targetRoom.roomType)
+        {
+            case RoomType.BOSS:
+                Sprite.sprite = ArchLoader.instance.GetDoorSprite("boss");
+                break;
+            case RoomType.EVENT:
+                Sprite.sprite = ArchLoader.instance.GetDoorSprite("event");
+                break;
+            default:
+                Sprite.sprite = ArchLoader.instance.GetDoorSprite("normal");
+                break;
+        }
         isOpen = true;
     }
     public void Close()
     {
-        sprite.sprite = closed;
+        Sprite.sprite = ArchLoader.instance.GetDoorSprite("closed");
         isOpen = false;
     }
     public void DestroyDoor()
     {
         isDestroyed = true;
-        Sprite.sprite = broken;
+        Sprite.sprite = ArchLoader.instance.GetDoorSprite("broken");
         Sprite.sortingOrder += 999; ///다른 Ontile에 가려지는거 막기
     }
 

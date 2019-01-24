@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class DeckEditUI : MonoBehaviour
 {
     private RectTransform rect;
-    private CardInfoPanel cardinfoPanel;
     private Vector3 offPos = new Vector3(0, 2000, 0);
     private bool isEditOk=false;
     public bool IsEditOk { get { return isEditOk; } }
@@ -27,62 +26,56 @@ public class DeckEditUI : MonoBehaviour
     RectTransform attainViewPort;
     public RectTransform AttainViewPort { get { return attainViewPort; } }
 
-    Text currentMode;
-    Button ChangeButton;
+    RectTransform exchangePopUp;
+
+    Button changeButton;
 
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
         deckViewPort = transform.Find("DeckPanel").Find("DeckCardPool").Find("viewport").GetComponent<RectTransform>();
         attainViewPort = transform.Find("DeckPanel").Find("AttainCardPool").Find("viewport").GetComponent<RectTransform>();
-        cardinfoPanel = transform.Find("DeckPanel").Find("CardInfoPanel").GetComponent<CardInfoPanel>();
 
-        currentMode = transform.Find("DeckPanel").Find("Texts").Find("currentMode").GetComponent<Text>();
-        ChangeButton = transform.Find("DeckPanel").Find("Buttons").Find("changeButton").GetComponent<Button>();
-        
+        changeButton = transform.Find("DeckPanel").Find("Buttons").Find("changeButton").GetComponent<Button>();
+        exchangePopUp = transform.Find("DeckPanel").Find("Buttons").Find("check").GetComponent<RectTransform>();
     }
 
     #region CardInfoPanel
-    public void CardInfoOn(Card c)
-    {
-        cardinfoPanel.gameObject.SetActive(true);
-        cardinfoPanel.SetText(c.Name,c.Info);
-        cardinfoPanel.SetRender(c.SpritePath);
-        cardinfoPanel.SetAttribute(c.Type);
-    }
-    public void CardInfoOff()
-    {
-        cardinfoPanel.gameObject.SetActive(false);
-    }
-    public void CardInfoUnknown()
-    {
-        cardinfoPanel.gameObject.SetActive(true);
-        cardinfoPanel.SetUnknown();
-    }
+
     #endregion
 
-    public void On(bool ok)
+    public void On()
     {
-        isEditOk = ok;
-        isEditMode = ok;
-        rect.anchoredPosition = Vector3.zero;
-        SetTitle(isEditOk);
-        MakeCardObjects();
-        ChangeButton.gameObject.SetActive(ok);
-        if (ok)
-        {
-            RevealAttainCards();
-            deckSelected = new List<EditCardObject>();
-            attainSelected = new List<EditCardObject>();
-        }
+        Debug.Log("On");
 
+        GameManager.instance.IsInputOk = false;
+        isEditOk = true;//bool
+        isEditMode = true;//bool
+        rect.anchoredPosition = Vector3.zero;
+        MakeCardObjects();
+        changeButton.gameObject.SetActive(true);//b
+        //if
+        RevealAttainCards();
+        deckSelected = new List<EditCardObject>();
+        attainSelected = new List<EditCardObject>();  
+        //     
+        UIManager.instance.CardInfoPanel_Off();
     }
     public void Off()
     {
+        UIManager.instance.CardInfoPanel_Off();
         StartCoroutine(OffRoutine());
-        ChangeButton.interactable = false;
+        changeButton.interactable = false;
     }
 
+    public void ExchangePopUp_On()
+    {
+        exchangePopUp.gameObject.SetActive(true);
+    }
+    public void ExchangePopUp_Off()
+    {
+        exchangePopUp.gameObject.SetActive(false);
+    }
     public void ExchangeCards()
     {
 
@@ -117,7 +110,9 @@ public class DeckEditUI : MonoBehaviour
             AttainCardSelectOff(attainSelected[i]);
         }
         isEditOk = false;
-        ChangeButton.interactable = false;
+        changeButton.interactable = false;
+        UIManager.instance.CardInfoPanel_Off();
+        ExchangePopUp_Off();
     }
 
 
@@ -162,28 +157,14 @@ public class DeckEditUI : MonoBehaviour
     {
         if(attainSelected.Count==deckSelected.Count)
         {
-            ChangeButton.interactable = true;
+            changeButton.interactable = true;
         }else
         {
-            ChangeButton.interactable = false;
+            changeButton.interactable = false;
         }
     }
 
     #region private
-    /// <summary>
-    /// Temp
-    /// </summary>
-    private void SetTitle(bool bo)
-    {
-        if (bo)
-        {
-            currentMode.text = "수정모드";
-        }
-        else
-        {
-            currentMode.text = "뷰 모드";
-        }
-    }
     private void MakeCardObjects()
     {
         deck = new List<Card>(PlayerData.Deck);
@@ -196,7 +177,7 @@ public class DeckEditUI : MonoBehaviour
         {
             deckCardObjects[i].SetParent(deckViewPort,true);
             deckCardObjects[i].SetDeckUI(this);
-            deckCardObjects[i].SetSpriteRender();
+            deckCardObjects[i].SetRenderKnown();
         }
 
         attain = new List<Card>(PlayerData.AttainCards);
@@ -209,9 +190,11 @@ public class DeckEditUI : MonoBehaviour
         {
             attainCardObjects[i].SetParent(attainViewPort,false);
             attainCardObjects[i].SetDeckUI(this);
+            attainCardObjects[i].SetRenderUnknown();
         }
         SortCards();
     }
+
     private void DeleteAllObjects()
     {
         for(int i=deckCardObjects.Count-1;i>=0;i--)
@@ -229,7 +212,7 @@ public class DeckEditUI : MonoBehaviour
         {
             if(!attainCardObjects[i].IsReavealed)
             {
-                attainCardObjects[i].SetSpriteRender();
+                attainCardObjects[i].SetRenderKnown();
                 yield return new WaitForSeconds(0.3f);
             }
         }
@@ -237,7 +220,7 @@ public class DeckEditUI : MonoBehaviour
     }
     IEnumerator OffRoutine()
     {
-        if(isEditMode)
+        if(isEditMode) //TODO : 카드 발화 애니메이션
         {
             PlayerData.Deck = deck;
             PlayerData.AttainCards.Clear();

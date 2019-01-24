@@ -24,14 +24,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
     public void SetCardRender(Card _data){
 		data = _data;
-        render.Name.text = data.Name;
-        render.SetRank(data.Cost);
-        render.SetAttribute(data.Type);
-        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.SpritePath));
-        if(_data is Card_Normal)
-        {
-            render.SetUpgrade((_data as Card_Normal).IsUpgraded);
-        }
+        render.SetRender(_data);
     }
 
 	public void SetParent(Hand hand_)
@@ -54,7 +47,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
     public void OnPointerDown(PointerEventData ped)
     {
         hand.SetJoyStick(false);
-        hand.CardInfoOn(data);
+        UIManager.instance.CardInfoPanel_On(data);
         data.CardEffectPreview();
 
 
@@ -73,7 +66,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 
 	public void OnPointerUp(PointerEventData ped)
     {
-        hand.CardInfoOff();
+        UIManager.instance.CardInfoPanel_Off();
         hand.SetJoyStick(true);
         data.CancelPreview();
 
@@ -190,14 +183,7 @@ public class CardObject : MonoBehaviour, IDragHandler,IPointerDownHandler,IPoint
 		
 	private static Vector3 GetPosition(int total, int target)
     {
-		if (total == 1) {
-			return new Vector3 (0, handYOffset * 120, 0);
-		}
-		float totalInterval = total*0.5f + (total * total)/(28);
-		Vector3 result = new Vector3(-totalInterval + (totalInterval * 2 / (total - 1)) * target, handYOffset);
-		//result.x = -totalInterval + (totalInterval * 2 / (total - 1)) * target;
-        //result.y = Mathf.Sqrt(100 - result.x * result.x) + handYOffset-10;
-        return result * 120;
+		return new Vector3(-400 + 180*(5-total) + target*185, handYOffset);
 	}
 	#endregion
 }

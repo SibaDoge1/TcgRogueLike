@@ -34,9 +34,9 @@ public class EditCardObject : Button
     bool isSelected;
     public bool IsSelected {
         get { return isSelected; }
-        set {isSelected = value; }
+        set { isSelected = value; }
     }
-    protected  override void Awake()
+    protected override void Awake()
     {
         onClick.AddListener(OnClickThis);
         highLightImage = transform.Find("HighLight").GetComponent<Image>();
@@ -45,22 +45,21 @@ public class EditCardObject : Button
     }
 
     public void SetCard(Card data_)
-    {      
-        data = data_;              
-    }
-    public void SetSpriteRender()
     {
-        isReavealed = true;
-        render.Name.text = data.Name;
-        render.SetRank(data.Cost);
-        render.SetAttribute(data.Type);
-        render.SetGraphic(ArchLoader.instance.GetCardSprite(data.SpritePath));
-        if (data is Card_Normal)
-        {
-            render.SetUpgrade((data as Card_Normal).IsUpgraded);
-        }
+        data = data_;
     }
+    public void SetRenderKnown()
+    {
 
+        isReavealed = true;
+        render.SetRender(data);
+
+    }
+    public void SetRenderUnknown()
+    {
+        isReavealed = false;
+        render.SetRender();
+    } 
 
     public void SetDeckUI(DeckEditUI de)
     {
@@ -77,11 +76,11 @@ public class EditCardObject : Button
     {
         if (isReavealed)
         {
-            deckEditUI.CardInfoOn(data);
+            UIManager.instance.CardInfoPanel_On(data);
         }
         else
         {
-            deckEditUI.CardInfoUnknown();
+            UIManager.instance.CardInfoPanel_On();
         }
 
         if (deckEditUI.IsEditOk && IsReavealed)
@@ -110,11 +109,13 @@ public class EditCardObject : Button
             }
         }
     }
+
     public void HighLightOn()
     {
         isSelected = true;
         highLightImage.enabled = true;
     }
+
     public void HighLightOff()
     {
         isSelected = false;

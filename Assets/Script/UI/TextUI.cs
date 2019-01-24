@@ -14,7 +14,7 @@ public class TextUI : MonoBehaviour
     AudioSource sound;
     string[] strings;
     int counter;
-    CallBack cb = null;
+    EventTileCallBack cb = null;
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class TextUI : MonoBehaviour
         text = GetComponent<Text>();
     }
     
-    public void StartText(string[] s,CallBack callback)
+    public void StartText(string[] s,EventTileCallBack callback)
     {
         Debug.Log("START");
         strings = s;
