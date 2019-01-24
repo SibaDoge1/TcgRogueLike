@@ -13,9 +13,17 @@ public class ArchLoader : MonoBehaviour {
 
     private void Awake()
     {
-        instance = this;
-        isCached = false;
-        DontDestroyOnLoad(this.gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            isCached = false;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(this);
+            UnityEngine.Debug.LogError("SingleTone Error : ArchLoader");
+        }
     }
 
     public void StartCache()
