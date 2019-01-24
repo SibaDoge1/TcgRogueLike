@@ -4,28 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HpUI : MonoBehaviour {
-    Transform[] fullHps,currentHps;
+    Transform[] currentHps;
     Text hpText;
     // Use this for initialization
     void Awake ()
     {      
-        fullHps = transform.Find("Full").GetComponentsInChildren<Transform>();
         currentHps = transform.Find("Current").GetComponentsInChildren<Transform>();
         hpText = transform.Find("text").GetComponent<Text>();
     }
-    public void HpUpdate(int currentHp_, int fullHp_)
+    public void HpUpdate(int currentHp_)
     {
-        for(int i=1; i<fullHps.Length;i++)
+        if (currentHp_ > 10)
         {
-            if(i<=fullHp_)
-            {
-                fullHps[i].gameObject.SetActive(true);
-            }else
-            {
-                fullHps[i].gameObject.SetActive(false);
-            }
+            currentHp_ = 10;
+            Debug.Log("최대 범위 보다 넘는 수치만큼 값이 들어왔습니다.");
         }
-        for(int i=1; i<currentHps.Length;i++)
+
+        for (int i=1; i<currentHps.Length;i++)
         {
             if(i<=currentHp_)
             {
@@ -36,7 +31,7 @@ public class HpUI : MonoBehaviour {
                 currentHps[i].gameObject.SetActive(false);
             }
         }
-        hpText.text = currentHp_ + "/" + fullHp_;
+        hpText.text = currentHp_ + "/" + 10;
     }
 
 }

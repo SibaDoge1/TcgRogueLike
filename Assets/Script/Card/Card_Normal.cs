@@ -20,8 +20,6 @@ public enum NormalCard
 
 public class Card_Normal : Card
 {
-    private bool isUpgraded = false;
-    public bool IsUpgraded { get { return isUpgraded; } }
     private Figure figure;
     private int range;
     NormalCard normal;
@@ -97,7 +95,7 @@ public class Card_Normal : Card
             case CardType.V:
                 info = "주어진 범위의 적들에게" + val1 + "만큼의 피해를 입히고 1만큼 회복합니다.";
                 break;
-            case CardType.NONE:
+            case CardType.N:
                 info = "주어진 범위의 적들에게" + val1 +"만큼의 피해를 입힙니다.";
                 break;
         }

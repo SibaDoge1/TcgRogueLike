@@ -4,12 +4,12 @@ using UnityEngine;
 
 public enum CardType
 {
-    NONE,//기본카드 중 효과안붙음
+    N,//기본카드 중 효과안붙음
     V,//기본카드 효과
     T,//기본카드 효과
     P,//기본카드 효과
     A,//기본카드 효과
-    AKASHA//특수카드
+    S
 }
 
 /// <summary>
@@ -19,6 +19,8 @@ public abstract class Card
 {
     protected static Player player;
     #region CardValues;
+    protected bool isUpgraded = false;
+    public bool IsUpgraded { get { return isUpgraded; } }
 
     protected bool isDirectionCard = false;
     public bool IsDirectionCard
@@ -35,7 +37,7 @@ public abstract class Card
     protected int cost;
     public int Cost { get { return cost; } }
 
-    protected CardType cardType = CardType.NONE;
+    protected CardType cardType = CardType.N;
     public CardType Type { get { return cardType; } }
 
     protected int val1;

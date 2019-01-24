@@ -4,15 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class AkashaUI : MonoBehaviour {
-    Text akashaText;
     Transform[] currents;
     // Use this for initialization
     void Awake () {
         currents = transform.Find("Akasha").GetComponentsInChildren<Transform>();
-        akashaText = transform.Find("text").GetComponent<Text>();
     }
-	public void AkashaUpdate(int current,int full)
+	public void AkashaUpdate(int current)
     {
+        if(current>10)
+        {
+            current = 10;
+            Debug.Log("최대 범위 보다 넘는 수치만큼 값이 들어왔습니다.");
+        }
         for(int i =1; i<currents.Length;i++)
         {
             if(i<=current)
@@ -23,7 +26,6 @@ public class AkashaUI : MonoBehaviour {
                 currents[i].gameObject.SetActive(false);
             }
         }
-        akashaText.text = current/ (float)full *100 +"%";
     }
 
 	

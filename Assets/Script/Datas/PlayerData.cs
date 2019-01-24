@@ -37,7 +37,7 @@ public static class PlayerData
             {
                 akashaGage = value;
             }
-            UIManager.instance.AkashaUpdate(AkashaGage,10);
+            UIManager.instance.AkashaUpdate(AkashaGage);
         }
     }
 

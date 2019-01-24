@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public delegate void CallBack();
+public delegate void EventTileCallBack();
 
 /// <summary>
 /// UI MANAGER 
@@ -12,64 +12,62 @@ public delegate void CallBack();
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    public static Transform canvas;
+    public Text remainText;
     private void Awake()
     {
         instance = this;
-        canvas = transform;
         mapUI = transform.Find("MapUI").GetComponent<MapUI>();
         hpUI = transform.Find("StatusUI").Find("HpUI").GetComponent<HpUI>();
         akashaUI = transform.Find("StatusUI").Find("AkashaUI").GetComponent<AkashaUI>();
-        deckUI = transform.Find("Deck").GetComponent<DeckEditUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
         gameWinUI = transform.Find("GameWinUI").GetComponent<GameWinUI>();
 
+        cardInfoPanel = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
         deck = transform.Find("Deck").GetComponent<Deck>();
+        deckEdit = transform.Find("Deck").Find("DeckEdit").GetComponent<DeckEditUI>();
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
-        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();   
+        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
     }
+
     TextUI textUI;
     AkashaUI akashaUI;
     HpUI hpUI;
     GameOverUI gameOverUI;
-    DeckEditUI deckUI;
+    DeckEditUI deckEdit;
     MapUI mapUI;
     Deck deck;
     Hand hand;
     ErrorPopUpUI error;
     GameWinUI gameWinUI;
+    CardInfoPanel cardInfoPanel;
 
     #region Status
-    public void HpUpdate(int currentHp_, int fullHp_)
+    public void HpUpdate(int currentHp_)
     {
-        hpUI.HpUpdate(currentHp_, fullHp_);
+        hpUI.HpUpdate(currentHp_);
     }
-    public void AkashaUpdate(int current, int full)
+    public void AkashaUpdate(int current)
     {
-        akashaUI.AkashaUpdate(current, full);
+        akashaUI.AkashaUpdate(current);
     }
 
     #endregion
 
     #region DeckEdit
-    public void DeckEditUIOn(bool b = false)
+    public void DeckEditUIOn()
     {
         if (!GameManager.instance.IsInputOk)
             return;
 
-        deckUI.On(b);
-        GameManager.instance.IsInputOk = false;
+        deckEdit.On();
     }
     public void DeckEditUIOff()
     {
-        deckUI.Off();
+        deckEdit.Off();
         GameManager.instance.IsInputOk = true;
     }
-    public void ExchangeButton()
-    {
-        deckUI.ExchangeCards();
-    }
+
     #endregion
 
     #region Map
@@ -124,7 +122,7 @@ public class UIManager : MonoBehaviour
         gameWinUI.On();
     }
 
-    public void ShowTextUI(string[] s, CallBack cb)
+    public void ShowTextUI(string[] s, EventTileCallBack cb)
     {
         textUI.StartText(s, cb);
     }
@@ -132,5 +130,31 @@ public class UIManager : MonoBehaviour
     {
         textUI.GoNext();
     }
+    public void SetCardNumber(int count)
+    {
+        remainText.text = "" + count;
+    }
+    /// <summary>
+    /// 해당 카드데이터 InfoPanel열기
+    /// </summary>
+    public void CardInfoPanel_On(Card data)
+    {
+        cardInfoPanel.gameObject.SetActive(true);
+        cardInfoPanel.SetCard(data);
+    }
+    /// <summary>
+    /// Unkwnon으로 열기
+    /// </summary>
+    public void CardInfoPanel_On()
+    {
+        cardInfoPanel.gameObject.SetActive(true);
+        cardInfoPanel.SetUnknown();
+    }
+    public void CardInfoPanel_Off()
+    {
+        cardInfoPanel.gameObject.SetActive(false);
+    }
+
+
 
 }

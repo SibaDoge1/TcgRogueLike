@@ -8,7 +8,7 @@ public class OffTile_Shop : OffTile
     {
         if(ot is Player)
         {
-            UIManager.instance.DeckEditUIOn(true);
+            UIManager.instance.DeckEditUIOn();
             ot.currentRoom.OpenDoors();
             DestroyThis();
         }

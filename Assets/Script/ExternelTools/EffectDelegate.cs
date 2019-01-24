@@ -5,7 +5,7 @@ using Arch;
 
 public enum CardEffectType{Shield, Blood, Heal, Hit}
 public enum RangeEffectType {CARD,ENEMY,DIR}
-public enum UIEffect {AttainR0,AttainR1}
+public enum UIEffect {CARD,REPORT }
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
 	void Awake()
@@ -16,7 +16,6 @@ public class EffectDelegate : MonoBehaviour {
 
 
 	public GameObject[] effectPrefabs;
-	public GameObject[] bulletPrefabs;
     public GameObject[] rangeLayer;
     public GameObject[] UIEffect;
     public GameObject textEffectPrefab;
@@ -42,6 +41,7 @@ public class EffectDelegate : MonoBehaviour {
     {
         DestroyImmediate(go);
     }
+
 	public GameObject MadeEffect(int damage, Transform parent){
         GameObject go = Instantiate(textEffectPrefab, parent);
         go.GetComponent<EffectText>().Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
@@ -80,6 +80,9 @@ public class EffectDelegate : MonoBehaviour {
         return go;        
     }
 
+    /// <summary>
+    /// Range Effect Delete할때 사용
+    /// </summary>
     public void DestroyEffect(List<GameObject> go)
     {
         if(go != null)
