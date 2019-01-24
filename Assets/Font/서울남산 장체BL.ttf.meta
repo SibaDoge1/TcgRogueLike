@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9ad5b037af8670041a0c18bd1d89cff6
-timeCreated: 1548344043
+guid: c3ce5c696e646a1468a3865ce5f7e637
+timeCreated: 1548343861
 licenseType: Free
 TrueTypeFontImporter:
   externalObjects: {}
@@ -10,9 +10,9 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: SeoulNamsan CM
+  fontName: SeoulNamsan CBL
   fontNames:
-  - SeoulNamsan CM
+  - SeoulNamsan CBL
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

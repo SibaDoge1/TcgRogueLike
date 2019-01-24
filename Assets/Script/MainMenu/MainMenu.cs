@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    LoadingManager loadingPanel;
-    Tutorial tutorial;
-    GameObject diary;
-    GameObject setting;
+    private LoadingManager loadingPanel;
+    private Tutorial tutorial;
+    private GameObject _new;
+    private Option option;
+    private Exit exitPanel;
+    private Diary diary;
+    public delegate void voidFunc();
 
     void Awake()
     {
@@ -18,19 +21,26 @@ public class MainMenu : MonoBehaviour
         #endregion
         loadingPanel = GameObject.Find("Canvas").transform.Find("LoadingPanel").GetComponent<LoadingManager>();
         tutorial = GameObject.Find("Canvas").transform.Find("Tutorial").gameObject.GetComponent<Tutorial>();
-        //diary = GameObject.Find("Canvas").transform.Find("LoadingPanel").gameObject;
-        //setting = GameObject.Find("Canvas").transform.Find("Setting").gameObject;
-    }
+        _new = GameObject.Find("Canvas").transform.Find("NewIcon").gameObject ;
+        option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
+        exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
+        diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
 
-    // Use this for initialization
+    }
+    
     void Start()
     {
         Database.ReadDatas();
+        SaveData.FirstSetUp();
+        CheckNew();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CheckNew()
     {
+        if (SaveData.CheckNew())
+            _new.SetActive(true);
+        else
+            _new.SetActive(false);
 
     }
 
@@ -46,12 +56,28 @@ public class MainMenu : MonoBehaviour
 
     public void OnDiaryButtonDown()
     {
-
+        voidFunc checkNew = new voidFunc(CheckNew);
+        diary.On(checkNew);
     }
 
-    public void OnSettingButtonDown()
+    public void OnOptionButtonDown()
     {
+        option.On();
+    }
 
+    public void OnExitButtonDown()
+    {
+        exitPanel.on();
+    }
+
+
+    public void SetDiaryAllTrue()
+    {
+        SaveData.SetDiaryAllTrue();
+    }
+    public void SetCardAllTrue()
+    {
+        SaveData.SetCardAllTrue();
     }
 
 }

@@ -7,16 +7,23 @@ using UnityEngine;
 /// </summary>
 public static class Database
 {
-  
-     static Dictionary<int, CardData> cardDatas;
-     static Dictionary<int, CardPoolData> cardPoolDatas;
-     static Dictionary<int, MonsterData> monsterDatas;
+
+     public static Dictionary<int, CardData> cardDatas { get; private set; }
+     public static Dictionary<int, CardPoolData> cardPoolDatas { get; private set; }
+     public static Dictionary<int, MonsterData> monsterDatas { get; private set; }
+     public static Dictionary<int, DiaryData> diaryDatas{ get; private set; }
+     public static Dictionary<int, AchiveData> achiveDatas { get; private set; }
+     private static bool isParsed;
 
     public static void ReadDatas()
     {
+        if (isParsed) return;
         cardDatas = CsvParser.ReadCardData("Data/CardData/CardData");
         cardPoolDatas = CsvParser.ReadCardPoolData("Data/CardPoolData/CardPoolData");
         monsterDatas = CsvParser.ReadMonsterData("Data/MonsterData/MonsterData");
+        diaryDatas = CsvParser.ReadDiaryData("Data/DiaryData");
+        achiveDatas = CsvParser.ReadAchiveData("Data/AchiveData");
+        isParsed = true;
     }
     public static CardData GetCardData(int i)
     {
@@ -45,7 +52,7 @@ public static class Database
         }
         return cardPoolDatas[index];
     }
-    
+
 }
 public class CardData
 {
@@ -126,19 +133,47 @@ public class MonsterData
     }
 }
 
-public class InfoData
+public class DiaryData
 {
     public readonly byte num;
+    public readonly Category category;
     public readonly string title;
     public readonly string info;
     public readonly string spritePath;
 
-    public InfoData(string[] data)
+    public DiaryData(string[] data)
     {
         num = byte.Parse(data[0]);
-        title = data[1];
-        info = data[2];
-        spritePath = data[3];
+        switch (data[1])
+        {
+            case "실험체": category = Category.irregulars; break;
+            case "R.A": category = Category.raChips; break;
+            case "연구기록": category = Category.records; break;
+            case "휴먼": category = Category.humans; break;
+            default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!"); break;
+        }
+        title = data[2];
+        info = data[3];
+        spritePath = data[4];
     }
 }
 
+public class AchiveData
+{
+    public readonly byte num;
+    public readonly string condition;
+    public readonly string type;
+    public readonly string addition;
+    public readonly string reward;
+    public readonly string cardReward;
+
+    public AchiveData(string[] data)
+    {
+        num = byte.Parse(data[0]);
+        condition = data[1];
+        type = data[2];
+        addition = data[3];
+        reward = data[4];
+        //cardReward = data[5];
+    }
+}

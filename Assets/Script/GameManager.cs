@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            UnityEngine.Debug.LogError("SingleTone Error: GameManager");
             Destroy(this);
-            UnityEngine.Debug.LogError("SingleTone Error");
         }
     }
     //Start of Everything
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     {
         SetSeed();
 
+        ReadDatas();
         ArchLoader.instance.GetPlayer();
         PlayerData.Clear();
         BuildDeck();
@@ -266,6 +267,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //Changes: readdata 함수 삭제
+    private void ReadDatas()
+    {
+        Database.ReadDatas();//todo : 룸데이터도 여기서 아예 읽어오자
+        ArchLoader.instance.StartCache();
+    }
     #endregion
 }

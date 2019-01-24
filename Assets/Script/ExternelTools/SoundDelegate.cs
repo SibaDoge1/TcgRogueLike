@@ -47,12 +47,23 @@ public class SoundDelegate : MonoBehaviour {
     public GameObject[] effectAudioObject;
     #endregion
 
-    void Awake ()
+    void Awake()
     {
-        instance = this;
+        //Changes: destroy 부분 추가
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("SingleTone Error : SoundDelegate");
+            Destroy(this);
+        }
+
         bgm = transform.Find("BGM").GetComponent<AudioSource>();
-	}
-	
+    }
+
     public void PlayBGM(BGM b)
     {
         bgm.clip = bgmAudioClips[(int)b];

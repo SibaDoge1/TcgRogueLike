@@ -152,11 +152,11 @@ public static class CsvParser
         return datas;
     }
     #endregion
-    #region InfoData
-    public static Dictionary<int, InfoData> ReadInfoData(string path)
+    #region DiaryData
+    public static Dictionary<int, DiaryData> ReadDiaryData(string path)
     {
         string[] dataString = ReadString(path);
-        Dictionary<int, InfoData> datas = new Dictionary<int, InfoData>();
+        Dictionary<int, DiaryData> datas = new Dictionary<int, DiaryData>();
         int num = 1;
         string[] split;
 
@@ -167,7 +167,28 @@ public static class CsvParser
             {
                 break;
             }
-            datas.Add(int.Parse(split[0]), new InfoData(split));
+            datas.Add(int.Parse(split[0]), new DiaryData(split));
+            num++;
+        }
+        return datas;
+    }
+    #endregion
+    #region AchiveData
+    public static Dictionary<int, AchiveData> ReadAchiveData(string path)
+    {
+        string[] dataString = ReadString(path);
+        Dictionary<int, AchiveData> datas = new Dictionary<int, AchiveData>();
+        int num = 1;
+        string[] split;
+
+        while (num < dataString.Length)
+        {
+            split = dataString[num].Split(',');
+            if (split[0].Length == 0)
+            {
+                break;
+            }
+            datas.Add(int.Parse(split[0]), new AchiveData(split));
             num++;
         }
         return datas;

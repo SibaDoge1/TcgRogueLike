@@ -9,20 +9,18 @@ using Arch;
 public class ArchLoader : MonoBehaviour {
     //Changes: 캐싱하고 파싱하는걸 메인메뉴씬으로 옮겨둠
     public static ArchLoader instance;
-    public bool isCached;
 
     private void Awake()
-    {
+    {//Changes: destroy 부분 추가
         if (instance == null)
         {
             instance = this;
-            isCached = false;
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Destroy(this);
             UnityEngine.Debug.LogError("SingleTone Error : ArchLoader");
+            Destroy(this);
         }
     }
 
