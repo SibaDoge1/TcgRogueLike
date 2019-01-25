@@ -3,198 +3,173 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MinimapRenderer : MonoBehaviour {
-	/*public static MinimapRenderer instance;
-	void Awake(){
-		instance = this;
-		img_MiniMap = GetComponent<Image> ();
-	}
-
-	private readonly Color wallColor = new Color (0f, 0f, 0f, 1f);
-	private readonly Color tileColor = new Color (0.4f, 0.4f, 0.4f, 1f);
-	private readonly Color playerColor = new Color (0f, 1f, 0f, 1f);
-	private const int roomInterval = 1;
-
-	private Image img_MiniMap;
-	private Texture2D miniMapTexture;
-
-	private Vector2Int roomArraySize;
-	private Vector2Int maxRoomSize;
-
-	private Vector2Int roomPosMax;
-	private Vector2Int roomPosMin;
-
-	private Vector2Int playerPixel;
-
-	private bool[,] renderState;
-	public void Init(Map map){
-		roomPosMax = map.maxRoomPos;
-		roomPosMin = map.minRoomPos;
-		roomArraySize = roomPosMax - roomPosMin + Vector2Int.one;
-		maxRoomSize = map.maxRoomSize;
-
-		renderState = new bool[roomArraySize.x, roomArraySize.y];
-
-		int pixelSizeX = roomArraySize.x * maxRoomSize.x + (roomArraySize.x - 1 * roomInterval);
-		int pixelSizeY = roomArraySize.y * maxRoomSize.y + (roomArraySize.y - 1 * roomInterval);
-		int textureSize = Mathf.Max (pixelSizeX, pixelSizeY) + 1; // 10칸 여분
-		miniMapTexture = new Texture2D (textureSize, textureSize);
-		miniMapTexture.filterMode = FilterMode.Point;
-
-		Color[] colors = miniMapTexture.GetPixels ();
-		for (int i = 0; i < colors.Length; i++) {
-			colors [i] = wallColor;
-		}
-
-		miniMapTexture.SetPixels (colors);
-
-		img_MiniMap.sprite = Sprite.Create (miniMapTexture, new Rect (0, 0, textureSize, textureSize), Vector2.zero);
-
-		CalcRoomCenterPixelCoord ();
-
-		RenderRoom (map.StartRoom);
-		DoorOpen (map.StartRoom);
-		playerPixel = RoomLocalPosToPixelCoord (map.StartRoom, map.StartRoom.GetPlayerTile ().pos);
-		miniMapTexture.SetPixel(playerPixel.x, playerPixel.y, playerColor);
-		miniMapTexture.Apply ();
-	}
+/// <summary>
+/// 미니맵 텍스쳐 생성하는 클래스
+/// </summary>
+public  static class MinimapTexture 
+{
+    private static readonly Color emptyColor = Color.clear;
+    private static readonly Color wallColor = Color.clear;
+	private static readonly Color tileColor = Color.blue;
+    private static readonly Color playerColor = Color.green;
+    private static readonly Color enemyColor = Color.red;
+    private static readonly Color doorColor = new Color(139/255f,69/255f,19/255f);
+    static int space;
 
 
-	#region Interface
-	public void RenderRoom(Room room){
-		Vector2Int tileMinPos = RoomLocalPosToPixelCoord (room, Vector2Int.zero);
+	private static Texture2D texture;
+    private static Vector2Int textureSize;
+	private static Vector2Int minBorder;
+	private static Vector2Int maxBorder;
+    private static Vector2Int playerMapPos;
+    private static List<Vector2Int> enemyPoses = new List<Vector2Int>();
 
-		for (int x = 0; x < room.size.x; x++) {
-			for (int y = 0; y < room.size.y; y++) {
-				if (x == 0 || x == room.size.x - 1 || y == 0 || y == room.size.y - 1) {
-					miniMapTexture.SetPixel (tileMinPos.x + x, tileMinPos.y + y, wallColor);
-				} else {
-					miniMapTexture.SetPixel (tileMinPos.x + x, tileMinPos.y + y, tileColor);
-				}
-			}
-		}
-		Vector2Int roomIndex = new Vector2Int ((int)room.transform.position.x - roomPosMin.x, (int)room.transform.position.y - roomPosMin.y);
-		renderState [roomIndex.x, roomIndex.y] = true;
+    static public  void Init(Map map)
+    {
+        minBorder = map.MinBorder;
+        maxBorder = map.MaxBorder;
+        space = map.GetComponent<MapGenerator>().space;
+        playerMapPos = new Vector2Int(-1, -1);
+        textureSize = maxBorder - minBorder + new Vector2Int(space*2,space*2);
+        texture = new Texture2D(textureSize.x,textureSize.y);
+        texture.filterMode = FilterMode.Point;
+        enemyPoses = new List<Vector2Int>();
 
+        Color resetColor = Color.clear;
+        Color[] resetColorArray = texture.GetPixels();
 
-		//Door Link Check
-		//Right
-		if (roomIndex.x + 1 < roomArraySize.x && renderState [roomIndex.x + 1, roomIndex.y]) {
-			int index = roomCenterX [roomIndex.x];
-			while (miniMapTexture.GetPixel (index, roomCenterY [roomIndex.y]) != wallColor) {
-				index++;
-			}
-			index++;
-			while (miniMapTexture.GetPixel (index, roomCenterY [roomIndex.y]) == wallColor) {
-				miniMapTexture.SetPixel (index, roomCenterY [roomIndex.y], tileColor);
-				index++;
-			}
-		}
-		//Left
-		if (roomIndex.x - 1 >= 0 && renderState [roomIndex.x - 1, roomIndex.y]) {
-			int index = roomCenterX [roomIndex.x];
-			while (miniMapTexture.GetPixel (index, roomCenterY [roomIndex.y]) != wallColor) {
-				index--;
-			}
-			index--;
-			while (miniMapTexture.GetPixel (index, roomCenterY [roomIndex.y]) == wallColor) {
-				miniMapTexture.SetPixel (index, roomCenterY [roomIndex.y], tileColor);
-				index--;
-			}
-		}
-		//Up
-		if (roomIndex.y + 1 < roomArraySize.y && renderState [roomIndex.x, roomIndex.y + 1] ) {
-			int index = roomCenterY [roomIndex.y];
-			while (miniMapTexture.GetPixel (roomCenterX [roomIndex.x], index) != wallColor) {
-				index++;
-			}
-			index++;
-			while (miniMapTexture.GetPixel (roomCenterX [roomIndex.x], index) == wallColor) {
-				miniMapTexture.SetPixel (roomCenterX [roomIndex.x], index, tileColor);
-				index++;
-			}
-		}
-		//Down
-		if (roomIndex.y - 1 >= 0 && renderState [roomIndex.x, roomIndex.y - 1]) {
-			int index = roomCenterY [roomIndex.y];
-			while (miniMapTexture.GetPixel (roomCenterX [roomIndex.x], index) != wallColor) {
-				index--;
-			}
-			index--;
-			while (miniMapTexture.GetPixel (roomCenterX [roomIndex.x], index) == wallColor) {
-				miniMapTexture.SetPixel (roomCenterX [roomIndex.x], index, tileColor);
-				index--;
-			}
-		}
+        for(int i=0; i<resetColorArray.Length;i++)
+        {
+            resetColorArray[i] = resetColor;
+        }
 
+        texture.SetPixels(resetColorArray);
 
-		miniMapTexture.Apply ();
-	}
+        firstTime = true;
+        UIManager.instance.SetMapTexture(texture, textureSize);
+    }
 
-	public void DoorOpen(Room room){
-		List<Vector2Int> list = room.GetDoorPos ();
-		Vector2Int temp;
-		for (int i = 0; i < list.Count; i++) {
-			temp = RoomLocalPosToPixelCoord (room, list [i]);
-			miniMapTexture.SetPixel (temp.x, temp.y, tileColor);
-		}
-		miniMapTexture.Apply ();
-	}
+    static public void DrawRoom(Room room)
+    {
+        Vector2Int pos = WorldPosToMapPos(room.transform.position);
+        for(int i=0; i<room.size.y;i++)
+        {
+            for(int j=0;j<room.size.x;j++)
+            {
+                Arch.Tile t = room.GetTile(new Vector2Int(j, i));
+                if (t.tileNum == 0 && t.OnTileObj == null && t.offTile==null)
+                    texture.SetPixel(pos.x+j,pos.y+i, emptyColor);
+                else
+                {
+                    if(t.offTile is OffTile_Door && !((OffTile_Door)t.offTile).IsDestroyed)
+                    {
+                        texture.SetPixel(pos.x + j, pos.y + i,doorColor);
+                    }
+                    else if(t.OnTileObj is Structure)
+                    {
+                        texture.SetPixel(pos.x + j, pos.y + i, wallColor);
+                    }else
+                    {
+                        texture.SetPixel(pos.x + j, pos.y + i, tileColor);
+                    }
+                }
+            }
+        }
+        texture.Apply();
+    }
+    
 
-	public void PlayerTileRefresh(Room room){
-		if (playerPixel != null) {
-			miniMapTexture.SetPixel(playerPixel.x, playerPixel.y, tileColor);
-		}
-		playerPixel = RoomLocalPosToPixelCoord (room, room.GetPlayerTile ().pos);
-		miniMapTexture.SetPixel(playerPixel.x, playerPixel.y, playerColor);
-		miniMapTexture.Apply ();
-	}
-	#endregion
+    static bool firstTime = true;
+    static  public  void DrawPlayerPos(Vector3 roomPos, Vector2Int pPos)
+    {
+        Vector2Int oldPos = playerMapPos;
+        if (firstTime)
+        {
+            firstTime = false;
+        }
+        else
+        {            
+            texture.SetPixel(oldPos.x, oldPos.y, tileColor);
+        }
 
-	private int[] roomCenterX;
-	private int[] roomCenterY;
-	private void CalcRoomCenterPixelCoord(){
-		roomCenterX = new int[roomArraySize.x];
-		roomCenterY = new int[roomArraySize.y];
+        playerMapPos = RoomPosToMapPos(roomPos, pPos);
+        texture.SetPixel(playerMapPos.x, playerMapPos.y, playerColor);
+        texture.Apply();
 
-		//Calc X
-		int centerIndex;
-		int centerPos;
+        UIManager.instance.MoveMiniMap(MapPosToUIPos(oldPos),MapPosToUIPos(playerMapPos));      
+    }
+    static public void DrawEnemies(Vector3 roomPos, List<Vector2Int> eP)
+    {
+        for(int i=0; i<enemyPoses.Count;i++) //적 위치 초기화
+        {
+            texture.SetPixel(enemyPoses[i].x, enemyPoses[i].y, tileColor);
+        }
+        enemyPoses.Clear();
 
-		centerIndex = roomArraySize.x / 2;
-		if (roomArraySize.x % 2 == 0) {
-			centerPos = miniMapTexture.width / 2 + maxRoomSize.x / 2;
-		} else {
-			centerPos = miniMapTexture.width / 2;
-		}
-		for (int i = 0; i < roomCenterX.Length; i++) {
-			roomCenterX[i] = centerPos + (i - centerIndex) * (maxRoomSize.x - 1 + roomInterval);
-		}
+        for (int i=0; i<eP.Count;i++)//적 위치 변환해서 enemyPoses에 저장
+        {
+            enemyPoses.Add(RoomPosToMapPos(roomPos, eP[i]));
+        }
 
+        for(int i=0; i<enemyPoses.Count;i++)//enemyPoses에 점찍기
+        {
+            texture.SetPixel(enemyPoses[i].x, enemyPoses[i].y, enemyColor);
+        }
+        texture.Apply();
+    }
+    static Vector2Int RoomPosToMapPos(Vector3 roomPos,Vector2Int pos)
+    {
+        return WorldPosToMapPos(roomPos) + pos;
+    }
 
-		centerIndex = roomArraySize.y / 2;
-		if (roomArraySize.y % 2 == 0) {
-			centerPos = miniMapTexture.height / 2 + maxRoomSize.y / 2;
-		} else {
-			centerPos = miniMapTexture.height / 2;
-		}
-		for (int i = 0; i < roomCenterY.Length; i++) {
-			roomCenterY[i] = centerPos + (i - centerIndex) * (maxRoomSize.y - 1 + roomInterval);
-		}
-
-	}
-
-	private Vector2Int GetRoomCenter(Vector2Int roomPos){
-		return new Vector2Int (roomCenterX [roomPos.x - roomPosMin.x], roomCenterY [roomPos.y - roomPosMin.y]);
-	}
-
-
-	private Vector2Int RoomLocalPosToPixelCoord(Room room, Vector2Int localPos){
-		Vector2Int result = new Vector2Int ();
-
-		result.x = roomCenterX [(int)room.transform.position.x - roomPosMin.x] - room.size.x / 2 + localPos.x;
-		result.y = roomCenterY [(int)room.transform.position.y - roomPosMin.y] - room.size.y / 2 + localPos.y;
-		return result;
-	}
-    */
+    static Vector3 MapPosToUIPos(Vector2Int pos)
+    {
+        if (pos.x < 0)
+        {
+            return Vector3.zero;
+        }
+        return new Vector3(-4*textureSize.x + 8 * pos.x, -4*textureSize.y + 8 * pos.y);
+    }
+    
+static Vector2Int WorldPosToMapPos(Vector3 pos)
+{
+    return new Vector2Int((int)pos.x,(int)pos.y) - minBorder + new Vector2Int(space,space);
 }
+}
+/*static public void DrawDoors(Vector3 roomPos,List<Door> doorList)
+{
+    foreach(Door d in doorList)
+    {
+        Vector2Int pos = RoomPosToMapPos(roomPos, d.CurrentTile.pos);
+        texture.SetPixel(pos.x,pos.y, tileColor);
+        switch (d.Dir)
+        {
+            case Direction.NORTH:
+                for(int i=1; i<=space;i++)
+                {
+                    texture.SetPixel(pos.x, pos.y + i, doorColor);
+                }
+                break;
+            case Direction.EAST:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x+i, pos.y, doorColor);
+                }
+                break;
+            case Direction.SOUTH:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x, pos.y - i, doorColor);
+                }
+                break;
+            case Direction.WEST:
+                for (int i = 1; i <=space; i++)
+                {
+                    texture.SetPixel(pos.x-i, pos.y, doorColor);
+                }
+                break;
+        }
+    }
+    texture.Apply();
+
+}*/

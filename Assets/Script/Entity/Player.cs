@@ -7,88 +7,79 @@ public class Player : Character
 {
     private void Start()
     {
-        fullHp = 10; currentHp = 10;
-    }
-
-    protected override IEnumerator MoveAnimationRoutine(Vector2Int pos)
-    {
-        return base.MoveAnimationRoutine(pos);       
+        FullHp = SettingHp; CurrentHp = SettingHp;
+        Atk = SettingAtk; Def = SettingDef;
     }
     //문을 통해서 이동
-    public void EnterRoom(Door door)
+    public void EnterRoom(OffTile_Door door)
     {
         Vector2Int temp;
-        bool isFlipped=false;
 
         if (currentRoom != null)
            currentTile.OnTileObj = null;
-
 		//Spawn Position Set
         if (door.Dir == Direction.NORTH)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(-1,0);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(0,1);
         }
         else if (door.Dir == Direction.EAST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0, 1);
-            //isFlipped = true;
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(1, 0);
         }
         else if (door.Dir == Direction.WEST)
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(0, -1);
-            //isFlipped = true;
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(-1, 0);
         }
         else//_room == currentRoom.SouthRoom
         {
-            temp = door.ConnectedDoor.ThisTile.pos + new Vector2Int(1,0);
+            temp = door.ConnectedDoor.CurrentTile.pos + new Vector2Int(0,-1);
         }
 
         SetRoom(door.TargetRoom,temp);
 
-        if (isFlipped)
-        {
-            SetLocalScale((int)-transform.localScale.x);
-        }
+		GameManager.instance.OnPlayerEnterRoom(currentRoom);
+    }
+    //워프하듯 이동
+    public void EnterRoom(Room room)
+    {
+        if (currentRoom != null)
+            currentTile.OnTileObj = null;
 
-		GameManager.instance.SetCurrentRoom (door.TargetRoom);
-		GameManager.instance.OnPlayerEnterNewRoom ();
+        SetRoom(room, new Vector2Int(room.size.x/2,room.size.y/2));
+
+
+         GameManager.instance.OnPlayerEnterRoom(currentRoom);
+        
     }
 	protected override void OnDieCallback()
     {
         base.OnDieCallback();
-        UIManager.instance.GameOver();
+        GameManager.instance.GameOver();
     }
-    public override int fullHp
-    {
-        get
-        {
-            return base.fullHp;
-        }
 
+    public override int FullHp
+    {
         set
         {
-            base.fullHp = value;
-            UIManager.instance.HpUpdate(currentHp, fullHp);
+            base.FullHp = value;
+            UIManager.instance.HpUpdate(currentHp);
         }
     }
-    public override int currentHp
-    {
-        get
-        {
-            return base.currentHp;
-        }
 
+    protected override int CurrentHp
+    {
         set
         {
-            base.currentHp = value;
-            characterUI.HpUpdate(fullHp, currentHp);
-			UIManager.instance.HpUpdate(currentHp, fullHp);
+            base.CurrentHp = value;
+            UIManager.instance.HpUpdate(currentHp);
         }
     }
-
-
-	protected override void OnEndTurn ()
+    public override bool GetDamage(int damage, Entity atker = null)
     {
-		PlayerControl.instance.EndPlayerTurn ();
-	}
+        SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
+        MyCamera.instance.ShakeCamera();
+        EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
+        return base.GetDamage(damage, atker);
+    }
+
 }

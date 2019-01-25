@@ -6,15 +6,13 @@ using Arch;
 
 public static class BuildRoom
 {
-    static Map newMap;
-    static List<string> defaultRoomData;
-    static List<string> battleRoomData;
-    static List<string> bossRoomData;
-    static List<string> eventRoomData;
-    static List<string> shopRoomData;
+    static Map currentMap;
+    static List<string[,]> battleRooms;
+    static List<string[,]> eventRooms;
+    static List<string[,]> shopRooms;
     static Vector2Int size;
     static Tile[,] tiles;
-    static Room room;
+    static Room currentRoom;
     static string[,] roomData;
 
     /// <summary>
@@ -23,20 +21,22 @@ public static class BuildRoom
     public static Room Build(RoomType type, string name)
     {
 
-        room = InstantiateDelegate.Instantiate(Resources.Load("Room") as GameObject, newMap.transform).GetComponent<Room>();
-        room.roomType = type;
+        currentRoom = ArchLoader.instance.GetRoom();
+        currentRoom.transform.parent = currentMap.transform;
+        currentRoom.roomType = type;
 
-        roomData = CsvParser.ReadRoom(1, type, name);
+        roomData = CsvParser.ReadRoom(currentMap.Floor, type, name);
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
-        room.size = size;
+
+        currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
-        room.SetTileArray(tiles);
+        currentRoom.SetTileArray(tiles);
 
         Draw();
         GenerateGraph();
 
         roomData = null;
-        return room;
+        return currentRoom;
     }
 
     /// <summary>
@@ -45,73 +45,43 @@ public static class BuildRoom
     public static Room Build(RoomType type)
     {
 
-        room = InstantiateDelegate.Instantiate(Resources.Load("Room") as GameObject, newMap.transform).GetComponent<Room>();
-        room.roomType = type;
+        currentRoom = ArchLoader.instance.GetRoom();
+        currentRoom.transform.parent = currentMap.transform;
+        currentRoom.roomType = type;
 
         roomData = GetRoomData(type);
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
-        room.size = size;
+        currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
-        room.SetTileArray(tiles);
+        currentRoom.SetTileArray(tiles);
 
         Draw();
         GenerateGraph();
 
         roomData = null;
-        return room;
+        return currentRoom;
     }
-    public static void SetRoomData(Map _newMap)
+
+
+    public static void Init(Map map)
     {
-        newMap = _newMap;
-
-        defaultRoomData = new List<string>();
-        battleRoomData = new List<string>();
-        bossRoomData = new List<string>();
-        eventRoomData = new List<string>();
-        shopRoomData = new List<string>();
-
-
-        Object[] defaultData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/DEFAULT");
-        for (int i = 0; i < defaultData.Length; i++)
-        {
-            defaultRoomData.Add(defaultData[i].name);
-        }
-        Object[] battleData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BATTLE");
-        for (int i = 0; i < battleData.Length; i++)
-        {
-            battleRoomData.Add(battleData[i].name);
-        }
-        Object[] bossData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/BOSS");
-        for (int i = 0; i < bossData.Length; i++)
-        {
-            bossRoomData.Add(bossData[i].name);
-        }
-        Object[] eventData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/EVENT");
-        for (int i = 0; i < eventData.Length; i++)
-        {
-            eventRoomData.Add(eventData[i].name);
-        }
-        Object[] shopData = Resources.LoadAll("RoomData/Floor" + newMap.floor + "/SHOP");
-        for (int i = 0; i < shopData.Length; i++)
-        {
-            shopRoomData.Add(shopData[i].name);
-        }
+        currentMap = map;
+        battleRooms = CsvParser.ReadRoom(map.Floor, RoomType.BATTLE);
+        eventRooms = CsvParser.ReadRoom(map.Floor, RoomType.EVENT);
+        shopRooms = CsvParser.ReadRoom(map.Floor, RoomType.SHOP);        
     }
-     static string[,] GetRoomData(RoomType rt)
+
+    static string[,] GetRoomData(RoomType rt)
     {
         switch(rt)
         {
-            case RoomType.DEFAULT:
-                return CsvParser.ReadRoom(newMap.floor, rt, defaultRoomData[Random.Range(0, defaultRoomData.Count)]);
             case RoomType.BATTLE:
-                return CsvParser.ReadRoom(newMap.floor, rt, battleRoomData[Random.Range(0, battleRoomData.Count)]);
-            case RoomType.BOSS:
-                return CsvParser.ReadRoom(newMap.floor, rt, bossRoomData[Random.Range(0, bossRoomData.Count)]);
+                return battleRooms[Random.Range(0, battleRooms.Count)];
             case RoomType.EVENT:
-                return CsvParser.ReadRoom(newMap.floor, rt, eventRoomData[Random.Range(0, eventRoomData.Count)]);
+                return eventRooms[Random.Range(0, eventRooms.Count)];
             case RoomType.SHOP:
-                return CsvParser.ReadRoom(newMap.floor, rt, shopRoomData[Random.Range(0, shopRoomData.Count)]);
+                return shopRooms[Random.Range(0, shopRooms.Count)];
             default:
                 Debug.Log("Room Type ERROR");
                 return null;
@@ -121,52 +91,41 @@ public static class BuildRoom
 
     static void Draw()
     {
-        int tile; int offtile; int item; int entity; int eventlayer;
+        short tile; short offtile;  short entity;
 
 
         //string을 다시 tile , item, player , height 항목으로 나눕니다
-        for (int i = 0; i < size.x ; i++)
+        for (int i = 0; i < size.y ; i++)
         {
-            for (int j = 0; j < size.y; j++)
+            for (int j = 0; j < size.x; j++)
             {
-                string[] temp = roomData[i,j].Split('/');
-                tile = int.Parse(temp[0]);
-                offtile = int.Parse(temp[1]);
-                item = int.Parse(temp[2]);
-                entity = int.Parse(temp[3]);
-                eventlayer = int.Parse(temp[4]);
+                string[] temp = roomData[j,i].Split('/');
+                tile = short.Parse(temp[0]);
+                offtile = short.Parse(temp[1]);
+                entity = short.Parse(temp[2]);
 
-
-                if (tile != 0)
-                {
-                    Tile tempTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("Tile/"+tile) as GameObject, room.transform).GetComponent<Tile>();
-                    tempTile.SetTile(new Vector2Int(i, j), size);
-                    tiles[i, j] = tempTile;
+                    Tile tempTile = ArchLoader.instance.GetTile(tile);
+                tempTile.Init(tile);
+                    tempTile.SetRoom(currentRoom, new Vector2Int(j, (size.y - 1) - i));
+                    tiles[j, (size.y-1)-i] = tempTile;
 
                     if (offtile != 0)
                     {
-                        OffTile offTile = InstantiateDelegate.ProxyInstantiate(Resources.Load("OffTile/" + offtile) as GameObject, tempTile.transform).GetComponent<OffTile>();
-                        tempTile.offTile = offTile;
-                    }
-                    if (item != 0)//아이템
-                    {
-                    }
-                    if (entity != 0) //엔타이티
-                    {
-                        Entity et = InstantiateDelegate.ProxyInstantiate(Resources.Load("Entity/"+ entity) as GameObject).GetComponent<Entity>();
-                        et.SetRoom(room, new Vector2Int(i, j));
-                    }
-                    if(eventlayer !=0)
-                    {
-                        EventLayer ev = InstantiateDelegate.ProxyInstantiate(Resources.Load("EventLayer/"+eventlayer) as GameObject).GetComponent<EventLayer>();
-                        tempTile.eventLayer = ev;
-                        if(eventlayer<5)//문
+                        OffTile ot = ArchLoader.instance.GetOffTile(offtile);
+                        ot.Init(offtile);
+                        tempTile.offTile = ot;
+                        if (offtile < 5)//문
                         {
-                            room.doorList.Add(ev as Door);
+                            currentRoom.doorList.Add(ot as OffTile_Door);
                         }
                     }
-                }
 
+                    if (entity != 0) //엔타이티
+                    {
+                        Entity et = ArchLoader.instance.GetEntity(entity);
+                        et.Init(entity);
+                        et.SetRoom(currentRoom, new Vector2Int(j, (size.y - 1) - i));
+                    }                     
             }
         }
     }
@@ -196,22 +155,6 @@ public static class BuildRoom
                 if (y < size.y - 1)
                 {
                     tiles[x, y].neighbours.Add(tiles[x, y + 1]);
-                }
-                if (x < size.x - 1 && y < size.y - 1)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y + 1]);
-                }
-                if (x < size.x - 1 && y > 0)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y - 1]);
-                }
-                if (x > 0 && y > 0)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y - 1]);
-                }
-                if (x > 0 && y < size.y - 1)
-                {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y + 1]);
                 }
             }
         }

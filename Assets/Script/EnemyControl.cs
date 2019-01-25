@@ -8,30 +8,35 @@ public class EnemyControl : MonoBehaviour {
 		instance = this;
 	}
 
-	private List<Enemy> enemies;
-	public void InitEnemy(Room room){
-        enemies = room.enemyList;
-    }
+    private Room currentRoom;
+    private List<Enemy> currentEnemies;
 
+    public void SetRoom(Room room){
+        currentRoom = room;
+    }
     public void EnemyTurn(){
-        if (enemies == null || enemies.Count == 0)
+        if (currentRoom.enemyList == null || currentRoom.enemyList.Count == 0)
         {
             GameManager.instance.OnEndEnemyTurn();
         }
         else
         {
-            foreach (Enemy e in enemies)
+            currentEnemies = new List<Enemy>(currentRoom.enemyList);
+            for(int i=0;i<currentEnemies.Count;i++)
             {
-                e.DoAct();
+                if(currentEnemies[i] != null)
+                StartCoroutine(currentEnemies[i].AIRoutine());
             }
+
         }
 
     }
+
     int count;
     public void EnemyEndCallBack()
     {
         count++;
-        if (count>=enemies.Count)
+        if (count>=currentEnemies.Count)
         {
             count = 0;
             GameManager.instance.OnEndEnemyTurn();

@@ -3,94 +3,63 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public abstract class Entity : MonoBehaviour {
-
+public abstract class Entity : MonoBehaviour
+{
+    public int objectNum;
     public Room currentRoom;
 	public Tile currentTile;
     public Vector2Int pos;
 
-    protected int _fullHp=1;
-    protected int _currentHp=1;
+    public short entityNum;
 
-    protected bool isHitable = true;
-    public bool IsHitable
+    public virtual void Init(short _entityNum)
     {
-        get
-        {
-            return isHitable;
-        }
+        entityNum = _entityNum;
+        gameObject.name = "" + entityNum;
     }
-    public virtual int fullHp
-    {
-        get
-        {
-            return _fullHp;
-        }
-        set
-        {
-            _fullHp = value;
-        }
-    }
-    public virtual int currentHp
-    {
-        get
-        {
-            return _currentHp;
-        }
-        set
-        {
-			if (value >= fullHp) {
-				EffectDelegate.instance.MadeEffect (fullHp - _currentHp, transform.position); 
-				_currentHp = fullHp;
-			} else {
-				EffectDelegate.instance.MadeEffect (value - _currentHp, transform.position); 
-				_currentHp = value;
-			}
-
-			if (_currentHp <= 0) {
-				EffectDelegate.instance.MadeEffect (CardEffectType.Blood, transform.position);
-				OnDieCallback ();
-			}
-        }
-    }
-
-    
-    protected SpriteRenderer sprite;
+    protected SpriteRenderer spriteRender;
 	protected virtual void  Awake () {
-        sprite = GetComponent<SpriteRenderer>();
+        spriteRender = GetComponent<SpriteRenderer>();      
 	}
 	
 	public virtual void SetRoom(Room room,Vector2Int _pos)
     {		
         currentRoom = room;
         this.transform.parent = room.transform;
-
-
         this.Teleport(_pos);
     }
-
+    public virtual void SetRoom(Room room, Tile _pos)
+    {
+        currentRoom = room;
+        this.transform.parent = room.transform;
+        this.Teleport(_pos.pos);
+    }
     #region MoveMethod
-	public virtual bool Teleport(Vector2Int _pos){
+    public virtual bool Teleport(Vector2Int _pos){
 		if (!currentRoom.GetTile(_pos).IsStandAble(this))
 		{
 			return false;
 		}
-
+        
 		if (currentRoom.GetTile(pos) && currentRoom.GetTile(pos).OnTileObj == this)
 			currentRoom.GetTile(pos).OnTileObj = null;
 
-		pos = _pos;
+        if (moveAnim != null)
+        {
+            StopCoroutine(moveAnim);
+        }
+        pos = _pos;
 		currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-        currentTile.SomethingUpOnThis(this);
-        transform.localPosition = currentTile.transform.localPosition + new Vector3(0, 0, pos.y);
-
-
+        transform.localPosition = currentTile.transform.localPosition - (Vector3.back*_pos.y);
         return true;
 	}
-	public virtual bool MoveTo(Vector2Int _pos)
+
+    Coroutine moveAnim;
+    public virtual bool MoveTo(Vector2Int _pos)
     {
-        if (!currentRoom.GetTile(_pos).IsStandAble(this))
+        
+        if (currentRoom.GetTile(_pos) == null ||!currentRoom.GetTile(_pos).IsStandAble(this))
         {
 			return false;
         }
@@ -98,24 +67,30 @@ public abstract class Entity : MonoBehaviour {
         if (currentRoom.GetTile(pos).OnTileObj == this)
             currentRoom.GetTile(pos).OnTileObj = null;
 
+        if (moveAnim != null)
+        {
+            StopCoroutine(moveAnim);
+        }
+
+        if (spriteRender == null)
+            spriteRender = GetComponent<SpriteRenderer>();
+        moveAnim = StartCoroutine(MoveAnimationRoutine(pos,_pos));
+
         pos = _pos;
 
         currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-
-        StartCoroutine (MoveAnimationRoutine (pos));
-
-
-        
         return true;
     }
 
-	protected virtual IEnumerator MoveAnimationRoutine(Vector2Int pos){
+    public static float moveSpeed = 6;
+    protected virtual IEnumerator MoveAnimationRoutine(Vector2Int origin,Vector2Int target){
 		float timer = 0;
-		Vector3 originPos = transform.localPosition;
-        Vector3 targetPos = currentRoom.GetTile(pos).transform.localPosition + new Vector3(0, 0, pos.y);
-		while (true) {
-			timer += Time.deltaTime * 5;
+        Vector3 originPos = currentRoom.GetTile(origin).transform.localPosition;
+        Vector3 targetPos = currentRoom.GetTile(target).transform.localPosition - (Vector3.back * target.y);
+        while (true)
+        {
+			timer += Time.deltaTime * moveSpeed;
 			if (timer > 1) {
 				break;
 			}
@@ -123,9 +98,6 @@ public abstract class Entity : MonoBehaviour {
 			yield return null;
 		}
         transform.localPosition = targetPos;
-
-        currentTile.SomethingUpOnThis(this);
-        OnEndTurn();
 	}
 
     protected virtual void OnDieCallback()
@@ -135,18 +107,10 @@ public abstract class Entity : MonoBehaviour {
     }
     #endregion
 
-	protected virtual void OnEndTurn(){
-		
-	}
-   /* protected virtual bool AttackThis(int dam,CardAttribute atr)
+
+
+    public void DestroyThis()
     {
-        if(!isHitable)
-        {
-            return false;
-        }
-
-
-
-        return true;
-    }*/
+        OnDieCallback();
+    }
 }

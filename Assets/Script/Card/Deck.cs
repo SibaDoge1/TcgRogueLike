@@ -5,42 +5,55 @@ using UnityEngine.UI;
 
 public class Deck : MonoBehaviour {
 
-	public Text txt_RemainCard;
-	public List<CardData> deck;
+	public List<Card> remainDeck;
 
-	public CardObject Draw(){
-		if (deck.Count <= 0) {
+	public HandCardObject Draw(){
+		if (remainDeck.Count <= 0) {
 			return null;
 		}
-		CardData c = deck [deck.Count - 1];
-		deck.RemoveAt(deck.Count - 1);
-		RefreshText ();
-		return c.Instantiate ();
+		Card c = remainDeck [remainDeck.Count - 1];
+		remainDeck.RemoveAt(remainDeck.Count - 1);
+        DrawCallBack();
+        return c.InstantiateHandCard ();
 	}
 
-	public void Load(){
-		deck = new List<CardData> (PlayerData.deck);
+	public void Load()
+    {
+		remainDeck = new List<Card> (PlayerData.Deck);
 		Shuffle ();
-		deck.Add (deck [0]);
-		deck [0] = new CardData_Reload (0);
-		RefreshText ();
+		remainDeck.Add (remainDeck [0]);
+		remainDeck [0] = new Card_Reload (Database.GetCardData(1));//1번은 리로드
+		LoadCallBack ();
 	}
 
 	#region Private
 
 	private void Shuffle(){
-		CardData temp;
+		Card temp;
 		int randIndex;
-		for (int i = 0; i < deck.Count - 1; i++) {
-			randIndex = Random.Range (0, deck.Count);
-			temp = deck [i];
-			deck [i] = deck [randIndex];
-			deck [randIndex] = temp;
+		for (int i = 0; i < remainDeck.Count - 1; i++) {
+			randIndex = Random.Range (0, remainDeck.Count);
+			temp = remainDeck [i];
+			remainDeck [i] = remainDeck [randIndex];
+			remainDeck [randIndex] = temp;
 		}
 	}
 
-	private void RefreshText(){
-		txt_RemainCard.text = "X " + deck.Count; 
-	}
-	#endregion
+    public int DeckCount
+    {
+        get
+        {
+            return remainDeck.Count;
+        }
+    }
+    private void DrawCallBack()
+    {
+        UIManager.instance.DeckCont(remainDeck.Count);
+    }
+    private void LoadCallBack()
+    {
+        UIManager.instance.DeckCont(remainDeck.Count);
+    }
+
+    #endregion
 }

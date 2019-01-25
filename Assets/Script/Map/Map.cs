@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Map : MonoBehaviour{
+/// <summary>
+/// 맵 데이터를 가지고있는 클래스 입니다.
+/// </summary>
+public class Map : MonoBehaviour
+{
+
     public void SetStartRoom(Room startRoom_)
     {
         startRoom = startRoom_;
-        currentRoom = startRoom;
+        //StartRoom.OpenDoors();
     }
-
-	private List<Room> room;
-    public List<Room> Room
+    public void Init(int fl,int ba,int ev,int sh)
+    {
+        floor = fl;
+        battleRoomNum = ba;
+        eventRoomNum = ev;
+        shopRoomNum = sh;
+    }
+    private List<Room> room;
+    public List<Room> Rooms
     {
         get { return room; }
         set { room = value; }
@@ -28,11 +39,53 @@ public class Map : MonoBehaviour{
         set { currentRoom = value; }
     }
 
-    public int floor;//층 수
-    public int roomNum;//방갯수
+    #region variables
+    private int floor;//층 수
+    public int Floor
+    {
+        get { return floor; }
+        set { floor = value; }
+    }
+    private int battleRoomNum;
+    public int BattleRoomNum
+    {
+        get { return battleRoomNum; }
+        set { battleRoomNum = value; }
+    }
+    private int shopRoomNum;
+    public int ShopRoomNum
+    {
+        get { return shopRoomNum; }
+        set { shopRoomNum = value; }
+    }
+    private int eventRoomNum;
+    public int EventRoomNum
+    {
+        get { return eventRoomNum; }
+        set { eventRoomNum = value; }
+    }
 
-    public Vector2Int maxHorizon;//Map의 가로 크기
-    public Vector2Int minVertical;//Map의 세로 크기
+    private Vector2Int minBorder;
+    public Vector2Int MinBorder
+    {
+        get { return minBorder; }
+        set { minBorder = value; }
+    }
+    private Vector2Int maxBorder;
+    public Vector2Int MaxBorder
+    {
+        get { return maxBorder; }
+        set { maxBorder = value; }
+    }
+    #endregion
 
+    public void SetRoomOn(Room room)
+    {
+        room.gameObject.SetActive(true);
+    }
+    public void SetRoomOff(Room room)
+    {
+        room.gameObject.SetActive(false);
+    }
 
 }

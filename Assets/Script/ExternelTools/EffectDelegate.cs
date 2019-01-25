@@ -3,61 +3,94 @@ using System.Collections.Generic;
 using UnityEngine;
 using Arch;
 
-public enum CardEffectType{Slash, Blood, Heal, Hit}
-public enum BulletType{Stone, Arrow}
+public enum CardEffectType{Shield, Blood, Heal, Hit}
+public enum RangeEffectType {CARD,ENEMY,DIR}
+public enum UIEffect {CARD,REPORT }
 public class EffectDelegate : MonoBehaviour {
 	public static EffectDelegate instance;
-	void Awake(){
+	void Awake()
+    {
 		instance = this;
 	}
 
 
-	[NamedArrayAttribute (new string[]{
-		"Slash", "Blood", "Heal", "Hit"
-	})]
+
 	public GameObject[] effectPrefabs;
-	[NamedArrayAttribute (new string[]{
-		"Stone", "Arrow"
-	})]
-	public GameObject[] bulletPrefabs;
-	public GameObject textEffectPrefab;
+    public GameObject[] rangeLayer;
+    public GameObject[] UIEffect;
+    public GameObject textEffectPrefab;
 
-
-	public void MadeEffect(CardEffectType eType, Transform parent){
-		Instantiate (effectPrefabs [(int)eType], parent);
+    public GameObject MadeEffect(UIEffect eType,Transform parent)
+    {
+        return Instantiate(UIEffect[(int)eType], parent);
+    }
+    public GameObject MadeEffect(CardEffectType eType, Transform parent){
+        return Instantiate(effectPrefabs [(int)eType], parent);
 	}
-	public void MadeEffect(CardEffectType eType, Entity parent){
-		Instantiate (effectPrefabs [(int)eType], parent.transform);
+	public GameObject MadeEffect(CardEffectType eType, Entity parent){
+        return Instantiate(effectPrefabs [(int)eType], parent.transform);
 	}
-	public void MadeEffect(CardEffectType eType, Vector3 worldPosition){
-		Instantiate (effectPrefabs [(int)eType], worldPosition, Quaternion.identity);
+	public GameObject MadeEffect(CardEffectType eType, Vector3 worldPosition){
+        return Instantiate(effectPrefabs [(int)eType], worldPosition, Quaternion.identity);
 	}
-	public void MadeEffect(CardEffectType eType, Tile targetTile){
-		Instantiate (effectPrefabs [(int)eType], targetTile.transform.position, Quaternion.identity);
-	}
-		
-
-	public void MadeEffect(int damage, Transform parent){
-		Instantiate (textEffectPrefab, parent).GetComponent<EffectText> ()
-			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
-	}
-	public void MadeEffect(int damage, Entity parent){
-		Instantiate (
-			textEffectPrefab, parent.transform).GetComponent<EffectText> ()
-			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
-	}
-	public void MadeEffect(int damage, Vector3 worldPosition){
-		Instantiate (
-			textEffectPrefab, worldPosition, Quaternion.identity).GetComponent<EffectText> ()
-			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
-	}
-	public void MadeEffect(int damage, Tile targetTile){
-		Instantiate (
-			textEffectPrefab, targetTile.transform.position, Quaternion.identity).GetComponent<EffectText> ()
-			.Init (damage.ToString (), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+	public GameObject MadeEffect(CardEffectType eType, Tile targetTile){
+        return Instantiate(effectPrefabs [(int)eType], targetTile.transform.position, Quaternion.identity);
 	}
 
-	public void MadeBullet(BulletType bType, Vector3 startPos, Transform target){
-		(Instantiate (bulletPrefabs [(int)bType], startPos, Quaternion.identity)as GameObject).GetComponent<Bullet> ().Shoot (target);
-	}
+    public void DestroyEffect(GameObject go)
+    {
+        DestroyImmediate(go);
+    }
+
+	public GameObject MadeEffect(int damage, Transform parent){
+        GameObject go = Instantiate(textEffectPrefab, parent);
+        go.GetComponent<EffectText>().Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+        return go;
+    }
+	public GameObject MadeEffect(int damage, Entity parent){
+        GameObject go =  Instantiate(textEffectPrefab, parent.transform);
+        go.GetComponent<EffectText>().Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+        return go;
+    }
+	public GameObject MadeEffect(int damage, Vector3 worldPosition){
+        if (damage == 0)
+            return null;
+
+        GameObject go= Instantiate(
+            textEffectPrefab, worldPosition, Quaternion.identity);
+        go.GetComponent<EffectText>()
+            .Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+        return go;
+    }
+	public GameObject MadeEffect(int damage, Tile targetTile){
+        GameObject go = Instantiate(
+            textEffectPrefab, targetTile.transform.position, Quaternion.identity);
+        go.GetComponent<EffectText>()
+            .Init(damage.ToString(), damage >= 0 ? TextColorType.Green : TextColorType.Red);
+        return go;
+    }
+
+    public GameObject MadeEffect(RangeEffectType range, Tile targetTile)
+    {
+        if (targetTile == null || targetTile.OnTileObj is Structure || targetTile.tileNum ==0)
+            return null;
+        GameObject go = Instantiate(rangeLayer[(int)range],
+     targetTile.transform.position, Quaternion.identity);
+
+        return go;        
+    }
+
+    /// <summary>
+    /// Range Effect Delete할때 사용
+    /// </summary>
+    public void DestroyEffect(List<GameObject> go)
+    {
+        if(go != null)
+        {
+            for (int i = 0; i < go.Count; i++)
+            {
+                DestroyImmediate(go[i]);
+            }
+        }
+    }
 }

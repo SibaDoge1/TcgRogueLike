@@ -5,16 +5,12 @@ using UnityEngine;
 namespace Arch{
 	public class Tile :MonoBehaviour
 	{
-		void Awake(){
-			sprite = GetComponent<SpriteRenderer> ();
-		}
+        #region variables
+       
+        public short tileNum;
 
-	    #region variables
-		public List<Tile> neighbours;
-	    private SpriteRenderer sprite;
-		public SpriteRenderer mySprite{
-			get { return sprite; }
-		}
+        public List<Tile> neighbours;
+
 	    public Vector2Int pos;
 		private Entity onTileObj;//타일위에 있는 mapObject
 	    public Entity OnTileObj {
@@ -23,44 +19,62 @@ namespace Arch{
 			}
 			set {
 				onTileObj = value;
+                SomethingUpOnThis(value);
 			}
 		}
 		private OffTile _offTile;
 		public OffTile offTile
-        { get { return _offTile; }  set { _offTile = value; _offTile.ThisTile = this; } }
-        private EventLayer _eventLayer;
-        public EventLayer eventLayer
-        { get { return _eventLayer;  } set { _eventLayer = value; _eventLayer.ThisTile = this; } }
+        {
+            get
+            { return _offTile; }
+            set
+            {
+                if (_offTile != null && _offTile.isEvent)
+                    return;
 
-	    #endregion
-	    /// <summary>
-	    /// Defalut : GroundTile
-	    /// </summary>
-	    public void SetTile(Vector2Int _pos,Vector2Int roomSize)
-		{
-			pos = _pos;
-			transform.localPosition = new Vector3(pos.y,-pos.x, 0);
+                _offTile = value;
 
-            name = "Tile" + _pos;
-		}
-	
-	    public bool IsStandAble(Entity ot)
+                if(_offTile !=null)
+                _offTile.CurrentTile = this;
+            }
+        }
+        #endregion
+
+        public void Init(short _tileNum)
+        {
+            tileNum = _tileNum;
+        }
+        public void SetSprite(Sprite _sprite)
+        {
+            GetComponent<SpriteRenderer>().sprite = _sprite;
+        }
+        public void SetRoom(Room room, Vector2Int _pos)
+        {
+            transform.SetParent(room.transform);
+            pos = _pos;
+            transform.localPosition = new Vector3(pos.x, pos.y, 0);
+        }
+        public bool IsStandAble(Entity ot)
 		{			
-				if (onTileObj != null) {
+				if (onTileObj != null || (offTile != null && !offTile.IsStandAble(ot)))
+                {
 					return false;
-				} else {
-					return true;
-				}			
+				} 
+                else if(tileNum == 0 && ot is Character)
+                {
+					return false;
+				}
+                else
+                {
+                return true;
+                 }
 		}
     	public void SomethingUpOnThis (Entity ot)
 		{
 			if (offTile != null) {
 				offTile.SomethingUpOnThis (ot);
 			}
-            if(eventLayer != null)
-            {
-                eventLayer.SomethingUpOnThis(ot);
-            }
 		}       
+
 	}
 }
