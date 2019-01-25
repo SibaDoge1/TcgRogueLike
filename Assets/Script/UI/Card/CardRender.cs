@@ -71,11 +71,19 @@ public class CardRender : MonoBehaviour {
     
     private void SetRank(int rank)
     {
-        for(int i=0; i<(5-rank);i++)
+        for(int i=0; i<5 ; i++)
         {
-            ranks[i].gameObject.SetActive(false);
+            if(i<=rank-1)
+            {
+                ranks[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                ranks[i].gameObject.SetActive(false);
+            }
         }
     }
+
     public void SetEnable(bool b)
     {
         img_Enable.enabled = !b;

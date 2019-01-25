@@ -7,7 +7,7 @@ public class Deck : MonoBehaviour {
 
 	public List<Card> remainDeck;
 
-	public CardObject Draw(){
+	public HandCardObject Draw(){
 		if (remainDeck.Count <= 0) {
 			return null;
 		}
@@ -48,11 +48,11 @@ public class Deck : MonoBehaviour {
     }
     private void DrawCallBack()
     {
-        UIManager.instance.SetCardNumber(remainDeck.Count);
+        UIManager.instance.DeckCont(remainDeck.Count);
     }
     private void LoadCallBack()
     {
-        UIManager.instance.SetCardNumber(remainDeck.Count);
+        UIManager.instance.DeckCont(remainDeck.Count);
     }
 
     #endregion

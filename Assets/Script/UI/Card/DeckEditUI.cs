@@ -9,10 +9,9 @@ using UnityEngine.UI;
 public class DeckEditUI : MonoBehaviour
 {
     private RectTransform rect;
-    private Vector3 offPos = new Vector3(0, 2000, 0);
+    private Vector3 offPos = new Vector3(0, 3000, 0);
     private bool isEditOk=false;
     public bool IsEditOk { get { return isEditOk; } }
-    private bool isEditMode = false;
     private List<EditCardObject> deckCardObjects;
     private List<EditCardObject> attainCardObjects;
     private List<Card> deck;
@@ -40,17 +39,10 @@ public class DeckEditUI : MonoBehaviour
         exchangePopUp = transform.Find("DeckPanel").Find("Buttons").Find("check").GetComponent<RectTransform>();
     }
 
-    #region CardInfoPanel
-
-    #endregion
-
     public void On()
     {
-        Debug.Log("On");
-
         GameManager.instance.IsInputOk = false;
         isEditOk = true;//bool
-        isEditMode = true;//bool
         rect.anchoredPosition = Vector3.zero;
         MakeCardObjects();
         changeButton.gameObject.SetActive(true);//b
@@ -171,7 +163,7 @@ public class DeckEditUI : MonoBehaviour
         deckCardObjects = new List<EditCardObject>();
         for(int i=0; i<deck.Count;i++)
         {
-            deckCardObjects.Add(deck[i].InstantiateDeckCard());
+            deckCardObjects.Add(deck[i].InstantiateEditCard());
         }
         for (int i = 0; i < deckCardObjects.Count; i++)
         {
@@ -184,13 +176,13 @@ public class DeckEditUI : MonoBehaviour
         attainCardObjects = new List<EditCardObject>();
         for (int i = 0; i < attain.Count; i++)
         {
-            attainCardObjects.Add(attain[i].InstantiateDeckCard());
+            attainCardObjects.Add(attain[i].InstantiateEditCard());
         }
         for (int i = 0; i < attainCardObjects.Count; i++)
         {
             attainCardObjects[i].SetParent(attainViewPort,false);
             attainCardObjects[i].SetDeckUI(this);
-            attainCardObjects[i].SetRenderUnknown();
+            deckCardObjects[i].SetRenderUnknown();
         }
         SortCards();
     }
@@ -213,20 +205,19 @@ public class DeckEditUI : MonoBehaviour
             if(!attainCardObjects[i].IsReavealed)
             {
                 attainCardObjects[i].SetRenderKnown();
-                yield return new WaitForSeconds(0.3f);
+                //TODO : 미지카드밝혀지는 애니메이션
             }
         }
         yield return null;
     }
     IEnumerator OffRoutine()
     {
-        if(isEditMode) //TODO : 카드 발화 애니메이션
-        {
-            PlayerData.Deck = deck;
-            PlayerData.AttainCards.Clear();
-            PlayerControl.instance.ReLoadDeck();
-            yield return null;
-        }
+
+         PlayerData.Deck = deck;
+         PlayerData.AttainCards.Clear();
+         PlayerControl.instance.ReLoadDeck();
+         yield return null;
+
         DeleteAllObjects();
         rect.anchoredPosition = offPos;
     }
@@ -234,8 +225,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = A.GetCard().Index * 10 + A.GetCard().Cost;
-            int bIndex = B.GetCard().Index * 10 + B.GetCard().Cost;
+            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index;
+            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -244,8 +235,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = A.GetCard().Index * 10 + A.GetCard().Cost;
-            int bIndex = B.GetCard().Index * 10 + B.GetCard().Cost;
+            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index;
+            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)

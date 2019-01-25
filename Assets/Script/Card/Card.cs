@@ -63,17 +63,25 @@ public abstract class Card
     }
 
 
-	public CardObject InstantiateHandCard(){
-		CardObject cardObject;
+	public HandCardObject InstantiateHandCard(){
+		HandCardObject cardObject;
         cardObject = ArchLoader.instance.GetCardObject();
-        cardObject.SetCardRender(this);
+        cardObject.SetCardData(this);
 		return cardObject;
 	}
-    public EditCardObject InstantiateDeckCard()
+    public EditCardObject InstantiateEditCard()
     {
         EditCardObject cardObject;
         cardObject = ArchLoader.instance.GetEditCard();
-        cardObject.SetCard(this);
+        cardObject.SetCardData(this);
+        return cardObject;
+    }
+
+    public CheckCardObject InstantiateCheckCard()
+    {
+        CheckCardObject cardObject;
+        cardObject = ArchLoader.instance.GetCheckCard();
+        cardObject.SetCardData(this);
         return cardObject;
     }
 

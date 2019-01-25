@@ -20,19 +20,20 @@ public class Hand : MonoBehaviour {
     public GameObject joyStick;
 	private Transform drawStartPosition;
     private bool isHided;
-	private List<CardObject> handList = new List<CardObject> ();
+	private List<HandCardObject> handList = new List<HandCardObject> ();
 
     public void SetJoyStick(bool b)
     {
         joyStick.gameObject.SetActive(b);
     }
 	//Add from Deck
-	public void DrawHand(CardObject cardObject){
+	public void DrawHand(HandCardObject cardObject){
 		if(cardObject == null){
 			return;
 		}
 
-		cardObject.SetParent (this);
+		cardObject.SetParent (this.transform);
+        cardObject.SetHand(this);
 		cardObject.transform.position = drawStartPosition.position;
 		cardObject.transform.localScale = Vector3.one;
 
@@ -41,12 +42,13 @@ public class Hand : MonoBehaviour {
 	}
 
 	//Add from Others (different animation)
-	public void AddHand(CardObject cardObject){
+	public void AddHand(HandCardObject cardObject){
 		if(cardObject == null){
 			return;
 		}
-		cardObject.SetParent (this);
-		cardObject.transform.localPosition = Vector3.zero;
+        cardObject.SetParent(this.transform);
+        cardObject.SetHand(this);
+        cardObject.transform.localPosition = Vector3.zero;
 		cardObject.transform.localScale = Vector3.one;
 
 		handList.Add (cardObject);
@@ -121,20 +123,20 @@ public class Hand : MonoBehaviour {
     /// <summary>
     /// List에서 지우기만 , CardObject는 따로 Destroy 해줘야함
     /// </summary>
-	public void RemoveCard(CardObject co){
+	public void RemoveCard(HandCardObject co){
 		handList.Remove (co);
 		SetCardPosition ();
 	}
     public void RemoveLeftCard()
     {
-        handList[0].Remove();
+        handList[0].DestroyFromHand();
         SetCardPosition();
     }
     public void RemoveAll()
     {
         for(int i = handList.Count-1; i>=0;i--)
         {
-            handList[i].Remove();
+            handList[i].DestroyFromHand();
         }
     }
 
