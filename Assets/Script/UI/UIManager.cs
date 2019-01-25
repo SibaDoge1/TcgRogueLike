@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
         cardInfoPanel = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
         deck = transform.Find("Deck").GetComponent<Deck>();
         deckEdit = transform.Find("Deck").Find("DeckEdit").GetComponent<DeckEditUI>();
+        deckCheck = transform.Find("Deck").Find("DeckCheck").GetComponent<DeckCheckUI>();
+
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
         error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
@@ -35,6 +37,7 @@ public class UIManager : MonoBehaviour
     HpUI hpUI;
     GameOverUI gameOverUI;
     DeckEditUI deckEdit;
+    DeckCheckUI deckCheck;
     MapUI mapUI;
     Deck deck;
     Hand hand;
@@ -54,7 +57,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    #region DeckEdit
+    #region Decks
     public void DeckEditUIOn()
     {
         if (!GameManager.instance.IsInputOk)
@@ -67,7 +70,22 @@ public class UIManager : MonoBehaviour
         deckEdit.Off();
         GameManager.instance.IsInputOk = true;
     }
+    public Deck GetDeck()
+    {
+        return deck;
+    }
+    public void DeckCheckUIOn()
+    {
+        if (!GameManager.instance.IsInputOk)
+            return;
 
+        deckCheck.On();
+    }
+    public void DeckCheckUIOff()
+    {
+        deckCheck.Off();
+        GameManager.instance.IsInputOk = true;
+    }
     #endregion
 
     #region Map
@@ -97,6 +115,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    #region ErrorPopUp
     public void ErrorPopUpOn(Debuffs de)
     {
         error.gameObject.SetActive(true);
@@ -105,23 +124,9 @@ public class UIManager : MonoBehaviour
     {
         error.gameObject.SetActive(false);
     }
-    public Deck GetDeck()
-    {
-        return deck;
-    }
-    public Hand GetHand()
-    {
-        return hand;
-    }
-    public void GameOverUIOn()
-    {
-        gameOverUI.On();
-    }
-    public void GameWinUIOn()
-    {
-        gameWinUI.On();
-    }
+    #endregion
 
+    #region TextUI
     public void ShowTextUI(string[] s, EventTileCallBack cb)
     {
         textUI.StartText(s, cb);
@@ -130,10 +135,10 @@ public class UIManager : MonoBehaviour
     {
         textUI.GoNext();
     }
-    public void SetCardNumber(int count)
-    {
-        remainText.text = "" + count;
-    }
+    #endregion
+
+
+    #region CardInfo
     /// <summary>
     /// 해당 카드데이터 InfoPanel열기
     /// </summary>
@@ -154,7 +159,27 @@ public class UIManager : MonoBehaviour
     {
         cardInfoPanel.gameObject.SetActive(false);
     }
+    #endregion
 
+    public Hand GetHand()
+    {
+        return hand;
+    }
+    public void GameOverUIOn()
+    {
+        gameOverUI.On();
+    }
+    public void GameWinUIOn()
+    {
+        gameWinUI.On();
+    }
 
-
+    /// <summary>
+    /// 현재 덱의 남아있는 카드 수
+    /// </summary>
+    /// <param name="count"></param>
+    public void DeckCont(int count)
+    {
+        remainText.text = "" + count;
+    }
 }

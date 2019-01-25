@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using System;
 /// <summary>
 /// 덱 수정에 있는 카드 오브젝트
 /// </summary>
 
-public class EditCardObject : Button
+public class EditCardObject : CardObject, IPointerClickHandler
 {
 
     private int index;
@@ -23,14 +23,13 @@ public class EditCardObject : Button
     private bool isOnDeck;
 
 
-    private Card data;
     public Card GetCard()
     {
         return data;
     }
     private DeckEditUI deckEditUI;
-    private CardRender render;
     private Image highLightImage;
+
     bool isSelected;
     public bool IsSelected {
         get { return isSelected; }
@@ -38,22 +37,15 @@ public class EditCardObject : Button
     }
     protected override void Awake()
     {
-        onClick.AddListener(OnClickThis);
+        base.Awake();
         highLightImage = transform.Find("HighLight").GetComponent<Image>();
         highLightImage.enabled = false;
-        render = transform.Find("render").GetComponent<CardRender>();
     }
 
-    public void SetCard(Card data_)
-    {
-        data = data_;
-    }
     public void SetRenderKnown()
     {
-
         isReavealed = true;
         render.SetRender(data);
-
     }
     public void SetRenderUnknown()
     {
@@ -72,7 +64,24 @@ public class EditCardObject : Button
         isOnDeck = isDeck;
     }
 
-    public void OnClickThis()
+    public void HighLightOn()
+    {
+        isSelected = true;
+        highLightImage.enabled = true;
+    }
+
+    public void HighLightOff()
+    {
+        isSelected = false;
+        highLightImage.enabled = false;
+    }
+
+    public void Locate(int i)
+    {
+        transform.SetSiblingIndex(i);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (isReavealed)
         {
@@ -95,6 +104,7 @@ public class EditCardObject : Button
                 {
                     deckEditUI.AttainCardSelectOff(this);
                 }
+                UIManager.instance.CardInfoPanel_Off();
             }
             else
             {
@@ -109,23 +119,4 @@ public class EditCardObject : Button
             }
         }
     }
-
-    public void HighLightOn()
-    {
-        isSelected = true;
-        highLightImage.enabled = true;
-    }
-
-    public void HighLightOff()
-    {
-        isSelected = false;
-        highLightImage.enabled = false;
-    }
-
-    public void Locate(int i)
-    {
-        transform.SetSiblingIndex(i);
-    }
-
-
 }

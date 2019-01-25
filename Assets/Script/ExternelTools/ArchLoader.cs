@@ -63,14 +63,19 @@ public class ArchLoader : MonoBehaviour {
                 return null;
         }
     }
-    public CardObject GetCardObject()
+    public HandCardObject GetCardObject()
     {
-        return Instantiate(cardObject).GetComponent<CardObject>();
+        return Instantiate(cardObject).GetComponent<HandCardObject>();
     }
     public EditCardObject GetEditCard()
     {
         return Instantiate(editCardObject).GetComponent<EditCardObject>();
     }
+    public CheckCardObject GetCheckCard()
+    {
+        return Instantiate(checkCardObject).GetComponent<CheckCardObject>();
+    }
+
     public Sprite GetCardSprite(string name)
     {
         return cardSprites[name];
@@ -193,14 +198,16 @@ public class ArchLoader : MonoBehaviour {
 
     GameObject cardObject;
     GameObject editCardObject;
+    GameObject checkCardObject;
+
     Dictionary<string, Sprite> cardSprites = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> cardFrame = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> attributes = new Dictionary<string, Sprite>();
     private void CacheCardObject()
     {
-        cardObject = Resources.Load<GameObject>("Card/CardObject");
+        cardObject = Resources.Load<GameObject>("Card/HandCardObject");
         editCardObject = Resources.Load<GameObject>("Card/EditCardObject");
-
+        checkCardObject = Resources.Load < GameObject >( "Card/CheckCardObject" );
         Sprite[] sprites = Resources.LoadAll<Sprite>("Card/Graphic");
         for(int i=0; i<sprites.Length;i++)
         {
