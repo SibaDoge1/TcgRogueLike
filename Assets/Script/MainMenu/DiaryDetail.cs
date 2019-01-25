@@ -9,6 +9,7 @@ public class DiaryDetail : MonoBehaviour {
     private Image image;
     private Diary diary;
     private MainMenu.voidFunc OffNew;
+    private GameObject noData;
 
     void Awake()
     {
@@ -16,6 +17,7 @@ public class DiaryDetail : MonoBehaviour {
         content = transform.Find("Text").GetComponent<Text>();
         image = transform.Find("Image").GetComponent<Image>();
         diary = transform.parent.GetComponent<Diary>();
+        noData = transform.Find("NO DATA").gameObject;
     }
 
     public void On(DiaryData data, MainMenu.voidFunc func)
@@ -25,7 +27,7 @@ public class DiaryDetail : MonoBehaviour {
         if (data == null) return;
         title.text = data.title;
         content.text = data.info;
-
+        noData.SetActive(false);
         SaveData.diaryUnlockData[data.num][1] = false;
 
         string imagePath;
@@ -42,6 +44,7 @@ public class DiaryDetail : MonoBehaviour {
 
     public void Off()
     {
+        noData.SetActive(true);
         OffNew();
         diary.CheckNew();
         gameObject.SetActive(false);
