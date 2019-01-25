@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Datas that will be used for save & load
@@ -12,7 +13,7 @@ public static class SaveData
     public static float UIValue { get; private set; }
     public static List<bool> cardUnlockData { get; private set; }
     public static List<bool> achiveUnlockData { get; private set; }
-    public static List<bool[]> diaryUnlockData { get; private set; }
+    public static List<bool[]> diaryUnlockData { get; private set; }  // [0] 일지 해금여부, [1] 새로 해금된 건지 여부
     public static Dictionary<int, int> monsterKillData { get; private set; }
     public static List<bool> stageArriveData { get; private set; } //TODO: 미구현
     public static bool isGetEnding { get; private set; }
@@ -143,13 +144,12 @@ public static class SaveData
             if(Database.achiveDatas[idx].type == "kill" && int.Parse(Database.achiveDatas[idx].condition) == i)
             {
                 GetAchivement(idx);
-                break;
             }
         }
     }
 
     /// <summary>
-    /// 업적달성시 콜
+    /// 아래 함수를 제외한 특수한 업적달성시 콜 할 것
     /// </summary>
     /// <param name="i">업적번호</param>
     public static void GetAchivement(int i)
@@ -170,9 +170,16 @@ public static class SaveData
     /// </summary>
     /// <param name="i"></param>
     /// <param name="value"></param>
-    public static void ArriveStage(int i, bool value)
+    public static void ArriveStage(int i)
     {
-        stageArriveData[i] = value;
+        stageArriveData[i] = true;
+        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        {
+            if (Database.achiveDatas[idx].type == "floor" && int.Parse(Database.achiveDatas[idx].condition) == i)
+            {
+                GetAchivement(idx);
+            }
+        }
     }
 
     /// <summary>
@@ -181,6 +188,14 @@ public static class SaveData
     public static void GetEnding()
     {
         isGetEnding = true;
+        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        {
+            if (Database.achiveDatas[idx].type == "ending")
+            {
+                GetAchivement(idx);
+            }
+        }
+        SceneManager.LoadScene("EndingScene");
     }
 
     /// <summary>
@@ -189,7 +204,15 @@ public static class SaveData
     public static void GetGameOver()
     {
         gameOverNum++;
+        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        {
+            if (Database.achiveDatas[idx].type == "gameover" && int.Parse(Database.achiveDatas[idx].condition) <= gameOverNum)
+            {
+                GetAchivement(idx);
+            }
+        }
     }
+
 
     public static bool CheckNew()
     {

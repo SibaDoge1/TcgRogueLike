@@ -21,12 +21,12 @@ public class DiaryDetail : MonoBehaviour {
     public void On(DiaryData data, MainMenu.voidFunc func)
     {
         gameObject.SetActive(true);
+        OffNew = func;
         if (data == null) return;
         title.text = data.title;
         content.text = data.info;
 
         SaveData.diaryUnlockData[data.num][1] = false;
-        OffNew = func;
 
         string imagePath;
         switch (data.category)

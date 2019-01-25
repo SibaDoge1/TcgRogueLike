@@ -12,6 +12,7 @@ public class MyCamera : MonoBehaviour {
     {
         instance = this;
         cam = GetComponentInChildren<Camera>();
+       // cam.aspect = 16f / 9f;
     }
 
     public void PlayerTrace(Player player)
