@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Character : Entity {
-    [Header("Setting")]
-    [SerializeField]
-    protected int SettingHp;
-    [SerializeField]
-    protected int SettingAtk;
-    [SerializeField]
-    protected int SettingDef;
 
+    public Sprite[] actionSprites;
+    Sprite normalSprites;
+    Coroutine anim;
 
     protected override void Awake()
     {
         base.Awake();
+        normalSprites = spriteRender.sprite;
+    }
+    protected override void SetSpriteRender()
+    {
         spriteRender = GetComponentInChildren<SpriteRenderer>();
     }
     public override bool MoveTo(Vector2Int _pos)
@@ -37,17 +37,9 @@ public abstract class Character : Entity {
 
 
     public virtual bool GetDamage(int damage, Entity atker = null)
-    {
-        
-            int rest = damage - def;
-            if (rest > 0)
-            {
-                CurrentHp -= rest;
-                return true;
-            }
-        
-        return false;
-
+    {      
+            CurrentHp -= damage;
+            return true;
     }
     public virtual bool GetDamage(float damage, Entity atker = null)
     {
@@ -98,19 +90,22 @@ public abstract class Character : Entity {
     }
 
     protected int atk;
-    protected int def;
     public int Atk
     {
         get { return atk; }
         set { atk = value; }
     }
-    public int Def
-    {
-        get { return def; }
-        set { def = value; }
-    }
+
+
     protected virtual void DamageEffect(int value)
     {
         EffectDelegate.instance.MadeEffect(value, transform.position);
+    }
+
+    protected virtual IEnumerator AnimationRoutine(int num, float animationTime = 0.5f)
+    {
+        spriteRender.sprite = actionSprites[num];
+        yield return new WaitForSeconds(animationTime);
+        spriteRender.sprite = normalSprites;
     }
 }

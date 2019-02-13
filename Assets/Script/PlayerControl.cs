@@ -5,17 +5,16 @@ using Arch;
 
 public class PlayerControl : MonoBehaviour {
     public static PlayerControl instance;
-	void Awake()
+    public static BuffManager status;//Status
+    public static Player player;//PlayerEntity
+
+
+    void Awake()
     {
         instance = this;
         player = GetComponent<Player>();
+        status = new BuffManager();
     }
-     
-
-    private static Player player;
-	public static Player Player{
-		get{ return player; }
-	}
 
     public void EndTurnButton()
     {
@@ -44,45 +43,35 @@ public class PlayerControl : MonoBehaviour {
         get { return selectedDirCard; }
         set
         {
-            if (value == null)
+            Card old = selectedDirCard;
+            selectedDirCard = value;
+
+            if (selectedDirCard == null)
             {
                 isDirCardSelected = false;
-                selectedDirCard.CancelPreview();
+                old.CancelPreview();
             }
             else
             {
                 isDirCardSelected = true;
-                value.CardEffectPreview();
+                selectedDirCard.CardEffectPreview();
             }
-            selectedDirCard = value;
 
         }
     }
-	/// <summary>
-	/// Draw Anyway even if Hand is Full
-	/// </summary>
-	public void ForceDraw(){
-		hand.DrawHand (deck.Draw ());
-	}
 
 	/// <summary>
-	/// Draw With MagicCard
-	/// </summary>
-	public void MagicDraw(){
-		if (hand.CurrentHandCount < Config.instance.HandMax) {
-			hand.DrawHand (deck.Draw ());
-		}
-	}
-
-	/// <summary>
-	/// Draw Each Turn (Check Remain Monsters)
+	/// Draw Each Turn
 	/// </summary>
 	public void NaturalDraw(){
 		if (hand.CurrentHandCount < Config.instance.HandMax) {
 			hand.DrawHand (deck.Draw ());
 		}else
         {
-            hand.RemoveLeftCard();//가장왼쪽의 카드 제거
+            if(!deck.isDrawEnd)
+            {
+                hand.ReturnCard();//가장왼쪽의 카드 제거
+            }
             hand.DrawHand(deck.Draw());
         }
 	}
@@ -100,21 +89,29 @@ public class PlayerControl : MonoBehaviour {
 
     public void ReLoadDeck()
     {
-        hand.RemoveAll();
-		deck.Load ();
-        hand.DrawHand(deck.Draw());
-        hand.DrawHand(deck.Draw());
-        hand.DrawHand(deck.Draw());
+        hand.DumpAll();
+		deck.ReLoad ();
+        for(int i=0; i<3; i++)
+        {
+            hand.DrawHand(deck.Draw());
+        }
     }
 
-
-
+    public void OnRoomClear()
+    {
+        hand.DumpAll();
+        deck.OnRoomClear();
+        for (int i = 0; i < 3; i++)
+        {
+            hand.DrawHand(deck.Draw());
+        }
+    }
 
     #endregion
     #region PlayerInput
     public void MoveToDirection(Direction dir)
     {
-        if (!IsMoveAble)
+        if (!status.IsMoveAble)
         {
             EndTurnButton();
         }else
@@ -155,58 +152,16 @@ public class PlayerControl : MonoBehaviour {
     }
     public void DoDirCard(Direction dir)
     {
-        SelectedDirCard.DoCard(dir);
+        SelectedDirCard.OnCardPlayed(dir);
         if (selectedDirCard.IsConsumeTurn())
         {
-            GameManager.instance.OnEndPlayerTurn();
+            GameManager.instance.OnEndPlayerTurn(selectedDirCard.effectTime);
         }
         SelectedDirCard = null;
     }
     public void ToggleHand()
     {
         hand.ToggleHand();
-    }
-    #endregion
-    public void EnableCards(bool enable)
-    {
-        hand.EnableCards(enable);
-    }
-
-    #region statusRegion //상태이상 스테이터스 관리
-    
-    private bool isMoveAble = true; private bool isDrawAble = true;
-    public bool IsMoveAble
-    {
-        get { return isMoveAble; }
-        set { isMoveAble = value; }
-    }
-    public bool IsDrawAble
-    {
-        get { return isDrawAble; }
-        set { isDrawAble = value; }
-    }
-
-    private Debuffs debuff;
-    public void SetDebuff(Debuffs d)
-    {
-        if(debuff != null)
-        {
-           EraseDebuff();
-        }
-        debuff = d;
-        d.Active();
-    }
-    public void CountDebuff()
-    {
-        if(debuff != null)
-        {
-            debuff.CountTurn();
-        }
-    }
-    public void EraseDebuff()
-    {
-        debuff.OnDestroy();
-        debuff = null;
     }
     #endregion
 }

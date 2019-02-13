@@ -140,22 +140,44 @@ public static class BuildRoom
         {
             for (int y = 0; y < size.y; y++)
             {
+                //상하좌우
                 if (x > 0)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x - 1, y]);
                 }
                 if (x < size.x - 1)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x + 1, y]);
                 }
                 if (y > 0)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x, y - 1]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x, y - 1]);
                 }
                 if (y < size.y - 1)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x, y + 1]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x, y + 1]);
                 }
+
+                //대각선 방향
+                if(x>0 && y>0)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x-1, y-1]);
+                }
+                if(x<size.x-1 && y>0)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x + 1, y - 1]);
+                }
+                if (x<size.x-1 && y<size.y-1)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x + 1, y + 1]);
+                }
+                if (x>0 && y<size.y-1)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x - 1, y + 1]);
+                }
+
+                tiles[x, y].allNeighbours = new List<Tile>(tiles[x,y].crossNeighbours);
+                tiles[x, y].allNeighbours.AddRange(tiles[x, y].diagonalNeighbours);
             }
         }
     }

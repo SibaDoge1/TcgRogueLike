@@ -120,6 +120,7 @@ public class MonsterData
     public readonly short rank;
     public readonly bool vision;
     public readonly byte visionDistance;
+    public readonly bool elite;
 
     public MonsterData(string[] data)
     {
@@ -130,6 +131,7 @@ public class MonsterData
         rank = short.Parse(data[4]);
         vision = bool.Parse(data[5]);
         visionDistance = byte.Parse(data[6]);
+        elite = bool.Parse(data[7]);
     }
 }
 

@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Player : Character
 {
-    private void Start()
+    protected override void Awake()
     {
-        FullHp = SettingHp; CurrentHp = SettingHp;
-        Atk = SettingAtk; Def = SettingDef;
+        base.Awake();
+        FullHp = 10; CurrentHp = 10;
+        Atk = 1;
     }
     //문을 통해서 이동
     public void EnterRoom(OffTile_Door door)
@@ -79,7 +80,26 @@ public class Player : Character
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
         MyCamera.instance.ShakeCamera();
         EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
-        return base.GetDamage(damage, atker);
+
+        if (PlayerControl.status.IsHitAble)
+        {
+            return base.GetDamage(damage, atker);
+        }
+        else
+            return false;
     }
+    public void SetHp(int hp)
+    {
+        int dif = currentHp - hp;
+        if(dif>=0)
+        {
+            GetDamage(dif);
+        }
+        else
+        {
+            GetHeal(-dif);
+        }
+    }
+
 
 }

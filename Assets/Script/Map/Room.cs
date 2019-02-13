@@ -12,6 +12,7 @@ public class Room : MonoBehaviour
     public Vector2Int size;
     public List<OffTile_Door> doorList;
 	Tile[,] tiles;
+    public int distance=0;
     public RoomType roomType;
     private int roomValue;
     public int RoomValue

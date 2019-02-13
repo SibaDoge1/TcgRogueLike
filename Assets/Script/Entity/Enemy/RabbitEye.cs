@@ -7,15 +7,16 @@ public class RabbitEye : Enemy {
 
 
     #region AI
+    private sbyte attackCooltime = 0;
     protected override void Think()
     {
-        if (TileUtils.AI_CircleFind(currentTile, 1))
+        if (TileUtils.AI_SquareFind(currentTile, 2) && attackCooltime<=0)
         {
-            currentActionList = moveList;
+            currentActionList = attackList;
         }
         else
         {
-            currentActionList = attackList;
+            currentActionList = moveList;
         }
     }
     List<Action> attackList;
@@ -26,15 +27,15 @@ public class RabbitEye : Enemy {
         attackList = new List<Action>()
         { new Action(RangeOnAction),new Action(AttackThenRangeOffAction)};
         moveList = new List<Action>()
-        { new Action(SimpleRunAway)};
+        { new Action(SimpleMove)};
     }
 
-    Arch.Tile aimedTile;
+         Arch.Tile aimedTile;
          IEnumerator RangeOnAction()
         {
-            PlayAnimation("Ready");
-            aimedTile = PlayerControl.Player.currentTile;
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.Player.currentTile));
+            enemyUI.ActionImageOn();
+            aimedTile = PlayerControl.player.currentTile;
+            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
             yield return null;
         }
   
@@ -42,37 +43,48 @@ public class RabbitEye : Enemy {
 
           IEnumerator AttackThenRangeOffAction()
         {
-            PlayAnimation("Attack"); 
-            if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
+
+        if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
             {
-            PlayerControl.Player.GetDamage(atk);
-
-        }
-        ClearRangeList();
-            yield return null;
-        }
-
-
-
-    Vector2Int dir;
-          IEnumerator SimpleRunAway()
-        {
-            if (dir == Vector2Int.zero)
-            {
-                List<Arch.Tile> nearTiles = TileUtils.CircleRange(currentTile, 1);
-                for (int i = 0; i < nearTiles.Count; i++)
-                {
-                    if (nearTiles[i].OnTileObj == null)
-                    {
-                        dir = TileUtils.GetDir(currentTile, nearTiles[i]);
-                        break;
-                    }
-                }
+            PlayerControl.player.GetDamage(atk);
             }
-            MoveTo(currentTile.pos + dir);
-            PlayAnimation("Idle");
-            yield return null;
+        enemyUI.ActionImageOff();
+        ClearRangeList();
+        attackCooltime = 2;
+
+            yield return StartCoroutine(AnimationRoutine(0));
         }
-    
+
+    byte moveCount = 0;
+    IEnumerator SimpleMove()
+    {
+        switch(moveCount)
+        {
+            case 0:
+            case 1:
+                MoveTo(pos + new Vector2Int(1, 0));
+                break;
+            case 2:
+            case 3:
+                MoveTo(pos + new Vector2Int(0, -1));
+                break;
+            case 4:
+            case 5:
+                MoveTo(pos + new Vector2Int(-1, 0));
+                break;
+            case 6:
+            case 7:
+                MoveTo(pos + new Vector2Int(0, 1));
+                break;
+        }
+        moveCount++;
+        if(moveCount == 8)
+        {
+            moveCount = 0;
+        }
+
+        attackCooltime--;
+        yield return null;
+    }
     #endregion
 }

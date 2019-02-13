@@ -17,7 +17,7 @@ public abstract class CardObject : MonoBehaviour
 
 
 
-    public void SetCardData(Card _data){
+    public virtual void SetCardData(Card _data){
 		data = _data;
         render.SetRender(_data);
     }

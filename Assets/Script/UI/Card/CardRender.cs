@@ -9,7 +9,7 @@ public class CardRender : MonoBehaviour {
 
     private Image img_Frame;
     private Image img_Graphic;
-    private Image img_Enable;
+    private Image img_UnEnable;
     private Image img_Upgrade;
     private Image[] ranks;
     private Text thisName;
@@ -21,7 +21,7 @@ public class CardRender : MonoBehaviour {
         img_Frame = transform.Find("Frame").GetComponent<Image>();
         img_Graphic = transform.Find("Graphic").GetComponent<Image>();
         ranks = transform.Find("Rank").GetComponentsInChildren<Image>();
-        img_Enable = transform.Find("enable").GetComponent<Image>();
+        img_UnEnable = transform.Find("enable").GetComponent<Image>();
         img_Upgrade = transform.Find("upgrade").GetComponent<Image>();
     }
     /// <summary>
@@ -35,6 +35,13 @@ public class CardRender : MonoBehaviour {
         img_Graphic.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);
         img_Upgrade.enabled = data.IsUpgraded;
     }
+    public void UpdateRender(Card data)
+    {
+        SetRank(data.Cost);
+        img_Upgrade.enabled = data.IsUpgraded;
+        SetEnable(data.IsCostAvailable());
+    }
+
     public void SetRender()
     {
         thisName.text = "???";
@@ -84,9 +91,9 @@ public class CardRender : MonoBehaviour {
         }
     }
 
-    public void SetEnable(bool b)
+    private void SetEnable(bool b)
     {
-        img_Enable.enabled = !b;
+        img_UnEnable.enabled = !b;
     }
 
 }

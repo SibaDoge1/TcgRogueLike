@@ -54,7 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offTileNum: 0
   isEvent: 0
-  Dir: 3
+  Dir: 2
 --- !u!212 &212826660623642726
 SpriteRenderer:
   m_ObjectHideFlags: 1

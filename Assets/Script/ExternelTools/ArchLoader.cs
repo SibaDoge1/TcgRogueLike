@@ -78,7 +78,10 @@ public class ArchLoader : MonoBehaviour {
 
     public Sprite GetCardSprite(string name)
     {
-        return cardSprites[name];
+        if (cardSprites.ContainsKey(name))
+            return cardSprites[name];
+        else
+            return cardSprites["error"];
     }
     public Sprite GetDoorSprite(string name)
     {

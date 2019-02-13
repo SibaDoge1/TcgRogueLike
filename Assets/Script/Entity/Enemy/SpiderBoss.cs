@@ -51,30 +51,26 @@ public class SpiderBoss : Enemy {
         {
             rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
-        PlayAnimation("AttackReady");
         yield return null;
     }
     IEnumerator Delay()
     {
-        PlayAnimation("Idle");
         yield return null;
     }
     IEnumerator Attack()
     {
         if(TileUtils.AI_CrossFind(currentTile,2))
         {
-            PlayerControl.Player.GetDamage(atk);
+            PlayerControl.player.GetDamage(atk);
         }
-        PlayAnimation("Attack");
         ClearRangeList();
         yield return null;
     }
     IEnumerator RunAway()
     {
-        PlayAnimation("Teleport");
         List<Tile> tiles = currentRoom.GetTileToList();
-        List<Tile> removeTiles = TileUtils.SquareRange(PlayerControl.Player.currentTile,2);//지워야 하는 타일들
-        removeTiles.Add(PlayerControl.Player.currentTile);
+        List<Tile> removeTiles = TileUtils.SquareRange(PlayerControl.player.currentTile,2);//지워야 하는 타일들
+        removeTiles.Add(PlayerControl.player.currentTile);
             
         for(int i=0; i<removeTiles.Count;i++)
         {
@@ -87,19 +83,17 @@ public class SpiderBoss : Enemy {
     Tile aimedTile;
     IEnumerator WebReady()
     {
-        aimedTile = PlayerControl.Player.currentTile;
-        rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.Player.currentTile));
-        PlayAnimation("WebReady");
+        aimedTile = PlayerControl.player.currentTile;
+        rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
         yield return null;
     }
     IEnumerator WebAttack()
     {
-        if(PlayerControl.Player.currentTile == aimedTile)
+        if(PlayerControl.player.currentTile == aimedTile)
         {
-            PlayerControl.instance.SetDebuff(new Debuff_Move());
-            PlayerControl.Player.GetDamage(atk * 0.5f);
+           // PlayerControl.instance.SetDebuff(new Debuff_Move());
+            PlayerControl.player.GetDamage(atk * 0.5f);
         }
-        PlayAnimation("Web");
         ClearRangeList();
         yield return null;
     }
@@ -114,7 +108,6 @@ public class SpiderBoss : Enemy {
                 e.SetRoom(currentRoom, tiles[i]);
             }
         }
-        PlayAnimation("Spawn");
         yield return null;
     }
 

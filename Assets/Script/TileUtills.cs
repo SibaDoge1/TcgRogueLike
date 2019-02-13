@@ -1,19 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using Arch;
 
 public enum Figure
 {
     NONE,
-    X,
+    Diagonal,
     CROSS,
-    CIRCLE,
+    HORIZION,
+    VERTICAL,
     SQUARE,
     EMPTYSQUARE,
-    HORIZION,
-    VERTICAL
+    CIRCLE,
 }
 
 /// <summary>
@@ -46,7 +45,7 @@ public static class TileUtils
     /// <summary>
     /// X범위로 가져옴
     /// </summary>
-    public static List<Tile> XRange(Tile center,int radius)
+    public static List<Tile> DiagonalRange(Tile center,int radius)
     {
         List<Tile> crossList = new List<Tile>();
         int x = (int)center.pos.x; int y = (int)center.pos.y;
@@ -222,8 +221,8 @@ public static class TileUtils
         List<Tile> range;
         switch (figure)
         {
-            case Figure.X:
-                range = XRange(center, radius);
+            case Figure.Diagonal:
+                range = DiagonalRange(center, radius);
                 break;
             case Figure.CROSS:
                 range = CrossRange(center, radius);
@@ -262,8 +261,8 @@ public static class TileUtils
         List<Tile> range;
         switch (figure)
         {
-            case Figure.X:
-                range = XRange(center, radius);
+            case Figure.Diagonal:
+                range = DiagonalRange(center, radius);
                 break;
             case Figure.CROSS:
                 range = CrossRange(center, radius);
@@ -356,8 +355,8 @@ public static class TileUtils
         List<Tile> range;
         switch (figure)
         {
-            case Figure.X:
-                range = XRange(center, radius);
+            case Figure.Diagonal:
+                range = DiagonalRange(center, radius);
                 break;
             case Figure.CROSS:
                 range = CrossRange(center, radius);
@@ -399,8 +398,8 @@ public static class TileUtils
         List<Tile> range;
         switch (figure)
         {
-            case Figure.X:
-                range = XRange(center, radius);
+            case Figure.Diagonal:
+                range = DiagonalRange(center, radius);
                 break;
             case Figure.CROSS:
                 range = CrossRange(center, radius);
@@ -463,6 +462,20 @@ public static class TileUtils
     }
 
     #region AI Utils
+    public static bool AI_Find(List<Tile> tiles)
+    {
+        for(int i=0; i<tiles.Count;i++)
+        {
+            if (tiles[i].OnTileObj != null)
+            {
+                if (tiles[i].OnTileObj is Player)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     /// <summary>
     /// 플레이어가 원모양으로 주위에 있는가 체크
     /// </summary>
@@ -500,6 +513,21 @@ public static class TileUtils
     public static bool AI_CrossFind(Tile center, int radius)
     {
         List<Tile> range = CrossRange(center, radius);
+        for (int i = 0; i < range.Count; i++)
+        {
+            if (range[i].OnTileObj != null)
+            {
+                if (range[i].OnTileObj is Player)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static bool AI_DiagonalFind(Tile center, int radius)
+    {
+        List<Tile> range = DiagonalRange(center, radius);
         for (int i = 0; i < range.Count; i++)
         {
             if (range[i].OnTileObj != null)

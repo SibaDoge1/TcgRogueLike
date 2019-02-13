@@ -22,6 +22,28 @@ public class Hand : MonoBehaviour {
     private bool isHided;
 	private List<HandCardObject> handList = new List<HandCardObject> ();
 
+    public List<Card> GetHandCardList()
+    {
+        List<Card> cards = new List<Card>();
+
+        for(int i=0; i<handList.Count;i++)
+        {
+            cards.Add(handList[i].Data);
+        }
+
+        return cards;
+    }
+    public bool isOnHand(Card data)
+    {
+        for(int i=0; i<handList.Count; i++)
+        {
+            if(data == handList[i].Data)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public void SetJoyStick(bool b)
     {
         joyStick.gameObject.SetActive(b);
@@ -102,45 +124,38 @@ public class Hand : MonoBehaviour {
             HideAll();
         }
     }
-    public void EnableCards(bool enable)
-    {
-        if(enable)
-        {
-            for(int i=0; i<handList.Count;i++)
-            {
-                handList[i].EnableInteraction(true);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < handList.Count; i++)
-            {
-                handList[i].EnableInteraction(false);
-            }
-        }
-    }
+
+
+
+
 
     /// <summary>
     /// List에서 지우기만 , CardObject는 따로 Destroy 해줘야함
     /// </summary>
-	public void RemoveCard(HandCardObject co){
-		handList.Remove (co);
-		SetCardPosition ();
-	}
-    public void RemoveLeftCard()
+    public void RemoveCard(HandCardObject co)
     {
-        handList[0].DestroyFromHand();
+        handList.Remove(co);
         SetCardPosition();
     }
-    public void RemoveAll()
+    public void DumpCard()
+    {
+        handList[0].DumpCard();
+        SetCardPosition();
+    }
+    public void DumpAll()
     {
         for(int i = handList.Count-1; i>=0;i--)
         {
-            handList[i].DestroyFromHand();
+            handList[i].DumpCard();
         }
     }
+    public void ReturnCard()
+    {
+        handList[0].ReturnCard();
+        SetCardPosition();
+    }
 
-	public void ChooseOne(){
+    public void ChooseOne(){
 		if (moveRoutine != null) {
 			StopCoroutine (moveRoutine);
 		}
