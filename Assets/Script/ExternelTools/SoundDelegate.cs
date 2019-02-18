@@ -6,6 +6,7 @@ public enum BGM
 {
     FLOOR1,
     Floor1_BOSS,
+    Title
 }
 public enum CardSoundType
 {
@@ -18,6 +19,13 @@ public enum EffectSoundType
     RoomClear,
     RoomMove,
     GameOver,
+}
+public enum ButtonSoundType
+{
+    Normal,
+    Select,
+    Exit,
+    Confirm,
 }
 public class SoundDelegate : MonoBehaviour {
     #region variables

@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DiaryDetail : MonoBehaviour {
+    public GameObject[] backGroundImages;
     private Text title;
     private Text content;
     private Image image;
+    private Image backGround;
     private Diary diary;
     private MainMenu.voidFunc OffNew;
     private GameObject noData;
@@ -18,6 +20,7 @@ public class DiaryDetail : MonoBehaviour {
         image = transform.Find("Image").GetComponent<Image>();
         diary = transform.parent.GetComponent<Diary>();
         noData = transform.Find("NO DATA").gameObject;
+        backGround = transform.Find("BackGround").GetComponent<Image>();
     }
 
     public void On(DiaryData data, MainMenu.voidFunc func)
@@ -25,6 +28,7 @@ public class DiaryDetail : MonoBehaviour {
         gameObject.SetActive(true);
         OffNew = func;
         if (data == null) return;
+
         title.text = data.title;
         content.text = data.info;
         noData.SetActive(false);
