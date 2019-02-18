@@ -11,6 +11,7 @@ public enum Turn
 
 public class GameManager : MonoBehaviour
 {
+    private Player player;
 
     private Turn currentTurn;
     public Turn CurrentTurn
@@ -46,8 +47,13 @@ public class GameManager : MonoBehaviour
     {
         SetSeed();
 
-        ReadDatas();
-        ArchLoader.instance.GetPlayer();
+        if(!ArchLoader.instance.IsCached)
+        {
+            ArchLoader.instance.StartCache();
+            Database.ReadDatas();
+        }
+
+        player = ArchLoader.instance.GetPlayer();
         PlayerData.Clear();
         BuildDeck();
 
@@ -63,17 +69,13 @@ public class GameManager : MonoBehaviour
         SetMap(level);
 
         MinimapTexture.Init(currentMap);
-        SettingtPlayer(PlayerControl.instance);
+        SettingtPlayer();
 
-        EnemyControl.instance.SetRoom(CurrentMap.StartRoom);
-
-        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
+        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
 
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
-
-        if (currentMap.Floor == 1)
-            SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
     }
+  
 
     private Map currentMap;
     public Map CurrentMap
@@ -115,11 +117,14 @@ public class GameManager : MonoBehaviour
             }
         }
         SetCurrentRoom(newRoom);
+
+        //TODO : 방마다 BGM 바꾸게 변경
+        PlayBGM(currentMap.Floor);
     }
 
     public void OnPlayerClearRoom()
     {
-        PlayerControl.instance.ReLoadDeck();
+        PlayerControl.instance.OnRoomClear();
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomClear, Camera.main.transform.position);
         PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE)
@@ -131,7 +136,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// 호출하자마자 Turn은 EnemyTurn으로 바꾸고
-    /// float나 코루틴 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
+    /// float 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
     /// </summary>
     public void OnEndPlayerTurn(float time = 0.1f)
     {
@@ -140,8 +145,16 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator EndTurnDelay(float time)
     {
-        yield return new WaitForSeconds(time);
-        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.Player.pos);
+        yield return null;
+        if(PlayerControl.player.PlayerAnim == null)
+        {
+            yield return new WaitForSeconds(time);
+        }else
+        {
+            yield return PlayerControl.player.PlayerAnim;
+            Debug.Log("Called");
+        }
+        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
         EnemyControl.instance.EnemyTurn();
     }
 
@@ -152,9 +165,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void OnEndEnemyTurn()
     {
-        //PlayerControl.instance.EnableCards(true);
         currentTurn = Turn.PLAYER;
-        PlayerControl.instance.CountDebuff();
+        PlayerControl.playerBuff.OnPlayerTurn();
         PlayerData.PlayerTurnStart();
         MinimapTexture.DrawEnemies(CurrentRoom().transform.position, CurrentRoom().GetEnemyPoses());
     }
@@ -199,21 +211,27 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void BuildDeck()
     {
-        for(int i=0; i<12;i++) // 현재 랜덤으로 12장 생성
-          PlayerData.Deck.Add(Card.GetCardByNum(0));     
+        for(int i=0; i<10;i++) //노말카드 랜덤 9장 생성
+          PlayerData.Deck.Add(Card.GetCardByNum(0));
+
+        for(int i=0; i<3;i++)//특수카드 3장 생성
+        {
+            PlayerData.Deck.Add(Card.GetCardByNum(Random.Range(1,20)));
+        }
+        PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
     }
     private void GetRandomCardToAttain(int value)
     {
         PlayerControl.instance.AddToAttain(Database.GetCardPoolByValue(value).GetRandomCard());       
     }
     
-    private void SettingtPlayer(PlayerControl pc)
+    private void SettingtPlayer()
     {
-        pc.gameObject.SetActive(true);
+        player.gameObject.SetActive(true);
+        PlayerControl pc = player.GetComponent<PlayerControl>();
         pc.deck = UIManager.instance.GetDeck();
         pc.hand = UIManager.instance.GetHand();
-        pc.ReLoadDeck();
-        Player player = pc.GetComponent<Player>();
+        pc.OnRoomClear();
         Card.SetPlayer(player);
         MyCamera.instance.PlayerTrace(player);
         player.EnterRoom(CurrentMap.StartRoom);
@@ -234,16 +252,9 @@ public class GameManager : MonoBehaviour
     {
         MapGenerator mapGenerator = currentMap.GetComponent<MapGenerator>();
 
-        if (Config.instance.RoomTestMode)
-        {
-            mapGenerator.GetTestMap(level,
-              Config.instance.TestRoomType, Config.instance.TestRoomName);
-        }
-        else
-        {
             mapGenerator.GetMap(level,
-                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum, Config.instance.LevelSettings[level].shopRoomNum);
-        }
+                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum);
+        
     }
     private void PlayBossBGM(int floor)
     {
@@ -267,10 +278,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ReadDatas()
+    private void PlayBGM(int floor)
     {
-        Database.ReadDatas();//todo : 룸데이터도 여기서 아예 읽어오자
-        ArchLoader.instance.StartCache();
+        switch (floor)
+        {
+            case 1:
+                SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
+                break;
+        }
     }
     #endregion
+
 }

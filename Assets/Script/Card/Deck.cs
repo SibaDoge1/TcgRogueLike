@@ -5,37 +5,85 @@ using UnityEngine.UI;
 
 public class Deck : MonoBehaviour {
 
-	public List<Card> remainDeck;
+    private List<Card> deck = PlayerData.Deck;
+    public List<Card> playingDeck
+    {
+        get { return deck; }
+    }
+
+    int count = 0;
+    public bool isDrawEnd
+    {
+        get
+        {
+            if (deck.Count <= count)
+                return true;
+            else
+                return false;
+        }
+    }
 
 	public HandCardObject Draw(){
-		if (remainDeck.Count <= 0) {
+		if (deck.Count <= count) {
 			return null;
 		}
-		Card c = remainDeck [remainDeck.Count - 1];
-		remainDeck.RemoveAt(remainDeck.Count - 1);
+		Card c = deck [count];
+        count++;
+
         DrawCallBack();
         return c.InstantiateHandCard ();
 	}
 
-	public void Load()
+    public void ReLoad()
     {
-		remainDeck = new List<Card> (PlayerData.Deck);
-		Shuffle ();
-		remainDeck.Add (remainDeck [0]);
-		remainDeck [0] = new Card_Reload (Database.GetCardData(1));//1번은 리로드
-		LoadCallBack ();
+
+        count = 0;
+        Shuffle();
+        for(int i=0; i<deck.Count;i++)
+        {
+            if(deck[i] is Card_Special)
+            {
+                ((Card_Special)deck[i]).CostReset();
+            }
+        }     
+        LoadCallBack();
+    }
+
+
+    public void OnRoomClear()
+    {
+        foreach(Card c in deck)
+        {
+            c.UpgradeReset();
+        }
+
+        ReLoad();
 	}
 
+    public void OnCardReturned(Card card)
+    {
+        for(int i=0; i< deck.Count;i++)
+        {
+            if(deck[i] is Card_Special)
+            {
+                deck[i].CardReturnCallBack(card);
+            }
+        }
+    }
 	#region Private
 
-	private void Shuffle(){
+    /// <summary>
+    /// 맨 마지막 카드 제외하고 셔플
+    /// </summary>
+	private void Shuffle()
+    {
 		Card temp;
 		int randIndex;
-		for (int i = 0; i < remainDeck.Count - 1; i++) {
-			randIndex = Random.Range (0, remainDeck.Count);
-			temp = remainDeck [i];
-			remainDeck [i] = remainDeck [randIndex];
-			remainDeck [randIndex] = temp;
+		for (int i = 0; i < deck.Count - 2; i++) {
+			randIndex = Random.Range (0, deck.Count-1);
+			temp = deck [i];
+			deck [i] = deck [randIndex];
+			deck [randIndex] = temp;
 		}
 	}
 
@@ -43,16 +91,16 @@ public class Deck : MonoBehaviour {
     {
         get
         {
-            return remainDeck.Count;
+            return deck.Count-count;
         }
     }
     private void DrawCallBack()
     {
-        UIManager.instance.DeckCont(remainDeck.Count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
     private void LoadCallBack()
     {
-        UIManager.instance.DeckCont(remainDeck.Count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
 
     #endregion

@@ -5,35 +5,42 @@ using Arch;
 
 public delegate IEnumerator Action();
 public abstract class Enemy : Character {
-    protected Animator enemyAnimator;
     protected List<GameObject> rangeList = new List<GameObject>();
     protected EnemyUI enemyUI;
 
-    public bool dontAffectByView;//시야 유무
     public bool isElite;//엘리트 몹인가?
-    public int value;
+
+    protected int value;
+    protected bool vision;//시야 유무
+    protected byte visionDistance;
 
     public override void Init(short _entityNum)
     {
         base.Init(_entityNum);
+
+        MonsterData data = Database.GetMonsterData(entityNum);
+
+        fullHp = data.hp; currentHp = fullHp;
+        Atk = data.atk;
+        value = data.rank;
+        vision = data.vision;
+        visionDistance = data.visionDistance;
+        isElite = data.elite;
+
+        if (vision)
+        {
+            currentState = State.OFF;
+        }
+        else
+        {
+            currentState = State.DELAY;
+        }
     }
+
     protected override void Awake()
     {
         base.Awake();
         enemyUI = transform.Find("Canvas").GetComponent<EnemyUI>();
-        enemyAnimator = transform.Find("Renderer").GetComponent<Animator>();
-
-
-        fullHp = SettingHp; currentHp = SettingHp;
-        Atk = SettingAtk; Def = SettingDef;
-        if(dontAffectByView)
-        {
-            currentState = State.DELAY;
-        }
-        else
-        {
-            currentState = State.OFF;
-        }
     }
     protected virtual void Start()
     {
@@ -66,10 +73,7 @@ public abstract class Enemy : Character {
     {
         EnemyControl.instance.EnemyEndCallBack();
     }
-    protected virtual void PlayAnimation(string s)
-    {
-        enemyAnimator.Play(s);
-    }
+
 
     protected override void SetLocalScale(int x)
     {
@@ -115,7 +119,7 @@ public abstract class Enemy : Character {
     {
         if(currentState == State.OFF)
         {
-            if(TileUtils.AI_SquareFind(currentTile,4))
+            if(TileUtils.AI_SquareFind(currentTile,visionDistance))
             {
                 currentState = State.DELAY;
             }else

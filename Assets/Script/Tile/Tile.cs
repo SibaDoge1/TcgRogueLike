@@ -9,7 +9,9 @@ namespace Arch{
        
         public short tileNum;
 
-        public List<Tile> neighbours;
+        public List<Tile> crossNeighbours;
+        public List<Tile> diagonalNeighbours;
+        public List<Tile> allNeighbours;
 
 	    public Vector2Int pos;
 		private Entity onTileObj;//타일위에 있는 mapObject
@@ -53,6 +55,7 @@ namespace Arch{
             transform.SetParent(room.transform);
             pos = _pos;
             transform.localPosition = new Vector3(pos.x, pos.y, 0);
+            gameObject.name = "tile_" + _pos.x + "_" + _pos.y;
         }
         public bool IsStandAble(Entity ot)
 		{			

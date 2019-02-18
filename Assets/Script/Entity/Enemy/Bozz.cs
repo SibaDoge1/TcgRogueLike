@@ -25,31 +25,35 @@ public class Bozz : Enemy {
 
          IEnumerator RangeOnAction()
         {
-            PlayAnimation("Ready");
-            List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
+            List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
             for (int i=0; i<tiles.Count; i++)
             {
                 rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
             }
+            enemyUI.ActionImageOn();
             yield return null;
         }
     
 
           IEnumerator AttackThenRangeOffAction()
         {
-            PlayAnimation("Attack"); 
-            if (TileUtils.AI_SquareFind(currentTile,1))
+            List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
+            
+
+            if (TileUtils.AI_Find(tiles))
             {
-                PlayerControl.Player.GetDamage(atk);
+                PlayerControl.player.GetDamage(atk);
             }
+
             ClearRangeList();
-            yield return null;
+            enemyUI.ActionImageOff();
+
+             yield return StartCoroutine(AnimationRoutine(0));
         }
     
 
           IEnumerator DelayAction()
         {
-            PlayAnimation("Idle");
             yield return null;
         }
     

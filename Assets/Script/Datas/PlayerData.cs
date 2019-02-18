@@ -11,7 +11,7 @@ public static class PlayerData
     public static List<Card> Deck
     {
         get { return deck; }
-        set { deck = value; }
+        set{deck = value;}
     }
     static List<Card> attainCards = new List<Card>();
     public static List<Card> AttainCards
@@ -35,7 +35,17 @@ public static class PlayerData
             }
             else
             {
-                akashaGage = value;
+                if(PlayerControl.playerBuff.IsAkashaAble)
+                {
+                    akashaGage = value;
+                }
+                else
+                {
+                    if(value<=akashaGage)
+                    {
+                        akashaGage = value;
+                    }
+                }
             }
             UIManager.instance.AkashaUpdate(AkashaGage);
         }
@@ -56,10 +66,14 @@ public static class PlayerData
         isAttacked = false;
     }
 
+    /// <summary>
+    // 플레이어 데이터 초기화
+    /// </summary>
     public static void Clear()
     {
         deck.Clear();
         attainCards.Clear();
         akashaGage = 0;
     }
+
 }

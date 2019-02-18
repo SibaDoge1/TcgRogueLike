@@ -5,7 +5,6 @@ using Arch;
 
 public abstract class Entity : MonoBehaviour
 {
-    public int objectNum;
     public Room currentRoom;
 	public Tile currentTile;
     public Vector2Int pos;
@@ -17,12 +16,19 @@ public abstract class Entity : MonoBehaviour
         entityNum = _entityNum;
         gameObject.name = "" + entityNum;
     }
+
     protected SpriteRenderer spriteRender;
-	protected virtual void  Awake () {
-        spriteRender = GetComponent<SpriteRenderer>();      
-	}
-	
-	public virtual void SetRoom(Room room,Vector2Int _pos)
+	protected virtual void  Awake ()
+    {
+        SetSpriteRender();
+    }
+
+    protected virtual void SetSpriteRender()
+    {
+        spriteRender = GetComponent<SpriteRenderer>();
+    }
+
+    public virtual void SetRoom(Room room,Vector2Int _pos)
     {		
         currentRoom = room;
         this.transform.parent = room.transform;

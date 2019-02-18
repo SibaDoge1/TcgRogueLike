@@ -58,7 +58,6 @@ public class OffTile_Door : OffTile
                 Sprite.sprite = ArchLoader.instance.GetDoorSprite("boss");
                 break;
             case RoomType.EVENT:
-            case RoomType.SHOP:
                 Sprite.sprite = ArchLoader.instance.GetDoorSprite("event");
                 break;
             default:

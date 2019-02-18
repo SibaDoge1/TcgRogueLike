@@ -9,10 +9,10 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
 
     private Hand hand;
 
-    // Update is called once per frame
-    private void Update()
+    public override void SetCardData(Card _data)
     {
-        EnableInteraction(data.IsAvailable());
+        base.SetCardData(_data);
+        StartCoroutine(CardRenderingUpdate());
     }
 
     public void SetHand(Hand _hand)
@@ -21,9 +21,9 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     }
     public bool IsAvailable()
     {
-        return data.IsAvailable();
+        return data.IsCostAvailable();
     }
-
+    public Card Data { get { return data; } }
     #region UserInput
     private const float handYOffset = -0.8f;
     private Vector3 originPos;
@@ -108,7 +108,6 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
             StopCoroutine(locateRoutine);
         }
         originPos = GetPosition(total, target);
-        //originRot = Quaternion.Euler (new Vector3 (0, 0, GetRotation (total, target)));
 
         if (isHided)
         {
@@ -120,38 +119,39 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
             locateRoutine = StartCoroutine(LocateRoutine(originPos));
         }
     }
+    /// <summary>
+    /// 반환
+    /// </summary>
+    public void ReturnCard()
+    {
+        data.OnCardReturned();
+        hand.RemoveCard(this);
+        Destroy(gameObject);
+    }
 
-    public void DestroyFromHand()
+    /// <summary>
+    /// 반환 트리거 없이 그냥 제거
+    /// </summary>
+    public void DumpCard()
     {
         hand.RemoveCard(this);
         Destroy(gameObject);
     }
 
-    public void EnableInteraction(bool enable)
-    {
-        if (enable)
-        {
-            render.SetEnable(true);
-        }
-        else
-        {
-            render.SetEnable(false);
-        }
-    }
-
     #region Private
     private void ActiveSelf()
     {
+        data.OnCardPlayed();
+
         if (data.IsDirectionCard)
         {
             PlayerControl.instance.SelectedDirCard = data;
         }
         else
         {
-            data.DoCard();
             if (data.IsConsumeTurn())
             {
-                GameManager.instance.OnEndPlayerTurn();
+                GameManager.instance.OnEndPlayerTurn(data.effectTime);
             }
         }
     }
@@ -178,11 +178,19 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         }
     }
 
+    private IEnumerator CardRenderingUpdate()
+    {
+        while(true)
+        {
+            render.UpdateRender(data);
+            yield return new WaitForSeconds(0.05f);
+        }
+    }
 
 
     private static Vector3 GetPosition(int total, int target)
     {
-        return new Vector3(-400 + 180 * (5 - total) + target * 185, handYOffset);
+        return new Vector3(400 - 180 * (5 - total) - target * 185, handYOffset);
     }
     #endregion
 

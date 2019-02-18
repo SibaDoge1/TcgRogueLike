@@ -22,6 +22,7 @@ public class CardInfoPanel : MonoBehaviour {
         cardUpgrade = transform.Find("Upgrade").GetComponent<Image>();
         cost = transform.Find("Cost").GetComponent<Image>();
         currentCost = transform.Find("Cost").GetComponentsInChildren<Image>();
+        cardAttribute.gameObject.SetActive(true);
     }
 
     public void SetUnknown()
@@ -39,15 +40,9 @@ public class CardInfoPanel : MonoBehaviour {
         cardName.text = data.Name;
         text.text = data.Info;
         render.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);
-        if(data.Type == CardType.S)
-        {
-            cardAttribute.gameObject.SetActive(false);
-        }
-        else
-        {
-            cardAttribute.gameObject.SetActive(true);
-            cardAttribute.sprite = ArchLoader.instance.GetCardAttribute(data.Type);
-        }
+
+        cardAttribute.sprite = ArchLoader.instance.GetCardAttribute(data.Type);
+        
         cardUpgrade.enabled = data.IsUpgraded;
         SetCost(data.Cost);
     }

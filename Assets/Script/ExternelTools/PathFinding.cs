@@ -66,9 +66,9 @@ public static class PathFinding
 
 
     /// <summary>
-    /// pathFinding Using A*
+    /// pathFinding Using A*, 상하좌우 방향
     /// </summary>
-    static public List<Tile> GeneratePath(Entity obje,Tile target)
+    static public List<Tile> GenerateCrossPath(Entity obje,Tile target)
 	{
 
 		Entity selectedUnit = obje;
@@ -121,7 +121,7 @@ public static class PathFinding
 
 
 
-			foreach (Tile v in current.neighbours) {
+			foreach (Tile v in current.crossNeighbours) {
 
 				if (closedList.Contains (v) || CostToEnterTile (current, v) == Mathf.Infinity)
 					continue;
@@ -138,7 +138,7 @@ public static class PathFinding
 
 		///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
 		if (prev [target] == null) {
-            return PathBlocked(obje, target);
+            return PathBlocked_Cross(obje, target);
 		}
          
 
@@ -159,16 +159,18 @@ public static class PathFinding
 		return currentPath;
 	}
 
-    static public List<Tile> GeneratePath(Entity obje, Entity target)
+    /// <summary>
+    /// pathFinding Using A*, 대각선 방향
+    /// </summary>
+    static public List<Tile> GenerateDiagonalPath(Entity obje, Tile target)
     {
 
         Entity selectedUnit = obje;
         Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
         Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
-        _targetTile = target.currentTile;
-        Tile targetTile = _targetTile;
+        _targetTile = target;
 
-        if (Mathf.Abs(targetTile.pos.x - obje.pos.x) > Mathf.Abs(targetTile.pos.y - obje.pos.y))
+        if (Mathf.Abs(target.pos.x - obje.pos.x) > Mathf.Abs(target.pos.y - obje.pos.y))
         {
             isVerticalLarge = true;
         }
@@ -179,8 +181,7 @@ public static class PathFinding
 
         Tile source = selectedUnit.currentTile;
 
-
-        if (targetTile == obje.currentTile)
+        if (target == obje.currentTile)
         {
             List<Tile> temp = new List<Tile>();
             temp.Add(source);
@@ -188,7 +189,7 @@ public static class PathFinding
         }
         //source.distance = 0;
         prev[source] = null;
-        prev[targetTile] = null;
+        prev[target] = null;
         List<Tile> openList = new List<Tile>();
         List<Tile> closedList = new List<Tile>();
 
@@ -221,7 +222,7 @@ public static class PathFinding
 
 
 
-            foreach (Tile v in current.neighbours)
+            foreach (Tile v in current.diagonalNeighbours)
             {
 
                 if (closedList.Contains(v) || CostToEnterTile(current, v) == Mathf.Infinity)
@@ -239,15 +240,15 @@ public static class PathFinding
         }
 
         ///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
-        if (prev[targetTile] == null)
+        if (prev[target] == null)
         {
-            return PathBlocked(obje, targetTile);
+            return PathBlocked_Cross(obje, target);
         }
 
 
 
         List<Tile> currentPath = new List<Tile>();
-        Tile now = targetTile;
+        Tile now = target;
         // Step through the "prev" chain and add it to our path
         while (now != null)
         {
@@ -263,7 +264,109 @@ public static class PathFinding
         return currentPath;
     }
 
+    /// <summary>
+    /// pathFinding Using A*, 8방향
+    /// </summary>
+    static public List<Tile> GenerateAllDirectionPath(Entity obje, Tile target)
+    {
 
+        Entity selectedUnit = obje;
+        Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+        Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
+        _targetTile = target;
+
+        if (Mathf.Abs(target.pos.x - obje.pos.x) > Mathf.Abs(target.pos.y - obje.pos.y))
+        {
+            isVerticalLarge = true;
+        }
+        else
+        {
+            isVerticalLarge = false;
+        }
+
+        Tile source = selectedUnit.currentTile;
+
+        if (target == obje.currentTile)
+        {
+            List<Tile> temp = new List<Tile>();
+            temp.Add(source);
+            return temp;
+        }
+        //source.distance = 0;
+        prev[source] = null;
+        prev[target] = null;
+        List<Tile> openList = new List<Tile>();
+        List<Tile> closedList = new List<Tile>();
+
+        openList.Add(source);
+
+        foreach (Tile v in obje.currentRoom.GetTileArrays())
+        {
+            distance[v] = Mathf.Infinity;
+        }
+        distance[source] = 0;
+
+        while (openList.Count > 0)
+        {
+            Tile current = openList[0];
+            for (int i = 0; i < openList.Count; i++)
+            {
+
+                if (distance[openList[i]] < distance[current])
+                {
+                    current = openList[i];
+                }
+            }
+            openList.Remove(current);
+            closedList.Add(current);
+
+            if (current == target)
+            {
+                break;
+            }
+
+
+            foreach (Tile v in current.allNeighbours)
+            {
+
+                if (closedList.Contains(v) || CostToEnterTile(current, v) == Mathf.Infinity)
+                    continue;
+
+                float alt = distance[current] + CostToEnterTile(current, v) + calculateVector(v.pos, target.pos);
+                if (alt < distance[v] || !openList.Contains(v))
+                {
+                    distance[v] = alt;
+                    prev[v] = current;
+                    if (!openList.Contains(v))
+                        openList.Add(v);
+                }
+            }
+        }
+
+        ///AI가 길찾기 알고리즘 발동시 , 막히는길이 생길경우가 있다, 그 경우 character를 무시하고 경로를 선택한다.
+        if (prev[target] == null)
+        {
+            return PathBlocked_Cross(obje, target);
+        }
+
+
+
+        List<Tile> currentPath = new List<Tile>();
+        Tile now = target;
+        // Step through the "prev" chain and add it to our path
+        while (now != null)
+        {
+            currentPath.Add(now);
+            now = prev[now];
+        }
+
+        // Right now, currentPath describes a route from out target to our source
+        // So we need to invert it!
+
+        currentPath.Reverse();
+        currentPath.Remove(source);
+        return currentPath;
+    }
 
 
 
@@ -308,7 +411,7 @@ public static class PathFinding
     /// 길 막혔다면 캐릭터 무시하고 계산하는 함수입니다. 
     /// </summary>
 
-    static private List<Tile> PathBlocked(Entity obje, Tile targetTile)
+    static private List<Tile> PathBlocked_Cross(Entity obje, Tile targetTile)
     {
         Entity selectedUnit = obje;
 		Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
@@ -353,7 +456,7 @@ public static class PathFinding
 
 
 
-			foreach (Tile v in current.neighbours)
+			foreach (Tile v in current.crossNeighbours)
             {
                 if (v == null)
                     continue;
@@ -394,6 +497,181 @@ public static class PathFinding
         currentPath.Remove(source);
         return currentPath;
         }
+
+    static private List<Tile> PathBlocked_Diagonal(Entity obje, Tile targetTile)
+    {
+        Entity selectedUnit = obje;
+        Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+        Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
+        _targetTile = targetTile;
+        Tile target;
+
+        Tile source = selectedUnit.currentTile;
+
+        target = _targetTile;
+
+        prev[source] = null;
+        prev[target] = null;
+        List<Tile> openList = new List<Tile>();
+        List<Tile> closedList = new List<Tile>();
+
+        foreach (Tile v in obje.currentRoom.GetTileArrays())
+        {
+            distance[v] = Mathf.Infinity;
+        }
+        distance[source] = 0;
+
+        openList.Add(source);
+
+        while (openList.Count > 0)
+        {
+            Tile current = openList[0];
+            for (int i = 0; i < openList.Count; i++)
+            {
+                if (distance[openList[i]] < distance[current])
+                {
+                    current = openList[i];
+                }
+            }
+            openList.Remove(current);
+            closedList.Add(current);
+
+            if (current == target)
+            {
+                break;
+            }
+
+
+
+            foreach (Tile v in current.diagonalNeighbours)
+            {
+                if (v == null)
+                    continue;
+                if (closedList.Contains(v) || costToEnterTileForPB(current, v) == Mathf.Infinity)
+                    continue;
+                //기본 pathFinding과 다른부분!!
+                float alt = distance[current] + costToEnterTileForPB(current, v) + calculateVector(v.pos, target.pos);
+                if (alt < distance[v] || !openList.Contains(v))
+                {
+                    distance[v] = alt;
+                    prev[v] = current;
+                    if (!openList.Contains(v))
+                        openList.Add(v);
+                }
+            }
+        }
+
+        ///진짜 아예 길이없넹..
+        if (prev[target] == null)
+        {
+            List<Tile> temp = new List<Tile>();
+            temp.Add(source);
+            return temp;
+        }
+
+
+
+        List<Tile> currentPath = new List<Tile>();
+        Tile now = target;
+        while (now != null)
+        {
+            currentPath.Add(now);
+            now = prev[now];
+        }
+
+        currentPath.Reverse();
+
+        currentPath.Remove(source);
+        return currentPath;
+    }
+
+    static private List<Tile> PathBlocked_All(Entity obje, Tile targetTile)
+    {
+        Entity selectedUnit = obje;
+        Dictionary<Tile, Tile> prev = new Dictionary<Tile, Tile>();
+        Dictionary<Tile, float> distance = new Dictionary<Tile, float>();
+        _targetTile = targetTile;
+        Tile target;
+
+        Tile source = selectedUnit.currentTile;
+
+        target = _targetTile;
+
+        prev[source] = null;
+        prev[target] = null;
+        List<Tile> openList = new List<Tile>();
+        List<Tile> closedList = new List<Tile>();
+
+        foreach (Tile v in obje.currentRoom.GetTileArrays())
+        {
+            distance[v] = Mathf.Infinity;
+        }
+        distance[source] = 0;
+
+        openList.Add(source);
+
+        while (openList.Count > 0)
+        {
+            Tile current = openList[0];
+            for (int i = 0; i < openList.Count; i++)
+            {
+                if (distance[openList[i]] < distance[current])
+                {
+                    current = openList[i];
+                }
+            }
+            openList.Remove(current);
+            closedList.Add(current);
+
+            if (current == target)
+            {
+                break;
+            }
+
+
+
+            foreach (Tile v in current.allNeighbours)
+            {
+                if (v == null)
+                    continue;
+                if (closedList.Contains(v) || costToEnterTileForPB(current, v) == Mathf.Infinity)
+                    continue;
+                //기본 pathFinding과 다른부분!!
+                float alt = distance[current] + costToEnterTileForPB(current, v) + calculateVector(v.pos, target.pos);
+                if (alt < distance[v] || !openList.Contains(v))
+                {
+                    distance[v] = alt;
+                    prev[v] = current;
+                    if (!openList.Contains(v))
+                        openList.Add(v);
+                }
+            }
+        }
+
+        ///진짜 아예 길이없넹..
+        if (prev[target] == null)
+        {
+            List<Tile> temp = new List<Tile>();
+            temp.Add(source);
+            return temp;
+        }
+
+
+
+        List<Tile> currentPath = new List<Tile>();
+        Tile now = target;
+        while (now != null)
+        {
+            currentPath.Add(now);
+            now = prev[now];
+        }
+
+        currentPath.Reverse();
+
+        currentPath.Remove(source);
+        return currentPath;
+    }
+
     #endregion
 }
 

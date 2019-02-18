@@ -79,6 +79,17 @@ public class EffectDelegate : MonoBehaviour {
 
         return go;        
     }
+    public GameObject MadeEffect(RangeEffectType range,Entity entity,Tile targetTile)
+    {
+        if (targetTile == null || targetTile.OnTileObj is Structure || targetTile.tileNum == 0)
+            return null;
+        GameObject go = Instantiate(rangeLayer[(int)range]);
+        Vector2 dif = targetTile.pos-entity.pos;
+        go.transform.parent = entity.transform;
+        go.transform.localPosition = dif;
+
+        return go;
+    }
 
     /// <summary>
     /// Range Effect Delete할때 사용

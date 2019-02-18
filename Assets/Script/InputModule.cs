@@ -80,24 +80,3 @@ public class InputModule : MonoBehaviour {
         }
     }
 }
-//TODO : ANDROID TOUCH
-/* if (isPlayerTurn) {
-    if (Input.GetMouseButtonDown (1) &&
-        !EventSystem.current.IsPointerOverGameObject () &&
-        !Physics2D.Raycast (Camera.main.ScreenToWorldPoint (Input.mousePosition), new Vector3 (0, 0, 1), 10f)
-    ){
-        Tile t = GameManager.instance.GetCurrentRoom ().WorldToTile (
-                    Camera.main.ScreenToWorldPoint (Input.mousePosition)
-                );
-        if(t!=null && t.OnTileObj == null)
-        {
-
-            if (PlayerControl.instance.PlayerMoveCommand(t))
-            {
-                InputModule.IsPlayerTurn = false;
-            }
-
-        }
-
-    }
-}*/

@@ -29,23 +29,20 @@ using UnityEngine;
 
     IEnumerator MoveToWard()
     {
-        MoveTo(PathFinding.GeneratePath(this, PlayerControl.Player)[0].pos);
-        PlayAnimation("Idle");
+        MoveTo(PathFinding.GenerateCrossPath(this, PlayerControl.player.currentTile)[0].pos);
         yield return null;
     }
 
 
     IEnumerator DelayAction()
     {
-        PlayAnimation("Idle");
         yield return null;
     }
 
 
     IEnumerator Attack()
     {
-        PlayerControl.Player.GetDamage(atk);
-        PlayAnimation("Attack");
+        PlayerControl.player.GetDamage(atk);
         yield return null;
     }
     #endregion

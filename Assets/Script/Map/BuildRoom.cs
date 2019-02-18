@@ -69,7 +69,6 @@ public static class BuildRoom
         currentMap = map;
         battleRooms = CsvParser.ReadRoom(map.Floor, RoomType.BATTLE);
         eventRooms = CsvParser.ReadRoom(map.Floor, RoomType.EVENT);
-        shopRooms = CsvParser.ReadRoom(map.Floor, RoomType.SHOP);        
     }
 
     static string[,] GetRoomData(RoomType rt)
@@ -80,8 +79,6 @@ public static class BuildRoom
                 return battleRooms[Random.Range(0, battleRooms.Count)];
             case RoomType.EVENT:
                 return eventRooms[Random.Range(0, eventRooms.Count)];
-            case RoomType.SHOP:
-                return shopRooms[Random.Range(0, shopRooms.Count)];
             default:
                 Debug.Log("Room Type ERROR");
                 return null;
@@ -140,22 +137,44 @@ public static class BuildRoom
         {
             for (int y = 0; y < size.y; y++)
             {
+                //상하좌우
                 if (x > 0)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x - 1, y]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x - 1, y]);
                 }
                 if (x < size.x - 1)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x + 1, y]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x + 1, y]);
                 }
                 if (y > 0)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x, y - 1]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x, y - 1]);
                 }
                 if (y < size.y - 1)
                 {
-                    tiles[x, y].neighbours.Add(tiles[x, y + 1]);
+                    tiles[x, y].crossNeighbours.Add(tiles[x, y + 1]);
                 }
+
+                //대각선 방향
+                if(x>0 && y>0)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x-1, y-1]);
+                }
+                if(x<size.x-1 && y>0)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x + 1, y - 1]);
+                }
+                if (x<size.x-1 && y<size.y-1)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x + 1, y + 1]);
+                }
+                if (x>0 && y<size.y-1)
+                {
+                    tiles[x, y].diagonalNeighbours.Add(tiles[x - 1, y + 1]);
+                }
+
+                tiles[x, y].allNeighbours = new List<Tile>(tiles[x,y].crossNeighbours);
+                tiles[x, y].allNeighbours.AddRange(tiles[x, y].diagonalNeighbours);
             }
         }
     }

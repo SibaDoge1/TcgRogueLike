@@ -56,6 +56,9 @@ TagManager:
   - name: OffTile
     uniqueID: 1116843935
     locked: 0
+  - name: Effect
+    uniqueID: 3072091491
+    locked: 0
   - name: Entity(Structure)
     uniqueID: 3174531655
     locked: 0
@@ -64,7 +67,4 @@ TagManager:
     locked: 0
   - name: WorldUI
     uniqueID: 3665753965
-    locked: 0
-  - name: Effect
-    uniqueID: 3072091491
     locked: 0

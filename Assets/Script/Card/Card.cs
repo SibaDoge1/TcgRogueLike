@@ -4,11 +4,10 @@ using UnityEngine;
 
 public enum CardType
 {
-    N,//기본카드 중 효과안붙음
     V,//기본카드 효과
     T,//기본카드 효과
     P,//기본카드 효과
-    A,//기본카드 효과
+    A,//기본카드 무효과
     S
 }
 
@@ -18,6 +17,7 @@ public enum CardType
 public abstract class Card
 {
     protected static Player player;
+     
     #region CardValues;
     protected bool isUpgraded = false;
     public bool IsUpgraded { get { return isUpgraded; } }
@@ -32,12 +32,16 @@ public abstract class Card
     public int Index { get { return index; } }
 
     protected string name;
-    public string Name {get { return name; } }
+    public string Name { get { return name; } }
 
     protected int cost;
-    public int Cost { get { return cost; } }
+    public int Cost
+    {
+        get { return cost; }
+        set { cost = value; }
+    }
 
-    protected CardType cardType = CardType.N;
+    protected CardType cardType = CardType.A;
     public CardType Type { get { return cardType; } }
 
     protected int val1;
@@ -45,13 +49,37 @@ public abstract class Card
     protected int val3;
 
     protected string info;
-    public string Info { get { return info; } }
+    public string Info
+    { get
+        {
+            string[] s = string.Copy(info).Split('<', '>');
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == "val1" || s[i] == "Val1")
+                {
+                    s[i] = "" + val1;
+                }
+                else if (s[i] == "val2" || s[i] == "Val2")
+                {
+                    s[i] = "" + val2;
+                }
+                else if (s[i] == "val3" || s[i] == "Val3")
+                {
+                    s[i] = "" + val3;
+                }
+            }
+
+            return string.Join("", s);
+        }
+    }
 
     protected string spritePath;
     public string SpritePath { get { return spritePath; } }
 
     protected CardEffectType cardEffect = CardEffectType.Hit;
     protected CardSoundType cardSound = CardSoundType.Hit;
+
+    public float effectTime = 0.1f;
     #endregion
 
 
@@ -64,9 +92,11 @@ public abstract class Card
 
 
 	public HandCardObject InstantiateHandCard(){
+
 		HandCardObject cardObject;
         cardObject = ArchLoader.instance.GetCardObject();
         cardObject.SetCardData(this);
+
 		return cardObject;
 	}
     public EditCardObject InstantiateEditCard()
@@ -91,16 +121,36 @@ public abstract class Card
     protected virtual void CardActive(Direction d)
     {
     }
-    public void DoCard()
-    { 
-        ConsumeAkasha();
+    public virtual void OnCardPlayed()
+    {
         CardActive();
+
+        if (!isDirectionCard)
+        {
+            ConsumeAkasha();
+        }
     }
-    public void DoCard(Direction d)
+    public virtual void OnCardPlayed(Direction d)
     {
         ConsumeAkasha();
         CardActive(d);
     }
+    /// <summary>
+    /// 이 카드가 반환되었을때 콜
+    /// </summary>
+    public virtual void OnCardReturned()
+    {
+        PlayerControl.instance.deck.OnCardReturned(this);
+    }
+
+    /// <summary>
+    /// 덱의 어떤 카드가 반환됬을시 콜
+    /// </summary>
+    public virtual void CardReturnCallBack(Card data)
+    {
+
+    }
+
 
     protected virtual void MakeEffect(Vector3 target)
     {
@@ -115,10 +165,10 @@ public abstract class Card
     {
         PlayerData.AkashaGage -= cost;
     }
-    public virtual bool IsAvailable()
+    public virtual bool IsCostAvailable()
     {
-		return (PlayerData.AkashaGage>=cost) ? true:false;
-	}
+            return (PlayerData.AkashaGage >= cost) ? true : false;
+    }
 
 	public virtual void CardEffectPreview(){		
 	}
@@ -147,13 +197,14 @@ public abstract class Card
             }
             else
             {
-                UnityEngine.Debug.Log("Card String Error");
+                UnityEngine.Debug.Log("Card String Error On Card No." + cardData.index + "  Name : " + cardData.className);
                 return null;
             }
         }
         else
         {
-            UnityEngine.Debug.Log("Card String Error");
+
+            UnityEngine.Debug.Log("Card String Error On Card No." + cardData.index + "  Name : " + cardData.className);
             return null;
         }
     }
@@ -181,6 +232,25 @@ public abstract class Card
             MakeSound(target.transform.position);
             target.GetDamage(dam * player.Atk, player);
             PlayerData.AttackedTarget();
+            player.OnAttack();
         }
     }
+
+    public virtual void UpgradeThis()
+    {
+        if(player.currentRoom.IsEnemyAlive())//전투중일때만
+        {
+            isUpgraded = true;
+            val1++;
+        }
+
+    }
+    /// <summary>
+    /// 초기화
+    /// </summary>
+    public virtual void UpgradeReset()
+    {
+    } 
+
+
 }

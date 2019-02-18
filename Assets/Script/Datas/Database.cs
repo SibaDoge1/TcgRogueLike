@@ -82,7 +82,7 @@ public class CardData
         _info = data[7];
         spritePath = data[8];
 
-        className = data[9].Substring(0,data[9].Length-1);
+        className = data[9].Replace("\r","");
     }
 }
 public class CardPoolData
@@ -120,6 +120,7 @@ public class MonsterData
     public readonly short rank;
     public readonly bool vision;
     public readonly byte visionDistance;
+    public readonly bool elite;
 
     public MonsterData(string[] data)
     {
@@ -130,6 +131,7 @@ public class MonsterData
         rank = short.Parse(data[4]);
         vision = bool.Parse(data[5]);
         visionDistance = byte.Parse(data[6]);
+        elite = bool.Parse(data[7]);
     }
 }
 

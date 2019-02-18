@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
-        error = transform.Find("ErrorPopUp").GetComponent<ErrorPopUpUI>();
+        buffUI = transform.Find("Buff").GetComponent<BuffUI>();
     }
 
     TextUI textUI;
@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     MapUI mapUI;
     Deck deck;
     Hand hand;
-    ErrorPopUpUI error;
+    BuffUI buffUI;
     GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
 
@@ -115,14 +115,14 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region ErrorPopUp
-    public void ErrorPopUpOn(Debuffs de)
+    #region Status
+    public void StatusTextUpdate()
     {
-        error.gameObject.SetActive(true);
+        buffUI.TextUpdate();
     }
-    public void ErrorPopUpOff()
+    public void ErrorPopUpOn()
     {
-        error.gameObject.SetActive(false);
+        buffUI.ShowAnim();
     }
     #endregion
 
