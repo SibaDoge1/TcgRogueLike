@@ -46,7 +46,7 @@ public class CardRender : MonoBehaviour {
     {
         thisName.text = "???";
         SetRank(0);
-        SetAttribute(CardType.N);
+        SetAttribute(CardType.A);
         img_Graphic.sprite = ArchLoader.instance.GetCardSprite("error");
         img_Upgrade.enabled = false;
     }
@@ -56,7 +56,7 @@ public class CardRender : MonoBehaviour {
             switch (attribute)
             {
                 case CardType.A:
-                    img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");
+                    img_Frame.sprite = ArchLoader.instance.GetCardFrame("n");
                     break;
                 case CardType.P:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("p");
@@ -67,11 +67,8 @@ public class CardRender : MonoBehaviour {
                 case CardType.V:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("v");
                 break;
-            case CardType.N:
-                    img_Frame.sprite = ArchLoader.instance.GetCardFrame("n");
-                break;
             case CardType.S:
-                    img_Frame.sprite = ArchLoader.instance.GetCardFrame("s");
+                    img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");
                 break;
             }
     }

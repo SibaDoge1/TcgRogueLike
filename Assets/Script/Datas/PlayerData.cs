@@ -11,7 +11,7 @@ public static class PlayerData
     public static List<Card> Deck
     {
         get { return deck; }
-        set { deck = value; }
+        set{deck = value;}
     }
     static List<Card> attainCards = new List<Card>();
     public static List<Card> AttainCards
@@ -35,7 +35,7 @@ public static class PlayerData
             }
             else
             {
-                if(PlayerControl.status.IsAkashaAble)
+                if(PlayerControl.playerBuff.IsAkashaAble)
                 {
                     akashaGage = value;
                 }

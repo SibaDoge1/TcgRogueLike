@@ -13,12 +13,11 @@ public class Map : MonoBehaviour
         startRoom = startRoom_;
         //StartRoom.OpenDoors();
     }
-    public void Init(int fl,int ba,int ev,int sh)
+    public void Init(int fl,int ba,int ev)
     {
         floor = fl;
         battleRoomNum = ba;
         eventRoomNum = ev;
-        shopRoomNum = sh;
     }
     private List<Room> room;
     public List<Room> Rooms

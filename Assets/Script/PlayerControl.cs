@@ -5,7 +5,7 @@ using Arch;
 
 public class PlayerControl : MonoBehaviour {
     public static PlayerControl instance;
-    public static BuffManager status;//Status
+    public static BuffManager playerBuff;//Status
     public static Player player;//PlayerEntity
 
 
@@ -13,14 +13,17 @@ public class PlayerControl : MonoBehaviour {
     {
         instance = this;
         player = GetComponent<Player>();
-        status = new BuffManager();
+        playerBuff = new BuffManager();
     }
 
     public void EndTurnButton()
     {
-        if (GameManager.instance.CurrentTurn == Turn.PLAYER && player.currentRoom.IsEnemyAlive())
+        if (GameManager.instance.CurrentTurn == Turn.PLAYER)
         {
-            NaturalDraw();
+            if(player.currentRoom.IsEnemyAlive())
+            {
+                NaturalDraw();
+            }
             GameManager.instance.OnEndPlayerTurn();
         }
     }
@@ -84,6 +87,7 @@ public class PlayerControl : MonoBehaviour {
     {
         PlayerData.AttainCards.Add(cData);
         EffectDelegate.instance.MadeEffect(UIEffect.CARD, UIManager.instance.transform);
+        //TODO : UI 애니메이션 Instantiate가 아니라 그냥 재생만 하는식으로 바꾸기
     }
 
 
@@ -105,13 +109,14 @@ public class PlayerControl : MonoBehaviour {
         {
             hand.DrawHand(deck.Draw());
         }
+        playerBuff.EraseDeBuff();
     }
 
     #endregion
     #region PlayerInput
     public void MoveToDirection(Direction dir)
     {
-        if (!status.IsMoveAble)
+        if (!playerBuff.IsMoveAble)
         {
             EndTurnButton();
         }else

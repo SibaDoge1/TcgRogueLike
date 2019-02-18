@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Character : Entity {
 
     public Sprite[] actionSprites;
-    Sprite normalSprites;
+    protected Sprite normalSprites;
     Coroutine anim;
 
     protected override void Awake()
@@ -27,11 +27,11 @@ public abstract class Character : Entity {
     {
         if(x>0)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            spriteRender.flipX = false;
         }
         else if (x<0)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            spriteRender.flipX = true;
         }
     }
 

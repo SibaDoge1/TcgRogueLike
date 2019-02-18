@@ -77,16 +77,16 @@ public class Player : Character
     }
     public override bool GetDamage(int damage, Entity atker = null)
     {
+        if(!PlayerControl.playerBuff.IsHitAble)
+        {
+            damage = 0;
+        }
         SoundDelegate.instance.PlayEffectSound(EffectSoundType.GetHit,transform.position);
         MyCamera.instance.ShakeCamera();
-        EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
+        SetPlayerAnim(1);
+        //EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
 
-        if (PlayerControl.status.IsHitAble)
-        {
-            return base.GetDamage(damage, atker);
-        }
-        else
-            return false;
+        return base.GetDamage(damage, atker);
     }
     public void SetHp(int hp)
     {
@@ -100,6 +100,50 @@ public class Player : Character
             GetHeal(-dif);
         }
     }
+    public override bool GetHeal(int heal)
+    {
+        SetPlayerAnim(2);
+        return base.GetHeal(heal);
+    }
 
+    public override bool MoveTo(Vector2Int _pos)
+    {
+        if(PlayerControl.playerBuff.IsMoveAble)
+        {
+            return base.MoveTo(_pos);
+        }else
+        {
+            return false;
+        }
+    }
+    private Coroutine playerAnim;
+    public Coroutine PlayerAnim
+    {
+        get { return playerAnim; }
+    }
 
+    /// <summary>
+    /// Set Animation
+    /// </summary>
+    public void OnAttack()
+    {
+        SetPlayerAnim(0);
+    }
+
+    private void SetPlayerAnim(int num)
+    {
+        if(playerAnim != null)
+        {
+            StopCoroutine(playerAnim);
+        }
+        playerAnim = StartCoroutine(AnimationRoutine(num));
+    }
+    protected override IEnumerator AnimationRoutine(int num, float animationTime = 0.5F)
+    {
+        spriteRender.sprite = actionSprites[num];
+        yield return new WaitForSeconds(animationTime);
+        spriteRender.sprite = normalSprites;
+        playerAnim = null;
+        yield return null;
+    }
 }

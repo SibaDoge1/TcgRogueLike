@@ -65,8 +65,7 @@ public class SteelBozz : Enemy {
         }
         isSecond = true;
 
-        //yield return StartCoroutine(AnimationRoutine(0));
-        yield return null;
+        yield return StartCoroutine(AnimationRoutine(0));
     }
 
 
@@ -81,9 +80,7 @@ public class SteelBozz : Enemy {
             PlayerControl.player.GetDamage(atk);
         }
 
-        //yield return StartCoroutine(AnimationRoutine(0));
-
-        yield return null;
+        yield return StartCoroutine(AnimationRoutine(0));
     }
 
     IEnumerator Suicide()

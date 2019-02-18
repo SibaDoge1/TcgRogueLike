@@ -15,20 +15,16 @@ public enum RoomType
     BATTLE,
     EVENT,
     BOSS,
-    SHOP
 }
 
 public class MapGenerator : MonoBehaviour
 {
     #region Interface
-    public Map GetMap(int floor, int baNum, int evNum, int shNum)
+    public Map GetMap(int floor, int baNum, int evNum)
     {
         currentMap = GetComponent<Map>();
 
-        currentMap.Floor = floor;
-        currentMap.BattleRoomNum = baNum;
-        currentMap.EventRoomNum = evNum;
-        currentMap.ShopRoomNum = shNum;
+        currentMap.Init(floor, baNum, evNum);
 
         BuildRooms();
         SetRooms();
@@ -136,11 +132,6 @@ public class MapGenerator : MonoBehaviour
                         Room battleRoom = BuildRoom.Build(RoomType.BATTLE);
                         roomsToSet.Add(battleRoom);
                     }
-                    for (int i = 0; i < currentMap.ShopRoomNum; i++)
-                    {
-                        Room shopRoom = BuildRoom.Build(RoomType.SHOP);
-                        roomsToSet.Add(shopRoom);
-                    }
                     for (int i = 0; i < currentMap.EventRoomNum; i++)
                     {
                         Room eventRoom = BuildRoom.Build(RoomType.EVENT);
@@ -219,18 +210,37 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-
+    
 
     private bool ConnectRoom(Room room1, Room room2)
     {
 
         OffTile_Door room1Door = null;
+        OffTile_Door room2Door = null;
+        Direction opposite;
+        bool success = false;
+
         for (int i = 0; i < room1.doorList.Count; i++)
         {
             if (room1.doorList[i].TargetRoom == null)
-            {              
+            {
                 room1Door = room1.doorList[i];
-                break;
+                opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
+                success = false;              
+                for (int j = 0; j < room2.doorList.Count; j++)
+                {
+                    if (room2.doorList[j].Dir == opposite && room2.doorList[j].TargetRoom == null)
+                    {
+                        room2Door = room2.doorList[j];
+                        success = true;
+                        break;
+                    }
+                }
+
+                if(success)
+                {
+                    break;
+                }
             }
             if (i == room1.doorList.Count - 1)
             {
@@ -238,22 +248,8 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        Direction opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
-        OffTile_Door room2Door = null;
 
-        for (int i = 0; i < room2.doorList.Count; i++)
-        {
-            if (room2.doorList[i].Dir == opposite && room2.doorList[i].TargetRoom == null)
-            {
-                room2Door = room2.doorList[i];
-                break;
-            }
-            if (i == room2.doorList.Count - 1)
-            {
-                return false;
-            }
-        }
-
+        
         ///방배치 시작
         Vector3 offset = room2.transform.position - room2Door.transform.position;
         switch (room1Door.Dir)

@@ -66,7 +66,7 @@ Transform:
   m_GameObject: {fileID: 1081455597876962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.2, z: 0}
-  m_LocalScale: {x: 1.1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4211703785689998}
   m_RootOrder: 0
@@ -82,15 +82,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82da77af10857f145a1c931f41e4a2ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectNum: 0
   currentRoom: {fileID: 0}
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
   entityNum: 0
-  SettingHp: 10
-  SettingAtk: 1
-  SettingDef: 0
-  actionSprites: []
+  actionSprites:
+  - {fileID: 21300000, guid: 2d52460d17e91e04b83540d193aa54e2, type: 3}
+  - {fileID: 21300000, guid: 8580fc3ffbcb14f43ba42ddaa746ddab, type: 3}
+  - {fileID: 21300000, guid: bc9eea3b92cf79f48916d954c68b388c, type: 3}
 --- !u!114 &114389132219726070
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,7 +133,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1113074499
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ebcf632a10f7edc4281512acd2d2df8c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

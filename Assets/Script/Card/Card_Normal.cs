@@ -21,12 +21,8 @@ public class Card_Normal : Card
 
         switch (cardType)
         {
-            case CardType.N:
-                cost = 1;
-                val1 = 1;
-                break;
             case CardType.V:
-                val1 = 2;
+                val1 = 1;
                 cost = 4;
                 break;
             case CardType.T:
@@ -34,7 +30,7 @@ public class Card_Normal : Card
                 cost = 2;
                 break;
             case CardType.P:
-                val1 = 2;
+                val1 = 1;
                 cost = 3;
                 break;
             case CardType.A:
@@ -52,16 +48,12 @@ public class Card_Normal : Card
     public Card_Normal()
     {
         figure = (Figure)UnityEngine.Random.Range(1, 6);
-        cardType = (CardType)UnityEngine.Random.Range(0, 5);
+        cardType = (CardType)UnityEngine.Random.Range(0, 4);
 
         switch (cardType)
         {
-            case CardType.N:
-                cost = 1;
-                val1 = 1;
-                break;
             case CardType.V:
-                val1 = 2;
+                val1 = 1;
                 cost = 4;
                 break;
             case CardType.T:
@@ -69,7 +61,7 @@ public class Card_Normal : Card
                 cost = 2;
                 break;
             case CardType.P:
-                val1 = 2;
+                val1 = 1;
                 cost = 3;
                 break;
             case CardType.A:
@@ -89,21 +81,19 @@ public class Card_Normal : Card
         switch (cardType) //Info 설정
         {
             case CardType.A:
-                info =  "게이지를 한칸 충전하고 주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
-                break;
-            case CardType.P:
-                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다. 엘리트 몬스터와 보스 몬스터에게는 2배의 데미지를 입힙니다.";
+                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
                 break;
             case CardType.T:
-                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 2만큼 텔레포트합니다.";
+                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
+                break;
+            case CardType.P:
+                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 3만큼 텔레포트합니다.";
                 isDirectionCard = true;
                 break;
             case CardType.V:
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 1만큼 회복합니다.";
                 break;
-            case CardType.N:
-                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
-                break;
+
         }
 
         switch(figure)
@@ -137,10 +127,7 @@ public class Card_Normal : Card
 
     protected override void CardActive()
     {
-        if(cardType == CardType.A)//CardType : A
-        {
-            PlayerData.AkashaGage += 1;
-        } else if (cardType == CardType.V)
+         if (cardType == CardType.V)
         {
             player.GetHeal(1); // CardType : V
         }
@@ -150,14 +137,9 @@ public class Card_Normal : Card
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (enemies[i].isElite && cardType == CardType.P)//CardType : P
-                {
-                    DamageToTarget(enemies[i], val1*2);
-                }
-                else
-                {
+
                     DamageToTarget(enemies[i], val1);
-                }
+                
             }
         }
     }
@@ -207,7 +189,7 @@ public class Card_Normal : Card
 
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;
@@ -220,7 +202,7 @@ public class Card_Normal : Card
             targetTiles = TileUtils.Range(player.currentTile, range, figure);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;
@@ -229,15 +211,31 @@ public class Card_Normal : Card
         }
     }
 
-    public override void OnCardPlayed()
+    public override void UpgradeReset()
     {
+        isUpgraded = false;
+        switch (cardType)
+        {
+            case CardType.V:
+                val1 = 1;
+                break;
+            case CardType.T:
+                val1 = 3;
+                break;
+            case CardType.P:
+                val1 = 1;
+                break;
+            case CardType.A:
+                val1 = 1;
+                break;
+        }
+    }
+    public override void UpgradeThis()
+    {
+        base.UpgradeThis();
         if(cardType == CardType.T)
         {
-            CardActive();
-        }else
-        {
-            ConsumeAkasha();
-            CardActive();
+            val1--;
         }
     }
 }

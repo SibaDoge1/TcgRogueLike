@@ -48,17 +48,15 @@ public class ArchLoader : MonoBehaviour {
         switch(type)
         {
             case CardType.A:
-                return attributes["akasha"];
+                return attributes["apas"];
             case CardType.P:
                 return attributes["prithivi"];
             case CardType.T:
                 return attributes["tejas"];
             case CardType.V:
                 return attributes["vayu"];
-            case CardType.N:
-                return attributes["apas"];
             case CardType.S:
-                return null;//temp
+                return attributes["akasha"];
             default :
                 return null;
         }

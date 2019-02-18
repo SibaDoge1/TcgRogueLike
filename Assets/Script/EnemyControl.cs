@@ -14,23 +14,25 @@ public class EnemyControl : MonoBehaviour {
     public void SetRoom(Room room){
         currentRoom = room;
     }
-    public void EnemyTurn(){
+    public void EnemyTurn()
+    {
         if (currentRoom.enemyList == null || currentRoom.enemyList.Count == 0)
         {
+            count = 0;
             GameManager.instance.OnEndEnemyTurn();
         }
         else
         {
             currentEnemies = new List<Enemy>(currentRoom.enemyList);
-            for(int i=0;i<currentEnemies.Count;i++)
+            for (int i = 0; i < currentEnemies.Count; i++)
             {
-                if(currentEnemies[i] != null)
-                StartCoroutine(currentEnemies[i].AIRoutine());
+                if (currentEnemies[i] != null)
+                    StartCoroutine(currentEnemies[i].AIRoutine());
             }
-
         }
-
     }
+
+
 
     int count;
     public void EnemyEndCallBack()
@@ -39,7 +41,12 @@ public class EnemyControl : MonoBehaviour {
         if (count>=currentEnemies.Count)
         {
             count = 0;
-            GameManager.instance.OnEndEnemyTurn();
+            StartCoroutine(EndTurnDelay());
         }
+    }
+    IEnumerator EndTurnDelay()
+    {
+        yield return PlayerControl.player.PlayerAnim;
+        GameManager.instance.OnEndEnemyTurn();
     }
 }

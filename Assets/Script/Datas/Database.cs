@@ -82,7 +82,7 @@ public class CardData
         _info = data[7];
         spritePath = data[8];
 
-        className = data[9].Substring(0,data[9].Length-1);
+        className = data[9].Replace("\r","");
     }
 }
 public class CardPoolData

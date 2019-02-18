@@ -26,11 +26,24 @@ public class Card_Special : Card
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        cost -= 1;
+        if(PlayerControl.instance.hand.isOnHand(this))
+        {
+            cost -= 1;
+        }
+    }
+    public override void UpgradeReset()
+    {
+        isUpgraded = false;
+        val1 = Database.GetCardData(index).val1;
+    }
+    public virtual void CostReset()
+    {
+        cost = Database.GetCardData(index).cost;
     }
 }
 
-public class Card_Reload : Card_Special{
+public class Card_Reload : Card_Special
+{
     public Card_Reload(CardData cd) : base(cd)
     {
 
@@ -42,68 +55,7 @@ public class Card_Reload : Card_Special{
     protected override void CardActive()
     {
         PlayerControl.player.GetDamage(1);
-		PlayerControl.instance.ReLoadDeck ();
-	}
-}
-public class Card_Teleport : Card_Special
-{
-
-    public Card_Teleport(CardData cd) : base(cd)
-    {
-        isDirectionCard = true;
-    }
-
-    protected override void CardActive(Direction dir)
-    {
-        Vector2Int d = Vector2Int.zero;
-        switch(dir)
-        {
-            case Direction.NORTH:
-                d = Vector2Int.up;
-                break;
-            case Direction.EAST:
-                d = Vector2Int.right;
-                break;
-            case Direction.SOUTH:
-                d = Vector2Int.down;
-                break;
-            case Direction.WEST:
-                d = Vector2Int.left;
-                break;
-        }
-
-        player.MoveTo(player.pos + d * 3);
-        
-    }
-
-    private List<Tile> targetTiles;
-    public override void CardEffectPreview()
-    {
-        targetTiles = new List<Tile> {
-            player.currentRoom.GetTile(player.pos + new Vector2Int(1, 0) * 3),
-             player.currentRoom.GetTile(player.pos + new Vector2Int(-1, 0) * 3),
-              player.currentRoom.GetTile(player.pos + new Vector2Int(0, 1) * 3),
-               player.currentRoom.GetTile(player.pos + new Vector2Int(0, -1) * 3)
-        };
-        for (int i = 0; i < targetTiles.Count; i++)
-        {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
-        }
-    }
-}
-public class Card_Heal : Card_Special
-{
-    public Card_Heal(CardData cd) : base(cd)
-    {
-
-    }
-    protected override void CardActive()
-    {
-        player.GetHeal(1);
+        PlayerControl.instance.ReLoadDeck();
     }
 }
 
@@ -121,11 +73,7 @@ public class Card_RedGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -134,7 +82,7 @@ public class Card_RedGrasp : Card_Special
         if(TileUtils.IsEnemyInRange(player.currentTile,1,Figure.SQUARE))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 1, Figure.SQUARE);
-            if(enemies.Count>val2)
+            if(enemies.Count>=val2)
             {
                 player.GetHeal(val3);
             }
@@ -160,11 +108,7 @@ public class Card_BlueGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -173,7 +117,7 @@ public class Card_BlueGrasp : Card_Special
         if (TileUtils.IsEnemyInRange(player.currentTile, 1, Figure.SQUARE))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 1, Figure.SQUARE);
-            if (enemies.Count > val2)
+            if (enemies.Count >= val2)
             {
                 PlayerData.AkashaGage += val3;
             }
@@ -198,11 +142,8 @@ public class Card_TimeFrog : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -242,11 +183,8 @@ public class Card_CrimsonCrow : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CROSS);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -261,7 +199,7 @@ public class Card_CrimsonCrow : Card_Special
             }
         }
         PlayerData.AkashaGage += val3;
-        PlayerControl.status.UpdateBuff(BUFF.IMMUNE,val2);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.IMMUNE,val2);
     }
 }
 
@@ -278,11 +216,8 @@ public class Card_Bishop : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.Diagonal);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -297,10 +232,10 @@ public class Card_Bishop : Card_Special
             }
         }
 
-        PlayerControl.status.UpdateBuff(BUFF.AKASHA, val3);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
         if (PlayerControl.instance.deck.DeckCount<=val2)
         {
-            PlayerControl.status.EraseDeBuff();
+            PlayerControl.playerBuff.EraseDeBuff();
         }
     }
 }
@@ -341,21 +276,10 @@ public class Card_WolfBite : Card_Special
     {
         List<Tile> targetTiles = GetRange();
 
-        for (int i = targetTiles.Count - 1; i >= 0; i--)
-        {
-            if (targetTiles[i] == null)
-            {
-                targetTiles.RemoveAt(i);
-            }
-        }
-
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -411,21 +335,10 @@ public class Card_BearClaw : Card_Special
     {
         List<Tile> targetTiles = GetRange();
 
-        for (int i = targetTiles.Count - 1; i >= 0; i--)
-        {
-            if (targetTiles[i] == null)
-            {
-                targetTiles.RemoveAt(i);
-            }
-        }
-
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -455,11 +368,8 @@ public class Card_Justice : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.EMPTYSQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -489,11 +399,8 @@ public class Card_WindCat : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -510,7 +417,7 @@ public class Card_WindCat : Card_Special
             }
         }
         MoveToRandom();
-        PlayerControl.status.UpdateBuff(BUFF.MOVE,val3);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE,val3);
     }
 
     private void MoveToRandom()
@@ -524,6 +431,7 @@ public class Card_WindCat : Card_Special
             if (UnExplore[rand].IsStandAble(player))
             {
                 player.MoveTo(UnExplore[rand].pos);
+                return;
             }
             else
             {
@@ -574,11 +482,8 @@ public class Card_HalfMask : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -641,11 +546,7 @@ public class Card_BlackThunder : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
         }
     }
 
@@ -675,16 +576,16 @@ public class Card_BlackThunder : Card_Special
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y - 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x +1, y-1)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x +1, y)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x +2, y)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y +1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y + 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + 1)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y + 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y - 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y + 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y + 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - 2)));
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {
@@ -713,11 +614,8 @@ public class Card_PoisonSnail : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-            if (ranges[i] != null)
-            {
-                ranges[i].transform.parent = player.transform;
-            }
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
         }
     }
 
@@ -733,8 +631,8 @@ public class Card_PoisonSnail : Card_Special
         }
         
         player.SetHp(val2);
-        PlayerControl.status.UpdateBuff(BUFF.CARD,val3);
-        PlayerControl.status.UpdateBuff(BUFF.AKASHA,val3);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.CARD,val3);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA,val3);
     }
 }
 public class Card_Shield : Card_Special
@@ -746,16 +644,12 @@ public class Card_Shield : Card_Special
 
     public override void CardEffectPreview()
     {
-        if(PlayerControl.instance.SelectedDirCard == this)
+        if (PlayerControl.instance.SelectedDirCard == this)
         {
-            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile,1);
+            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 1);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-                if (ranges[i] != null)
-                {
-                    ranges[i].transform.parent = player.transform;
-                }
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
         else
@@ -763,18 +657,20 @@ public class Card_Shield : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-                if (ranges[i] != null)
-                {
-                    ranges[i].transform.parent = player.transform;
-                }
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            }
+            targetTiles = GetRange2();
+            for (int i = 0; i < targetTiles.Count; i++)
+            {
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
+
     }
 
-    protected override void CardActive()
+    protected override void CardActive(Direction dir)
     {
-        List<Tile> targetTiles = GetRange();
+        List<Tile> targetTiles = GetRange3(dir);
 
         if (TileUtils.IsEnemyInRange(targetTiles))
         {
@@ -785,9 +681,6 @@ public class Card_Shield : Card_Special
             }
         }
 
-    }
-    protected override void CardActive(Direction dir)//CardType : T
-    {
         Vector2Int d = Vector2Int.zero;
         switch (dir)
         {
@@ -804,8 +697,8 @@ public class Card_Shield : Card_Special
                 d = Vector2Int.left;
                 break;
         }
+        player.MoveTo(player.pos + d * -1);
 
-        player.MoveTo(player.pos + d * val3);
     }
 
     private List<Tile> GetRange()
@@ -813,8 +706,59 @@ public class Card_Shield : Card_Special
         List<Tile> targetTiles = new List<Tile>();
         int x = (int)player.pos.x; int y = (int)player.pos.y;
 
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x +1, y)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x +2, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
+    }
+    private List<Tile> GetRange2()
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x -1, y)));
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
+    }
+    private List<Tile> GetRange3(Direction dir)
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        switch (dir)
+        {
+            case Direction.EAST:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
+                break;
+            case Direction.NORTH:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + 1)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + 2)));
+                break;
+            case Direction.SOUTH:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - 1)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - 2)));
+                break;
+            case Direction.WEST:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y)));
+                break;
+        }
+
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {
@@ -836,16 +780,18 @@ public class Card_Rush : Card_Special
 
     public override void CardEffectPreview()
     {
-        if (PlayerControl.instance.SelectedDirCard == this)
+        if(PlayerControl.instance.SelectedDirCard == this)
         {
-            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 1);
+            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile,2);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-                if (ranges[i] != null)
-                {
-                    ranges[i].transform.parent = player.transform;
-                }
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            }
+
+            targetTiles = GetRange4();
+            for (int i = 0; i < targetTiles.Count; i++)
+            {
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
         else
@@ -853,18 +799,20 @@ public class Card_Rush : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, targetTiles[i]));
-                if (ranges[i] != null)
-                {
-                    ranges[i].transform.parent = player.transform;
-                }
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            }
+            targetTiles = GetRange2();
+            for (int i = 0; i < targetTiles.Count; i++)
+            {
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
+
     }
 
-    protected override void CardActive()
+    protected override void CardActive(Direction dir)
     {
-        List<Tile> targetTiles = GetRange();
+        List<Tile> targetTiles = GetRange3(dir);
 
         if (TileUtils.IsEnemyInRange(targetTiles))
         {
@@ -875,7 +823,251 @@ public class Card_Rush : Card_Special
             }
         }
 
+        Vector2Int d = Vector2Int.zero;
+        switch (dir)
+        {
+            case Direction.NORTH:
+                d = Vector2Int.up;
+                break;
+            case Direction.EAST:
+                d = Vector2Int.right;
+                break;
+            case Direction.SOUTH:
+                d = Vector2Int.down;
+                break;
+            case Direction.WEST:
+                d = Vector2Int.left;
+                break;
+        }
+        player.MoveTo(player.pos + d * 3);
+    
+}
+
+    private List<Tile> GetRange()
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
     }
+    private List<Tile> GetRange2()
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 3, y)));
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
+    }
+    private List<Tile> GetRange3(Direction dir)
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        switch(dir)
+        {
+            case Direction.EAST:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
+                break;
+            case Direction.NORTH:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y+1)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y+2)));
+                break;
+            case Direction.SOUTH:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y-1)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y-2)));
+                break;
+            case Direction.WEST:
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y)));
+                targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y)));
+                break;
+        }
+
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
+    }
+    private List<Tile> GetRange4()
+    {
+        List<Tile> targetTiles = new List<Tile>();
+        int x = (int)player.pos.x; int y = (int)player.pos.y;
+
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 3, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 3, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y+3)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y-3)));
+
+        for (int i = targetTiles.Count - 1; i >= 0; i--)
+        {
+            if (targetTiles[i] == null)
+            {
+                targetTiles.RemoveAt(i);
+            }
+        }
+        return targetTiles;
+    }
+}
+public class Card_Mist : Card_Special
+{
+    public Card_Mist(CardData cd) : base(cd)
+    {
+
+    }
+
+    public override void CardEffectPreview()
+    {
+        List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
+        }
+    }
+
+    protected override void CardActive()
+    {
+
+
+        if (TileUtils.IsEnemyInRange(player.currentTile, 2, Figure.CIRCLE))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], val1);
+            }
+        }
+        foreach (Card c in PlayerData.Deck)
+        {
+            if (c.Type == CardType.A)
+            {
+                for (int i = 0; i < val2; i++)
+                {
+                    c.UpgradeThis();
+                }
+            }
+        }
+    }
+}
+public class Card_WormHole : Card_Special
+{
+    public Card_WormHole(CardData cd) : base(cd)
+    {
+
+    }
+
+    public override void CardEffectPreview()
+    {
+        List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
+        }
+    }
+
+    protected override void CardActive()
+    {
+
+
+        if (TileUtils.IsEnemyInRange(player.currentTile, 2, Figure.CIRCLE))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], val1);
+            }
+        }
+        foreach (Card c in PlayerData.Deck)
+        {
+            if (c.Type == CardType.P)
+            {
+                for (int i = 0; i < val2; i++)
+                {
+                    c.UpgradeThis();
+                }
+            }
+        }
+        player.GetHeal(val3);
+    }
+}
+
+public class Card_Plant : Card_Special
+{
+    public Card_Plant(CardData cd) : base(cd)
+    {
+        isDirectionCard = true;
+    }
+
+    public override void CardEffectPreview()
+    {
+        if (PlayerControl.instance.SelectedDirCard == this)
+        {
+            List<Tile> targetTiles = GetRange();
+            for (int i = 0; i < targetTiles.Count; i++)
+            {
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+
+            }
+        }
+        else
+        {
+            List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < targetTiles.Count; i++)
+            {
+                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
+            }
+        }
+    }
+
+    protected override void CardActive()
+    {
+
+
+        if (TileUtils.IsEnemyInRange(player.currentTile, 2, Figure.CIRCLE))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], val1);
+            }
+        }
+        foreach (Card c in PlayerData.Deck)
+        {
+            if (c.Type == CardType.V)
+            {
+                for (int i = 0; i < val2; i++)
+                {
+                    c.UpgradeThis();
+                }
+            }
+        }
+    }
+
     protected override void CardActive(Direction dir)//CardType : T
     {
         Vector2Int d = Vector2Int.zero;
@@ -903,8 +1095,10 @@ public class Card_Rush : Card_Special
         List<Tile> targetTiles = new List<Tile>();
         int x = (int)player.pos.x; int y = (int)player.pos.y;
 
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 3, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 3, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y+3)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x , y-3)));
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {
@@ -915,9 +1109,84 @@ public class Card_Rush : Card_Special
         }
         return targetTiles;
     }
+
 }
-public class Card_Mist : Card_Special
+
+public class Card_Stamp : Card_Special
 {
+    public Card_Stamp(CardData cd) : base(cd)
+    {
 
+    }
 
+    public override void CardEffectPreview()
+    {
+        List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
+        }
+    }
+
+    protected override void CardActive()
+    {
+        if (TileUtils.IsEnemyInRange(player.currentTile, 2, Figure.CIRCLE))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], val1);
+            }
+        }
+        foreach (Card c in PlayerData.Deck)
+        {
+            if (c.Type == CardType.S)
+            {
+                for (int i = 0; i < val2; i++)
+                {
+                    c.UpgradeThis();
+                }
+            }
+        }
+        PlayerData.AkashaGage += val3;
+    }
+}
+public class Card_Needle : Card_Special
+{
+    public Card_Needle(CardData cd) : base(cd)
+    {
+
+    }
+    
+    public override void CardEffectPreview()
+    {
+        List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
+        for (int i = 0; i < targetTiles.Count; i++)
+        {
+            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+
+        }
+    }
+
+    protected override void CardActive()
+    {
+        if (TileUtils.IsEnemyInRange(player.currentTile, 2, Figure.CIRCLE))
+        {
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 2, Figure.CIRCLE);
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                DamageToTarget(enemies[i], val1);
+            }
+        }
+        foreach (Card c in PlayerData.Deck)
+        {
+            for (int i = 0; i < val2; i++)
+            {
+                c.UpgradeThis();
+            }
+        }
+        PlayerData.AkashaGage += val3;
+        player.GetHeal(val3);
+    }
 }

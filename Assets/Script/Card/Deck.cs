@@ -5,13 +5,18 @@ using UnityEngine.UI;
 
 public class Deck : MonoBehaviour {
 
-	private List<Card> remainDeck;
+    private List<Card> deck = PlayerData.Deck;
+    public List<Card> playingDeck
+    {
+        get { return deck; }
+    }
+
     int count = 0;
     public bool isDrawEnd
     {
         get
         {
-            if (remainDeck.Count <= count)
+            if (deck.Count <= count)
                 return true;
             else
                 return false;
@@ -19,10 +24,10 @@ public class Deck : MonoBehaviour {
     }
 
 	public HandCardObject Draw(){
-		if (remainDeck.Count <= count) {
+		if (deck.Count <= count) {
 			return null;
 		}
-		Card c = remainDeck [count];
+		Card c = deck [count];
         count++;
 
         DrawCallBack();
@@ -33,25 +38,36 @@ public class Deck : MonoBehaviour {
     {
 
         count = 0;
-        Shuffle();     
-
+        Shuffle();
+        for(int i=0; i<deck.Count;i++)
+        {
+            if(deck[i] is Card_Special)
+            {
+                ((Card_Special)deck[i]).CostReset();
+            }
+        }     
         LoadCallBack();
     }
 
 
     public void OnRoomClear()
     {
-		remainDeck = new List<Card> (PlayerData.Deck);
-        remainDeck.Insert(remainDeck.Count, new Card_Reload(Database.GetCardData(99)));//1번은 리로드
+        foreach(Card c in deck)
+        {
+            c.UpgradeReset();
+        }
 
         ReLoad();
 	}
 
     public void OnCardReturned(Card card)
     {
-        for(int i=0; i<remainDeck.Count;i++)
+        for(int i=0; i< deck.Count;i++)
         {
-            remainDeck[i].CardReturnCallBack(card);
+            if(deck[i] is Card_Special)
+            {
+                deck[i].CardReturnCallBack(card);
+            }
         }
     }
 	#region Private
@@ -63,11 +79,11 @@ public class Deck : MonoBehaviour {
     {
 		Card temp;
 		int randIndex;
-		for (int i = 0; i < remainDeck.Count - 2; i++) {
-			randIndex = Random.Range (0, remainDeck.Count-1);
-			temp = remainDeck [i];
-			remainDeck [i] = remainDeck [randIndex];
-			remainDeck [randIndex] = temp;
+		for (int i = 0; i < deck.Count - 2; i++) {
+			randIndex = Random.Range (0, deck.Count-1);
+			temp = deck [i];
+			deck [i] = deck [randIndex];
+			deck [randIndex] = temp;
 		}
 	}
 
@@ -75,16 +91,16 @@ public class Deck : MonoBehaviour {
     {
         get
         {
-            return remainDeck.Count;
+            return deck.Count-count;
         }
     }
     private void DrawCallBack()
     {
-        UIManager.instance.DeckCont(remainDeck.Count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
     private void LoadCallBack()
     {
-        UIManager.instance.DeckCont(remainDeck.Count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
 
     #endregion

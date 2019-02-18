@@ -99,7 +99,10 @@ public class BuffManager
         }
         public void UpdateTurn(int t)
         {
-            turn = t;
+            if(turn<=t)
+            {
+                turn = t;
+            }
         }
         public void CountTurn()
         {

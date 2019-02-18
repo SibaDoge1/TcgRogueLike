@@ -69,7 +69,6 @@ public static class BuildRoom
         currentMap = map;
         battleRooms = CsvParser.ReadRoom(map.Floor, RoomType.BATTLE);
         eventRooms = CsvParser.ReadRoom(map.Floor, RoomType.EVENT);
-        shopRooms = CsvParser.ReadRoom(map.Floor, RoomType.SHOP);        
     }
 
     static string[,] GetRoomData(RoomType rt)
@@ -80,8 +79,6 @@ public static class BuildRoom
                 return battleRooms[Random.Range(0, battleRooms.Count)];
             case RoomType.EVENT:
                 return eventRooms[Random.Range(0, eventRooms.Count)];
-            case RoomType.SHOP:
-                return shopRooms[Random.Range(0, shopRooms.Count)];
             default:
                 Debug.Log("Room Type ERROR");
                 return null;

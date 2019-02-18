@@ -18,19 +18,19 @@ public class BuffUI : MonoBehaviour
     public void TextUpdate()
     {
         string s = "";
-        if(!PlayerControl.status.IsMoveAble)
+        if(!PlayerControl.playerBuff.IsMoveAble)
         {
             s += "이동불가! \n";
         }
-        if(!PlayerControl.status.IsAkashaAble)
+        if(!PlayerControl.playerBuff.IsAkashaAble)
         {
             s += "아카샤충전불가! \n";
         }
-        if(!PlayerControl.status.IsCardAble)
+        if(!PlayerControl.playerBuff.IsCardAble)
         {
             s += "카드사용불가! \n";
         }
-        if(!PlayerControl.status.IsHitAble)
+        if(!PlayerControl.playerBuff.IsHitAble)
         {
             s += "피해면역! \n";
         }

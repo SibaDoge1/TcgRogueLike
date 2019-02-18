@@ -4481,7 +4481,7 @@ MonoBehaviour:
   - {fileID: 1849777026106732, guid: 2bfe1eeb09a67844db5e96e62afecbca, type: 2}
   rangeLayer:
   - {fileID: 1901324666352306, guid: 5ca6b911662ffdc4492076ef2455d80e, type: 2}
-  - {fileID: 1291516968948508, guid: a297356345012a948bdcf06f95532c6b, type: 2}
+  - {fileID: 1479374802016482, guid: c04587e3cac0005499826a862ebd1790, type: 2}
   - {fileID: 1389592520065522, guid: cb65244ca3983b74f92ba8144fd2dd3a, type: 2}
   UIEffect:
   - {fileID: 1663874021600768, guid: 6917a15db3e461d48849ebf01c0d65c5, type: 2}
@@ -5327,13 +5327,11 @@ MonoBehaviour:
   LevelSettings:
   - battleRoomNum: 0
     eventRoomNum: 0
-    shopRoomNum: 0
   - battleRoomNum: 4
     eventRoomNum: 0
-    shopRoomNum: 2
   RoomTestMode: 1
   TestRoomType: 1
-  TestRoomName: test7
+  TestRoomName: test1
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0

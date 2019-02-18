@@ -139,8 +139,8 @@ public class Hand : MonoBehaviour {
     }
     public void DumpCard()
     {
-        handList[0].DumpCard();
-        SetCardPosition();
+            handList[0].DumpCard();
+            SetCardPosition();      
     }
     public void DumpAll()
     {
@@ -151,8 +151,11 @@ public class Hand : MonoBehaviour {
     }
     public void ReturnCard()
     {
-        handList[0].ReturnCard();
-        SetCardPosition();
+        if(PlayerControl.player.currentRoom.IsEnemyAlive())
+        {
+            handList[0].ReturnCard();
+            SetCardPosition();
+        }
     }
 
     public void ChooseOne(){

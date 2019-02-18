@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// 호출하자마자 Turn은 EnemyTurn으로 바꾸고
-    /// float나 코루틴 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
+    /// float 삽입시 그만큼 기달리고 적행동 시작 (기본=0.17f)
     /// </summary>
     public void OnEndPlayerTurn(float time = 0.1f)
     {
@@ -145,7 +145,15 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator EndTurnDelay(float time)
     {
-        yield return new WaitForSeconds(time);
+        yield return null;
+        if(PlayerControl.player.PlayerAnim == null)
+        {
+            yield return new WaitForSeconds(time);
+        }else
+        {
+            yield return PlayerControl.player.PlayerAnim;
+            Debug.Log("Called");
+        }
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
         EnemyControl.instance.EnemyTurn();
     }
@@ -158,7 +166,7 @@ public class GameManager : MonoBehaviour
     public void OnEndEnemyTurn()
     {
         currentTurn = Turn.PLAYER;
-        PlayerControl.status.OnPlayerTurn();
+        PlayerControl.playerBuff.OnPlayerTurn();
         PlayerData.PlayerTurnStart();
         MinimapTexture.DrawEnemies(CurrentRoom().transform.position, CurrentRoom().GetEnemyPoses());
     }
@@ -203,8 +211,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void BuildDeck()
     {
-        for(int i=0; i<12;i++) // 현재 랜덤으로 12장 생성
-          PlayerData.Deck.Add(Card.GetCardByNum(0));     
+        for(int i=0; i<10;i++) //노말카드 랜덤 9장 생성
+          PlayerData.Deck.Add(Card.GetCardByNum(0));
+
+        for(int i=0; i<3;i++)//특수카드 3장 생성
+        {
+            PlayerData.Deck.Add(Card.GetCardByNum(Random.Range(1,20)));
+        }
+        PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
     }
     private void GetRandomCardToAttain(int value)
     {
@@ -239,7 +253,7 @@ public class GameManager : MonoBehaviour
         MapGenerator mapGenerator = currentMap.GetComponent<MapGenerator>();
 
             mapGenerator.GetMap(level,
-                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum, Config.instance.LevelSettings[level].shopRoomNum);
+                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum);
         
     }
     private void PlayBossBGM(int floor)

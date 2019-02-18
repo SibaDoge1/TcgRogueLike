@@ -4,11 +4,10 @@ using UnityEngine;
 
 public enum CardType
 {
-    N,//기본카드 중 효과안붙음
     V,//기본카드 효과
     T,//기본카드 효과
     P,//기본카드 효과
-    A,//기본카드 효과
+    A,//기본카드 무효과
     S
 }
 
@@ -20,7 +19,7 @@ public abstract class Card
     protected static Player player;
      
     #region CardValues;
-    private bool isUpgraded = false;
+    protected bool isUpgraded = false;
     public bool IsUpgraded { get { return isUpgraded; } }
 
     protected bool isDirectionCard = false;
@@ -42,7 +41,7 @@ public abstract class Card
         set { cost = value; }
     }
 
-    protected CardType cardType = CardType.N;
+    protected CardType cardType = CardType.A;
     public CardType Type { get { return cardType; } }
 
     protected int val1;
@@ -124,13 +123,11 @@ public abstract class Card
     }
     public virtual void OnCardPlayed()
     {
-        if(isDirectionCard)
-        {
-            return;
-        }else
+        CardActive();
+
+        if (!isDirectionCard)
         {
             ConsumeAkasha();
-            CardActive();
         }
     }
     public virtual void OnCardPlayed(Direction d)
@@ -200,13 +197,14 @@ public abstract class Card
             }
             else
             {
-                UnityEngine.Debug.Log("Card String Error");
+                UnityEngine.Debug.Log("Card String Error On Card No." + cardData.index + "  Name : " + cardData.className);
                 return null;
             }
         }
         else
         {
-            UnityEngine.Debug.Log("Card String Error");
+
+            UnityEngine.Debug.Log("Card String Error On Card No." + cardData.index + "  Name : " + cardData.className);
             return null;
         }
     }
@@ -234,15 +232,25 @@ public abstract class Card
             MakeSound(target.transform.position);
             target.GetDamage(dam * player.Atk, player);
             PlayerData.AttackedTarget();
+            player.OnAttack();
         }
     }
 
-    public void UpgradeThis()
+    public virtual void UpgradeThis()
     {
-        isUpgraded = true;
-        val1 += 1;
-    }
+        if(player.currentRoom.IsEnemyAlive())//전투중일때만
+        {
+            isUpgraded = true;
+            val1++;
+        }
 
+    }
+    /// <summary>
+    /// 초기화
+    /// </summary>
+    public virtual void UpgradeReset()
+    {
+    } 
 
 
 }

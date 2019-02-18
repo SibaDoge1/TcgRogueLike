@@ -63,7 +63,7 @@ public class SteelChicken : Enemy {
     IEnumerator Attack()
     {
         PlayerControl.player.GetDamage(atk);
-        PlayerControl.status.UpdateBuff(BUFF.MOVE);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE);
         yield return StartCoroutine(AnimationRoutine(0));
     }
 
