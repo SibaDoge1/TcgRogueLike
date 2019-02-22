@@ -4,10 +4,22 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LoadingManager : MonoBehaviour {
-    
+    public static LoadingManager instance;
+
     void Awake()
     {
-       // DontDestroyOnLoad(this.gameObject);
+        if (instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(this.gameObject);
+            //DontDestroyOnLoad(transform.parent);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("SingleTone Error : ArchLoader");
+            Destroy(this);
+        }
+       LoadScene();
     }
 
     public void LoadScene()
@@ -32,6 +44,7 @@ public class LoadingManager : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
             if (op.progress >= 0.9f)
             {
+                //gameObject.SetActive(false);
                 op.allowSceneActivation = true;
             }
         }

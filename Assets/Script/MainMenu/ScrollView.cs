@@ -5,7 +5,8 @@ using UnityEngine;
 public class ScrollView : MonoBehaviour {
     private Animator handle;
     [SerializeField]
-    private const float Threshold = 1.5f;
+    private const float Threshold = 1.0f;
+    private Coroutine coroutine;
 
     void Awake()
     {
@@ -14,9 +15,9 @@ public class ScrollView : MonoBehaviour {
 
 	public void OnChanged()
     {
-        Debug.Log("down!");
-        StopCoroutine("ClickTimer");
-        StartCoroutine("ClickTimer");
+        if(coroutine != null)
+            StopCoroutine(coroutine);
+        coroutine = StartCoroutine("ClickTimer");
         handle.SetBool("isUsing", true);
     }
 

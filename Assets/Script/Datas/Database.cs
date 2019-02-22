@@ -52,6 +52,18 @@ public static class Database
         }
         return cardPoolDatas[index];
     }
+    public static AchiveData GetAchiveDataByDiary(int num)
+    {
+        for (int i = 1; i < achiveDatas.Count; i++)
+        {
+            Debug.Log(achiveDatas[i].num + achiveDatas[i].info + achiveDatas[i].reward);
+            if(int.Parse(achiveDatas[i].reward) == num)
+            {
+                return achiveDatas[i];
+            }
+        }
+        return null;
+    }
 
 }
 public class CardData
@@ -148,14 +160,15 @@ public class DiaryData
         num = byte.Parse(data[0]);
         switch (data[1])
         {
-            case "실험체": category = Category.irregulars; break;
-            case "R.A": category = Category.raChips; break;
-            case "연구기록": category = Category.records; break;
-            case "휴먼": category = Category.humans; break;
+            case "이레귤러": category = Category.irregulars; break;
+            case "R.A.칩": category = Category.raChips; break;
+            case "기록": category = Category.records; break;
+            case "인물": category = Category.humans; break;
             default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!"); break;
         }
         title = data[2];
-        info = data[3];
+        info = data[3].Replace("$", "\n");
+        //Debug.Log(data[3]);
         spritePath = data[4];
     }
 }
@@ -163,19 +176,19 @@ public class DiaryData
 public class AchiveData
 {
     public readonly byte num;
-    public readonly string condition;
+    public readonly string info;
     public readonly string type;
-    public readonly string addition;
+    public readonly string condition;
     public readonly string reward;
     public readonly string cardReward;
 
     public AchiveData(string[] data)
     {
         num = byte.Parse(data[0]);
-        condition = data[1];
+        info = data[1];
         type = data[2];
-        addition = data[3];
+        condition = data[3];
         reward = data[4];
-        //cardReward = data[5];
+        cardReward = data[5];
     }
 }

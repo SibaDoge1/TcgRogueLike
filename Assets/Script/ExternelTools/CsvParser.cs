@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 /// <summary>
 /// CSV 데이터 읽어오는 클래스 입니다.
@@ -159,15 +160,29 @@ public static class CsvParser
         Dictionary<int, DiaryData> datas = new Dictionary<int, DiaryData>();
         int num = 1;
         string[] split;
+        string[] result = new string[5];
 
         while (num < dataString.Length)
         {
-            split = dataString[num].Split(',');
-            if (split[0].Length == 0)
+            //split = Regex.Split(dataString[num], "[(,[^\"])([^\"],)]");
+            split = dataString[num].Split('"');
+            if (split.Length == 1)
+            {
+                result = dataString[num].Split(',');
+            }
+            else if(split.Length == 3)
+            {
+                result[0] = split[0].Split(',')[0];
+                result[1] = split[0].Split(',')[1];
+                result[2] = split[0].Split(',')[2];
+                result[3] = split[1];
+                result[4] = split[2].Split(',')[1];
+            }
+            if (result[0].Length == 0)
             {
                 break;
             }
-            datas.Add(int.Parse(split[0]), new DiaryData(split));
+            datas.Add(int.Parse(result[0]), new DiaryData(result));
             num++;
         }
         return datas;

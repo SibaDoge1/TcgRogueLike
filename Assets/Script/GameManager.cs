@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
         BuildDeck();
 
         LoadLevel(Config.instance.floorNum);
+        
     }
 
     

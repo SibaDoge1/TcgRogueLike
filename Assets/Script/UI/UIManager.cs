@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
         buffUI = transform.Find("Buff").GetComponent<BuffUI>();
+        //optionUI = transform.Find("Option").GetComponent<Option>();
     }
 
     TextUI textUI;
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
     BuffUI buffUI;
     GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
+    Option optionUI;
 
     #region Status
     public void HpUpdate(int currentHp_)
@@ -172,6 +174,11 @@ public class UIManager : MonoBehaviour
     public void GameWinUIOn()
     {
         gameWinUI.On();
+    }
+
+    public void OptionUIOn()
+    {
+        //optionUI.On();
     }
 
     /// <summary>

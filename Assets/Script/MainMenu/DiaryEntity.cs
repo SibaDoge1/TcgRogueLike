@@ -24,8 +24,8 @@ public class DiaryEntity : MonoBehaviour {
     public void SetEntity(DiaryData data)
     {
         diaryData = data;
-        if (diaryData == null) return;
         _name.text = diaryData.title;
+        if (SaveData.diaryUnlockData[diaryData.num][0] == false) return;
         _lock.SetActive(false);
         image.SetActive(true);
 
@@ -35,12 +35,14 @@ public class DiaryEntity : MonoBehaviour {
         string imagePath;
         switch (diaryData.category)
         {
-            case Category.irregulars: imagePath = ""; break;
-            case Category.raChips: imagePath = ""; break;
-            case Category.records: imagePath = ""; break;
-            case Category.humans: imagePath = ""; break;
+            case Category.irregulars: imagePath = "Monster"; break;
+            case Category.raChips: imagePath = "Card"; break;
+            case Category.records: imagePath = "Record"; break;
+            case Category.humans: imagePath = "Human"; break;
+            default: imagePath = null; break;
         }
-        //image.GetComponent<Image>().sprite = Resources.Load<Sprite>("");
+        //if (imagePath != null)
+            //image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/"+imagePath+"/"+diaryData.spritePath);
     }
 	
     public void OnClick()

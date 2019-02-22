@@ -49,8 +49,7 @@ public static class SaveData
             SetStageArriveDataAll();
             isGetEnding = false;
             gameOverNum = 0;
-
-        isSet = true;
+            isSet = true;
     }
     #endregion
 
@@ -137,7 +136,7 @@ public static class SaveData
     public static void killMonster(int i)
     {
         monsterKillData[i]++;
-        if (monsterKillData[i] - 1 > 0) return;
+        if (monsterKillData[i] - 1 > 0) return; //버그시 확인 필
 
         for(int idx = 1; idx <= Database.achiveDatas.Count; idx++)
         {
@@ -168,14 +167,13 @@ public static class SaveData
     /// <summary>
     /// 스테이지 도달 시 콜
     /// </summary>
-    /// <param name="i"></param>
-    /// <param name="value"></param>
+    /// <param name="i">도달한 층</param>
     public static void ArriveStage(int i)
     {
         stageArriveData[i] = true;
         for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
         {
-            if (Database.achiveDatas[idx].type == "floor" && int.Parse(Database.achiveDatas[idx].condition) == i)
+            if (Database.achiveDatas[idx].type == "floor" && int.Parse(Database.achiveDatas[idx].info) == i)
             {
                 GetAchivement(idx);
             }
@@ -206,7 +204,7 @@ public static class SaveData
         gameOverNum++;
         for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
         {
-            if (Database.achiveDatas[idx].type == "gameover" && int.Parse(Database.achiveDatas[idx].condition) <= gameOverNum)
+            if (Database.achiveDatas[idx].type == "gameover" && int.Parse(Database.achiveDatas[idx].info) <= gameOverNum)
             {
                 GetAchivement(idx);
             }

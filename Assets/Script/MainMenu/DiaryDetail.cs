@@ -7,55 +7,84 @@ public class DiaryDetail : MonoBehaviour {
     public GameObject[] backGroundImages;
     private Text title;
     private Text content;
-    private Image image;
     private Image backGround;
     private Diary diary;
     private MainMenu.voidFunc OffNew;
     private GameObject noData;
+    private GameObject zoomPanel;
+    private DiaryData diaryData;
+    private Transform categoryObject;
+
+    private string objectPath;
 
     void Awake()
     {
         title = transform.Find("Title").GetComponent<Text>();
-        content = transform.Find("Text").GetComponent<Text>();
-        image = transform.Find("Image").GetComponent<Image>();
+        content = transform.Find("TextBG").Find("Scroll View").Find("Viewport").Find("Content").Find("Text").GetComponent<Text>();
         diary = transform.parent.GetComponent<Diary>();
         noData = transform.Find("NO DATA").gameObject;
-        backGround = transform.Find("BackGround").GetComponent<Image>();
+        zoomPanel = transform.Find("ZoomPanel").gameObject;
+        noData.SetActive(true);
     }
 
     public void On(DiaryData data, MainMenu.voidFunc func)
     {
         gameObject.SetActive(true);
         OffNew = func;
-        if (data == null) return;
-
-        title.text = data.title;
-        content.text = data.info;
-        noData.SetActive(false);
-        SaveData.diaryUnlockData[data.num][1] = false;
-
-        string imagePath;
-        switch (data.category)
+        diaryData = data;
+        switch (diaryData.category)
         {
-            case Category.irregulars: imagePath = ""; break;
-            case Category.raChips: imagePath = ""; break;
-            case Category.records: imagePath = ""; break;
-            case Category.humans: imagePath = ""; break;
+            case Category.irregulars: objectPath = "Monster"; break;
+            case Category.raChips: objectPath = "Card"; break;
+            case Category.records: objectPath = "Record"; break;
+            case Category.humans: objectPath = "Human"; break;
         }
-        //image.GetComponent<Image>().sprite = Resources.Load<Sprite>("");
+        categoryObject = transform.Find(objectPath);
 
+        if (SaveData.diaryUnlockData[diaryData.num][0] == false)
+        {
+            Debug.Log(diaryData.num);
+            noData.transform.Find("Text").GetComponent<Text>().text = Database.GetAchiveDataByDiary(diaryData.num).info;
+            return;
+        }
+        Debug.Log(diaryData.category);
+        SaveData.ChangeNewToOld(diaryData.num);
+        noData.SetActive(false);
+        categoryObject.gameObject.SetActive(true);
+        title.text = diaryData.title;
+        content.text = diaryData.info;
+        //if (categoryObject.Find("Image") != null)
+           // categoryObject.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + objectPath + "/" + diaryData.spritePath);
+        if (categoryObject.Find("Name") != null)
+            categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
     }
 
     public void Off()
     {
         noData.SetActive(true);
-        OffNew();
+        if(OffNew != null)
+            OffNew();
+        diary.CheckNew();
+        categoryObject.gameObject.SetActive(false);
+        gameObject.SetActive(false);
+    }
+
+    public void OffWithOutUnlock()
+    {
+        noData.SetActive(true);
         diary.CheckNew();
         gameObject.SetActive(false);
     }
 
     public void Zoom()
     {
-        
+        if (diaryData.spritePath.Length != 0) return;
+        zoomPanel.SetActive(true);
+        zoomPanel.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(objectPath + "Full");
+    }
+
+    public void ZoomOff()
+    {
+
     }
 }

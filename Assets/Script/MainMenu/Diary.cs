@@ -106,12 +106,7 @@ public class Diary : MonoBehaviour {
         for (int i = 0; i < Diaries[category].Count; i++)
         {
             entity = Instantiate(entityPrefab, content);
-            if (SaveData.diaryUnlockData[(Diaries[category])[i]][0] == true)
-            {
-                entity.GetComponent<DiaryEntity>().SetEntity(Database.diaryDatas[(Diaries[category])[i]]);
-            }
-            else
-                entity.GetComponent<DiaryEntity>().SetEntity(null);
+            entity.GetComponent<DiaryEntity>().SetEntity(Database.diaryDatas[(Diaries[category])[i]]);
         }
     }
 
