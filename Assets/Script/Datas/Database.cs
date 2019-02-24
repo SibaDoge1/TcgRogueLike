@@ -9,7 +9,7 @@ public static class Database
 {
 
      public static Dictionary<int, CardData> cardDatas { get; private set; }
-     public static Dictionary<int, CardPoolData> cardPoolDatas { get; private set; }
+     public static Dictionary<string, CardPoolData> cardPoolDatas { get; private set; }
      public static Dictionary<int, MonsterData> monsterDatas { get; private set; }
      public static Dictionary<int, DiaryData> diaryDatas{ get; private set; }
      public static Dictionary<int, AchiveData> achiveDatas { get; private set; }
@@ -29,29 +29,23 @@ public static class Database
     {
         return cardDatas[i];
     }
-    public static CardPoolData GetCardPool(int i)
+    public static CardPoolData GetCardPool(string name)
     { 
-        return cardPoolDatas[i];
+        if(cardPoolDatas.ContainsKey(name))
+        {
+            return cardPoolDatas[name];
+        }
+        else
+        {
+            Debug.Log("The Room " + name + " isn't exists");
+            return cardPoolDatas["default"];
+        }
     }
     public static MonsterData GetMonsterData(int i)
     {
         return monsterDatas[i];
     }
-    public static CardPoolData GetCardPoolByValue(int value)
-    {
-        int offset = int.MaxValue;
-        int index = 0;
-         for(int i=0; i<cardPoolDatas.Count;i++)
-        {
-            int temp = Mathf.Abs(value - cardPoolDatas[i].value);
-            if(temp<offset)
-            {
-                offset = temp;
-                index = i;
-            }
-        }
-        return cardPoolDatas[index];
-    }
+
 
 }
 public class CardData
@@ -87,15 +81,13 @@ public class CardData
 }
 public class CardPoolData
 {
-    public readonly byte num;
-    public readonly int value;
+    public readonly string name;
     public readonly List<int> cardPool = new List<int>();
 
     public CardPoolData(string[] data)
     {
-        num = byte.Parse(data[0]);
-        value = int.Parse(data[1]);
-        string[] d = data[2].Split('/');
+        name = data[0];
+        string[] d = data[1].Split('/');
         for(int i=0; i<d.Length;i++)
         {
             cardPool.Add(int.Parse(d[i]));

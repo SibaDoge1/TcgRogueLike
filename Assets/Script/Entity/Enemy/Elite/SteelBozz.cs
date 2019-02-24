@@ -37,13 +37,7 @@ public class SteelBozz : Enemy {
 
     IEnumerator RangeOn()
     {
-        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            //TODO : MAKE EFFECT
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
-        }
-
+        enemyUI.ActionImageOn();
         yield return null;
     }
 
@@ -52,19 +46,20 @@ public class SteelBozz : Enemy {
     {
         if(isSecond)
         {
-            ClearRangeList();
+            enemyUI.ActionImageOff();
         }
 
         List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-        //TODO : MAKE EFFECT
-
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, tiles[i]);
+        }
 
         if (TileUtils.AI_Find(tiles))
         {
             PlayerControl.player.GetDamage(atk);
         }
         isSecond = true;
-
         yield return StartCoroutine(AnimationRoutine(0));
     }
 
@@ -72,8 +67,11 @@ public class SteelBozz : Enemy {
 
     IEnumerator SelfDestruct()
     {
-        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);        
-        //TODO : MAKE EFFECT
+        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, tiles[i]);
+        }
 
         if (TileUtils.AI_Find(tiles))
         {

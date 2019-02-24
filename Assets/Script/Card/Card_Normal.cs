@@ -22,8 +22,8 @@ public class Card_Normal : Card
         switch (cardType)
         {
             case CardType.V:
-                val1 = 1;
-                cost = 4;
+                val1 = 2;
+                cost = 3;
                 break;
             case CardType.T:
                 val1 = 3;
@@ -31,7 +31,7 @@ public class Card_Normal : Card
                 break;
             case CardType.P:
                 val1 = 1;
-                cost = 3;
+                cost = 4;
                 break;
             case CardType.A:
                 val1 = 1;
@@ -53,8 +53,8 @@ public class Card_Normal : Card
         switch (cardType)
         {
             case CardType.V:
-                val1 = 1;
-                cost = 4;
+                val1 = 2;
+                cost = 3;
                 break;
             case CardType.T:
                 val1 = 3;
@@ -62,7 +62,7 @@ public class Card_Normal : Card
                 break;
             case CardType.P:
                 val1 = 1;
-                cost = 3;
+                cost = 4;
                 break;
             case CardType.A:
                 val1 = 1;
@@ -100,23 +100,23 @@ public class Card_Normal : Card
         {
             case Figure.Diagonal:
                 range = 1;
-                spritePath = "x";
+                spritePath = "Card_X";
                 break;
             case Figure.CROSS:
                 range = 1;
-                spritePath = "cross";
+                spritePath = "Card_Cross";
                 break;
             case Figure.HORIZION:
                 range = 1;
-                spritePath = "horizion";//이미지 현재 없음
+                spritePath = "Card_Horizon";//이미지 현재 없음
                 break;
             case Figure.SQUARE:
                 range = 1;
-                spritePath = "square";
+                spritePath = "Card_Square";
                 break;
             case Figure.VERTICAL:
                 range = 1;
-                spritePath = "vertical";//이미지 현재 없음
+                spritePath = "Card_Vertical";//이미지 현재 없음
                 break;
             default:
                 Debug.LogError("Normal카드 FigureError");
@@ -163,7 +163,7 @@ public class Card_Normal : Card
                 break;
         }
 
-          player.MoveTo(player.pos + d * 2);       
+          player.Teleport(player.pos + d * 2);       
 
 
 

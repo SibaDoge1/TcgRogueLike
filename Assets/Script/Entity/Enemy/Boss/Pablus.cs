@@ -66,7 +66,7 @@ public class Pablus : Enemy {
         if (TileUtils.AI_Find(targets))
         {
             PlayerControl.player.GetDamage(atk);
-            while(!PlayerControl.player.MoveTo((new Vector2Int(Random.Range(2,4),Random.Range(1,6)))))
+            while(!PlayerControl.player.Teleport((new Vector2Int(Random.Range(2,4),Random.Range(1,6)))))
             { }
         }
         yield return StartCoroutine(AnimationRoutine(0));

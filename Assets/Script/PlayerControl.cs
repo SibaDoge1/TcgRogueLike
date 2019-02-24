@@ -146,10 +146,7 @@ public class PlayerControl : MonoBehaviour {
                 if (player.currentRoom.IsEnemyAlive())
                 {
                     NaturalDraw();
-                    if(PlayerData.AkashaGage<5)
-                    {
-                        PlayerData.AkashaGage += 1;
-                    }
+                    PlayerData.AkashaGage += 1;              
                 }
                 GameManager.instance.OnEndPlayerTurn();
             }

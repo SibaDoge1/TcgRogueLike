@@ -5,7 +5,14 @@ using UnityEngine;
 public enum BGM
 {
     FLOOR1,
-    Floor1_BOSS,
+    FLOOR2,
+    FLOOR3,
+    FLOOR4,
+    FLOOR5,
+    FLOOR2_BOSS,
+    FLOOR3_BOSS,
+    FLOOR4_BOSS,
+    FLOOR5_BOSS
 }
 public enum CardSoundType
 {

@@ -7,6 +7,8 @@ public struct LevelSetting
 {
     public int battleRoomNum;
     public int eventRoomNum;
+    public bool bossRoom;
+    public bool endRoom;
 }
 public class Config : MonoBehaviour
 {

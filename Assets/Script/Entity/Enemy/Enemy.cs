@@ -56,7 +56,6 @@ public abstract class Enemy : Character {
         {
             OnEndTurn();
         }
-        currentRoom.RoomValue += value;
         base.OnDieCallback ();
 	}
     public override void SetRoom(Room room, Tile _pos)

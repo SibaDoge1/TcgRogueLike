@@ -21,14 +21,21 @@ public class Card_Special : Card
     public override void OnCardReturned()
     {
         base.OnCardReturned();
-        player.GetDamage(1);
+        player.GetDamage(1,player);
     }
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
         if(PlayerControl.instance.hand.isOnHand(this))
         {
-            cost -= 1;
+            if(cost>1)
+            {
+                cost -= 2;
+            }
+            if(cost<1)
+            {
+                cost = 1;
+            }
         }
     }
     public override void UpgradeReset()
@@ -48,13 +55,12 @@ public class Card_Reload : Card_Special
     {
 
     }
-
     public override void CardReturnCallBack(Card data)
     {
     }
     protected override void CardActive()
     {
-        PlayerControl.player.GetDamage(1);
+        PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE,3);
         PlayerControl.instance.ReLoadDeck();
     }
 }
@@ -293,7 +299,7 @@ public class Card_WolfBite : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        player.GetDamage(val3);
+        player.GetDamage(val3, player);
     }
 }
 
@@ -352,7 +358,7 @@ public class Card_BearClaw : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        player.GetDamage(val3);
+        player.GetDamage(val3, player);
     }
 }
 
@@ -430,7 +436,7 @@ public class Card_WindCat : Card_Special
 
             if (UnExplore[rand].IsStandAble(player))
             {
-                player.MoveTo(UnExplore[rand].pos);
+                player.Teleport(UnExplore[rand].pos);
                 return;
             }
             else
@@ -697,7 +703,7 @@ public class Card_Shield : Card_Special
                 d = Vector2Int.left;
                 break;
         }
-        player.MoveTo(player.pos + d * -1);
+        player.Teleport(player.pos + d * -1);
 
     }
 
@@ -839,7 +845,7 @@ public class Card_Rush : Card_Special
                 d = Vector2Int.left;
                 break;
         }
-        player.MoveTo(player.pos + d * 3);
+        player.Teleport(player.pos + d * 3);
     
 }
 
@@ -1087,7 +1093,7 @@ public class Card_Plant : Card_Special
                 break;
         }
 
-        player.MoveTo(player.pos + d * val3);
+        player.Teleport(player.pos + d * val3);
     }
 
     private List<Tile> GetRange()

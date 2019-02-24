@@ -51,10 +51,10 @@ public static class CsvParser
     /// <summary>
     /// 해당타입의 방 데이터를 모두 받아옴
     /// </summary>
-    public static List<string[,]> ReadRoom (int floor, RoomType rt)
+    public static Dictionary<string,string[,]> ReadRoom (int floor, RoomType rt)
     {
         UnityEngine.Object[] Data = Resources.LoadAll("Data/RoomData/Floor" + floor + "/"+rt.ToString());
-        List<string[,]> dataList = new List<string[,]>();
+        Dictionary<string,string[,]> dataList = new Dictionary<string,string[,]>();
         for (int i = 0; i < Data.Length; i++)
         {
             string[] line = ReadString(Data[i]);
@@ -72,7 +72,7 @@ public static class CsvParser
                     roomData[loop2, loop] = split[loop2];
                 }
             }
-            dataList.Add(roomData);
+            dataList.Add(Data[i].name,roomData);
         }
                
         return dataList;
@@ -106,10 +106,10 @@ public static class CsvParser
     /// <summary>
     /// 카드풀 데이터
     /// </summary>
-    public static Dictionary<int, CardPoolData> ReadCardPoolData(string path)
+    public static Dictionary<string, CardPoolData> ReadCardPoolData(string path)
     {
         string[] dataString = ReadString(path);
-        Dictionary<int, CardPoolData> datas = new Dictionary<int, CardPoolData>();
+        Dictionary<string, CardPoolData> datas = new Dictionary<string, CardPoolData>();
         int num = 1;
         string[] split;
 
@@ -121,7 +121,7 @@ public static class CsvParser
             {
                 break;
             }
-            datas.Add(int.Parse(split[0]), new CardPoolData(split));
+            datas.Add(split[0], new CardPoolData(split));
             num++;
         }
         return datas;
@@ -195,4 +195,3 @@ public static class CsvParser
     }
     #endregion
 }
-

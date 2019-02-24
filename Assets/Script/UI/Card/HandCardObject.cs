@@ -124,9 +124,12 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     /// </summary>
     public void ReturnCard()
     {
-        data.OnCardReturned();
-        hand.RemoveCard(this);
-        Destroy(gameObject);
+        if(!(data is Card_Reload))//리로드카드는 반환X
+        {
+            data.OnCardReturned();
+            hand.RemoveCard(this);
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

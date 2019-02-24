@@ -1,5 +1,5 @@
 ﻿번호,이름,코스트,속성,val1,val2,val3,텍스트,이미지명,클래스명
-99,리로드,0,0,0,0,0,덱을 리로드 합니다.,reload,Card_Reload
+99,리로드,0,0,0,0,0,덱을 리로드 합니다.,Card_Reload,Card_Reload
 1,핏빛 손아귀,5,0,2,2,2,공격력 <val1>. <val2>마리 이상의 적을 타격 시 HP <val3> 회복,Card_RedGrasp,Card_RedGrasp
 2,창백한 손아귀,5,0,2,2,5,공격력 <val1>. <val2>마리 이상의 적을 타격 시 AKS <val3> 회복,Card_BlueGrasp,Card_BlueGrasp
 3,시간을 먹는 개구리,5,0,2,0,3,공격력 <val1>. AKS <val3> 회복. 핸드의 R.A를 전부 반환하고 같은 장수 만큼 R.A 뽑는다.,Card_TimeFrog,Card_TimeFrog

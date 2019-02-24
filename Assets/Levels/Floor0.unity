@@ -5325,13 +5325,29 @@ MonoBehaviour:
   HandMax: 5
   floorNum: 1
   LevelSettings:
-  - battleRoomNum: 0
-    eventRoomNum: 0
   - battleRoomNum: 4
-    eventRoomNum: 0
-  RoomTestMode: 1
-  TestRoomType: 1
-  TestRoomName: test1
+    eventRoomNum: 2
+    bossRoom: 0
+    endRoom: 1
+  - battleRoomNum: 5
+    eventRoomNum: 3
+    bossRoom: 1
+    endRoom: 1
+  - battleRoomNum: 6
+    eventRoomNum: 3
+    bossRoom: 1
+    endRoom: 1
+  - battleRoomNum: 7
+    eventRoomNum: 3
+    bossRoom: 1
+    endRoom: 0
+  - battleRoomNum: 0
+    eventRoomNum: 1
+    bossRoom: 1
+    endRoom: 0
+  RoomTestMode: 0
+  TestRoomType: 2
+  TestRoomName: EVENT1
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0
