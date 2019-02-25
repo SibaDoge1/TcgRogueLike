@@ -17,11 +17,14 @@ public class Card_Special : Card
         val3 = cardData.val3;
         info = cardData._info;
         spritePath = cardData.spritePath;
+        cardEffect = cardData.effect;
+        cardSound = cardData.sound;
     }
     public override void OnCardReturned()
     {
         base.OnCardReturned();
         player.GetDamage(1,player);
+        player.OnReturned();
     }
     public override void CardReturnCallBack(Card data)
     {
@@ -71,7 +74,6 @@ public class Card_RedGrasp : Card_Special
 
     public Card_RedGrasp(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -79,7 +81,7 @@ public class Card_RedGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -97,6 +99,7 @@ public class Card_RedGrasp : Card_Special
                     DamageToTarget(enemies[i], val1);
                 }       
         }
+        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
     }
 }
 
@@ -106,7 +109,6 @@ public class Card_BlueGrasp : Card_Special
 {
     public Card_BlueGrasp(CardData cd) :base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -114,7 +116,7 @@ public class Card_BlueGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -132,15 +134,15 @@ public class Card_BlueGrasp : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
+
     }
 }
 
-//기존 패 버리고 같은 장수 다시 드로우
 public class Card_TimeFrog : Card_Special
 {
     public Card_TimeFrog(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -148,7 +150,7 @@ public class Card_TimeFrog : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -164,16 +166,32 @@ public class Card_TimeFrog : Card_Special
             }
         }
         PlayerData.AkashaGage += val3;
-        int hand = PlayerControl.instance.hand.CurrentHandCount;
-        for(int i=0; i<hand;i++)
-        {
-            PlayerControl.instance.hand.ReturnCard();
-        }
-        for (int i = 0; i<hand; i++)
-        {
-            PlayerControl.instance.NaturalDraw();
-        }
+        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
+
+        MoveToRandom();
     }
+
+    private void MoveToRandom()
+    {
+        List<Tile> UnExplore = new List<Tile>(player.currentRoom.GetTileToList());
+
+        while (UnExplore.Count > 1)
+        {
+            int rand = UnityEngine.Random.Range(0, UnExplore.Count);
+
+            if (UnExplore[rand].IsStandAble(player) && !(UnExplore[rand].offTile is OffTile_Door))
+            {                
+                player.Teleport(UnExplore[rand].pos);
+                return;
+            }
+            else
+            {
+                UnExplore.RemoveAt(rand);
+            }
+        }
+        Debug.Log("랜덤이동 실패");
+    }
+
 }
 
 //1턴 피해면역
@@ -181,7 +199,6 @@ public class Card_CrimsonCrow : Card_Special
 {
     public Card_CrimsonCrow(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -189,7 +206,7 @@ public class Card_CrimsonCrow : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CROSS);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -206,6 +223,8 @@ public class Card_CrimsonCrow : Card_Special
         }
         PlayerData.AkashaGage += val3;
         PlayerControl.playerBuff.UpdateBuff(BUFF.IMMUNE,val2);
+        MakeEffect(TileUtils.CrossRange(player.currentTile, 2));
+
     }
 }
 
@@ -214,7 +233,6 @@ public class Card_Bishop : Card_Special
 {
     public Card_Bishop(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -222,7 +240,7 @@ public class Card_Bishop : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.Diagonal);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -237,7 +255,7 @@ public class Card_Bishop : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-
+        MakeEffect(TileUtils.DiagonalRange(player.currentTile, 2));
         PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
         if (PlayerControl.instance.deck.DeckCount<=val2)
         {
@@ -250,7 +268,6 @@ public class Card_WolfBite : Card_Special
 {
     public Card_WolfBite(CardData cd) : base(cd)
     {
-
     }
     private List<Tile> GetRange()
     {
@@ -284,7 +301,7 @@ public class Card_WolfBite : Card_Special
 
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -299,7 +316,10 @@ public class Card_WolfBite : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+       MakeEffect(GetRange());
+
         player.GetDamage(val3, player);
+
     }
 }
 
@@ -307,7 +327,6 @@ public class Card_BearClaw : Card_Special
 {
     public Card_BearClaw(CardData cd) : base(cd)
     {
-
     }
 
     private List<Tile> GetRange()
@@ -343,7 +362,7 @@ public class Card_BearClaw : Card_Special
 
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -358,6 +377,7 @@ public class Card_BearClaw : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(GetRange());
         player.GetDamage(val3, player);
     }
 }
@@ -366,7 +386,6 @@ public class Card_Justice : Card_Special
 {
     public Card_Justice(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -374,7 +393,7 @@ public class Card_Justice : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.EMPTYSQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -390,6 +409,7 @@ public class Card_Justice : Card_Special
             }
         }
         player.GetHeal(val3);
+        MakeEffect(TileUtils.EmptySquareRange(player.currentTile,2));
     }
 }
 
@@ -397,7 +417,6 @@ public class Card_WindCat : Card_Special
 {
     public Card_WindCat(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -405,7 +424,7 @@ public class Card_WindCat : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -422,6 +441,7 @@ public class Card_WindCat : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(targetTiles);
         MoveToRandom();
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE,val3);
     }
@@ -434,7 +454,7 @@ public class Card_WindCat : Card_Special
         {
             int rand = UnityEngine.Random.Range(0, UnExplore.Count);
 
-            if (UnExplore[rand].IsStandAble(player))
+            if (UnExplore[rand].IsStandAble(player) && !(UnExplore[rand].offTile is OffTile_Door))
             {
                 player.Teleport(UnExplore[rand].pos);
                 return;
@@ -480,7 +500,6 @@ public class Card_HalfMask : Card_Special
 {
     public Card_HalfMask(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -488,7 +507,7 @@ public class Card_HalfMask : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -508,7 +527,7 @@ public class Card_HalfMask : Card_Special
         {
             player.GetHeal(val3);
         }
-
+        MakeEffect(targetTiles);
     }
 
     private List<Tile> GetRange()
@@ -544,7 +563,6 @@ public class Card_BlackThunder : Card_Special
 
     public Card_BlackThunder(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -552,7 +570,7 @@ public class Card_BlackThunder : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
         }
     }
 
@@ -568,6 +586,7 @@ public class Card_BlackThunder : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(targetTiles);
 
     }
 
@@ -612,7 +631,6 @@ public class Card_PoisonSnail : Card_Special
 {
     public Card_PoisonSnail(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -620,7 +638,7 @@ public class Card_PoisonSnail : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -635,7 +653,8 @@ public class Card_PoisonSnail : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        
+        MakeEffect(TileUtils.SquareRange(player.currentTile, 2));
+
         player.SetHp(val2);
         PlayerControl.playerBuff.UpdateBuff(BUFF.CARD,val3);
         PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA,val3);
@@ -652,10 +671,10 @@ public class Card_Shield : Card_Special
     {
         if (PlayerControl.instance.SelectedDirCard == this)
         {
-            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 1);
+            List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 2);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
         else
@@ -663,12 +682,7 @@ public class Card_Shield : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
-            }
-            targetTiles = GetRange2();
-            for (int i = 0; i < targetTiles.Count; i++)
-            {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
             }
         }
 
@@ -686,6 +700,7 @@ public class Card_Shield : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(targetTiles);
 
         Vector2Int d = Vector2Int.zero;
         switch (dir)
@@ -709,28 +724,7 @@ public class Card_Shield : Card_Special
 
     private List<Tile> GetRange()
     {
-        List<Tile> targetTiles = new List<Tile>();
-        int x = (int)player.pos.x; int y = (int)player.pos.y;
-
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y)));
-
-        for (int i = targetTiles.Count - 1; i >= 0; i--)
-        {
-            if (targetTiles[i] == null)
-            {
-                targetTiles.RemoveAt(i);
-            }
-        }
-        return targetTiles;
-    }
-    private List<Tile> GetRange2()
-    {
-        List<Tile> targetTiles = new List<Tile>();
-        int x = (int)player.pos.x; int y = (int)player.pos.y;
-
-        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x -1, y)));
-
+        List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 2);
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {
             if (targetTiles[i] == null)
@@ -786,34 +780,19 @@ public class Card_Rush : Card_Special
 
     public override void CardEffectPreview()
     {
-        if(PlayerControl.instance.SelectedDirCard == this)
-        {
+
             List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile,2);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
             }
 
             targetTiles = GetRange4();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
-        }
-        else
-        {
-            List<Tile> targetTiles = GetRange();
-            for (int i = 0; i < targetTiles.Count; i++)
-            {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
-            }
-            targetTiles = GetRange2();
-            for (int i = 0; i < targetTiles.Count; i++)
-            {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
-            }
-        }
-
+        
     }
 
     protected override void CardActive(Direction dir)
@@ -828,6 +807,8 @@ public class Card_Rush : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(targetTiles);
+
 
         Vector2Int d = Vector2Int.zero;
         switch (dir)
@@ -941,7 +922,6 @@ public class Card_Mist : Card_Special
 {
     public Card_Mist(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -949,7 +929,7 @@ public class Card_Mist : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -966,6 +946,8 @@ public class Card_Mist : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.CircleRange(player.currentTile,2));
+
         foreach (Card c in PlayerData.Deck)
         {
             if (c.Type == CardType.A)
@@ -982,7 +964,6 @@ public class Card_WormHole : Card_Special
 {
     public Card_WormHole(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -990,7 +971,7 @@ public class Card_WormHole : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -1007,6 +988,8 @@ public class Card_WormHole : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+
         foreach (Card c in PlayerData.Deck)
         {
             if (c.Type == CardType.P)
@@ -1035,7 +1018,7 @@ public class Card_Plant : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
 
             }
         }
@@ -1044,7 +1027,7 @@ public class Card_Plant : Card_Special
             List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
             }
         }
@@ -1062,6 +1045,8 @@ public class Card_Plant : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+
         foreach (Card c in PlayerData.Deck)
         {
             if (c.Type == CardType.V)
@@ -1122,7 +1107,6 @@ public class Card_Stamp : Card_Special
 {
     public Card_Stamp(CardData cd) : base(cd)
     {
-
     }
 
     public override void CardEffectPreview()
@@ -1130,7 +1114,7 @@ public class Card_Stamp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -1145,6 +1129,8 @@ public class Card_Stamp : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+
         foreach (Card c in PlayerData.Deck)
         {
             if (c.Type == CardType.S)
@@ -1162,15 +1148,14 @@ public class Card_Needle : Card_Special
 {
     public Card_Needle(CardData cd) : base(cd)
     {
-
     }
-    
+
     public override void CardEffectPreview()
     {
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -1185,6 +1170,8 @@ public class Card_Needle : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
+        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+
         foreach (Card c in PlayerData.Deck)
         {
             for (int i = 0; i < val2; i++)

@@ -81,14 +81,18 @@ public class SpiderBoss : Enemy {
         targetList = TileUtils.CircleRange(currentTile, 2);
         for (int i = 0; i < targetList.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, targetList[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, targetList[i]));
         }
         yield return null;
     }
     IEnumerator WideAttack()
     {
         ClearRangeList();
-        if(TileUtils.AI_Find(targetList))
+        for(int i=0; i<targetList.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, targetList[i]);
+        }
+        if (TileUtils.AI_Find(targetList))
         {
             PlayerControl.player.GetDamage(atk);
         }
@@ -101,10 +105,11 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator SpawnElite()
     {
-        SpawnEnemy(Random.Range(4005,4009),currentRoom.GetTile(new Vector2Int(6,4)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(4, 6)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(8, 6)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(6, 8)));
+        int x = pos.x; int y = pos.y;
+        SpawnEnemy(Random.Range(4005,4009),currentRoom.GetTile(new Vector2Int(x+2,y)));
+        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(x-2, y)));
+        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(x, y+2)));
+        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(y, y-2)));
         yield return StartCoroutine(AnimationRoutine(2));
     }
     IEnumerator AtkReady()
@@ -112,7 +117,7 @@ public class SpiderBoss : Enemy {
         List<Arch.Tile> tiles = TileUtils.CrossRange(currentTile, 2);
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
         yield return null;
     }
@@ -122,7 +127,13 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator Attack()
     {
-        if(TileUtils.AI_CrossFind(currentTile,2))
+        List<Tile> tiles = TileUtils.CrossRange(currentTile, 2);
+        for(int i=0; i<tiles.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, tiles[i]);
+        }
+
+        if (TileUtils.AI_Find(tiles))
         {
             PlayerControl.player.GetDamage(atk);
         }
@@ -161,12 +172,13 @@ public class SpiderBoss : Enemy {
     IEnumerator WebReady()
     {
         aimedTile = PlayerControl.player.currentTile;
-        rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
+        rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
         yield return null;
     }
     IEnumerator WebAttack()
     {
-        if(PlayerControl.player.currentTile == aimedTile)
+        ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, aimedTile);
+        if (PlayerControl.player.currentTile == aimedTile)
         {
             PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);
             PlayerControl.player.GetDamage(1);

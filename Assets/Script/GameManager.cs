@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             newRoom.IsVisited = true;
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
-            SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomMove, Camera.main.transform.position);
+            SoundDelegate.instance.PlayEffectSound(MonoSound.RoomMove, Camera.main.transform.position);
 
             if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
             {
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
     public void OnPlayerClearRoom()
     {
         PlayerControl.instance.OnRoomClear();
-        SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomClear, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(MonoSound.RoomClear, Camera.main.transform.position);
         PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
         {
@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSoundType.GameOver, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(MonoSound.GameOver, Camera.main.transform.position);
         UIManager.instance.GameOverUIOn();
         IsInputOk = false;
     }
@@ -210,12 +210,12 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void BuildDeck()
     {
-        for(int i=0; i<10;i++) //노말카드 랜덤 9장 생성
+        for(int i=0; i<9;i++) //노말카드 랜덤 9장 생성
           PlayerData.Deck.Add(Card.GetCardByNum(0));
 
-        for(int i=0; i<3;i++)//특수카드 3장 생성
+        for(int i=0; i<6;i++)//특수카드 3장 생성
         {
-            PlayerData.Deck.Add(Card.GetCardByNum(Random.Range(1,20)));
+            PlayerData.Deck.Add(Card.GetCardByNum(19));
         }
         PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
     }

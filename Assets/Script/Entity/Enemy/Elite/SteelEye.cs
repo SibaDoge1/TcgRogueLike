@@ -28,7 +28,7 @@ public class SteelEye : Enemy {
 
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
 
         enemyUI.ActionImageOn();
@@ -41,6 +41,10 @@ public class SteelEye : Enemy {
     {
         List<Arch.Tile> tiles = GetTileList(dir);
 
+        for(int i=0; i<tiles.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);
+        }
         for(int i=0; i<3; i++)
         {
            if(!MoveTo(tiles[i].pos))

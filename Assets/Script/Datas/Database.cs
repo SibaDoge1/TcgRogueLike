@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 /// <summary>
 /// 카드 데이터,몬스터 데이터,정보 데이터,카드풀 데이터
 /// </summary>
@@ -61,6 +60,8 @@ public class CardData
     public readonly string _info;
     public readonly string spritePath;
     public readonly string className;
+    public readonly CardEffect effect;
+    public readonly EffectSound sound;
 
     public CardData(string[] data)
     {
@@ -75,8 +76,10 @@ public class CardData
 
         _info = data[7];
         spritePath = data[8];
+        className = data[9];
+        effect = (CardEffect)System.Enum.Parse(typeof(CardEffect), data[10]);
+        sound = (EffectSound)System.Enum.Parse(typeof(EffectSound), data[11].Replace("\r", ""));
 
-        className = data[9].Replace("\r","");
     }
 }
 public class CardPoolData

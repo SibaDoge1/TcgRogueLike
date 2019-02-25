@@ -35,11 +35,6 @@ public class SteelHand : Enemy {
 
     IEnumerator RangeOnAction()
     {
-        List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
-        }
         enemyUI.ActionImageOn();
         yield return null;
     }
@@ -48,12 +43,15 @@ public class SteelHand : Enemy {
     {
         List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
 
+        for(int i=0; i<tiles.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.ELECTRICG,tiles[i]);
+        }
         if (TileUtils.AI_Find(tiles))
         {
             PlayerControl.player.GetDamage(atk);
         }
 
-        ClearRangeList();
         enemyUI.ActionImageOff();
 
         yield return StartCoroutine(AnimationRoutine(0));

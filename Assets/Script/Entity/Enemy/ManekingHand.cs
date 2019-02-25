@@ -29,19 +29,27 @@ public class ManekingHand : Enemy {
 
          IEnumerator MoveToward()
         {
-            MoveTo(PathFinding.GenerateCrossPath(this, PlayerControl.player.currentTile)[0].pos);
+        enemyUI.ActionImageOff();
+        MoveTo(PathFinding.GenerateCrossPath(this, PlayerControl.player.currentTile)[0].pos);
             yield return null;
         }
     
 
           IEnumerator DelayAction()
         {
+            enemyUI.ActionImageOn();
             yield return null;
         }
     
  
           IEnumerator Attack()
         {
+             enemyUI.ActionImageOff();
+        List<Arch.Tile> tiles = TileUtils.CircleRange(currentTile, 1);
+        for(int i=0; i<tiles.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);
+        }
             PlayerControl.player.GetDamage(atk);
             yield return StartCoroutine(AnimationRoutine(0));
         }

@@ -76,8 +76,8 @@ public abstract class Card
     protected string spritePath;
     public string SpritePath { get { return spritePath; } }
 
-    protected CardEffectType cardEffect = CardEffectType.Hit;
-    protected CardSoundType cardSound = CardSoundType.Hit;
+    protected CardEffect cardEffect = CardEffect.HIT;
+    protected EffectSound cardSound = EffectSound.Hit;
 
     public float effectTime = 0.1f;
     #endregion
@@ -154,8 +154,21 @@ public abstract class Card
 
     protected virtual void MakeEffect(Vector3 target)
     {
-        EffectDelegate.instance.MadeEffect(cardEffect, target);
+        ArchLoader.instance.MadeEffect(cardEffect, target);
     }
+    protected virtual void MakeEffect(Arch.Tile target)
+    {
+        ArchLoader.instance.MadeEffect(cardEffect, target);
+    }
+
+    protected virtual void MakeEffect(List<Arch.Tile> tiles)
+    {
+        for(int i=0; i<tiles.Count;i++)
+        {
+            ArchLoader.instance.MadeEffect(cardEffect, tiles[i]);
+        }
+    }
+
     protected virtual void MakeSound(Vector3 target)
     {
         SoundDelegate.instance.PlayCardSound(cardSound, target);
@@ -173,7 +186,7 @@ public abstract class Card
 	public virtual void CardEffectPreview(){		
 	}
 	public virtual void CancelPreview(){
-        EffectDelegate.instance.DestroyEffect(ranges);
+        ArchLoader.instance.DestroyEffect(ranges);
         ranges.Clear();
     }
     
@@ -228,8 +241,8 @@ public abstract class Card
     {
         if (target != null)
         {
-            MakeEffect(target.transform.position);
-            MakeSound(target.transform.position);
+            //MakeEffect(target.transform.position);
+            //MakeSound(target.transform.position);
             target.GetDamage(dam * player.Atk, player);
             PlayerData.AttackedTarget();
             player.OnAttack();

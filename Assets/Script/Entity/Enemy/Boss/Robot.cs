@@ -118,7 +118,7 @@ public class Robot : Enemy
         List<Arch.Tile> tiles = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
 
         yield return null;
@@ -129,7 +129,7 @@ public class Robot : Enemy
         List<Arch.Tile> targets = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < targets.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, targets[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.ENEMYEXPLOSIONC, targets[i]);
         }
         if (TileUtils.AI_Find(targets))
         {

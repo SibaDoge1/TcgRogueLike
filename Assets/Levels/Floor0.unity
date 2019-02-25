@@ -4474,20 +4474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b1b9617fb54f654193ced95e8dbef05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectPrefabs:
-  - {fileID: 1578285978204278, guid: 8542ebca1323d964ea8ba4b062a5ee38, type: 2}
-  - {fileID: 1022765111111238, guid: 89b1efd3e79989a40be5361022c493b6, type: 2}
-  - {fileID: 1851665452307390, guid: b5428dafabb04fd4da43c5f7d56d94d5, type: 2}
-  - {fileID: 1849777026106732, guid: 2bfe1eeb09a67844db5e96e62afecbca, type: 2}
-  rangeLayer:
-  - {fileID: 1901324666352306, guid: 5ca6b911662ffdc4492076ef2455d80e, type: 2}
-  - {fileID: 1479374802016482, guid: c04587e3cac0005499826a862ebd1790, type: 2}
-  - {fileID: 1389592520065522, guid: cb65244ca3983b74f92ba8144fd2dd3a, type: 2}
-  UIEffect:
-  - {fileID: 1663874021600768, guid: 6917a15db3e461d48849ebf01c0d65c5, type: 2}
-  - {fileID: 1317718318141826, guid: 193d749ee7db0ed42b71399e7192b155, type: 2}
-  textEffectPrefab: {fileID: 1442815581718012, guid: 2f7b052117bb2f343b0038f31f02cbfc,
-    type: 2}
 --- !u!4 &928653822
 Transform:
   m_ObjectHideFlags: 0
@@ -5345,9 +5331,13 @@ MonoBehaviour:
     eventRoomNum: 1
     bossRoom: 1
     endRoom: 0
+  - battleRoomNum: 1
+    eventRoomNum: 1
+    bossRoom: 0
+    endRoom: 0
   RoomTestMode: 0
-  TestRoomType: 2
-  TestRoomName: EVENT1
+  TestRoomType: 1
+  TestRoomName: test1
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0
@@ -5804,7 +5794,7 @@ Camera:
   field of view: 60
   orthographic: 1
   orthographic size: 4
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -9162,16 +9152,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmAudioClips:
-  - {fileID: 8300000, guid: d8ef07372524fec4f92835fdce829a7f, type: 3}
-  - {fileID: 8300000, guid: d3d5ace4e3522c148b01613881d1495e, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
   cardAudioObject:
-  - {fileID: 1617321800208154, guid: 47e065d094dac4445af5fca5d4d99707, type: 2}
-  - {fileID: 1680948848311224, guid: e42314b0b6de92a49af021626493e3d3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
   effectAudioObject:
-  - {fileID: 1701927928802890, guid: c9de397933cd3374581b0645d8d4a5f3, type: 2}
-  - {fileID: 1808955580947942, guid: 9d8e743008d9ddb418509dd3ceda1b74, type: 2}
-  - {fileID: 1001218772850502, guid: 82dbf4507cf93f14695c8837caff1927, type: 2}
-  - {fileID: 1760920913034536, guid: 086672f8361ea1a4b97e5b2428bb03ff, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1865638369
 GameObject:
   m_ObjectHideFlags: 0

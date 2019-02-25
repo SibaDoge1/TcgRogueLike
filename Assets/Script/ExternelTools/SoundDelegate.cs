@@ -4,31 +4,54 @@ using UnityEngine;
 
 public enum BGM
 {
-    FLOOR1,
-    FLOOR2,
-    FLOOR3,
-    FLOOR4,
-    FLOOR5,
-    FLOOR2_BOSS,
-    FLOOR3_BOSS,
-    FLOOR4_BOSS,
-    FLOOR5_BOSS
+    FIELD1,
+    FIELD2,
+    FIELD3,
+    FIELD4,
+    BOSSFIRE,//화산,연기
+    BOSSROBOT,//기계
+    BOSSSPIDER,//거미신부
+    FIELDTITLE,
+    NORMALENDING,
+    TRUEENDING
 }
-public enum CardSoundType
+public enum MonoSound//1개만 재생되는것들
 {
-    Hit,
-    CriticalHit
+    BUTTONTITLE,
+    BUTTONNORMAL,
+    BUTTONYES,
+    BUTTONNO,
+    ROOMCLEAR,
 }
-public enum EffectSoundType
+public enum EffectSound//재생할때마다 prefab 생성되는것들
 {
-    GetHit,
-    RoomClear,
-    RoomMove,
-    GameOver,
+    SFX1,
+    SFX2,
+    SFX3,
+    SFX4,
+    SFX5,
+    SFX6,
+    SFX7,
+    SFX8,
+    SFX9,
+    SFX10,
+    MOVE,
+    AKSLOW,
+    CONNECT,
+    RELOADCARD,
+    GAMEOVER,
+    ERROR,
+    HEAL,
+    DAMAGE,
+    ATTACK
 }
+/// <summary>
+/// 이펙트 사운드는 ArchLoader쪽으로 이동
+/// </summary>
 public class SoundDelegate : MonoBehaviour {
     #region variables
     AudioSource bgm;
+    AudioSource monosound;
 
     private float bgmSound = 1f;
     public float BGMSound
@@ -45,13 +68,15 @@ public class SoundDelegate : MonoBehaviour {
     public float EffectSound
     {
         get { return effectSound; }
-        set { effectSound = value; }
+        set
+        {
+            effectSound = value;
+            monosound.volume = effectSound;
+            ArchLoader.instance.GetSoundObject().volume = effectSound;
+        }
     }
 
     public static SoundDelegate instance;
-    public AudioClip[] bgmAudioClips;
-    public GameObject[] cardAudioObject;
-    public GameObject[] effectAudioObject;
     #endregion
 
     void Awake()
@@ -69,19 +94,22 @@ public class SoundDelegate : MonoBehaviour {
         }
 
         bgm = transform.Find("BGM").GetComponent<AudioSource>();
+        monosound = transform.Find("MONO").GetComponent<AudioSource>();
     }
 
     public void PlayBGM(BGM b)
     {
-        bgm.clip = bgmAudioClips[(int)b];
+        bgm.clip = ArchLoader.instance.GetBGM(b);        
         bgm.Play();
     }
-    public GameObject PlayCardSound(CardSoundType cst,Vector3 position)
+    public void PlayMono(MonoSound mono)
     {
-        return Instantiate(cardAudioObject[(int)cst],position,Quaternion.identity);
+        monosound.clip = ArchLoader.instance.GetMono(mono);
+        monosound.Play();
     }
-    public GameObject PlayEffectSound(EffectSoundType ef, Vector3 position)
+    public void PlayEffectSound(EffectSound eType, Vector3 position)
     {
-        return Instantiate(effectAudioObject[(int)ef], position, Quaternion.identity);
+        ArchLoader.instance.GetSoundObject().clip = ArchLoader.instance.GetSoundEffect(eType);
+        Instantiate(ArchLoader.instance.GetSoundObject(), position, Quaternion.identity);
     }
 }

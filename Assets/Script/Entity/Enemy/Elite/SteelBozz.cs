@@ -52,7 +52,7 @@ public class SteelBozz : Enemy {
         List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
         for (int i = 0; i < tiles.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, tiles[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH, tiles[i]);
         }
 
         if (TileUtils.AI_Find(tiles))
@@ -70,7 +70,7 @@ public class SteelBozz : Enemy {
         List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
         for (int i = 0; i < tiles.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, tiles[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.EXPLOSIONB, tiles[i]);
         }
 
         if (TileUtils.AI_Find(tiles))

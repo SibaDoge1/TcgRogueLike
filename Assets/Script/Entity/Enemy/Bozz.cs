@@ -34,18 +34,20 @@ public class Bozz : Enemy {
           IEnumerator AttackThenRangeOffAction()
         {
             List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-            
-        for(int i=0; i<tiles.Count;i++)
-        {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, tiles[i]);
-        }
+
+        enemyUI.ActionImageOff();
+
+
+        for (int i=0; i<tiles.Count;i++)
+            {
+                ArchLoader.instance.MadeEffect(EnemyEffect.POW, tiles[i]);
+            }
 
             if (TileUtils.AI_Find(tiles))
             {
                 PlayerControl.player.GetDamage(atk);
             }
 
-            enemyUI.ActionImageOff();
 
              yield return StartCoroutine(AnimationRoutine(0));
         }

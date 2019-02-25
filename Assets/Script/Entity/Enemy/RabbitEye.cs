@@ -35,7 +35,7 @@ public class RabbitEye : Enemy {
         {
             enemyUI.ActionImageOn();
             aimedTile = PlayerControl.player.currentTile;
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
             yield return null;
         }
   
@@ -43,14 +43,14 @@ public class RabbitEye : Enemy {
 
           IEnumerator AttackThenRangeOffAction()
         {
-
+            ArchLoader.instance.MadeEffect(EnemyEffect.FORCE, aimedTile);
         if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
             {
             PlayerControl.player.GetDamage(atk);
             }
-        enemyUI.ActionImageOff();
-        ClearRangeList();
-        attackCooltime = 2;
+                enemyUI.ActionImageOff();
+                ClearRangeList();
+                attackCooltime = 2;
 
             yield return StartCoroutine(AnimationRoutine(0));
         }
