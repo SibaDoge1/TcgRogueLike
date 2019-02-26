@@ -17,8 +17,6 @@ public class MainMenu : MonoBehaviour
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
-        //Screen.SetResolution(1920,1080, true);
-        //Screen.SetResolution(Screen.width, (Screen.width / 2) * 3, true);
         Screen.orientation = ScreenOrientation.Landscape;
         #endregion
         loadingPanel = GameObject.Find("Canvas").transform.Find("LoadingPanel").GetComponent<LoadingManager>();
