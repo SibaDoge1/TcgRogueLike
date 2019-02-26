@@ -56,7 +56,6 @@ public static class Database
     {
         for (int i = 1; i < achiveDatas.Count; i++)
         {
-            Debug.Log(achiveDatas[i].num + achiveDatas[i].info + achiveDatas[i].reward);
             if(int.Parse(achiveDatas[i].reward) == num)
             {
                 return achiveDatas[i];

@@ -31,14 +31,13 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         //Changes: 안드로이드 설정 메인메뉴씬으로 옮김
-
         if (instance == null)
         {
             instance = this;
         }
-        else
+        else if (instance != this)
         {
-            UnityEngine.Debug.LogError("SingleTone Error: GameManager");
+            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
             Destroy(this);
         }
     }

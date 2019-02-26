@@ -24,7 +24,8 @@
 
 public static class GPGSIds
 {
-        public const string leaderboard_archaeolog = "CgkIiJvs0usJEAIQAw"; // <GPGSID>
+        public const string leaderboard_achivementscore = "CgkIior1vPwMEAIQAg"; // <GPGSID>
+        public const string achievement_gamestart = "CgkIior1vPwMEAIQAQ"; // <GPGSID>
 
 }
 

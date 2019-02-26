@@ -41,7 +41,7 @@ public class DiaryDetail : MonoBehaviour {
         }
         categoryObject = transform.Find(objectPath);
 
-        if (SaveData.diaryUnlockData[diaryData.num][0] == false)
+        if (SaveData.GetDiaryUnlockData(diaryData.num)[0] == false)
         {
             Debug.Log(diaryData.num);
             noData.transform.Find("Text").GetComponent<Text>().text = Database.GetAchiveDataByDiary(diaryData.num).info;

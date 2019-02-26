@@ -6,8 +6,8 @@ using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System;
 
+//참고한 자료 : https://minhyeokism.tistory.com/72?category=700407, https://huiyoi.tistory.com/95
 public static class GooglePlayManager
-
 {
 
     //게임서비스 플러그인 초기화시에 EnableSavedGames()를 넣어서 저장된 게임 사용할 수 있게 합니다.
@@ -16,30 +16,87 @@ public static class GooglePlayManager
 
     //하도록 설정하셔야 합니다.
 
+
     public static void Init()
 
     {
-
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().EnableSavedGames().Build();
-
+#if UNITY_ANDROID
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+        // enables saving game progress.
+        .EnableSavedGames()
+        // registers a callback to handle game invitations received while the game is not running.
+        //.WithInvitationDelegate(null)
+        // registers a callback for turn based match notifications received while the
+        // game is not running.
+        //.WithMatchDelegate(null)
+        // requests the email address of the player be available.
+        // Will bring up a prompt for consent.
+        .RequestEmail()
+        // requests a server auth code be generated so it can be passed to an
+        //  associated back end server application and exchanged for an OAuth token.
+        .RequestServerAuthCode(false)
+        // requests an ID token be generated.  This OAuth token can be used to
+        //  identify the player to other services such as Firebase.
+        .RequestIdToken()
+        .Build();
 
         PlayGamesPlatform.InitializeInstance(config);
-
-
-        //
-
-        PlayGamesPlatform.DebugLogEnabled = false;
-
-
-        //Activate the Google Play gaems platform
-
-
+        // recommended for debugging:
+        PlayGamesPlatform.DebugLogEnabled = true;
+        // Activate the Google Play Games platform
         PlayGamesPlatform.Activate();
+        Debug.Log("init!");
+#elif UNITY_IOS
+        GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true);
+#endif
 
     }
 
 
     //인증여부 확인
+
+    public static void LogIn()
+    {
+#if UNITY_ANDROID
+        Debug.Log("login");
+        Social.localUser.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+                Debug.Log("login success");
+                // to do ...
+                // 구글 플레이 게임 서비스 로그인 성공 처리
+            }
+            else
+            {
+                Debug.Log("login fail");
+                // to do ...
+                // 구글 플레이 게임 서비스 로그인 실패 처리
+            }
+        });
+
+#elif UNITY_IOS
+        Social.localUser.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+                // to do ...
+                // 애플 게임 센터 로그인 성공 처리
+            }
+            else
+            {
+                // to do ...
+                // 애플 게임 센터 로그인 실패 처리
+            }
+        });
+#endif
+    }
+
+    public static void LogOut()
+
+    {
+        PlayGamesPlatform.Instance.SignOut();
+    }
 
     public static bool CheckLogin()
 
@@ -49,7 +106,134 @@ public static class GooglePlayManager
 
     }
 
+    public static void UnlockAchievement(int score)
+    {
+        if (score >= 100)
+        {
+#if UNITY_ANDROID
+            //Social.ReportProgress(GPGSIds.achievement_gamestart, 100f, null);
+#elif UNITY_IOS
+            Social.ReportProgress("Score_100", 100f, null);
+#endif
+        }
+    }
+    public static void ShowAchievementUI()
+    {
+        // Sign In 이 되어있지 않은 상태라면
+        // Sign In 후 업적 UI 표시 요청할 것
+        if (CheckLogin() == false)
+        {
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("login success");
+                    Social.ShowAchievementsUI();
+                    return;
+                }
+                else
+                {
+                    Debug.Log("login fail");
+                    return;
+                }
+            });
+        }
+
+        Social.ShowAchievementsUI();
+    }
+
+    public static void ReportScore(int score)
+    {
+#if UNITY_ANDROID
+        /*
+        Social.ReportScore(score, GPGSIds.leaderboard_achivementscore, (bool success) =>
+        {
+            if (success)
+            {
+                // Report 성공
+                // 그에 따른 처리
+            }
+            else
+            {
+                // Report 실패
+                // 그에 따른 처리
+            }
+        });*/
+#elif UNITY_IOS
+ 
+        Social.ReportScore(score, "Leaderboard_ID", (bool success) =>
+            {
+                if (success)
+                {
+                    // Report 성공
+                    // 그에 따른 처리
+                }
+                else
+                {
+                    // Report 실패
+                    // 그에 따른 처리
+                }
+            });
+        
+#endif
+    }
+
+    public static void ShowLeaderboardUI()
+    {
+        // Sign In 이 되어있지 않은 상태라면
+        // Sign In 후 리더보드 UI 표시 요청할 것
+        if (CheckLogin() == false)
+        {
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("login success");
+                    Social.ShowLeaderboardUI();
+                    return;
+                }
+                else
+                {
+                    Debug.Log("login fail");
+                    return;
+                }
+            });
+        }
+
+#if UNITY_ANDROID
+        Social.ShowLeaderboardUI();
+#elif UNITY_IOS
+        GameCenterPlatform.ShowLeaderboardUI("Leaderboard_ID", UnityEngine.SocialPlatforms.TimeScope.AllTime);
+#endif
+    }
+
     //--------------------------------------------------------------------
+    public static void ShowSelectUI()
+    {
+        uint maxNumToDisplay = 5;
+        bool allowCreateNew = false;
+        bool allowDelete = true;
+
+        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+        savedGameClient.ShowSelectSavedGameUI("Select saved game",
+            maxNumToDisplay,
+            allowCreateNew,
+            allowDelete,
+            OnSavedGameSelected);
+    }
+
+
+    static void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
+    {
+        if (status == SelectUIStatus.SavedGameSelected)
+        {
+            // handle selected game save
+        }
+        else
+        {
+            // handle cancel or error
+        }
+    }
 
     //게임 저장은 다음과 같이 합니다.
 
@@ -60,17 +244,15 @@ public static class GooglePlayManager
         if (!CheckLogin()) //로그인되지 않았으면
 
         {
-
+            LogIn();
             //로그인루틴을 진행하던지 합니다.
-
-            return;
 
         }
 
 
         //파일이름에 적당히 사용하실 파일이름을 지정해줍니다.
 
-        OpenSavedGame("사용할파일이름", true);
+        OpenSavedGame("SaveData", true);
 
     }
 
@@ -97,102 +279,58 @@ public static class GooglePlayManager
     //savedGameClient.OpenWithAutomaticConflictResolution호출시 아래 함수를 콜백으로 지정했습니다. 준비된경우 자동으로 호출될겁니다.
 
     static void OnSavedGameOpenedToSave(SavedGameRequestStatus status, ISavedGameMetadata game)
-
     {
-
         if (status == SavedGameRequestStatus.Success)
-
         {
-
             // handle reading or writing of saved game.
-
-
             //파일이 준비되었습니다. 실제 게임 저장을 수행합니다.
-
             //저장할데이터바이트배열에 저장하실 데이터의 바이트 배열을 지정합니다.
-
+            SaveGame(game, SaveData.DataToByte(), DateTime.Now.TimeOfDay);
             //SaveGame(game, "저장할데이터바이트배열", DateTime.Now.TimeOfDay);
-
         }
-
         else
-
         {
-
+            Debug.LogWarning("저장 중 파일열기에 실패 했습니다: " + status);
             //파일열기에 실패 했습니다. 오류메시지를 출력하든지 합니다.
-
         }
-
     }
-
+    
 
     static void SaveGame(ISavedGameMetadata game, byte[] savedData, TimeSpan totalPlaytime)
-
     {
-
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-
-
         SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
-
         builder = builder
-
             .WithUpdatedPlayedTime(totalPlaytime)
-
             .WithUpdatedDescription("Saved game at " + DateTime.Now);
-
-
         /*
-
         if (savedImage != null)
-
         {
-
             // This assumes that savedImage is an instance of Texture2D
-
             // and that you have already called a function equivalent to
-
             // getScreenshot() to set savedImage
-
             // NOTE: see sample definition of getScreenshot() method below
 
             byte[] pngData = savedImage.EncodeToPNG();
-
             builder = builder.WithUpdatedPngCoverImage(pngData);
-
         }*/
-
-
         SavedGameMetadataUpdate updatedMetadata = builder.Build();
-
         savedGameClient.CommitUpdate(game, updatedMetadata, savedData, OnSavedGameWritten);
-
     }
 
 
     static void OnSavedGameWritten(SavedGameRequestStatus status, ISavedGameMetadata game)
-
     {
-
-
-
-
         if (status == SavedGameRequestStatus.Success)
-
         {
-
+            Debug.LogWarning("데이터 저장이 완료되었습니다.");
             //데이터 저장이 완료되었습니다.
-
         }
-
         else
-
         {
-
+            Debug.LogWarning("데이터 저장에 실패 했습니다: " + status);
             //데이터 저장에 실패 했습니다.
-
         }
-
     }
 
 
@@ -201,91 +339,78 @@ public static class GooglePlayManager
     //클라우드로 부터 파일읽기
 
     public static void LoadFromCloud()
-
     {
-
         if (!CheckLogin())
-
         {
-
+            LogIn();
             //로그인되지 않았으니 로그인 루틴을 진행하던지 합니다.
-
-            return;
-
         }
-
-
         //내가 사용할 파일이름을 지정해줍니다. 그냥 컴퓨터상의 파일과 똑같다 생각하시면됩니다.
-
-        OpenSavedGame("사용할파일이름", false);
-
+        OpenSavedGame("SaveData", false);
     }
 
 
 
     static void OnSavedGameOpenedToRead(SavedGameRequestStatus status, ISavedGameMetadata game)
-
     {
-
         if (status == SavedGameRequestStatus.Success)
-
         {
-
             // handle reading or writing of saved game.
-
             LoadGameData(game);
-
         }
-
         else
-
         {
-
+            Debug.LogWarning("로드 중 파일열기에 실패 했습니다: " + status);
+            SaveData.FirstSetUp();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
-
         }
-
     }
-
-
+    
     //데이터 읽기를 시도합니다.
-
     static void LoadGameData(ISavedGameMetadata game)
-
     {
-
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
-
         savedGameClient.ReadBinaryData(game, OnSavedGameDataRead);
-
     }
 
 
     static void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data)
-
     {
-
         if (status == SavedGameRequestStatus.Success)
-
         {
-
             // handle processing the byte array data
-
-
             //데이터 읽기에 성공했습니다.
-
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
-
+            SaveData.ByteToData(data);
         }
-
         else
-
         {
-
+            Debug.LogWarning("로드 중 데이터 읽기에 실패 했습니다: " + status);
+            SaveData.FirstSetUp();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
-
         }
+    }
 
+    //--------------세이브 삭제 ------------------
+    public static void DeleteGameData(string filename)
+    {
+        // Open the file to get the metadata.
+        ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+        savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
+            ConflictResolutionStrategy.UseLongestPlaytime, DeleteSavedGame);
+    }
+
+    static void DeleteSavedGame(SavedGameRequestStatus status, ISavedGameMetadata game)
+    {
+        if (status == SavedGameRequestStatus.Success)
+        {
+            ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
+            savedGameClient.Delete(game);
+        }
+        else
+        {
+            // handle error
+        }
     }
 
 }

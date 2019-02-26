@@ -136,10 +136,10 @@ public class Diary : MonoBehaviour {
     public void SetUnlcokRate()
     {
         int trueCount = 0;
-        for (int idx = 1; idx < SaveData.diaryUnlockData.Count; idx++)
+        foreach (KeyValuePair<int, DiaryData> pair in Database.diaryDatas)
         {
-            if (SaveData.diaryUnlockData[idx][0] == true) trueCount++;
+            if (SaveData.GetDiaryUnlockData(pair.Key)[0]) trueCount++;
         }
-        unlockRate.text = (float)trueCount*100 / (float)(SaveData.diaryUnlockData.Count - 1) + "%";
+        unlockRate.text = (float)trueCount*100 / (float)(SaveData.DiaryDataCount - 1) + "%";
     }
 }

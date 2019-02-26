@@ -17,9 +17,9 @@ public class ArchLoader : MonoBehaviour {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else
+        else if (instance != this)
         {
-            UnityEngine.Debug.LogError("SingleTone Error : ArchLoader");
+            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
             Destroy(this);
         }
     }

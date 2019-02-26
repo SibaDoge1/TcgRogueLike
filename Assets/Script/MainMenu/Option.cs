@@ -32,9 +32,9 @@ public class Option : MonoBehaviour {
 
     public void SetSliderValues()
     {
-        bgmSlider.value = SaveData.bgmValue;
-        fxSlider.value = SaveData.fxValue;
-        UISlider.value = SaveData.UIValue;
+        bgmSlider.value = SaveData.GetBgmValue();
+        fxSlider.value = SaveData.GetFxValue();
+        UISlider.value = SaveData.GetUIValue();
     }
 
     public void OnBgmSliderChanged(Slider sld)

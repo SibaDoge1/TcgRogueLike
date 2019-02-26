@@ -57,18 +57,16 @@ public class SoundDelegate : MonoBehaviour {
 
     void Awake()
     {
-        //Changes: destroy 부분 추가
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        else
+        else if (instance != this)
         {
-            UnityEngine.Debug.LogError("SingleTone Error : SoundDelegate");
+            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
             Destroy(this);
         }
-
         bgm = transform.Find("BGM").GetComponent<AudioSource>();
     }
 
