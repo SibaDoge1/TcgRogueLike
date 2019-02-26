@@ -58,6 +58,8 @@ public class Pablus : Enemy {
         ClearRangeList();
         List<Arch.Tile> targets = GetBlowAwayRange();
 
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
+
         for (int i = 0; i < move.Count; i++)
         {
             ArchLoader.instance.MadeEffect(CardEffect.FIREBALLA, move[i]);

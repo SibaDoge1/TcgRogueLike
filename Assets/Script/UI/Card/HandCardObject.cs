@@ -35,8 +35,12 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         UIManager.instance.CardInfoPanel_On(data);
         data.CardEffectPreview();
 
-
-        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected || !IsAvailable())
+        if (!IsAvailable())
+        {
+            SoundDelegate.instance.PlayEffectSound(EffectSound.AKSLOW, PlayerControl.player.transform.position);
+            return;
+        }
+        if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
         {
             return;
         }

@@ -77,7 +77,7 @@ public class Card_Normal : Card
     private void GenerateCardData()
     {
         index = 0;
-
+        cardSound = EffectSound.ATTACK;
         switch (cardType) //Info 설정
         {
             case CardType.A:

@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             newRoom.IsVisited = true;
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
-            SoundDelegate.instance.PlayEffectSound(MonoSound.RoomMove, Camera.main.transform.position);
+            SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
             if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
             {
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
     public void OnPlayerClearRoom()
     {
         PlayerControl.instance.OnRoomClear();
-        SoundDelegate.instance.PlayEffectSound(MonoSound.RoomClear, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(EffectSound.ROOMCLEAR,player.transform.position);
         PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
         {
@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SoundDelegate.instance.PlayEffectSound(MonoSound.GameOver, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(EffectSound.GAMEOVER, Camera.main.transform.position);
         UIManager.instance.GameOverUIOn();
         IsInputOk = false;
     }
@@ -270,7 +270,19 @@ public class GameManager : MonoBehaviour
         switch (floor)
         {
             case 1:
-                SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
+                SoundDelegate.instance.PlayBGM(BGM.FIELD1);
+                break;
+            case 2:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD2);
+                break;
+            case 3:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD3);
+                break;
+            case 4:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD4);
+                break;
+            case 5:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSSPIDER);
                 break;
         }
     }
@@ -280,12 +292,16 @@ public class GameManager : MonoBehaviour
         switch(floor)
         {
             case 2:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSFIRE);
                 break;
             case 3:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSFIRE);
                 break;
             case 4:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSROBOT);
                 break;
             case 5:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSSPIDER);
                 break;
         }
     }

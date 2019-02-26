@@ -71,6 +71,7 @@ public class SteelChicken : Enemy {
         {
             ArchLoader.instance.MadeEffect(EnemyEffect.FORCE, tiles[i]);
         }
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX1, transform.position);
         PlayerControl.player.GetDamage(atk);
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE);
         yield return StartCoroutine(AnimationRoutine(0));

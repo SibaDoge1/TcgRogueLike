@@ -8,6 +8,7 @@ public class OffTile_Shop : OffTile
     {
         if(ot is Player)
         {
+            SoundDelegate.instance.PlayEffectSound(EffectSound.CONNECT, transform.position);
             UIManager.instance.DeckEditUIOn();
             ot.currentRoom.OpenDoors();
             DestroyThis();

@@ -77,7 +77,7 @@ public abstract class Card
     public string SpritePath { get { return spritePath; } }
 
     protected CardEffect cardEffect = CardEffect.HIT;
-    protected EffectSound cardSound = EffectSound.Hit;
+    protected EffectSound cardSound = EffectSound.SFX1;
 
     public float effectTime = 0.1f;
     #endregion
@@ -128,11 +128,13 @@ public abstract class Card
         if (!isDirectionCard)
         {
             ConsumeAkasha();
+            MakeSound(player.transform.position);
         }
     }
     public virtual void OnCardPlayed(Direction d)
     {
         ConsumeAkasha();
+        MakeSound(player.transform.position);
         CardActive(d);
     }
     /// <summary>
@@ -171,7 +173,7 @@ public abstract class Card
 
     protected virtual void MakeSound(Vector3 target)
     {
-        SoundDelegate.instance.PlayCardSound(cardSound, target);
+        SoundDelegate.instance.PlayEffectSound(cardSound, target);
     }
 
     protected virtual void ConsumeAkasha()

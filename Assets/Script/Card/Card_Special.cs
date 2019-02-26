@@ -56,7 +56,6 @@ public class Card_Reload : Card_Special
 {
     public Card_Reload(CardData cd) : base(cd)
     {
-
     }
     public override void CardReturnCallBack(Card data)
     {

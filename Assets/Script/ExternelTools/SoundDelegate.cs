@@ -20,8 +20,7 @@ public enum MonoSound//1개만 재생되는것들
     BUTTONTITLE,
     BUTTONNORMAL,
     BUTTONYES,
-    BUTTONNO,
-    ROOMCLEAR,
+    BUTTONNO
 }
 public enum EffectSound//재생할때마다 prefab 생성되는것들
 {
@@ -34,16 +33,17 @@ public enum EffectSound//재생할때마다 prefab 생성되는것들
     SFX7,
     SFX8,
     SFX9,
-    SFX10,
+    SFX10,//여기까지 카드
     MOVE,
-    AKSLOW,
+    AKSLOW,//TODO
     CONNECT,
     RELOADCARD,
     GAMEOVER,
     ERROR,
     HEAL,
     DAMAGE,
-    ATTACK
+    ATTACK,
+    ROOMCLEAR
 }
 /// <summary>
 /// 이펙트 사운드는 ArchLoader쪽으로 이동
@@ -51,6 +51,7 @@ public enum EffectSound//재생할때마다 prefab 생성되는것들
 public class SoundDelegate : MonoBehaviour {
     #region variables
     AudioSource bgm;
+    BGM current;
     AudioSource monosound;
 
     private float bgmSound = 1f;
@@ -99,8 +100,15 @@ public class SoundDelegate : MonoBehaviour {
 
     public void PlayBGM(BGM b)
     {
-        bgm.clip = ArchLoader.instance.GetBGM(b);        
-        bgm.Play();
+        if(current == b)
+        {
+            return;
+        }else
+        {
+            current = b;
+            bgm.clip = ArchLoader.instance.GetBGM(b);
+            bgm.Play();
+        }
     }
     public void PlayMono(MonoSound mono)
     {

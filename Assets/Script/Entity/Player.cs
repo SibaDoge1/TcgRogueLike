@@ -81,10 +81,12 @@ public class Player : Character
         {
             damage = 0;
         }
-        SoundDelegate.instance.PlayEffectSound(MonoSound.GetHit,transform.position);
-        MyCamera.instance.ShakeCamera();
-        SetPlayerAnim(1);
-        //EffectDelegate.instance.MadeEffect(CardEffectType.Shield, this);
+        if(atker == this)//return, 자기피해
+        {
+            SoundDelegate.instance.PlayEffectSound(EffectSound.DAMAGE, transform.position);
+            MyCamera.instance.ShakeCamera();
+            SetPlayerAnim(1);
+        }
 
         return base.GetDamage(damage, atker);
     }
@@ -102,6 +104,7 @@ public class Player : Character
     }
     public override bool GetHeal(int heal)
     {
+        SoundDelegate.instance.PlayEffectSound(EffectSound.HEAL, transform.position);
         return base.GetHeal(heal);
     }
 
@@ -131,6 +134,7 @@ public class Player : Character
     public void OnReturned()
     {
         SetPlayerAnim(2);
+        //TODO : Play Returned Sound
     }
 
     private void SetPlayerAnim(int num)

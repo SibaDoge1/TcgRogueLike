@@ -125,6 +125,8 @@ public class Robot : Enemy
     }
     IEnumerator Attack()
     {
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX10, transform.position);
+
         ClearRangeList();
         List<Arch.Tile> targets = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < targets.Count; i++)

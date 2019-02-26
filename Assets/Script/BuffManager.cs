@@ -72,14 +72,17 @@ public class BuffManager
             case BUFF.AKASHA:
                 akasha.UpdateTurn(turn);
                 UIManager.instance.ErrorPopUpOn();
+                SoundDelegate.instance.PlayEffectSound(EffectSound.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.CARD:
                 card.UpdateTurn(turn);
                 UIManager.instance.ErrorPopUpOn();
+                SoundDelegate.instance.PlayEffectSound(EffectSound.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.MOVE:
                 move.UpdateTurn(turn);
                 UIManager.instance.ErrorPopUpOn();
+                SoundDelegate.instance.PlayEffectSound(EffectSound.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.IMMUNE:
                 IMMUNE.UpdateTurn(turn);
