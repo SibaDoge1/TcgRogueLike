@@ -75,6 +75,7 @@ public class SoundDelegate : MonoBehaviour {
         {
             effectSound = value;
             monosound.volume = effectSound;
+            if(ArchLoader.instance.GetSoundObject() != null)
             ArchLoader.instance.GetSoundObject().volume = effectSound;
         }
     }
