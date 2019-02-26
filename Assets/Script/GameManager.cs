@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             newRoom.IsVisited = true;
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
-            SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
+            //SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
             if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
             {
@@ -215,7 +215,10 @@ public class GameManager : MonoBehaviour
 
         for(int i=0; i<6;i++)//특수카드 3장 생성
         {
-            PlayerData.Deck.Add(Card.GetCardByNum(19));
+            if(Config.instance.CardTestMode)
+            {
+                PlayerData.Deck.Add(Card.GetCardByNum(Config.instance.cardNum));
+            }
         }
         PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
     }

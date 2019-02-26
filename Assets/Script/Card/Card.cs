@@ -128,13 +128,13 @@ public abstract class Card
         if (!isDirectionCard)
         {
             ConsumeAkasha();
-            MakeSound(player.transform.position);
+            //MakeSound(player.transform.position);
         }
     }
     public virtual void OnCardPlayed(Direction d)
     {
         ConsumeAkasha();
-        MakeSound(player.transform.position);
+        //MakeSound(player.transform.position);
         CardActive(d);
     }
     /// <summary>
@@ -243,8 +243,8 @@ public abstract class Card
     {
         if (target != null)
         {
-            //MakeEffect(target.transform.position);
-            //MakeSound(target.transform.position);
+            MakeEffect(target.transform.position);
+            MakeSound(target.transform.position);
             target.GetDamage(dam * player.Atk, player);
             PlayerData.AttackedTarget();
             player.OnAttack();

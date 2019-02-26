@@ -8,14 +8,14 @@
 6,야행매복의 룬다,5,0,3,0,1,공격력 <val1>. ,Card_WolfBite,Card_WolfBite,CLAWS,SFX6
 7,줄리아나의 앞발,5,0,3,0,1,공격력 <val1>. ,Card_BearClaw,Card_BearClaw,CLAWS,SFX6
 8,정의집행자,5,0,2,0,1,공격력 <val1>. HP <val3> 회복,Card_Justice,Card_Justice,HEART,SFX8
-9,질풍삵,5,0,2,0,4,공격력 <val1>. 공격 후 방 내의 랜덤한 위치로 이동. 패널티: <val3>턴 이동불가.,Card_WindCat,Card_WindCat,OUTWARD,SFX10
-10,혼돈과 질서,5,0,3,0,2,공격력 <val1>. 몬스터 <val2>마리 타격 시 HP <val3> 회복,Card_HalfMask,Card_HalfMask,DRAIN,SFX10
+9,질풍삵,5,0,2,0,4,공격력 <val1>. 공격 후 방 내의 랜덤한 위치로 이동. 패널티: <val3>턴 이동불가.,Card_WindCat,Card_WindCat,OUTWARD,SFX9
+10,혼돈과 질서,5,0,3,0,2,공격력 <val1>. 몬스터 <val2>마리 타격 시 HP <val3> 회복,Card_HalfMask,Card_HalfMask,DRAIN,SFX9
 11,검은 번개,5,0,1,1,0,공격력 <val1>. 다른 카드가 반환될 때마다 자신의 공격력 강화 <val2>,Card_BlackThunder,Card_BlackThunder,THUNDER,SFX3
 12,겁쟁이 닐스,5,0,3,1,7,공격력 <val1>. HP <val2>로 초기화. 패널티: <val3>턴 카드사용&AKS 충전불가,Card_PoisonSnail,Card_PoisonSnail,EXPLOSION,SFX4
 13,알하가의 외골격,5,0,2,0,1,공격력 <val1>. 공격 후 공격방향 반대로 <val3>칸 이동. 공격방향 선택 가능.,Card_Shield,Card_Shield,SLASHORANGE,SFX7
 14,맹목적인 스카울러,5,0,3,0,3,공격력 <val1>. 공격 후 공격 방향으로 <val3>칸 이동. 공격방향 선택 가능.,Card_Rush,Card_Rush,SLASHORANGE,SFX7
 15,케툴라의 안개,5,0,2,1,0,공격력 <val1>. 사용 시 A타입(무효과) R.A 강화 <val2>.,Card_Mist,Card_Mist,SMOKE,SFX9
-16,홀메이커,5,0,2,1,1,공격력 <val1>. 사용 시 P타입(텔레포트) R.A 강화 <val2>. HP <val3> 회복.,Card_WormHole,Card_WormHole,RADAR,SFX10
+16,홀메이커,5,0,2,1,1,공격력 <val1>. 사용 시 P타입(텔레포트) R.A 강화 <val2>. HP <val3> 회복.,Card_WormHole,Card_WormHole,RADAR,SFX9
 17,기생수 로시셉톨,5,0,2,1,3,공격력 <val1>. 사용 시 V타입(회복) R.A 강화 <val2>. 공격 후 텔레포트 <val3>칸.,Card_Plant,Card_Plant,AIR,SFX9
 18,트리클로,5,0,2,1,2,공격력 <val1>. 사용 시 아카샤타입(특수) R.A 강화 <val2>. AKS <val3> 회복.,Card_Stamp,Card_Stamp,FIREBALLC,SFX4
-19,거미신부의 바늘,5,0,3,2,2,공격력 <val1>.사용 시 모든 R.A 강화 <val2>. HP <val3> AKS <val3> 회복.,Card_Needle,Card_Needle,DARKSUN,SFX10
+19,거미신부의 바늘,5,0,3,2,2,공격력 <val1>.사용 시 모든 R.A 강화 <val2>. HP <val3> AKS <val3> 회복.,Card_Needle,Card_Needle,DARKSUN,SFX9

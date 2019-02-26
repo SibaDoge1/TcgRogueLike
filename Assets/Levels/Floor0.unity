@@ -1502,7 +1502,7 @@ GameObject:
   - component: {fileID: 365956823}
   - component: {fileID: 365956824}
   m_Layer: 0
-  m_Name: Mono
+  m_Name: MONO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5418,7 +5418,7 @@ MonoBehaviour:
   UseRandomSeed: 1
   Seed: 0
   HandMax: 5
-  floorNum: 1
+  floorNum: 6
   LevelSettings:
   - battleRoomNum: 4
     eventRoomNum: 2
@@ -5444,9 +5444,11 @@ MonoBehaviour:
     eventRoomNum: 1
     bossRoom: 0
     endRoom: 0
-  RoomTestMode: 0
+  RoomTestMode: 1
   TestRoomType: 1
-  TestRoomName: test1
+  TestRoomName: test6
+  CardTestMode: 1
+  cardNum: 14
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0

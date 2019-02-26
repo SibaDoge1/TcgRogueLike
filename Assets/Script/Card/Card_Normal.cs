@@ -145,7 +145,7 @@ public class Card_Normal : Card
                     DamageToTarget(enemies[i], val1);              
             }
         }
-        MakeEffect(TileUtils.Range(player.currentTile,range,figure));
+        //MakeEffect(TileUtils.Range(player.currentTile,range,figure));
     }
 
     protected override void CardActive(Direction dir)//CardType : T

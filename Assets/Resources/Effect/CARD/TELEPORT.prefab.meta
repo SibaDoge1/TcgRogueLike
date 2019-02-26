@@ -1,10 +1,8 @@
 fileFormatVersion: 2
 guid: bfaad0c7ba0a0264da205ec6168e2075
-labels:
-- ball
-- bubble
-- cartoonfx
-- electric
-- mobile
-- particles
-- toon
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

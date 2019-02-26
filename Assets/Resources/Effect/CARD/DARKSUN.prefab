@@ -124,9 +124,9 @@ ParticleSystem:
   m_GameObject: {fileID: 1643887440674830}
   serializedVersion: 5
   lengthInSec: 2.8
-  simulationSpeed: 1
+  simulationSpeed: 2
   stopAction: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -212,8 +212,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: -1
-      minScalar: 5
+      scalar: -6
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -316,8 +316,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.1
+      scalar: 1.2
+      minScalar: 0.6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -591,7 +591,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 6, y: 6, z: 6}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -1216,8 +1216,8 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
-      minScalar: 1
+      scalar: 3
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1492,8 +1492,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1533,8 +1533,8 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1574,8 +1574,8 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1615,7 +1615,7 @@ ParticleSystem:
     magnitude:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.7
+      scalar: 4.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2244,7 +2244,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    range: {x: 0, y: 1}
+    range: {x: 0, y: 6}
     separateAxes: 0
   RotationBySpeedModule:
     enabled: 0
@@ -3401,9 +3401,9 @@ ParticleSystem:
   m_GameObject: {fileID: 1565211848112406}
   serializedVersion: 5
   lengthInSec: 3
-  simulationSpeed: 1
+  simulationSpeed: 2
   stopAction: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -3502,7 +3502,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       scalar: 0
-      minScalar: 5
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3593,8 +3593,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3874,7 +3874,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 6, y: 6, z: 6}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -4856,8 +4856,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4897,8 +4897,8 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4938,8 +4938,8 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4979,7 +4979,7 @@ ParticleSystem:
     magnitude:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 6
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -5608,7 +5608,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    range: {x: 0, y: 1}
+    range: {x: 0, y: 6}
     separateAxes: 0
   RotationBySpeedModule:
     enabled: 0
@@ -6765,9 +6765,9 @@ ParticleSystem:
   m_GameObject: {fileID: 1545932270988168}
   serializedVersion: 5
   lengthInSec: 2.5
-  simulationSpeed: 1
+  simulationSpeed: 2
   stopAction: 0
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -6866,7 +6866,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       scalar: 0
-      minScalar: 5
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -6969,8 +6969,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
-      minScalar: 1
+      scalar: 3
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -7244,7 +7244,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 1, z: 1}
+    m_Scale: {x: 6, y: 6, z: 6}
     placementMode: 2
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -8193,8 +8193,8 @@ ParticleSystem:
     x:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -8234,8 +8234,8 @@ ParticleSystem:
     y:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -8275,8 +8275,8 @@ ParticleSystem:
     z:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
-      minScalar: 1
+      scalar: 6
+      minScalar: 6
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -8316,7 +8316,7 @@ ParticleSystem:
     magnitude:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 6
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -8945,7 +8945,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    range: {x: 0, y: 1}
+    range: {x: 0, y: 6}
     separateAxes: 0
   RotationBySpeedModule:
     enabled: 0

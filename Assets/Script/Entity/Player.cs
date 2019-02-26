@@ -81,7 +81,7 @@ public class Player : Character
         {
             damage = 0;
         }
-        if(atker == this)//return, 자기피해
+        if(atker != this)//return, 자기피해
         {
             SoundDelegate.instance.PlayEffectSound(EffectSound.DAMAGE, transform.position);
             MyCamera.instance.ShakeCamera();
@@ -134,7 +134,7 @@ public class Player : Character
     public void OnReturned()
     {
         SetPlayerAnim(2);
-        //TODO : Play Returned Sound
+        SoundDelegate.instance.PlayEffectSound(EffectSound.CARD, transform.position);
     }
 
     private void SetPlayerAnim(int num)

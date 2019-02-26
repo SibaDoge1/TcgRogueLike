@@ -98,7 +98,7 @@ public class Card_RedGrasp : Card_Special
                     DamageToTarget(enemies[i], val1);
                 }       
         }
-        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
+       // MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
     }
 }
 
@@ -133,7 +133,7 @@ public class Card_BlueGrasp : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
+       // MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
 
     }
 }
@@ -165,7 +165,7 @@ public class Card_TimeFrog : Card_Special
             }
         }
         PlayerData.AkashaGage += val3;
-        MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
+      //  MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
 
         MoveToRandom();
     }
@@ -222,7 +222,7 @@ public class Card_CrimsonCrow : Card_Special
         }
         PlayerData.AkashaGage += val3;
         PlayerControl.playerBuff.UpdateBuff(BUFF.IMMUNE,val2);
-        MakeEffect(TileUtils.CrossRange(player.currentTile, 2));
+      //  MakeEffect(TileUtils.CrossRange(player.currentTile, 2));
 
     }
 }
@@ -254,7 +254,7 @@ public class Card_Bishop : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.DiagonalRange(player.currentTile, 2));
+      //  MakeEffect(TileUtils.DiagonalRange(player.currentTile, 2));
         PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
         if (PlayerControl.instance.deck.DeckCount<=val2)
         {
@@ -315,7 +315,7 @@ public class Card_WolfBite : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-       MakeEffect(GetRange());
+      // MakeEffect(GetRange());
 
         player.GetDamage(val3, player);
 
@@ -376,7 +376,7 @@ public class Card_BearClaw : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(GetRange());
+       // MakeEffect(GetRange());
         player.GetDamage(val3, player);
     }
 }
@@ -408,7 +408,7 @@ public class Card_Justice : Card_Special
             }
         }
         player.GetHeal(val3);
-        MakeEffect(TileUtils.EmptySquareRange(player.currentTile,2));
+       //MakeEffect(TileUtils.EmptySquareRange(player.currentTile,2));
     }
 }
 
@@ -440,7 +440,7 @@ public class Card_WindCat : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(targetTiles);
+       // MakeEffect(targetTiles);
         MoveToRandom();
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE,val3);
     }
@@ -526,7 +526,7 @@ public class Card_HalfMask : Card_Special
         {
             player.GetHeal(val3);
         }
-        MakeEffect(targetTiles);
+      //  MakeEffect(targetTiles);
     }
 
     private List<Tile> GetRange()
@@ -585,7 +585,7 @@ public class Card_BlackThunder : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(targetTiles);
+     //   MakeEffect(targetTiles);
 
     }
 
@@ -652,7 +652,7 @@ public class Card_PoisonSnail : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.SquareRange(player.currentTile, 2));
+      //  MakeEffect(TileUtils.SquareRange(player.currentTile, 2));
 
         player.SetHp(val2);
         PlayerControl.playerBuff.UpdateBuff(BUFF.CARD,val3);
@@ -699,7 +699,7 @@ public class Card_Shield : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(targetTiles);
+       // MakeEffect(targetTiles);
 
         Vector2Int d = Vector2Int.zero;
         switch (dir)
@@ -806,7 +806,7 @@ public class Card_Rush : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(targetTiles);
+        //MakeEffect(targetTiles);
 
 
         Vector2Int d = Vector2Int.zero;
@@ -945,7 +945,7 @@ public class Card_Mist : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.CircleRange(player.currentTile,2));
+       // MakeEffect(TileUtils.CircleRange(player.currentTile,2));
 
         foreach (Card c in PlayerData.Deck)
         {
@@ -987,7 +987,7 @@ public class Card_WormHole : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+       // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
         foreach (Card c in PlayerData.Deck)
         {
@@ -1044,7 +1044,7 @@ public class Card_Plant : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+       // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
         foreach (Card c in PlayerData.Deck)
         {
@@ -1128,7 +1128,7 @@ public class Card_Stamp : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+       // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
         foreach (Card c in PlayerData.Deck)
         {
@@ -1155,7 +1155,6 @@ public class Card_Needle : Card_Special
         for (int i = 0; i < targetTiles.Count; i++)
         {
             ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
-
         }
     }
 
@@ -1169,7 +1168,7 @@ public class Card_Needle : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
+      //  MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
         foreach (Card c in PlayerData.Deck)
         {

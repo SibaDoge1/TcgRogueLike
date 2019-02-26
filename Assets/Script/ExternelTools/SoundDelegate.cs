@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum BGM
 {
+    NONE,
     FIELD1,
     FIELD2,
     FIELD3,
@@ -37,6 +38,7 @@ public enum EffectSound//재생할때마다 prefab 생성되는것들
     MOVE,
     AKSLOW,//TODO
     CONNECT,
+    CARD,
     RELOADCARD,
     GAMEOVER,
     ERROR,
@@ -51,7 +53,7 @@ public enum EffectSound//재생할때마다 prefab 생성되는것들
 public class SoundDelegate : MonoBehaviour {
     #region variables
     AudioSource bgm;
-    BGM current;
+    BGM current = BGM.NONE;
     AudioSource monosound;
 
     private float bgmSound = 1f;
@@ -106,8 +108,14 @@ public class SoundDelegate : MonoBehaviour {
         }else
         {
             current = b;
-            bgm.clip = ArchLoader.instance.GetBGM(b);
-            bgm.Play();
+            if(current == BGM.NONE)
+            {
+                bgm.Stop();
+            }else
+            {
+                bgm.clip = ArchLoader.instance.GetBGM(b);
+                bgm.Play();
+            }
         }
     }
     public void PlayMono(MonoSound mono)

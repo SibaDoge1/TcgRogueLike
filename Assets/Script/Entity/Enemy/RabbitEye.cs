@@ -43,12 +43,12 @@ public class RabbitEye : Enemy {
 
           IEnumerator AttackThenRangeOffAction()
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.FORCE, aimedTile);
+            ArchLoader.instance.MadeEffect(CardEffect.OUTWARD, aimedTile);
             if (aimedTile.OnTileObj != null && aimedTile.OnTileObj is Player)
             {
             PlayerControl.player.GetDamage(atk);
             }
-            SoundDelegate.instance.PlayEffectSound(EffectSound.SFX1, transform.position);
+            SoundDelegate.instance.PlayEffectSound(EffectSound.SFX2, transform.position);
 
                 enemyUI.ActionImageOff();
                 ClearRangeList();

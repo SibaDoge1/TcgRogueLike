@@ -111,8 +111,9 @@ public static class SaveData
         SoundDelegate.instance.BGMSound = bgmValue;
     }
     public static void SetFxValue(float value)
-    {   //TODO: 효과음 조절
-            fxValue = value;
+    {   
+        fxValue = value;
+        SoundDelegate.instance.EffectSound = fxValue;//효과음 조절
     }
     public static void SetUIValue(float value)
     {   //TODO: UI 투명도 조절

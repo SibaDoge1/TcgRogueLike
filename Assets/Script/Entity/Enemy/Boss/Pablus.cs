@@ -60,9 +60,9 @@ public class Pablus : Enemy {
 
         SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
 
-        for (int i = 0; i < move.Count; i++)
+        for (int i = 0; i < targets.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(CardEffect.FIREBALLA, move[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.EXPLOSIONB, targets[i]);
         }
 
         if (TileUtils.AI_Find(targets))
