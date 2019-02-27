@@ -247,8 +247,9 @@ public static class SaveData
             SoundDelegate.instance.BGMSound = saveData.bgmValue;
     }
     public static void SetFxValue(float value)
-    {   //TODO: 효과음 조절
-        saveData.fxValue = value;
+    {   
+        fxValue = value;
+        SoundDelegate.instance.EffectSound = fxValue;//효과음 조절
     }
     public static void SetUIValue(float value)
     {   //TODO: UI 투명도 조절
@@ -289,6 +290,8 @@ public static class SaveData
             SetCardUnlockData(int.Parse(Database.achiveDatas[i].cardReward), true);
         }
     }
+
+
 
     /// <summary>
     /// 랜덤하게 카드를 언락하는 함수

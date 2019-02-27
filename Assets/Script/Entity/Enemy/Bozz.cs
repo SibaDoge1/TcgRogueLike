@@ -25,11 +25,7 @@ public class Bozz : Enemy {
 
          IEnumerator RangeOnAction()
         {
-            List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-            for (int i=0; i<tiles.Count; i++)
-            {
-                rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
-            }
+
             enemyUI.ActionImageOn();
             yield return null;
         }
@@ -38,15 +34,20 @@ public class Bozz : Enemy {
           IEnumerator AttackThenRangeOffAction()
         {
             List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-            
+            SoundDelegate.instance.PlayEffectSound(EffectSound.SFX2, transform.position);
+            enemyUI.ActionImageOff();
+
+
+        for (int i=0; i<tiles.Count;i++)
+            {
+                ArchLoader.instance.MadeEffect(EnemyEffect.POW, tiles[i]);
+            }
 
             if (TileUtils.AI_Find(tiles))
             {
                 PlayerControl.player.GetDamage(atk);
             }
 
-            ClearRangeList();
-            enemyUI.ActionImageOff();
 
              yield return StartCoroutine(AnimationRoutine(0));
         }

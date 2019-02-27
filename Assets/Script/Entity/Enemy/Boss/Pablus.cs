@@ -48,7 +48,7 @@ public class Pablus : Enemy {
         List<Arch.Tile> targets = GetBlowAwayRange();
         for (int i = 0; i < targets.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, targets[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, targets[i]));
         }
 
         yield return null;
@@ -58,17 +58,21 @@ public class Pablus : Enemy {
         ClearRangeList();
         List<Arch.Tile> targets = GetBlowAwayRange();
 
-        for (int i = 0; i < move.Count; i++)
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
+
+        for (int i = 0; i < targets.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, move[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.EXPLOSIONB, targets[i]);
         }
 
         if (TileUtils.AI_Find(targets))
         {
             PlayerControl.player.GetDamage(atk);
-            while(!PlayerControl.player.MoveTo((new Vector2Int(Random.Range(2,4),Random.Range(1,6)))))
-            { }
+
         }
+        while (!PlayerControl.player.Teleport((new Vector2Int(Random.Range(2, 4), Random.Range(1, 6)))))
+        { }
+
         yield return StartCoroutine(AnimationRoutine(0));
     }
 
@@ -82,7 +86,7 @@ public class Pablus : Enemy {
 
         for(int i=0; i<targets.Count;i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood,targets[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH,targets[i]);
         }
         yield return null;
     }
@@ -98,7 +102,7 @@ public class Pablus : Enemy {
 
         for (int i = 0; i < move.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, move[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH, move[i]);
         }
         yield return StartCoroutine(AnimationRoutine(0));
     }
@@ -107,7 +111,7 @@ public class Pablus : Enemy {
         move = GetFireMoveRange(move);
         for (int i = 0; i < move.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, move[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH, move[i]);
         }
         if (TileUtils.AI_Find(move))
         {

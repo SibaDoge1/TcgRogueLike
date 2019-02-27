@@ -7,9 +7,9 @@ using Arch;
 public static class BuildRoom
 {
     static Map currentMap;
-    static List<string[,]> battleRooms;
-    static List<string[,]> eventRooms;
-    static List<string[,]> shopRooms;
+    static Dictionary<string,string[,]> battleRooms;
+    static Dictionary<string,string[,]> eventRooms;
+    static Dictionary<string, string[,]> bossRooms;
     static Vector2Int size;
     static Tile[,] tiles;
     static Room currentRoom;
@@ -31,7 +31,7 @@ public static class BuildRoom
         currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
         currentRoom.SetTileArray(tiles);
-
+        currentRoom.RoomName = name;
         Draw();
         GenerateGraph();
 
@@ -49,13 +49,14 @@ public static class BuildRoom
         currentRoom.transform.parent = currentMap.transform;
         currentRoom.roomType = type;
 
-        roomData = GetRoomData(type);
+        KeyValuePair<string, string[,]> temp = GetRoomData(type);
+        currentRoom.RoomName = temp.Key;
+        roomData = temp.Value;
         size = new Vector2Int(roomData.GetLength(0), roomData.GetLength(1));
 
         currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
         currentRoom.SetTileArray(tiles);
-
         Draw();
         GenerateGraph();
 
@@ -69,19 +70,23 @@ public static class BuildRoom
         currentMap = map;
         battleRooms = CsvParser.ReadRoom(map.Floor, RoomType.BATTLE);
         eventRooms = CsvParser.ReadRoom(map.Floor, RoomType.EVENT);
+        bossRooms = CsvParser.ReadRoom(map.Floor, RoomType.BOSS);
     }
 
-    static string[,] GetRoomData(RoomType rt)
+
+    static KeyValuePair<string, string[,]> GetRoomData(RoomType rt)
     {
         switch(rt)
         {
             case RoomType.BATTLE:
-                return battleRooms[Random.Range(0, battleRooms.Count)];
+                return battleRooms.ElementAt(Random.Range(0, battleRooms.Keys.Count));
             case RoomType.EVENT:
-                return eventRooms[Random.Range(0, eventRooms.Count)];
+                return eventRooms.ElementAt(Random.Range(0,eventRooms.Keys.Count));
+            case RoomType.BOSS:
+                return bossRooms.ElementAt(Random.Range(0, bossRooms.Keys.Count));
             default:
                 Debug.Log("Room Type ERROR");
-                return null;
+                return battleRooms.ElementAt(0);
         }
     }
 

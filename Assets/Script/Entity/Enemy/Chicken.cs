@@ -21,13 +21,14 @@ public class Chicken : Enemy {
     List<Action> attackList;
     protected override void SetActionLists()
     {
-        DelayList = new List<Action>() { new Action(DelayAction) , new Action(DelayAction)};
+        DelayList = new List<Action>() { new Action(DelayAction) , new Action(DelayAction1)};
         moveList = new List<Action>() { new Action(MoveToward) };
         attackList = new List<Action>() { new Action(Attack) };
     }
 
     IEnumerator MoveToward()
     {
+        enemyUI.ActionImageOff();
         MoveTo(PathFinding.GenerateDiagonalPath(this, PlayerControl.player.currentTile)[0].pos);
         yield return null;
     }
@@ -38,9 +39,22 @@ public class Chicken : Enemy {
         yield return null;
     }
 
+    IEnumerator DelayAction1()
+    {
+        enemyUI.ActionImageOn();
+        yield return null;
+    }
+
 
     IEnumerator Attack()
     {
+        enemyUI.ActionImageOff();
+
+        List<Arch.Tile> tiles = TileUtils.DiagonalRange(currentTile, 1);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);
+        }
         PlayerControl.player.GetDamage(atk);
         yield return StartCoroutine(AnimationRoutine(0));
     }

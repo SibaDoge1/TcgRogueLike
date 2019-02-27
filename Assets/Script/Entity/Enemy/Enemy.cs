@@ -51,12 +51,11 @@ public abstract class Enemy : Character {
     {
         ClearRangeList();
 		currentRoom.OnEnemyDead (this);
-        EffectDelegate.instance.MadeEffect(CardEffectType.Blood, currentTile);
+        ArchLoader.instance.MadeEffect(EnemyEffect.DIE, currentTile);
         if(GameManager.instance.CurrentTurn == Turn.ENEMY)
         {
             OnEndTurn();
         }
-        currentRoom.RoomValue += value;
         base.OnDieCallback ();
 	}
     public override void SetRoom(Room room, Tile _pos)
@@ -98,7 +97,7 @@ public abstract class Enemy : Character {
     {
         if (rangeList != null)
         {
-            EffectDelegate.instance.DestroyEffect(rangeList);
+            ArchLoader.instance.DestroyEffect(rangeList);
             rangeList = new List<GameObject>();
         }
     }

@@ -37,13 +37,7 @@ public class SteelBozz : Enemy {
 
     IEnumerator RangeOn()
     {
-        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-        for (int i = 0; i < tiles.Count; i++)
-        {
-            //TODO : MAKE EFFECT
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
-        }
-
+        enemyUI.ActionImageOn();
         yield return null;
     }
 
@@ -52,19 +46,21 @@ public class SteelBozz : Enemy {
     {
         if(isSecond)
         {
-            ClearRangeList();
+            enemyUI.ActionImageOff();
         }
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
 
         List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-        //TODO : MAKE EFFECT
-
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH, tiles[i]);
+        }
 
         if (TileUtils.AI_Find(tiles))
         {
             PlayerControl.player.GetDamage(atk);
         }
         isSecond = true;
-
         yield return StartCoroutine(AnimationRoutine(0));
     }
 
@@ -72,13 +68,17 @@ public class SteelBozz : Enemy {
 
     IEnumerator SelfDestruct()
     {
-        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);        
-        //TODO : MAKE EFFECT
+        List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.EXPLOSIONB, tiles[i]);
+        }
 
         if (TileUtils.AI_Find(tiles))
         {
             PlayerControl.player.GetDamage(atk);
         }
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
 
         yield return StartCoroutine(AnimationRoutine(0));
     }

@@ -182,7 +182,7 @@ public class DeckEditUI : MonoBehaviour
         {
             attainCardObjects[i].SetParent(attainViewPort,false);
             attainCardObjects[i].SetDeckUI(this);
-            deckCardObjects[i].SetRenderUnknown();
+            attainCardObjects[i].SetRenderUnknown();
         }
         SortCards();
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 /// <summary>
 /// 카드 데이터,몬스터 데이터,정보 데이터,카드풀 데이터
 /// </summary>
@@ -9,7 +8,7 @@ public static class Database
 {
 
      public static Dictionary<int, CardData> cardDatas { get; private set; }
-     public static Dictionary<int, CardPoolData> cardPoolDatas { get; private set; }
+     public static Dictionary<string, CardPoolData> cardPoolDatas { get; private set; }
      public static Dictionary<int, MonsterData> monsterDatas { get; private set; }
      public static Dictionary<int, DiaryData> diaryDatas{ get; private set; }
      public static Dictionary<int, AchiveData> achiveDatas { get; private set; }
@@ -29,9 +28,17 @@ public static class Database
     {
         return cardDatas[i];
     }
-    public static CardPoolData GetCardPool(int i)
+    public static CardPoolData GetCardPool(string name)
     { 
-        return cardPoolDatas[i];
+        if(cardPoolDatas.ContainsKey(name))
+        {
+            return cardPoolDatas[name];
+        }
+        else
+        {
+            Debug.Log("The Room " + name + " isn't exists");
+            return cardPoolDatas["default"];
+        }
     }
     public static MonsterData GetMonsterData(int i)
     {
@@ -64,6 +71,7 @@ public static class Database
         return null;
     }
 
+
 }
 public class CardData
 {
@@ -78,6 +86,8 @@ public class CardData
     public readonly string _info;
     public readonly string spritePath;
     public readonly string className;
+    public readonly CardEffect effect;
+    public readonly EffectSound sound;
 
     public CardData(string[] data)
     {
@@ -92,21 +102,21 @@ public class CardData
 
         _info = data[7];
         spritePath = data[8];
+        className = data[9];
+        effect = (CardEffect)System.Enum.Parse(typeof(CardEffect), data[10]);
+        sound = (EffectSound)System.Enum.Parse(typeof(EffectSound), data[11].Replace("\r", ""));
 
-        className = data[9].Replace("\r","");
     }
 }
 public class CardPoolData
 {
-    public readonly byte num;
-    public readonly int value;
+    public readonly string name;
     public readonly List<int> cardPool = new List<int>();
 
     public CardPoolData(string[] data)
     {
-        num = byte.Parse(data[0]);
-        value = int.Parse(data[1]);
-        string[] d = data[2].Split('/');
+        name = data[0];
+        string[] d = data[1].Split('/');
         for(int i=0; i<d.Length;i++)
         {
             cardPool.Add(int.Parse(d[i]));

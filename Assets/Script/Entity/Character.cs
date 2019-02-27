@@ -76,6 +76,7 @@ public abstract class Character : Entity {
         }
         set
         {
+            if(currentHp != 0)
             DamageEffect(value - CurrentHp);
 
             if (value<=0)
@@ -99,7 +100,7 @@ public abstract class Character : Entity {
 
     protected virtual void DamageEffect(int value)
     {
-        EffectDelegate.instance.MadeEffect(value, transform.position);
+        ArchLoader.instance.MadeEffect(value, transform.position);
     }
 
     protected virtual IEnumerator AnimationRoutine(int num, float animationTime = 0.5f)

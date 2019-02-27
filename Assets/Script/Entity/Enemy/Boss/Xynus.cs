@@ -29,7 +29,7 @@ public class Xynus : Enemy {
     {
         DelayList = null;
         moveList = new List<Action>()
-        { new Action(Move) ,new Action(Delay),new Action(Delay)  };
+        { new Action(Move) ,new Action(Delay),new Action(Delay1)  };
 
         environmentAttack = new List<Action>()
         {
@@ -38,7 +38,7 @@ public class Xynus : Enemy {
 
         meeleAttack = new List<Action>()
         {
-            new Action(MeeleAttack),new Action(Delay),new Action(Delay)
+            new Action(MeeleAttack),new Action(Delay),new Action(Delay1)
         };
     }
 
@@ -49,7 +49,7 @@ public class Xynus : Enemy {
         for (int i = 0; i < environ.Count; i++)
         {
             //TODO : MAKE EFFECT
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, environ[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, environ[i]));
         }
 
         yield return null;
@@ -57,9 +57,16 @@ public class Xynus : Enemy {
 
     IEnumerator EnvironAttack()
     {
+        enemyUI.ActionImageOff();
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
+
         ClearRangeList();
 
-        if(TileUtils.AI_Find(environ))
+        for(int i=0; i<environ.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.SPACE, environ[i]);
+        }
+        if (TileUtils.AI_Find(environ))
         {
             PlayerControl.player.GetDamage(atk);
         }
@@ -70,7 +77,9 @@ public class Xynus : Enemy {
 
     IEnumerator SpawnOrDelay()
     {
-        if(currentRoom.enemyList.Count<=3) //소환
+        enemyUI.ActionImageOn();
+
+        if (currentRoom.enemyList.Count<=3) //소환
         {
             List<Arch.Tile> targets = TileUtils.DiagonalRange(currentTile, 1);
             
@@ -95,17 +104,26 @@ public class Xynus : Enemy {
 
     IEnumerator Move()
     {
+        enemyUI.ActionImageOff();
         MoveTo(PathFinding.GenerateAllDirectionPath(this, PlayerControl.player.currentTile)[0].pos);
         yield return null;
     }
 
     IEnumerator MeeleAttack()
     {
-        
-        if(TileUtils.AI_SquareFind(currentTile,1))
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
+        enemyUI.ActionImageOff();
+        List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(EnemyEffect.SPACE, tiles[i]);
+        }
+
+        if (TileUtils.AI_SquareFind(currentTile,1))
         {
             PlayerControl.player.GetDamage(atk);
         }
+
 
         //yield return StartCoroutine(AnimationRoutine(0));
         yield return null;
@@ -114,18 +132,47 @@ public class Xynus : Enemy {
     {
         yield return null;
     }
+    IEnumerator Delay1()
+    {
+        enemyUI.ActionImageOn();
+        yield return null;
+    }
     /// <summary>
     /// 포위 범위
     /// </summary>
     /// <returns></returns>
     public List<Arch.Tile> GetEnvironment()
     {
-        List<Arch.Tile> targetTiles = TileUtils.EmptySquareRange(currentTile,3);
-        int x = (int)pos.x; int y = (int)pos.y;
-        targetTiles.Add(currentRoom.GetTile(new Vector2Int(x-2,y-2)));
-        targetTiles.Add(currentRoom.GetTile(new Vector2Int(x + 2, y - 2)));
-        targetTiles.Add(currentRoom.GetTile(new Vector2Int(x + 2, y + 2)));
-        targetTiles.Add(currentRoom.GetTile(new Vector2Int(x - 2, y + 2)));
+        List<Arch.Tile> targetTiles = new List<Arch.Tile>() ;
+   
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1,1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 2)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 3)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 4)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 5)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 6)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(2, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(3, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(4, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(5, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(6, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 1)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 2)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 3)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 4)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 5)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 6)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(7, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(1, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(2, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(3, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(4, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(5, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(6, 7)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(2, 6)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(6, 6)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(6, 2)));
+        targetTiles.Add(currentRoom.GetTile(new Vector2Int(2, 2)));
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {

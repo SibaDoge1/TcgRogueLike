@@ -20,29 +20,29 @@ public enum RoomType
 public class MapGenerator : MonoBehaviour
 {
     #region Interface
-    public Map GetMap(int floor, int baNum, int evNum)
+    public Map GetMap(int floor, int baNum, int evNum,bool boss,bool end)
     {
         currentMap = GetComponent<Map>();
 
-        currentMap.Init(floor, baNum, evNum);
+        currentMap.Init(floor, baNum, evNum,boss,end);
 
         BuildRooms();
         SetRooms();
 
-        for (int i = 0; i < currentRooms.Count; i++)
+        for (int i = 0; i < connectedRooms.Count; i++)
         {
-            currentRooms[i].DestroyDoors();
+            connectedRooms[i].DestroyDoors();
         }
 
-        currentMap.Rooms = currentRooms;
+        currentMap.Rooms = connectedRooms;
         currentMap.SetStartRoom(startRoom);
 
         currentMap.MaxBorder = GetMaxBorders();
         currentMap.MinBorder = GetMinBorders();
 
-        for(int i=0;i< currentRooms.Count;i++)
+        for(int i=0;i< connectedRooms.Count;i++)
         {
-            currentMap.SetRoomOff(currentRooms[i]);
+            currentMap.SetRoomOff(connectedRooms[i]);
         }
 
         return currentMap;
@@ -51,7 +51,7 @@ public class MapGenerator : MonoBehaviour
     private Vector2Int GetMaxBorders()
     {
         int maxX = 0; int maxY = 0;
-        foreach (Room r in currentRooms)
+        foreach (Room r in connectedRooms)
         {
             Vector2Int temp = new Vector2Int((int)r.transform.position.x,
                 (int)r.transform.position.y) + r.size;
@@ -69,7 +69,7 @@ public class MapGenerator : MonoBehaviour
     private Vector2Int GetMinBorders()
     {
         int minX = 0; int minY = 0;
-        foreach (Room r in currentRooms)
+        foreach (Room r in connectedRooms)
         {
 
             if (r.transform.position.x < minX)
@@ -88,7 +88,7 @@ public class MapGenerator : MonoBehaviour
 
     Map currentMap;
     Room startRoom;
-    List<Room> currentRooms;//현재 놓여진 방들
+    List<Room> connectedRooms;//현재 놓여진 방들
     List<Room> roomsToSet;//놓아야 하는 방들
     public int space = 3;
 
@@ -97,36 +97,18 @@ public class MapGenerator : MonoBehaviour
     private void BuildRooms()
     {
 
-        if(Config.instance.RoomTestMode) // Test모드
+        BuildRoom.Init(currentMap);
+        roomsToSet = new List<Room>();
+
+        startRoom = BuildRoom.Build(RoomType.START, "start"+currentMap.Floor);
+        roomsToSet.Add(startRoom);
+
+        if (Config.instance.RoomTestMode) // Test모드
         {
-            BuildRoom.Init(currentMap);
-            roomsToSet = new List<Room>();
-
-            startRoom = BuildRoom.Build(RoomType.START, "start");
-            roomsToSet.Add(startRoom);
-
             Room testRoom = BuildRoom.Build(Config.instance.TestRoomType, Config.instance.TestRoomName);
-            roomsToSet.Add(testRoom);
-
-            return;
-        }else //아닐시 , floor마다 구분
+            roomsToSet.Add(testRoom);           
+        }else //아닐시 Map정보에 따라 빌드
         {
-            switch (currentMap.Floor)
-            {
-                case 1:
-
-                    break;
-                case 2:
-                case 3:
-
-                    break;
-                case 4:
-                    BuildRoom.Init(currentMap);
-                    roomsToSet = new List<Room>();
-
-                    startRoom = BuildRoom.Build(RoomType.START, "start");
-                    roomsToSet.Add(startRoom);
-
                     for (int i = 0; i < currentMap.BattleRoomNum; i++)
                     {
                         Room battleRoom = BuildRoom.Build(RoomType.BATTLE);
@@ -137,16 +119,16 @@ public class MapGenerator : MonoBehaviour
                         Room eventRoom = BuildRoom.Build(RoomType.EVENT);
                         roomsToSet.Add(eventRoom);
                     }
-
-                    Room bossRoom = BuildRoom.Build(RoomType.BOSS, "boss");
-                    roomsToSet.Add(bossRoom);
-                    break;
-                case 5:
-
-                    break;
-            }
-
-            
+                    if (currentMap.Boss)
+                    { 
+                        Room bossRoom = BuildRoom.Build(RoomType.BOSS, "boss"+currentMap.Floor);
+                        roomsToSet.Add(bossRoom);
+                    }
+                    if(currentMap.End)
+                    {
+                        Room endRoom = BuildRoom.Build(RoomType.START, "end"+currentMap.Floor);
+                        roomsToSet.Add(endRoom);
+                    }                              
         }     
     }
 
@@ -158,45 +140,39 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     private void SetRooms()
     {
-        if(Config.instance.RoomTestMode)
+        connectedRooms = new List<Room>();
+        Queue<Room> roomQueue = new Queue<Room>(roomsToSet);
+        Room cur = roomQueue.Dequeue();
+        connectedRooms.Add(cur);//StartRoom
+
+        if (Config.instance.RoomTestMode)
         {
-            currentRooms = new List<Room>();
-            Queue<Room> roomQueue = new Queue<Room>(roomsToSet);
-            Room start = roomQueue.Dequeue();
-            currentRooms.Add(start);//StartRoom
             Room test = roomQueue.Dequeue();
-            ConnectRoom(start, test);
-            currentRooms.Add(test);
+            ConnectRoom(cur, test);
+            connectedRooms.Add(test);
         }else
         {
-                    currentRooms = new List<Room>();
-                    Queue<Room> roomQueue = new Queue<Room>(roomsToSet);
-                    Room cur = roomQueue.Dequeue();
-                    currentRooms.Add(cur);
-
                     while (roomQueue.Count > 0)
                     {
                         cur = roomQueue.Dequeue();
-                        int loopNum = 0;
-                        while (!ConnectRoom(currentRooms[loopNum], cur))
-                        {
-                            loopNum++;
-                            if (loopNum >= currentRooms.Count)
-                            {
-                                Debug.Log("Rooms are not fit well So restart");
-                                DestroyRooms();
-                                BuildRooms();
-                                SetRooms();
-                                return;
-                            }
-                        }
-                        currentRooms.Add(cur);
-                        ShuffleRoomList();
-                    }
-            //현재 : currentRoom리스트 단순 배치
-            //TODO : 끝방은 첫방으로부터 일정 distance 이상되야 연결되게 구현
-        }
 
+                            int loopNum = 0;
+                            while (!ConnectRoom(connectedRooms[loopNum], cur))
+                            {
+                             loopNum++;
+                             if (loopNum >= connectedRooms.Count)
+                                {
+                                  Debug.Log("Rooms are not fit well So restart");
+                                  DestroyRooms();
+                                  BuildRooms();
+                                  SetRooms();
+                                 return;
+                                 }
+                             }
+                            connectedRooms.Add(cur);
+                            ShuffleRoomList();                  
+                    }
+        }
     }
     
 
@@ -214,84 +190,86 @@ public class MapGenerator : MonoBehaviour
 
     private bool ConnectRoom(Room room1, Room room2)
     {
+        ShuffleDoor(room1);
+        ShuffleDoor(room2);
 
         OffTile_Door room1Door = null;
         OffTile_Door room2Door = null;
-        Direction opposite;
         bool success = false;
+        
+        if (room2.RoomName.Contains("end") && room1.Distance < 3) //끝방 조건
+        {
+            return false;
+        }
 
         for (int i = 0; i < room1.doorList.Count; i++)
         {
             if (room1.doorList[i].TargetRoom == null)
             {
                 room1Door = room1.doorList[i];
-                opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
-                success = false;              
-                for (int j = 0; j < room2.doorList.Count; j++)
+                room2Door = FindRightDoor(room1Door, room2);
+                if (room2Door == null)
+                    continue;
+                else
                 {
-                    if (room2.doorList[j].Dir == opposite && room2.doorList[j].TargetRoom == null)
+                    ///방배치 시작
+                    Vector3 offset = room2.transform.position - room2Door.transform.position;
+                    switch (room1Door.Dir)
                     {
-                        room2Door = room2.doorList[j];
+                        case Direction.NORTH:
+                            room2.transform.position =
+                            new Vector3(room1Door.transform.position.x + offset.x
+                            , room1.transform.position.y + room1.size.y + space);
+                            break;
+                        case Direction.EAST:
+                            room2.transform.position =
+                               new Vector3(room1.transform.position.x + room1.size.x + space
+                               , room1Door.transform.position.y + offset.y);
+                            break;
+                        case Direction.SOUTH:
+                            room2.transform.position =
+                                new Vector3(room1Door.transform.position.x + offset.x
+                                , room1.transform.position.y - room2.size.y - space);
+                            break;
+                        case Direction.WEST:
+                            room2.transform.position =
+                                 new Vector3(room1.transform.position.x - room2.size.x - space
+                                 , room1Door.transform.position.y + offset.y);
+                            break;
+                    }
+                    if (IsOverlapped(room2))
+                    {
+                        room2.transform.position = new Vector3(-9999, -9999);
+                        continue;
+                    }else
+                    {
+                        room1Door.TargetRoom = room2;
+                        room1Door.ConnectedDoor = room2Door;
+                        room2Door.TargetRoom = room1;
+                        room2Door.ConnectedDoor = room1Door;
+                        room2.Distance = room1.Distance + 1;
                         success = true;
                         break;
                     }
                 }
-
-                if(success)
-                {
-                    break;
-                }
-            }
-            if (i == room1.doorList.Count - 1)
-            {
-                return false;    
             }
         }
 
-
-        
-        ///방배치 시작
-        Vector3 offset = room2.transform.position - room2Door.transform.position;
-        switch (room1Door.Dir)
-        {
-            case Direction.NORTH:
-                room2.transform.position =
-                new Vector3(room1Door.transform.position.x + offset.x
-                , room1.transform.position.y + room1.size.y + space);
-                break;
-            case Direction.EAST:
-                room2.transform.position =
-                   new Vector3(room1.transform.position.x + room1.size.x + space
-                   , room1Door.transform.position.y + offset.y);
-                break;
-            case Direction.SOUTH:
-                room2.transform.position =
-                    new Vector3(room1Door.transform.position.x + offset.x
-                    , room1.transform.position.y - room2.size.y - space);
-                break;
-            case Direction.WEST:
-                room2.transform.position =
-                     new Vector3(room1.transform.position.x - room2.size.x - space
-                     , room1Door.transform.position.y + offset.y);
-                break;
-        }
-
-        if (IsOverlapped(room2))
-            return false;
-        else
-        {
-            room1Door.TargetRoom = room2;
-            room1Door.ConnectedDoor = room2Door;
-            room2Door.TargetRoom = room1;
-            room2Door.ConnectedDoor = room1Door;
-            room2.distance = room1.distance + 1;
-            ShuffleDoor(room1);
-            ShuffleDoor(room2);
-            return true;
-        }
-        
+        return success;        
     }
 
+    private OffTile_Door FindRightDoor(OffTile_Door room1Door, Room room2)
+    {
+        Direction opposite = (Direction)(((int)room1Door.Dir + 2) % 4);
+        for (int j = 0; j < room2.doorList.Count; j++)
+        {
+            if (room2.doorList[j].Dir == opposite && room2.doorList[j].TargetRoom == null)
+            {
+                return room2.doorList[j];
+            }
+        }
+        return null;
+    }
     private void ShuffleDoor(Room room)
     {
         for(int i=0; i<room.doorList.Count;i++)
@@ -304,12 +282,12 @@ public class MapGenerator : MonoBehaviour
     }
     private void ShuffleRoomList()
     {
-        for(int i=0; i<currentRooms.Count;i++)
+        for(int i=0; i<connectedRooms.Count;i++)
         {
-            Room var = currentRooms[i];
-            int ranNum = Random.Range(i, currentRooms.Count);
-            currentRooms[i] = currentRooms[ranNum];
-            currentRooms[ranNum] = var;
+            Room var = connectedRooms[i];
+            int ranNum = Random.Range(i, connectedRooms.Count);
+            connectedRooms[i] = connectedRooms[ranNum];
+            connectedRooms[ranNum] = var;
         }
     }
     /// <summary>
@@ -317,7 +295,7 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     private bool IsOverlapped(Room room)
     {
-        foreach (Room r in currentRooms)
+        foreach (Room r in connectedRooms)
         {
             float compareX, compareY, disX, disY;
             disX = r.transform.position.x - room.transform.position.x;

@@ -12,11 +12,24 @@ public class Room : MonoBehaviour
     public Vector2Int size;
     public List<OffTile_Door> doorList;
 	Tile[,] tiles;
-    public int distance=0;
+    private int distance=0;
+    public int Distance
+    {
+        get { return distance; }
+        set { distance = value; }
+    }
     public RoomType roomType;
-    private int roomValue;
-    public int RoomValue
-    { get { return roomValue; } set { roomValue = value; } }
+    private string roomName;
+    public string RoomName
+    {
+        get { return roomName; }
+        set
+        {
+            roomName = value;
+            gameObject.name = roomName;
+        }
+    }
+
 
 	public List<Enemy> enemyList = new List<Enemy>();
 

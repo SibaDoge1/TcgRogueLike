@@ -9,10 +9,11 @@ public enum Turn
     ENEMY
 }
 
+public delegate void OnRoomClearDelegater();
+
 public class GameManager : MonoBehaviour
 {
     private Player player;
-
     private Turn currentTurn;
     public Turn CurrentTurn
     {
@@ -25,7 +26,6 @@ public class GameManager : MonoBehaviour
         get { return isInputOk; }
         set { isInputOk = value; }
     }
-
 
     public static GameManager instance;
     private void Awake()
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             newRoom.IsVisited = true;
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
-            SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomMove, Camera.main.transform.position);
+            //SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
             if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
             {
@@ -125,11 +125,11 @@ public class GameManager : MonoBehaviour
     public void OnPlayerClearRoom()
     {
         PlayerControl.instance.OnRoomClear();
-        SoundDelegate.instance.PlayEffectSound(EffectSoundType.RoomClear, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(EffectSound.ROOMCLEAR,player.transform.position);
         PlayerData.AkashaGage = 0;
-        if (CurrentRoom().roomType == RoomType.BATTLE)
+        if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
         {
-            GetRandomCardToAttain(CurrentRoom().RoomValue);
+            GetRandomCardToAttain(CurrentRoom().RoomName);
         }
     }
 
@@ -152,7 +152,6 @@ public class GameManager : MonoBehaviour
         }else
         {
             yield return PlayerControl.player.PlayerAnim;
-            Debug.Log("Called");
         }
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
         EnemyControl.instance.EnemyTurn();
@@ -173,7 +172,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSoundType.GameOver, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(EffectSound.GAMEOVER, Camera.main.transform.position);
         UIManager.instance.GameOverUIOn();
         IsInputOk = false;
     }
@@ -211,18 +210,21 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void BuildDeck()
     {
-        for(int i=0; i<10;i++) //노말카드 랜덤 9장 생성
+        for(int i=0; i<9;i++) //노말카드 랜덤 9장 생성
           PlayerData.Deck.Add(Card.GetCardByNum(0));
 
-        for(int i=0; i<3;i++)//특수카드 3장 생성
+        for(int i=0; i<6;i++)//특수카드 3장 생성
         {
-            PlayerData.Deck.Add(Card.GetCardByNum(Random.Range(1,20)));
+            if(Config.instance.CardTestMode)
+            {
+                PlayerData.Deck.Add(Card.GetCardByNum(Config.instance.cardNum));
+            }
         }
         PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
     }
-    private void GetRandomCardToAttain(int value)
+    private void GetRandomCardToAttain(string name)
     {
-        PlayerControl.instance.AddToAttain(Database.GetCardPoolByValue(value).GetRandomCard());       
+        PlayerControl.instance.AddToAttain(Database.GetCardPool(name).GetRandomCard());       
     }
     
     private void SettingtPlayer()
@@ -253,21 +255,9 @@ public class GameManager : MonoBehaviour
         MapGenerator mapGenerator = currentMap.GetComponent<MapGenerator>();
 
             mapGenerator.GetMap(level,
-                Config.instance.LevelSettings[level].battleRoomNum, Config.instance.LevelSettings[level].eventRoomNum);
-        
+                Config.instance.LevelSettings[level-1].battleRoomNum, Config.instance.LevelSettings[level-1].eventRoomNum,
+                Config.instance.LevelSettings[level-1].bossRoom,Config.instance.LevelSettings[level-1].endRoom);        
     }
-    private void PlayBossBGM(int floor)
-    {
-        switch(floor)
-        {
-            case 1:
-              SoundDelegate.instance.PlayBGM(BGM.Floor1_BOSS);
-                break;
-            default:
-                break;
-        }
-    }
-
     private void DestroyMap()
     {
         PlayerControl.instance.transform.SetParent(null);
@@ -283,7 +273,38 @@ public class GameManager : MonoBehaviour
         switch (floor)
         {
             case 1:
-                SoundDelegate.instance.PlayBGM(BGM.FLOOR1);
+                SoundDelegate.instance.PlayBGM(BGM.FIELD1);
+                break;
+            case 2:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD2);
+                break;
+            case 3:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD3);
+                break;
+            case 4:
+                SoundDelegate.instance.PlayBGM(BGM.FIELD4);
+                break;
+            case 5:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSSPIDER);
+                break;
+        }
+    }
+
+    private void PlayBossBGM(int floor)
+    {
+        switch(floor)
+        {
+            case 2:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSFIRE);
+                break;
+            case 3:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSFIRE);
+                break;
+            case 4:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSROBOT);
+                break;
+            case 5:
+                SoundDelegate.instance.PlayBGM(BGM.BOSSSPIDER);
                 break;
         }
     }

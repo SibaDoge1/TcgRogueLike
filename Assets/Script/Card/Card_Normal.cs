@@ -22,16 +22,16 @@ public class Card_Normal : Card
         switch (cardType)
         {
             case CardType.V:
-                val1 = 1;
+                val1 = 2;
                 cost = 4;
                 break;
             case CardType.T:
                 val1 = 3;
-                cost = 2;
+                cost = 3;
                 break;
             case CardType.P:
                 val1 = 1;
-                cost = 3;
+                cost = 2;
                 break;
             case CardType.A:
                 val1 = 1;
@@ -53,16 +53,16 @@ public class Card_Normal : Card
         switch (cardType)
         {
             case CardType.V:
-                val1 = 1;
+                val1 = 2;
                 cost = 4;
                 break;
             case CardType.T:
                 val1 = 3;
-                cost = 2;
+                cost = 3;
                 break;
             case CardType.P:
                 val1 = 1;
-                cost = 3;
+                cost = 2;
                 break;
             case CardType.A:
                 val1 = 1;
@@ -77,20 +77,24 @@ public class Card_Normal : Card
     private void GenerateCardData()
     {
         index = 0;
-
+        cardSound = EffectSound.ATTACK;
         switch (cardType) //Info 설정
         {
             case CardType.A:
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
+                cardEffect = CardEffect.EMPTY;
                 break;
             case CardType.T:
+                cardEffect = CardEffect.REINFORCE;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
                 break;
             case CardType.P:
+                cardEffect = CardEffect.TELEPORT;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 3만큼 텔레포트합니다.";
                 isDirectionCard = true;
                 break;
             case CardType.V:
+                cardEffect = CardEffect.HEAL;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 1만큼 회복합니다.";
                 break;
 
@@ -100,23 +104,23 @@ public class Card_Normal : Card
         {
             case Figure.Diagonal:
                 range = 1;
-                spritePath = "x";
+                spritePath = "Card_X";
                 break;
             case Figure.CROSS:
                 range = 1;
-                spritePath = "cross";
+                spritePath = "Card_Cross";
                 break;
             case Figure.HORIZION:
                 range = 1;
-                spritePath = "horizion";//이미지 현재 없음
+                spritePath = "Card_Horizon";//이미지 현재 없음
                 break;
             case Figure.SQUARE:
                 range = 1;
-                spritePath = "square";
+                spritePath = "Card_Square";
                 break;
             case Figure.VERTICAL:
                 range = 1;
-                spritePath = "vertical";//이미지 현재 없음
+                spritePath = "Card_Vertical";//이미지 현재 없음
                 break;
             default:
                 Debug.LogError("Normal카드 FigureError");
@@ -138,10 +142,10 @@ public class Card_Normal : Card
             for (int i = 0; i < enemies.Count; i++)
             {
 
-                    DamageToTarget(enemies[i], val1);
-                
+                    DamageToTarget(enemies[i], val1);              
             }
         }
+        //MakeEffect(TileUtils.Range(player.currentTile,range,figure));
     }
 
     protected override void CardActive(Direction dir)//CardType : T
@@ -163,7 +167,7 @@ public class Card_Normal : Card
                 break;
         }
 
-          player.MoveTo(player.pos + d * 2);       
+          player.Teleport(player.pos + d * 2);       
 
 
 
@@ -189,7 +193,7 @@ public class Card_Normal : Card
 
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.DIR,player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;
@@ -202,7 +206,7 @@ public class Card_Normal : Card
             targetTiles = TileUtils.Range(player.currentTile, range, figure);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
+                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;
@@ -217,7 +221,7 @@ public class Card_Normal : Card
         switch (cardType)
         {
             case CardType.V:
-                val1 = 1;
+                val1 = 2;
                 break;
             case CardType.T:
                 val1 = 3;

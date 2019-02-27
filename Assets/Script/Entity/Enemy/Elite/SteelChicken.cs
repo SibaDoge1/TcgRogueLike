@@ -27,6 +27,7 @@ public class SteelChicken : Enemy {
 
     IEnumerator MoveToward()
     {
+        enemyUI.ActionImageOff();
         MoveTo(PathFinding.GenerateAllDirectionPath(this, PlayerControl.player.currentTile)[0].pos);
         yield return null;
     }
@@ -56,12 +57,21 @@ public class SteelChicken : Enemy {
 
     IEnumerator DelayAction()
     {
+        enemyUI.ActionImageOn();
         yield return null;
     }
 
 
     IEnumerator Attack()
     {
+        enemyUI.ActionImageOff();
+
+        List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
+        for (int i = 0; i < tiles.Count; i++)
+        {
+            ArchLoader.instance.MadeEffect(CardEffect.OUTWARD, tiles[i]);
+        }
+        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX2, transform.position);
         PlayerControl.player.GetDamage(atk);
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE);
         yield return StartCoroutine(AnimationRoutine(0));

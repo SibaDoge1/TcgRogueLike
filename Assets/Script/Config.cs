@@ -7,6 +7,8 @@ public struct LevelSetting
 {
     public int battleRoomNum;
     public int eventRoomNum;
+    public bool bossRoom;
+    public bool endRoom;
 }
 public class Config : MonoBehaviour
 {
@@ -37,4 +39,7 @@ public class Config : MonoBehaviour
     public RoomType TestRoomType;
     public string TestRoomName;
 
+    [Header("CardTest")]
+    public bool CardTestMode;
+    public int cardNum;
 }

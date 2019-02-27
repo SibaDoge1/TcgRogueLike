@@ -13,11 +13,13 @@ public class Map : MonoBehaviour
         startRoom = startRoom_;
         //StartRoom.OpenDoors();
     }
-    public void Init(int fl,int ba,int ev)
+    public void Init(int fl,int ba,int ev,bool bo,bool isend)
     {
         floor = fl;
         battleRoomNum = ba;
         eventRoomNum = ev;
+        boss = bo;
+        end = isend;
     }
     private List<Room> room;
     public List<Room> Rooms
@@ -49,20 +51,23 @@ public class Map : MonoBehaviour
     public int BattleRoomNum
     {
         get { return battleRoomNum; }
-        set { battleRoomNum = value; }
-    }
-    private int shopRoomNum;
-    public int ShopRoomNum
-    {
-        get { return shopRoomNum; }
-        set { shopRoomNum = value; }
     }
     private int eventRoomNum;
     public int EventRoomNum
     {
         get { return eventRoomNum; }
-        set { eventRoomNum = value; }
     }
+    private bool boss;
+    public bool Boss
+    {
+        get { return boss; }
+    }
+    private bool end;
+    public bool End
+    {
+        get { return end; }
+    }
+
 
     private Vector2Int minBorder;
     public Vector2Int MinBorder

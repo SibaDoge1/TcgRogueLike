@@ -97,17 +97,14 @@ public class Robot : Enemy
             case 2:
                 SpawnEnemy(4006, currentRoom.GetTile(new Vector2Int(2, 6)));
                 SpawnEnemy(4006, currentRoom.GetTile(new Vector2Int(8, 6)));
-
                 SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(3, 6)));
                 SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(5, 8)));
                 SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(7, 6)));
                 SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(5, 4)));
-
                 SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(2, 3)));
                 SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(2, 9)));
                 SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(8, 9)));
                 SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(8, 3)));
-
                 SpawnEnemy(4002, currentRoom.GetTile(new Vector2Int(4, 7)));
                 SpawnEnemy(4007, currentRoom.GetTile(new Vector2Int(5, 9)));
 
@@ -121,18 +118,20 @@ public class Robot : Enemy
         List<Arch.Tile> tiles = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(EffectDelegate.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
 
         yield return null;
     }
     IEnumerator Attack()
     {
+        SoundDelegate.instance.PlayEffectSound(EffectSound.ATTACK, transform.position);
+
         ClearRangeList();
         List<Arch.Tile> targets = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < targets.Count; i++)
         {
-            EffectDelegate.instance.MadeEffect(CardEffectType.Blood, targets[i]);
+            ArchLoader.instance.MadeEffect(EnemyEffect.ENEMYEXPLOSIONC, targets[i]);
         }
         if (TileUtils.AI_Find(targets))
         {
@@ -152,4 +151,13 @@ public class Robot : Enemy
         }
     }
 
+    protected override void OnDieCallback()
+    {
+        OffTile_Floor stair = ArchLoader.instance.GetOffTile(95) as OffTile_Floor;
+        stair.Init(95);
+        currentTile.offTile = stair;
+        stair.targetFloor = 5;
+
+        base.OnDieCallback();
+    }
 }
