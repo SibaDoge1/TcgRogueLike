@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ToastMessage : MonoBehaviour
-{
+{/*
     public static ToastMessage Instance { get; private set; }
     void Awake()
     {
@@ -51,5 +51,5 @@ public class ToastMessage : MonoBehaviour
         AndroidJavaObject toast = Toast.CallStatic<AndroidJavaObject>("makeText", context, javaString, Toast.GetStatic<int>("LENGTH_SHORT"));
         toast.Call("show");
     }
-
+    */
 }

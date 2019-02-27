@@ -42,14 +42,14 @@ public class SaveData1
 public static class SaveData
 {
     private static SaveData1 saveData;
-    private static string Ext = ".ini";
+    private static string Ext = ".dat";
     private static string FileName = "save";
-    private static string Path = Application.dataPath;
+    private static string Path = Application.persistentDataPath;
 
     #region FirstSetUp
     public static void FirstSetUp()
     {
-        //bool loadComplete = JsonLoad(FileName, Path);
+        bool loadComplete = JsonLoad(FileName, Path);
         if (saveData == null)
             saveData = new SaveData1();
         if (saveData.isSet)
@@ -75,12 +75,11 @@ public static class SaveData
         }
 
         Debug.Log(JsonConvert.SerializeObject(saveData));
-        /*
+        
         if (!loadComplete)
         {
             JsonSave(saveData, FileName, Path);
         }
-        */
     }
     #endregion
 
@@ -292,6 +291,22 @@ public static class SaveData
     }
 
     /// <summary>
+    /// 랜덤하게 카드를 언락하는 함수
+    /// </summary>
+    public static void GetRandomCard()
+    {
+        List<int> unobtainedCards = new List<int>();
+        foreach (KeyValuePair<int, CardData> pair in Database.cardDatas)
+        {
+            if (GetCardUnlockData(pair.Key) == false)
+                unobtainedCards.Add(pair.Key);
+        }
+        int randomIdx = UnityEngine.Random.Range(0, unobtainedCards.Count);
+        SetCardUnlockData(unobtainedCards[randomIdx], true);
+
+    }
+
+    /// <summary>
     /// 스테이지 도달 시 콜
     /// </summary>
     /// <param name="i">도달한 층</param>
@@ -353,6 +368,7 @@ public static class SaveData
         saveData.diaryUnlockData[i][1] = false;
     }
 
+    #region For Save/Load
     public static void LoadFile()
     {
     }
@@ -410,5 +426,5 @@ public static class SaveData
         Debug.Log("SaveFile Loaded" + json);
         return true;
     }
+    #endregion
 }
- 
