@@ -138,8 +138,8 @@ public class Diary : MonoBehaviour {
         int trueCount = 0;
         foreach (KeyValuePair<int, DiaryData> pair in Database.diaryDatas)
         {
-            if (SaveData.GetDiaryUnlockData(pair.Key)[0]) trueCount++;
+            if (SaveManager.GetDiaryUnlockData(pair.Key)[0]) trueCount++;
         }
-        unlockRate.text = (float)trueCount*100 / (float)(SaveData.DiaryDataCount - 1) + "%";
+        unlockRate.text = (float)trueCount*100 / (float)(SaveManager.DiaryDataCount - 1) + "%";
     }
 }

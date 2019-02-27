@@ -1,26 +1,26 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Newtonsoft.Json;
-using System;
-using System.Text;
 
 [Serializable]
-public class SaveData1
+public class SaveData
 {
-    public SaveData1()
+    public SaveData()
     {
         //default value
         cardUnlockData = new Dictionary<int, bool>();
         diaryUnlockData = new Dictionary<int, bool[]>();
         monsterKillData = new Dictionary<int, int>();
-        stageArriveData = new Dictionary<int, bool>();
+        stageArriveData = new List<int>();
         achiveUnlockData = new Dictionary<int, bool>();
         isGetEnding = false;
         gameOverNum = 0;
         isSet = false;
+        savedTime = DateTimeOffset.Parse("2000/01/01 00:00:00");
     }
     public float bgmValue;
     public float fxValue;
@@ -29,29 +29,30 @@ public class SaveData1
     public Dictionary<int, bool> achiveUnlockData;
     public Dictionary<int, bool[]> diaryUnlockData; // [0] 일지 해금여부, [1] 새로운 일지인지 여부
     public Dictionary<int, int> monsterKillData;
-    public Dictionary<int, bool> stageArriveData; //TODO: 미구현
+    public List<int> stageArriveData;
     public bool isGetEnding;
     public uint gameOverNum;
     public bool isSet;
-
+    public DateTimeOffset savedTime;
 }
 
 /// <summary>
 /// Datas that will be used for save & load
 /// </summary>
-public static class SaveData
+public static class SaveManager
 {
-    private static SaveData1 saveData;
-    private static string Ext = ".dat";
-    private static string FileName = "save";
-    private static string Path = Application.persistentDataPath;
+    private static SaveData saveData;
+    public static int numOfStages = 5;
+    public static string Ext = ".dat";
+    public static string FileName = "save";
+    public static string Path = Application.persistentDataPath;
 
     #region FirstSetUp
     public static void FirstSetUp()
     {
-        bool loadComplete = JsonLoad(FileName, Path);
+        bool loadComplete = JsonLoad(FileName, Path); //클라우드시 제거
         if (saveData == null)
-            saveData = new SaveData1();
+            saveData = new SaveData();
         if (saveData.isSet)
         {
             InitCardUnlockDatas();
@@ -71,15 +72,16 @@ public static class SaveData
             InitDiaryUnlockDatas();
             InitMonsterKillDatas();
             InitStageArriveDatas();
+            saveData.savedTime = DateTime.Now;
             saveData.isSet = true;
         }
-
-        Debug.Log(JsonConvert.SerializeObject(saveData));
         
-        if (!loadComplete)
+        if (!loadComplete) //클라우드시 제거
         {
-            JsonSave(saveData, FileName, Path);
+            JsonSave(FileName, Path);
         }
+        
+        Debug.Log(JsonConvert.SerializeObject(saveData));
     }
     #endregion
 
@@ -126,15 +128,15 @@ public static class SaveData
         }
         saveData.monsterKillData[i] = value;
     }
-    private static void SetStageArriveData(int i, bool isUnlock)
+    private static void SetStageArriveData(int i, int value)
     {
-        if (!saveData.stageArriveData.ContainsKey(i))
+        if (i > saveData.stageArriveData.Count)
         {
             Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
-            saveData.stageArriveData.Add(i, isUnlock);
+            //saveData.stageArriveData.Add(0);
             //return;
         }
-        saveData.stageArriveData[i] = isUnlock;
+        saveData.stageArriveData[i] = value;
 
     }
 
@@ -172,7 +174,10 @@ public static class SaveData
     }
     private static void InitStageArriveDatas()
     {
-
+        for(int i = saveData.stageArriveData.Count; i < 5; i++)
+        {
+            saveData.stageArriveData.Add(0);
+        }
     }
 
     #endregion
@@ -221,15 +226,13 @@ public static class SaveData
     }
     public static bool[] GetDiaryUnlockData(int i)
     {
-        if (!saveData.diaryUnlockData.ContainsKey(i))
-            Debug.Log("Key" + i);
         return saveData.diaryUnlockData[i];
     }
     public static int GetMonsterKillData(int i)
     {
         return saveData.monsterKillData[i];
     }
-    public static bool GetStageArriveData(int i)
+    public static int GetStageArriveData(int i)
     {
         return saveData.stageArriveData[i];
     }
@@ -248,8 +251,9 @@ public static class SaveData
     }
     public static void SetFxValue(float value)
     {   
-        fxValue = value;
-        SoundDelegate.instance.EffectSound = fxValue;//효과음 조절
+        saveData.fxValue = value;
+        if (SoundDelegate.instance != null)
+            SoundDelegate.instance.EffectSound = saveData.fxValue;//효과음 조절
     }
     public static void SetUIValue(float value)
     {   //TODO: UI 투명도 조절
@@ -265,11 +269,12 @@ public static class SaveData
         saveData.monsterKillData[i]++;
         if (saveData.monsterKillData[i] - 1 > 0) return; //버그시 확인 필
 
-        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (Database.achiveDatas[idx].type == "kill" && int.Parse(Database.achiveDatas[idx].condition) == i)
+            if(pair.Value.type == "kill" && int.Parse(pair.Value.condition) == i)
             {
-                GetAchivement(idx);
+                GetAchivement(pair.Key);
+                return;
             }
         }
     }
@@ -315,12 +320,13 @@ public static class SaveData
     /// <param name="i">도달한 층</param>
     public static void ArriveStage(int i)
     {
-        SetStageArriveData(i, true);
-        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        saveData.stageArriveData[i]++;
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (Database.achiveDatas[idx].type == "floor" && int.Parse(Database.achiveDatas[idx].info) == i)
+            if (pair.Value.type == "floor" && int.Parse(pair.Value.condition) == i)
             {
-                GetAchivement(idx);
+                GetAchivement(pair.Key);
+                return;
             }
         }
     }
@@ -331,11 +337,12 @@ public static class SaveData
     public static void GetEnding()
     {
         saveData.isGetEnding = true;
-        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (Database.achiveDatas[idx].type == "ending")
+            if (pair.Value.type == "ending")
             {
-                GetAchivement(idx);
+                GetAchivement(pair.Key);
+                return;
             }
         }
         SceneManager.LoadScene("EndingScene");
@@ -347,15 +354,22 @@ public static class SaveData
     public static void GetGameOver()
     {
         saveData.gameOverNum++;
-        for (int idx = 1; idx <= Database.achiveDatas.Count; idx++)
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (Database.achiveDatas[idx].type == "gameover" && int.Parse(Database.achiveDatas[idx].info) <= saveData.gameOverNum)
+            if (pair.Value.type == "gameover" && int.Parse(pair.Value.condition) >= saveData.gameOverNum)
             {
-                GetAchivement(idx);
+                GetAchivement(pair.Key);
             }
         }
     }
 
+    public static void ApplySave()
+    {
+        if (saveData == null) return;
+        SetBgmValue(saveData.bgmValue);
+        SetFxValue(saveData.fxValue);
+        SetUIValue(saveData.UIValue);
+    }
 
     public static bool CheckNew()
     {
@@ -372,32 +386,40 @@ public static class SaveData
     }
 
     #region For Save/Load
-    public static void LoadFile()
-    {
-    }
 
-    public static byte[] DataToByte()
+    public static byte[] OnCloudSaveStart()
     {
+        if (saveData == null) FirstSetUp();
+        saveData.savedTime = DateTimeOffset.Now;
         string json = JsonConvert.SerializeObject(saveData);
         return Encoding.UTF8.GetBytes(json); ;
     }
-    public static void ByteToData(byte[] byteArr)
+    public static void OnCloudLoadCompleted(byte[] byteArr)
     {
         string json = Encoding.UTF8.GetString(byteArr);
-        Debug.Log("loaded save: " + json);
         if (json.Length == 0)
         {
-            Debug.Log("0 lenth data from cloud, exit");
+            Debug.Log("0 lenth data from save, exit");
             return;
         }
-        saveData = JsonConvert.DeserializeObject<SaveData1>(json);
+        Debug.Log("loaded save: " + json);
+        SaveData cloud = JsonConvert.DeserializeObject<SaveData>(json);
+        if (saveData != null)
+        {
+            if (DateTimeOffset.Compare(cloud.savedTime, saveData.savedTime) < 0)
+            {
+                Debug.Log("로컬이 클라우드보다 최신입니다. 로컬세이브를 적용합니다. " + json);
+                return;
+            }
+        }
+        saveData = JsonConvert.DeserializeObject<SaveData>(json);
         return;
     }
 
-    public static bool JsonSave(SaveData1 data, string filename, string path)
+    public static bool JsonSave(string filename, string path)
     {
-        string json = JsonConvert.SerializeObject(data);
-        Encoding.UTF8.GetBytes(json);
+        saveData.savedTime = DateTimeOffset.Now;
+        string json = JsonConvert.SerializeObject(saveData);
         FileStream file = new FileStream(path + "/" + filename + Ext, FileMode.Create);
         if (file == null)
         {
@@ -409,7 +431,7 @@ public static class SaveData
         writer.Write(json);
 
         writer.Close();
-        Debug.Log("SaveComplete" + json);
+        Debug.Log("Local Save Complete" + json);
         return true;
     }
 
@@ -420,13 +442,13 @@ public static class SaveData
         string json = reader.ReadToEnd();
         if (file.Length == 0)
         {
-            Debug.Log("make new savefile");
+            Debug.Log("make new Local Save");
             reader.Close();
             return false;
         }
-        saveData = JsonConvert.DeserializeObject<SaveData1>(json);
+        saveData = JsonConvert.DeserializeObject<SaveData>(json);
         reader.Close();
-        Debug.Log("SaveFile Loaded" + json);
+        Debug.Log("Local Save Loaded" + json);
         return true;
     }
     #endregion

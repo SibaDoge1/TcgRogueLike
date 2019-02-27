@@ -6,7 +6,7 @@ public class GooglePlayUI : MonoBehaviour {
 
 	// Use this for initialization
 	public void OnLogIn () {
-        GooglePlayManager.LogIn();
+        GooglePlayManager.LogIn(null, null);
     }
     public void OnLogOut()
     {
@@ -16,6 +16,14 @@ public class GooglePlayUI : MonoBehaviour {
     public void OnLeaderboard()
     {
         GooglePlayManager.ShowLeaderboardUI();
+    }
+    public void OnLeaderboardScore()
+    {
+        GooglePlayManager.ReportScore(GPGSIds.leaderboard_achivementscore, 5);
+    }
+    public void OnAchiveClear()
+    {
+        GooglePlayManager.UnlockAchievement(GPGSIds.achievement_end,100);
     }
     public void OnAchive()
     {

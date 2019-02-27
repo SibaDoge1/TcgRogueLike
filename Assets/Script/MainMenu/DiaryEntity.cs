@@ -25,11 +25,11 @@ public class DiaryEntity : MonoBehaviour {
     {
         diaryData = data;
         _name.text = diaryData.title;
-        if (SaveData.GetDiaryUnlockData(diaryData.num)[0] == false) return;
+        if (SaveManager.GetDiaryUnlockData(diaryData.num)[0] == false) return;
         _lock.SetActive(false);
         image.SetActive(true);
 
-        if (SaveData.GetDiaryUnlockData(diaryData.num)[1] == true) OnNewIcon();
+        if (SaveManager.GetDiaryUnlockData(diaryData.num)[1] == true) OnNewIcon();
         else OffNewIcon();
 
         string imagePath;

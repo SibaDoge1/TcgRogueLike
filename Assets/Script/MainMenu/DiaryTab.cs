@@ -20,7 +20,7 @@ public class DiaryTab : MonoBehaviour {
         List<int> diaryList = transform.parent.GetComponent<Diary>().Diaries[category];
         for(int i=0; i < diaryList.Count; i++)
         {
-            if (SaveData.GetDiaryUnlockData(diaryList[i])[1] == true)
+            if (SaveManager.GetDiaryUnlockData(diaryList[i])[1] == true)
             {
                 OnNewIcon();
                 return;

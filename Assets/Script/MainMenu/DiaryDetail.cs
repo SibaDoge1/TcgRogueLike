@@ -41,14 +41,14 @@ public class DiaryDetail : MonoBehaviour {
         }
         categoryObject = transform.Find(objectPath);
 
-        if (SaveData.GetDiaryUnlockData(diaryData.num)[0] == false)
+        if (SaveManager.GetDiaryUnlockData(diaryData.num)[0] == false)
         {
             Debug.Log(diaryData.num);
             noData.transform.Find("Text").GetComponent<Text>().text = Database.GetAchiveDataByDiary(diaryData.num).info;
             return;
         }
         Debug.Log(diaryData.category);
-        SaveData.ChangeNewToOld(diaryData.num);
+        SaveManager.ChangeNewToOld(diaryData.num);
         noData.SetActive(false);
         categoryObject.gameObject.SetActive(true);
         title.text = diaryData.title;

@@ -44,11 +44,12 @@ public static class Database
     {
         return monsterDatas[i];
     }
+    /* 머지했더니 이거 컴파일오류 남, 수정필요
     public static CardPoolData GetCardPoolByValue(int value)
     {
         int offset = int.MaxValue;
         int index = 0;
-         for(int i=0; i<cardPoolDatas.Count;i++)
+        for (int i=0; i<cardPoolDatas.Count;i++)
         {
             int temp = Mathf.Abs(value - cardPoolDatas[i].value);
             if(temp<offset)
@@ -59,13 +60,14 @@ public static class Database
         }
         return cardPoolDatas[index];
     }
+    */
     public static AchiveData GetAchiveDataByDiary(int num)
     {
-        for (int i = 1; i < achiveDatas.Count; i++)
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if(int.Parse(achiveDatas[i].reward) == num)
+            if (int.Parse(achiveDatas[pair.Key].reward) == num)
             {
-                return achiveDatas[i];
+                return achiveDatas[pair.Key];
             }
         }
         return null;

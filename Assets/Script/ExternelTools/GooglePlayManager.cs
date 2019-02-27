@@ -9,6 +9,7 @@ using System;
 //참고한 자료 : https://minhyeokism.tistory.com/72?category=700407, https://huiyoi.tistory.com/95
 public static class GooglePlayManager
 {
+    public delegate void voidFunc();
 
     //게임서비스 플러그인 초기화시에 EnableSavedGames()를 넣어서 저장된 게임 사용할 수 있게 합니다.
 
@@ -21,9 +22,10 @@ public static class GooglePlayManager
 
     {
 #if UNITY_ANDROID
+        //if (PlayGamesPlatform.Instance != null) return;
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         // enables saving game progress.
-        .EnableSavedGames()
+        //.EnableSavedGames()
         // registers a callback to handle game invitations received while the game is not running.
         //.WithInvitationDelegate(null)
         // registers a callback for turn based match notifications received while the
@@ -55,45 +57,29 @@ public static class GooglePlayManager
 
     //인증여부 확인
 
-    public static void LogIn()
+    public static void LogIn(voidFunc successFunc, voidFunc failFunc)
     {
-#if UNITY_ANDROID
         Debug.Log("login");
         Social.localUser.Authenticate((bool success) =>
         {
             if (success)
             {
                 Debug.Log("login success");
+                successFunc();
                 // to do ...
                 // 구글 플레이 게임 서비스 로그인 성공 처리
             }
             else
             {
                 Debug.Log("login fail");
+                failFunc();
                 // to do ...
                 // 구글 플레이 게임 서비스 로그인 실패 처리
             }
         });
-
-#elif UNITY_IOS
-        Social.localUser.Authenticate((bool success) =>
-        {
-            if (success)
-            {
-                // to do ...
-                // 애플 게임 센터 로그인 성공 처리
-            }
-            else
-            {
-                // to do ...
-                // 애플 게임 센터 로그인 실패 처리
-            }
-        });
-#endif
     }
 
     public static void LogOut()
-
     {
         PlayGamesPlatform.Instance.SignOut();
     }
@@ -106,12 +92,12 @@ public static class GooglePlayManager
 
     }
 
-    public static void UnlockAchievement(int score)
+    public static void UnlockAchievement(string achive, int score)
     {
         if (score >= 100)
         {
 #if UNITY_ANDROID
-            //Social.ReportProgress(GPGSIds.achievement_gamestart, 100f, null);
+            Social.ReportProgress(achive, 100f, null);
 #elif UNITY_IOS
             Social.ReportProgress("Score_100", 100f, null);
 #endif
@@ -142,11 +128,10 @@ public static class GooglePlayManager
         Social.ShowAchievementsUI();
     }
 
-    public static void ReportScore(int score)
+    public static void ReportScore(string borad, int score)
     {
 #if UNITY_ANDROID
-        /*
-        Social.ReportScore(score, GPGSIds.leaderboard_achivementscore, (bool success) =>
+        Social.ReportScore(score, borad, (bool success) =>
         {
             if (success)
             {
@@ -158,7 +143,7 @@ public static class GooglePlayManager
                 // Report 실패
                 // 그에 따른 처리
             }
-        });*/
+        });
 #elif UNITY_IOS
  
         Social.ReportScore(score, "Leaderboard_ID", (bool success) =>
@@ -244,7 +229,7 @@ public static class GooglePlayManager
         if (!CheckLogin()) //로그인되지 않았으면
 
         {
-            LogIn();
+            LogIn(null, null);
             //로그인루틴을 진행하던지 합니다.
 
         }
@@ -285,12 +270,14 @@ public static class GooglePlayManager
             // handle reading or writing of saved game.
             //파일이 준비되었습니다. 실제 게임 저장을 수행합니다.
             //저장할데이터바이트배열에 저장하실 데이터의 바이트 배열을 지정합니다.
-            SaveGame(game, SaveData.DataToByte(), DateTime.Now.TimeOfDay);
+            SaveGame(game, SaveManager.OnCloudSaveStart(), DateTime.Now.TimeOfDay);
             //SaveGame(game, "저장할데이터바이트배열", DateTime.Now.TimeOfDay);
         }
         else
         {
-            Debug.LogWarning("저장 중 파일열기에 실패 했습니다: " + status);
+            Debug.LogWarning("클라우드 저장 중 파일열기에 실패 했습니다: " + status);
+            SaveManager.FirstSetUp();
+            SaveManager.JsonSave(SaveManager.FileName, SaveManager.Path);
             //파일열기에 실패 했습니다. 오류메시지를 출력하든지 합니다.
         }
     }
@@ -323,12 +310,14 @@ public static class GooglePlayManager
     {
         if (status == SavedGameRequestStatus.Success)
         {
-            Debug.LogWarning("데이터 저장이 완료되었습니다.");
+            Debug.LogWarning("클라우드 저장이 완료되었습니다.");
             //데이터 저장이 완료되었습니다.
         }
         else
         {
-            Debug.LogWarning("데이터 저장에 실패 했습니다: " + status);
+            Debug.LogWarning("클라우드 저장에 실패 했습니다: " + status);
+            SaveManager.FirstSetUp();
+            SaveManager.JsonSave(SaveManager.FileName, SaveManager.Path);
             //데이터 저장에 실패 했습니다.
         }
     }
@@ -342,7 +331,7 @@ public static class GooglePlayManager
     {
         if (!CheckLogin())
         {
-            LogIn();
+            LogIn(null, null);
             //로그인되지 않았으니 로그인 루틴을 진행하던지 합니다.
         }
         //내가 사용할 파일이름을 지정해줍니다. 그냥 컴퓨터상의 파일과 똑같다 생각하시면됩니다.
@@ -360,8 +349,9 @@ public static class GooglePlayManager
         }
         else
         {
-            Debug.LogWarning("로드 중 파일열기에 실패 했습니다: " + status);
-            SaveData.FirstSetUp();
+            Debug.LogWarning("클라우드 로드 중 파일열기에 실패 했습니다: " + status);
+            SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
+            SaveManager.FirstSetUp();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
         }
     }
@@ -381,12 +371,15 @@ public static class GooglePlayManager
             // handle processing the byte array data
             //데이터 읽기에 성공했습니다.
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
-            SaveData.ByteToData(data);
+            SaveManager.OnCloudLoadCompleted(data);
+            SaveManager.FirstSetUp();
+            SaveToCloud();
         }
         else
         {
-            Debug.LogWarning("로드 중 데이터 읽기에 실패 했습니다: " + status);
-            SaveData.FirstSetUp();
+            Debug.LogWarning("클라우드 로드 중 데이터 읽기에 실패 했습니다: " + status);
+            SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
+            SaveManager.FirstSetUp();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
         }
     }

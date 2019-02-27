@@ -32,24 +32,24 @@ public class Option : MonoBehaviour {
 
     public void SetSliderValues()
     {
-        bgmSlider.value = SaveData.GetBgmValue();
-        fxSlider.value = SaveData.GetFxValue();
-        UISlider.value = SaveData.GetUIValue();
+        bgmSlider.value = SaveManager.GetBgmValue();
+        fxSlider.value = SaveManager.GetFxValue();
+        UISlider.value = SaveManager.GetUIValue();
     }
 
     public void OnBgmSliderChanged(Slider sld)
     {
-        SaveData.SetBgmValue(sld.value);
+        SaveManager.SetBgmValue(sld.value);
     }
 
     public void OnFxSliderChanged(Slider sld)
     {
-        SaveData.SetFxValue(sld.value);
+        SaveManager.SetFxValue(sld.value);
     }
 
     public void OnUISliderChanged(Slider sld)
     {
-        SaveData.SetUIValue(sld.value);
+        SaveManager.SetUIValue(sld.value);
     }
 
     public void OnExitButtonDown()

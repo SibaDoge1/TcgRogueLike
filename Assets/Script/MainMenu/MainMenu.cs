@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,7 @@ public class MainMenu : MonoBehaviour
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
         Database.ReadDatas();
-        SaveData.FirstSetUp();
+        SaveManager.FirstSetUp();
         GooglePlayManager.Init();
 #if UNITY_ANDROID
         Debug.Log("안드로이드");
@@ -36,14 +37,15 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        //GooglePlayManager.LoadFromCloud();
-        //GooglePlayManager.SaveToCloud();
+        //GooglePlayManager.LoadFromCloud(); //클라우드시 사용
+        SaveManager.ApplySave();
         CheckNew();
+        //GooglePlayManager.SaveToCloud();
     }
 
     public void CheckNew()
     {
-        if (SaveData.CheckNew())
+        if (SaveManager.CheckNew())
             _new.SetActive(true);
         else
             _new.SetActive(false);
@@ -80,11 +82,11 @@ public class MainMenu : MonoBehaviour
 
     public void SetDiaryAllTrue()
     {
-        SaveData.SetDiaryAllTrue();
+        SaveManager.SetDiaryAllTrue();
     }
     public void SetCardAllTrue()
     {
-        SaveData.SetCardAllTrue();
+        SaveManager.SetCardAllTrue();
     }
 
 }
