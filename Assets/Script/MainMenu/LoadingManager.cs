@@ -35,6 +35,7 @@ public class LoadingManager : MonoBehaviour {
 
     private IEnumerator LoadSceneRoutine()
     {
+        yield return null;
         ArchLoader.instance.StartCache();
         AsyncOperation op = SceneManager.LoadSceneAsync("Levels/Floor0");
         op.allowSceneActivation = false;

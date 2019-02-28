@@ -45,4 +45,9 @@ public class GooglePlayUI : MonoBehaviour {
     {
         GooglePlayManager.ShowSelectUI();
     }
+
+    public void Toggle()
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
 }
