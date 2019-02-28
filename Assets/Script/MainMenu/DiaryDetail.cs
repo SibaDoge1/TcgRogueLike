@@ -61,6 +61,7 @@ public class DiaryDetail : MonoBehaviour {
 
     public void Off()
     {
+        MainMenu.ButtonDown();
         noData.SetActive(true);
         if(OffNew != null)
             OffNew();
@@ -78,6 +79,7 @@ public class DiaryDetail : MonoBehaviour {
 
     public void Zoom()
     {
+        MainMenu.ButtonDown();
         if (diaryData.spritePath.Length != 0) return;
         zoomPanel.SetActive(true);
         zoomPanel.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(objectPath + "Full");
@@ -85,6 +87,7 @@ public class DiaryDetail : MonoBehaviour {
 
     public void ZoomOff()
     {
-
+        MainMenu.ButtonDown();
+        zoomPanel.SetActive(false);
     }
 }

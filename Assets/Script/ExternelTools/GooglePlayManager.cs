@@ -105,6 +105,10 @@ public static class GooglePlayManager
     }
     public static void ShowAchievementUI()
     {
+        if (PlayGamesPlatform.Instance == null)
+        {
+            Init();
+        }
         // Sign In 이 되어있지 않은 상태라면
         // Sign In 후 업적 UI 표시 요청할 것
         if (CheckLogin() == false)
@@ -165,6 +169,10 @@ public static class GooglePlayManager
 
     public static void ShowLeaderboardUI()
     {
+        if (PlayGamesPlatform.Instance == null)
+        {
+            Init();
+        }
         // Sign In 이 되어있지 않은 상태라면
         // Sign In 후 리더보드 UI 표시 요청할 것
         if (CheckLogin() == false)
@@ -225,6 +233,10 @@ public static class GooglePlayManager
     public static void SaveToCloud()
 
     {
+        if(PlayGamesPlatform.Instance == null)
+        {
+            Init();
+        }
 
         if (!CheckLogin()) //로그인되지 않았으면
 
@@ -329,6 +341,10 @@ public static class GooglePlayManager
 
     public static void LoadFromCloud()
     {
+        if (PlayGamesPlatform.Instance == null)
+        {
+            Init();
+        }
         if (!CheckLogin())
         {
             LogIn(null, null);
@@ -352,6 +368,7 @@ public static class GooglePlayManager
             Debug.LogWarning("클라우드 로드 중 파일열기에 실패 했습니다: " + status);
             SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
             SaveManager.FirstSetUp();
+            SaveManager.ApplySave();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
         }
     }
@@ -373,6 +390,7 @@ public static class GooglePlayManager
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
             SaveManager.OnCloudLoadCompleted(data);
             SaveManager.FirstSetUp();
+            SaveManager.ApplySave();
             SaveToCloud();
         }
         else
@@ -380,6 +398,7 @@ public static class GooglePlayManager
             Debug.LogWarning("클라우드 로드 중 데이터 읽기에 실패 했습니다: " + status);
             SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
             SaveManager.FirstSetUp();
+            SaveManager.ApplySave();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
         }
     }

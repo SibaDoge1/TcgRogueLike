@@ -11,11 +11,13 @@ public class Exit : MonoBehaviour {
 
     public void off()
     {
+        MainMenu.ButtonDown();
         gameObject.SetActive(false);
     }
 
     public void QuitGame()
     {
+        MainMenu.ButtonDown();
         Application.Quit();
     }
 }

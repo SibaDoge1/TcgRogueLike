@@ -6,144 +6,43 @@ using UnityEngine.UI;
 
 public delegate void voidFunc();
 
-public class FadeTool : MonoBehaviour
+public static class FadeTool
 {
-    private static FadeTool instance;
-    public static FadeTool Instance
+    private static Fade fade;
+
+    public static void FadeOut(float time, voidFunc func = null)
     {
-        get { return instance; }
+        if (!IsExist())
+        {
+            return;
+        }
+        fade.StartCoroutine(fade.FadeOutRoutine(time, func));
     }
 
-    private Image fade;
-    // Start is called before the first frame update
-    void Awake()
+    public static void FadeIn(float time, voidFunc func = null)
     {
-        if (instance == null) instance = this;
-        else if(instance != this)
+        if (!IsExist())
         {
-            Debug.LogWarning("Singleton Error! : " + this.name);
-            Destroy(gameObject);
+            return;
         }
-        DontDestroyOnLoad(gameObject);
-        fade = GameObject.Find("Canvas").transform.Find("Fade").GetComponent<Image>();
+        fade.StartCoroutine(fade.FadeInRoutine(time, func));
     }
-    void OnEnable()
+    public static void FadeOutIn(float time, float waitTime = 0, voidFunc func = null, voidFunc endFunc = null)
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        fade = GameObject.Find("Canvas").transform.Find("Fade").GetComponent<Image>();
-    }
-    public void FadeOut(float time, voidFunc func)
-    {
-        StartCoroutine(FadeOutRoutine(time, func));
-    }
-
-    public void FadeIn(float time, voidFunc func)
-    {
-        StartCoroutine(FadeInRoutine(time, func));
-    }
-    public void FadeInOut(float time, voidFunc func)
-    {
-        StartCoroutine(FadeInOutRoutine(time,0f, func, null));
-    }
-    public void FadeInOut(float time, float waitTime, voidFunc func)
-    {
-        StartCoroutine(FadeInOutRoutine(time, waitTime, func, null));
-    }
-    public void FadeInOut(float time, float waitTime, voidFunc func, voidFunc endFunc)
-    {
-        StartCoroutine(FadeInOutRoutine(time, waitTime, func, endFunc));
-    }
-
-    IEnumerator FadeOutRoutine(float time, voidFunc func)
-    {
-        //fade.gameObject.SetActive(true);
-        Color DefaultCol = fade.color;
-        Color col = fade.color;
-        float curtime = 0f;
-        while (col.a < 1)
+        if (!IsExist())
         {
-            col = fade.color;
-            curtime += Time.deltaTime;
-            col.a = Mathf.Lerp(DefaultCol.a, 1, curtime / time);
-            fade.color = col;
-            yield return null;
+            return;
         }
-        if (func != null)
-        {
-            func();
-        }
-        //fade.gameObject.SetActive(false);
+        fade.StartCoroutine(fade.FadeOutInRoutine(time, waitTime, func, endFunc));
     }
-
-    IEnumerator FadeInRoutine(float time, voidFunc func)
+    public static bool IsExist()
     {
-        //fade.gameObject.SetActive(true);
-        Color DefaultCol = fade.color;
-        Color col = fade.color;
-        float curtime = 0f;
-        while (col.a > 0)
+        if (fade == null)
         {
-            col = fade.color;
-            curtime += Time.deltaTime;
-            col.a = Mathf.Lerp(DefaultCol.a, 0, curtime / time);
-            fade.color = col;
-            yield return null;
+            fade = GameObject.Find("Canvas").transform.Find("Fade").GetComponent<Fade>();
+            return fade != null;
         }
-        if (func != null)
-        {
-            func();
-        }
-        //fade.gameObject.SetActive(false);
-    }
-
-    IEnumerator FadeInOutRoutine(float time, float waitTime, voidFunc middleFunc, voidFunc endFunc)
-    {
-        //fade.gameObject.SetActive(true);
-        Color DefaultCol = fade.color;
-        Color col = fade.color;
-        float curtime = 0f;
-        while (col.a < 1)
-        {
-            col = fade.color;
-            curtime += Time.deltaTime;
-            col.a = Mathf.Lerp(DefaultCol.a, 1, curtime / time);
-            fade.color = col;
-            yield return null;
-        }
-        if (middleFunc != null)
-        {
-            middleFunc();
-        }
-        yield return new WaitForSeconds(waitTime);
-        DefaultCol = fade.color;
-        col = fade.color;
-        curtime = 0f;
-        while (col.a > 0)
-        {
-            col = fade.color;
-            curtime += Time.deltaTime;
-            col.a = Mathf.Lerp(DefaultCol.a, 0, curtime / time);
-            fade.color = col;
-            yield return null;
-        }
-        if (endFunc != null)
-        {
-            endFunc();
-        }
-        //fade.gameObject.SetActive(false);
-    }
-
-    public void SetImage(Image image)
-    {
-        fade = image;
+        else
+            return true;
     }
 }

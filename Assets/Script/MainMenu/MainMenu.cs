@@ -16,6 +16,7 @@ public class MainMenu : MonoBehaviour
 
     void Awake()
     {
+        FadeTool.FadeIn(1f, null);
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
@@ -28,6 +29,7 @@ public class MainMenu : MonoBehaviour
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
         Database.ReadDatas();
+        ArchLoader.instance.StartCache();
         SaveManager.FirstSetUp();
         GooglePlayManager.Init();
 #if UNITY_ANDROID
@@ -40,6 +42,7 @@ public class MainMenu : MonoBehaviour
         //GooglePlayManager.LoadFromCloud(); //클라우드시 사용
         SaveManager.ApplySave();
         CheckNew();
+        SoundDelegate.instance.PlayBGM(BGM.FIELDTITLECUT);
         //GooglePlayManager.SaveToCloud();
     }
 
@@ -52,30 +55,40 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    public static void ButtonDown()
+    {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONTITLE);
+    }
+
     public void OnStartButtonDown()
     {
+        ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
         loadingPanel.LoadScene();
     }
 
     public void OnTutorialButtonDown()
     {
+        ButtonDown();
         tutorial.On();
     }
 
     public void OnDiaryButtonDown()
     {
+        ButtonDown();
         voidFunc checkNew = new voidFunc(CheckNew);
         diary.On(checkNew);
     }
 
     public void OnOptionButtonDown()
     {
+        ButtonDown();
         option.On();
     }
 
     public void OnExitButtonDown()
     {
+        ButtonDown();
         exitPanel.on();
     }
 

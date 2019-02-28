@@ -41,30 +41,35 @@ public class Diary : MonoBehaviour {
 
     public void Off()
     {
+        MainMenu.ButtonDown();
         mainmenufunc();
         gameObject.SetActive(false);
     }
 
     public void OnRecordButtonDown()
     {
+        MainMenu.ButtonDown();
         SetTabColor(Category.records);
         DisplayList(Category.records);
     }
 
     public void OnHumanButtonDown()
     {
+        MainMenu.ButtonDown();
         SetTabColor(Category.humans);
         DisplayList(Category.humans);
     }
 
     public void OnIrregularButtonDown()
     {
+        MainMenu.ButtonDown();
         SetTabColor(Category.irregulars);
         DisplayList(Category.irregulars);
     }
 
     public void OnChipButtonDown()
     {
+        MainMenu.ButtonDown();
         SetTabColor(Category.raChips);
         DisplayList(Category.raChips);
     }
@@ -140,6 +145,6 @@ public class Diary : MonoBehaviour {
         {
             if (SaveManager.GetDiaryUnlockData(pair.Key)[0]) trueCount++;
         }
-        unlockRate.text = (float)trueCount*100 / (float)(SaveManager.DiaryDataCount - 1) + "%";
+        unlockRate.text = Mathf.Round((float)trueCount*100 / (float)(SaveManager.DiaryDataCount)) + "%";
     }
 }

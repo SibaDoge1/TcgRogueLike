@@ -12,7 +12,7 @@ public enum BGM
     BOSSFIRE,//화산,연기
     BOSSROBOT,//기계
     BOSSSPIDER,//거미신부
-    FIELDTITLE,
+    FIELDTITLECUT,
     NORMALENDING,
     TRUEENDING
 }

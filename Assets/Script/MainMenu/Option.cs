@@ -54,6 +54,7 @@ public class Option : MonoBehaviour {
 
     public void OnExitButtonDown()
     {
+        MainMenu.ButtonDown();
         gameObject.SetActive(false);
     }
 

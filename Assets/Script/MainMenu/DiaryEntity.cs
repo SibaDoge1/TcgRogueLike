@@ -47,6 +47,7 @@ public class DiaryEntity : MonoBehaviour {
 	
     public void OnClick()
     {
+        MainMenu.ButtonDown();
         detail.On(diaryData, new MainMenu.voidFunc(OffNewIcon));
     }
 

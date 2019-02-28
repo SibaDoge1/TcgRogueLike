@@ -387,6 +387,15 @@ public static class SaveManager
 
     #region For Save/Load
 
+    public static void SaveAll()
+    {
+        GooglePlayManager.SaveToCloud();
+    }
+    public static void LoadAll()
+    {
+        GooglePlayManager.LoadFromCloud();
+    }
+
     public static byte[] OnCloudSaveStart()
     {
         if (saveData == null) FirstSetUp();
