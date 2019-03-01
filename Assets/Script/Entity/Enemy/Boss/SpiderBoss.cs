@@ -33,7 +33,7 @@ public class SpiderBoss : Enemy {
             }
         }else
         {
-            if (currentHp<=12)
+            if (currentHp<=18)
             {
                 currentActionList = changePhaseList;
             }else
@@ -73,7 +73,7 @@ public class SpiderBoss : Enemy {
          WideAttackList = new List<Action>()
          {new Action(WideAttackReady),new Action(WideAttack) } ;
          MoveList = new List<Action>()
-         { new Action(MoveEightWay) , new Action(Delay) , new Action(Delay) , new Action(Delay)};
+         { new Action(MoveEightWay) , new Action(Delay)};
     }
     List<Arch.Tile> targetList;
     IEnumerator WideAttackReady()
@@ -107,11 +107,7 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator SpawnElite()
     {
-        int x = pos.x; int y = pos.y;
-        SpawnEnemy(Random.Range(4005,4009),currentRoom.GetTile(new Vector2Int(x+2,y)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(x-2, y)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(x, y+2)));
-        SpawnEnemy(Random.Range(4005, 4009), currentRoom.GetTile(new Vector2Int(y, y-2)));
+        SpawnEnemy(Random.Range(4005, 4009), TileUtils.DiagonalRange(currentTile, 1));
         yield return StartCoroutine(AnimationRoutine(2));
     }
     IEnumerator AtkReady()
@@ -186,7 +182,7 @@ public class SpiderBoss : Enemy {
         if (PlayerControl.player.currentTile == aimedTile)
         {
             PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);
-            PlayerControl.player.GetDamage(1);
+            PlayerControl.player.GetDamage(0);
         }
         ClearRangeList();
         yield return StartCoroutine(AnimationRoutine(0));

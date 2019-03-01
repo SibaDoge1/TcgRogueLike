@@ -321,6 +321,7 @@ public class Card_Reload : Card
     protected override void CardActive()
     {
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);
+        PlayerData.AkashaGage -= 3;
         PlayerControl.instance.ReLoadDeck();
     }
 }

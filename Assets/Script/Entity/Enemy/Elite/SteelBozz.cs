@@ -27,7 +27,7 @@ public class SteelBozz : Enemy {
         DelayList = null;
         justDeleay = new List<Action>() { new Action(DelayAction) };
         attackList = new List<Action>()
-        { new Action(RangeOn),new  Action(Attack),new Action(Attack),new Action(Suicide)};
+        { new Action(RangeOn),new  Action(Attack),new Action(Attack),new Action(Attack),new Action(Suicide)};
         suicideList = new List<Action>()
         {
             new Action(SelfDestruct),new Action(Suicide)

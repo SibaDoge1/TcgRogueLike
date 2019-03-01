@@ -59,7 +59,7 @@ public class Robot : Enemy
     }
     IEnumerator SelfDestruct()
     {
-        GetDamage(fullHp/3);
+        GetDamage(fullHp/4);
         yield return null;
     }
     int turn = 0;

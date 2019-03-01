@@ -266,12 +266,23 @@ public class Card_WolfBite : Card_Special
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y + 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y + 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y + 1)));
 
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y - 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y - 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y - 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y - 1)));
+
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
         {
@@ -326,12 +337,22 @@ public class Card_BearClaw : Card_Special
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y - 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y + 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 2, y - 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y + 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x + 1, y - 2)));
 
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y + 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y - 1)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y + 2)));
         targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 2, y - 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y + 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - 1)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y + 2)));
+        targetTiles.Add(GameManager.instance.CurrentRoom().GetTile(new Vector2Int(x - 1, y - 2)));
 
 
         for (int i = targetTiles.Count - 1; i >= 0; i--)
