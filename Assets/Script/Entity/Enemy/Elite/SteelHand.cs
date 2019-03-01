@@ -51,7 +51,7 @@ public class SteelHand : Enemy {
         {
             PlayerControl.player.GetDamage(atk);
         }
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX3, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX3, transform.position);
         enemyUI.ActionImageOff();
 
         yield return StartCoroutine(AnimationRoutine(0));

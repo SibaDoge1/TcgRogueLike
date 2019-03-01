@@ -41,5 +41,5 @@ public class Config : MonoBehaviour
 
     [Header("CardTest")]
     public bool CardTestMode;
-    public int cardNum;
+    public int[] cardList;
 }

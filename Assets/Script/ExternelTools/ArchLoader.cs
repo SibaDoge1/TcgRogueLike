@@ -69,6 +69,11 @@ public class ArchLoader : MonoBehaviour {
                 return null;
         }
     }
+    public Sprite GetCardRangeImage(string name)
+    {
+        return cardRangeImage[name];
+    }
+
     public HandCardObject GetCardObject()
     {
         return Instantiate(cardObject).GetComponent<HandCardObject>();
@@ -141,7 +146,7 @@ public class ArchLoader : MonoBehaviour {
     {
         return monos[mono.ToString()];
     }
-    public AudioClip GetSoundEffect(EffectSound sound)
+    public AudioClip GetSoundEffect(SoundEffect sound)
     {
         return soundEffects[sound.ToString()];
     }
@@ -190,11 +195,6 @@ public class ArchLoader : MonoBehaviour {
      targetTile.transform.position, Quaternion.identity);
 
         return go;
-    }
-
-    public GameObject MadeEffect(UIEffect eType, Transform parent)
-    {
-        return Instantiate(uiEffectPrefabs[eType.ToString()], parent);
     }
     public GameObject MadeEffect(int damage, Transform parent)
     {
@@ -300,6 +300,7 @@ public class ArchLoader : MonoBehaviour {
     GameObject editCardObject;
     GameObject checkCardObject;
 
+    Dictionary<string, Sprite> cardRangeImage = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> cardSprites = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> cardFrame = new Dictionary<string, Sprite>();
     Dictionary<string, Sprite> attributes = new Dictionary<string, Sprite>();
@@ -325,12 +326,17 @@ public class ArchLoader : MonoBehaviour {
         {
             attributes.Add(sprites[i].name, sprites[i]);
         }
+
+        sprites = Resources.LoadAll<Sprite>("Card/Range");
+        for(int i=0; i<sprites.Length;i++)
+        {
+            cardRangeImage.Add(sprites[i].name, sprites[i]);
+        }
     }
 
 
     Dictionary<string, GameObject> cardEffectPrefabs = new Dictionary<string, GameObject>();
     Dictionary<string, GameObject> monsterEffectPrefabs = new Dictionary<string, GameObject>();
-    Dictionary<string, GameObject> uiEffectPrefabs = new Dictionary<string, GameObject>();
     Dictionary<string, GameObject> rangeEffectPrefabs = new Dictionary<string, GameObject>();
 
     GameObject textEffectPrefab;
@@ -346,11 +352,6 @@ public class ArchLoader : MonoBehaviour {
         for (int i = 0; i < prefabs.Length; i++)
         {
             monsterEffectPrefabs.Add(prefabs[i].name, prefabs[i]);
-        }
-        prefabs = Resources.LoadAll<GameObject>("EFFECT/UI");
-        for (int i = 0; i < prefabs.Length; i++)
-        {
-            uiEffectPrefabs.Add(prefabs[i].name, prefabs[i]);
         }
         prefabs = Resources.LoadAll<GameObject>("EFFECT/RANGE");
         for (int i = 0; i < prefabs.Length; i++)

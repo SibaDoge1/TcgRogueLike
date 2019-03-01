@@ -163,7 +163,7 @@ public class DeckEditUI : MonoBehaviour
         deckCardObjects = new List<EditCardObject>();
         for(int i=0; i<deck.Count;i++)
         {
-            deckCardObjects.Add(deck[i].InstantiateEditCard());
+            deckCardObjects.Add(deck[i].InstantiateEditCard());          
         }
         for (int i = 0; i < deckCardObjects.Count; i++)
         {
@@ -215,7 +215,6 @@ public class DeckEditUI : MonoBehaviour
 
          PlayerData.Deck = deck;
          PlayerData.AttainCards.Clear();
-         PlayerControl.instance.ReLoadDeck();
          yield return null;
 
         DeleteAllObjects();

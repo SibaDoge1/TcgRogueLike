@@ -48,7 +48,7 @@ public class RabbitEye : Enemy {
             {
             PlayerControl.player.GetDamage(atk);
             }
-            SoundDelegate.instance.PlayEffectSound(EffectSound.SFX2, transform.position);
+            SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX2, transform.position);
 
                 enemyUI.ActionImageOff();
                 ClearRangeList();

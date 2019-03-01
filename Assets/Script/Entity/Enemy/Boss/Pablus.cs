@@ -6,19 +6,25 @@ public class Pablus : Enemy {
 
     protected override void Think()
     {
-        if(currentHp < frontTurnHp)
-        {
-            currentActionList = blowAway;
-        }else if(currentRoom.enemyList.Count<2)
+        if (currentRoom.enemyList.Count < 2)
         {
             currentActionList = spawnList;
-        }else
+        }
+        else
         {
-            currentActionList = justFireWall;
+            if (currentHp < frontTurnHp)
+            {
+                currentActionList = blowAway;
+            }
+            else
+            {
+                currentActionList = justFireWall;
+            }
         }
 
         frontTurnHp = currentHp;
     }
+
 
     int frontTurnHp;
     List<Action> spawnList;
@@ -31,9 +37,8 @@ public class Pablus : Enemy {
         blowAway = new List<Action>() { new Action(RangeOn),new Action(BlowAway) };
 
         spawnList = new List<Action>()
-        { new Action(Spawn),new  Action(FireWall),new Action(FireWall),
-            new Action(SelectFireWall),new Action(FireWallMove),new Action(FireWallMove),
-            new Action(FireWallMove)
+        {
+            new Action(Spawn)
         };
 
         justFireWall = new List<Action>()
@@ -58,7 +63,7 @@ public class Pablus : Enemy {
         ClearRangeList();
         List<Arch.Tile> targets = GetBlowAwayRange();
 
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX4, transform.position);
 
         for (int i = 0; i < targets.Count; i++)
         {
@@ -164,9 +169,13 @@ public class Pablus : Enemy {
     {
         if (tile.IsStandAble(this))
         {
-            Entity e = ArchLoader.instance.GetEntity(num);
-            e.Init((short)num);
-            e.SetRoom(currentRoom, tile);
+            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 5)));
+            SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(9, 3)));
+            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 1)));
+            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 2)));
+            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 4)));
+            SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(6, 3)));
+
         }
     }
 

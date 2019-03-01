@@ -59,7 +59,7 @@ public class Robot : Enemy
     }
     IEnumerator SelfDestruct()
     {
-        GetDamage(fullHp/3);
+        GetDamage(fullHp/4);
         yield return null;
     }
     int turn = 0;
@@ -125,7 +125,7 @@ public class Robot : Enemy
     }
     IEnumerator Attack()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.ATTACK, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.ATTACK, transform.position);
 
         ClearRangeList();
         List<Arch.Tile> targets = TileUtils.CrossRange(currentTile, 4);

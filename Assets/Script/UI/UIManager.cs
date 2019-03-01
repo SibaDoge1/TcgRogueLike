@@ -29,8 +29,8 @@ public class UIManager : MonoBehaviour
 
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
-        buffUI = transform.Find("Buff").GetComponent<BuffUI>();
-        //optionUI = transform.Find("Option").GetComponent<Option>();
+        buffUI = transform.Find("Anim").Find("Buff").GetComponent<BuffUI>();
+        uianimations = transform.Find("Anim").GetComponent<UIAnim>();
     }
 
     TextUI textUI;
@@ -45,7 +45,6 @@ public class UIManager : MonoBehaviour
     BuffUI buffUI;
     GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
-    Option optionUI;
 
     #region Status
     public void HpUpdate(int currentHp_)
@@ -117,16 +116,14 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    #region Status
+    public void StartUIAnim(UIAnimation ani)
+    {
+        uianimations.ShowAnim(ani);
+    }
     public void StatusTextUpdate()
     {
         buffUI.TextUpdate();
     }
-    public void ErrorPopUpOn()
-    {
-        buffUI.ShowAnim();
-    }
-    #endregion
 
     #region TextUI
     public void ShowTextUI(string[] s, EventTileCallBack cb)

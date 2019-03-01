@@ -9,8 +9,6 @@ public class CardRender : MonoBehaviour {
 
     private Image img_Frame;
     private Image img_Graphic;
-    private Image img_UnEnable;
-    private Image img_Upgrade;
     private Image[] ranks;
     private Text thisName;
 
@@ -21,8 +19,6 @@ public class CardRender : MonoBehaviour {
         img_Frame = transform.Find("Frame").GetComponent<Image>();
         img_Graphic = transform.Find("Graphic").GetComponent<Image>();
         ranks = transform.Find("Rank").GetComponentsInChildren<Image>();
-        img_UnEnable = transform.Find("enable").GetComponent<Image>();
-        img_Upgrade = transform.Find("upgrade").GetComponent<Image>();
     }
     /// <summary>
     /// 카드데이터로 랜더링
@@ -33,13 +29,10 @@ public class CardRender : MonoBehaviour {
         SetRank(data.Cost);
         SetAttribute(data.Type);
         img_Graphic.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);
-        img_Upgrade.enabled = data.IsUpgraded;
     }
     public void UpdateRender(Card data)
     {
         SetRank(data.Cost);
-        img_Upgrade.enabled = data.IsUpgraded;
-        SetEnable(data.IsCostAvailable());
     }
 
     public void SetRender()
@@ -48,7 +41,6 @@ public class CardRender : MonoBehaviour {
         SetRank(0);
         SetAttribute(CardType.A);
         img_Graphic.sprite = ArchLoader.instance.GetCardSprite("error");
-        img_Upgrade.enabled = false;
     }
 
     private void SetAttribute(CardType attribute)
@@ -87,10 +79,4 @@ public class CardRender : MonoBehaviour {
             }
         }
     }
-
-    private void SetEnable(bool b)
-    {
-        img_UnEnable.enabled = !b;
-    }
-
 }

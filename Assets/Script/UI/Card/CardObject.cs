@@ -25,6 +25,7 @@ public abstract class CardObject : MonoBehaviour
 	public virtual void SetParent(Transform tr)
     {
 		transform.SetParent(tr);
+        transform.localScale = new Vector3(1, 1, 1);
 	}
 
 }

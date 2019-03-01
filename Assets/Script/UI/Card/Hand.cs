@@ -57,7 +57,6 @@ public class Hand : MonoBehaviour {
 		cardObject.SetParent (this.transform);
         cardObject.SetHand(this);
 		cardObject.transform.position = drawStartPosition.position;
-		cardObject.transform.localScale = Vector3.one;
 
 		handList.Add (cardObject);
 		SetCardPosition ();

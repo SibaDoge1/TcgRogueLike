@@ -11,33 +11,25 @@ public class Card_Normal : Card
     private int range;
 
     /// <summary>
-    /// 지정해서 생성
+    /// 타입, 형태 지정해서 생성 
     /// </summary>
-    public Card_Normal(Figure _figure,CardType _type,bool upgrade)
+    public Card_Normal(Figure _figure,CardType _type)
     {
 
         figure = _figure;
         cardType = _type;
 
-        switch (cardType)
-        {
-            case CardType.V:
-                val1 = 2;
-                cost = 4;
-                break;
-            case CardType.T:
-                val1 = 3;
-                cost = 3;
-                break;
-            case CardType.P:
-                val1 = 1;
-                cost = 2;
-                break;
-            case CardType.A:
-                val1 = 1;
-                cost = 1;
-                break;
-        }
+        GenerateCardData();
+    }
+
+    /// <summary>
+    /// 타입 지정해서 생성 
+    /// </summary>
+    public Card_Normal(CardType _type)
+    {
+
+        figure = (Figure)UnityEngine.Random.Range(1, 6);
+        cardType = _type;
 
         GenerateCardData();
     }
@@ -50,50 +42,47 @@ public class Card_Normal : Card
         figure = (Figure)UnityEngine.Random.Range(1, 6);
         cardType = (CardType)UnityEngine.Random.Range(0, 4);
 
-        switch (cardType)
-        {
-            case CardType.V:
-                val1 = 2;
-                cost = 4;
-                break;
-            case CardType.T:
-                val1 = 3;
-                cost = 3;
-                break;
-            case CardType.P:
-                val1 = 1;
-                cost = 2;
-                break;
-            case CardType.A:
-                val1 = 1;
-                cost = 1;
-                break;
-        }
-
         GenerateCardData();
     }
 
 
     private void GenerateCardData()
-    {
-        index = 0;
-        cardSound = EffectSound.ATTACK;
+    {       
+        cardSound = SoundEffect.ATTACK;
+
+
         switch (cardType) //Info 설정
         {
             case CardType.A:
+                val1 = 1;
+                cost = 1;
+                index = 91;
+
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
                 cardEffect = CardEffect.EMPTY;
                 break;
             case CardType.T:
+                val1 = 3;
+                cost = 3;
+                index = 93;
+
                 cardEffect = CardEffect.REINFORCE;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입힙니다.";
                 break;
             case CardType.P:
+                val1 = 1;
+                cost = 2;
+                index = 92;
+
                 cardEffect = CardEffect.TELEPORT;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 3만큼 텔레포트합니다.";
                 isDirectionCard = true;
                 break;
             case CardType.V:
+                val1 = 2;
+                cost = 4;
+                index = 94;
+
                 cardEffect = CardEffect.HEAL;
                 info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 1만큼 회복합니다.";
                 break;
@@ -105,21 +94,26 @@ public class Card_Normal : Card
             case Figure.Diagonal:
                 range = 1;
                 spritePath = "Card_X";
+                cardRange = "range_5_1";
                 break;
             case Figure.CROSS:
                 range = 1;
                 spritePath = "Card_Cross";
+                cardRange = "range_1_1";
                 break;
             case Figure.HORIZION:
                 range = 1;
+                cardRange = "range_3_1";
                 spritePath = "Card_Horizon";//이미지 현재 없음
                 break;
             case Figure.SQUARE:
                 range = 1;
                 spritePath = "Card_Square";
+                cardRange = "range_2_1";
                 break;
             case Figure.VERTICAL:
                 range = 1;
+                cardRange = "range_4_1";
                 spritePath = "Card_Vertical";//이미지 현재 없음
                 break;
             default:
