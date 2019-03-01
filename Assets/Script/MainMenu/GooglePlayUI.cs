@@ -19,7 +19,7 @@ public class GooglePlayUI : MonoBehaviour {
     }
     public void OnLeaderboardScore()
     {
-        GooglePlayManager.ReportScore(GPGSIds.leaderboard_achivementscore, 5);
+        GooglePlayManager.ReportScore(GPGSIds.leaderboard_aklg, 5);
     }
     public void OnAchiveClear()
     {

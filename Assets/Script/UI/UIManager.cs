@@ -45,6 +45,7 @@ public class UIManager : MonoBehaviour
     BuffUI buffUI;
     GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
+    UIAnim uianimations;
 
     #region Status
     public void HpUpdate(int currentHp_)
@@ -124,7 +125,6 @@ public class UIManager : MonoBehaviour
     {
         buffUI.TextUpdate();
     }
-
     #region TextUI
     public void ShowTextUI(string[] s, EventTileCallBack cb)
     {

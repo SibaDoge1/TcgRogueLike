@@ -129,10 +129,13 @@ public class Pablus : Enemy {
 
     IEnumerator Spawn()
     {
-        SpawnEnemy(4008,currentRoom.GetTile(new Vector2Int(5,3)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 3)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 2)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 4)));
+        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 5)));
+        SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(9, 3)));
+        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 1)));
+        SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 2)));
+        SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 4)));
+        SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(6, 3)));
+
 
         yield return StartCoroutine(AnimationRoutine(0));
     }
@@ -169,12 +172,9 @@ public class Pablus : Enemy {
     {
         if (tile.IsStandAble(this))
         {
-            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 5)));
-            SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(9, 3)));
-            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 1)));
-            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 2)));
-            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 4)));
-            SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(6, 3)));
+            Entity e = ArchLoader.instance.GetEntity(num);
+            e.Init((short)num);
+            e.SetRoom(currentRoom, tile);
 
         }
     }

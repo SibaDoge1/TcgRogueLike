@@ -5585,19 +5585,19 @@ MonoBehaviour:
   HandMax: 5
   floorNum: 1
   LevelSettings:
-  - battleRoomNum: 4
-    eventRoomNum: 2
+  - battleRoomNum: 6
+    eventRoomNum: 1
     bossRoom: 0
     endRoom: 1
-  - battleRoomNum: 5
-    eventRoomNum: 3
+  - battleRoomNum: 8
+    eventRoomNum: 2
     bossRoom: 1
     endRoom: 1
-  - battleRoomNum: 6
-    eventRoomNum: 3
+  - battleRoomNum: 10
+    eventRoomNum: 2
     bossRoom: 1
     endRoom: 1
-  - battleRoomNum: 7
+  - battleRoomNum: 12
     eventRoomNum: 3
     bossRoom: 1
     endRoom: 0
@@ -5610,10 +5610,10 @@ MonoBehaviour:
     bossRoom: 0
     endRoom: 0
   RoomTestMode: 0
-  TestRoomType: 2
-  TestRoomName: EVENT1
-  CardTestMode: 0
-  cardList: 5a0000005a0000005a0000005a0000005a0000005a0000005a0000005a00000013000000130000001300000013000000
+  TestRoomType: 1
+  TestRoomName: test11
+  CardTestMode: 1
+  cardList: 5b0000005b0000005b0000005b0000005b0000005b0000005b0000005b0000005b0000005b0000005c0000005c0000005d0000005d0000005e000000
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0
@@ -7553,7 +7553,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1552c3d9c039cd940896c06bb9266728, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26fc3bfc0986e8d4fbc39ed776f73e7b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

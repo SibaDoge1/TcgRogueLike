@@ -80,8 +80,8 @@ public class DiaryDetail : MonoBehaviour {
     public void Zoom()
     {
         MainMenu.ButtonDown();
-        if (diaryData.spritePath.Length != 0) return;
         zoomPanel.SetActive(true);
+        if (diaryData.spritePath.Length != 0) return;
         zoomPanel.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(objectPath + "Full");
     }
 
