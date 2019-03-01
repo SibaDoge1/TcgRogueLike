@@ -10,7 +10,6 @@ public enum CardType
     A,//기본카드 무효과
     S
 }
-
 /// <summary>
 /// 카드 데이터
 /// </summary>
@@ -41,6 +40,8 @@ public abstract class Card
         set { cost = value; }
     }
 
+    protected string cardRange = "range_0";
+    public string Range { get { return cardRange; } }
     protected CardType cardType = CardType.A;
     public CardType Type { get { return cardType; } }
 
@@ -77,7 +78,7 @@ public abstract class Card
     public string SpritePath { get { return spritePath; } }
 
     protected CardEffect cardEffect = CardEffect.HIT;
-    protected EffectSound cardSound = EffectSound.SFX1;
+    protected SoundEffect cardSound = SoundEffect.SFX1;
 
     public float effectTime = 0.1f;
     #endregion
@@ -226,14 +227,32 @@ public abstract class Card
 
     public static Card GetCardByNum(int i)
     {        
-        if(i == 0)
-        {
-            return new Card_Normal();
-        }
-        else
-        {
-            return GetSpecialCard(Database.GetCardData(i));
-        }
+
+            switch(i)
+            {
+                case 90:
+                    return new Card_Normal();
+                case 91:
+                    return new Card_Normal(CardType.A);
+                case 92:
+                    return new Card_Normal(CardType.P);
+                case 93:
+                    return new Card_Normal(CardType.T);
+                case 94:
+                    return new Card_Normal(CardType.V);
+                case 99:
+                    return new Card_Reload();
+                default:
+                    if(Database.GetCardData(i) != null)
+                    {
+                    return GetSpecialCard(Database.GetCardData(i));
+                    }else
+                    {
+                    Debug.Log("UnExpected CardNumber " + i);
+                    return new Card_Normal();
+                    }
+            }
+        
     }
 
     /// <summary>
@@ -267,5 +286,41 @@ public abstract class Card
     {
     } 
 
+}
 
+public class Card_Reload : Card
+{
+    public Card_Reload()
+    {
+        index = 99;
+        name = "리로드";
+        cost = 0;
+        cardType = CardType.S;
+        val1 = 0;
+        val2 = 0;
+        val3 = 0;
+        info = "덱을 리로드 합니다.";
+        spritePath = "Card_Reload";
+        cardEffect = CardEffect.FIRE;
+        cardSound = SoundEffect.RELOADCARD;
+        cardRange = "range_0";
+    }
+    public override void CardReturnCallBack(Card data)
+    {
+    }
+    public override void UpgradeReset()
+    {      
+    }
+    public override void OnCardReturned()
+    {
+        base.OnCardReturned();
+        player.GetDamage(1, player);
+        player.OnReturned();
+    }
+
+    protected override void CardActive()
+    {
+        PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);
+        PlayerControl.instance.ReLoadDeck();
+    }
 }

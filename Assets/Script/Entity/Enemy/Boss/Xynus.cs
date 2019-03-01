@@ -58,7 +58,7 @@ public class Xynus : Enemy {
     IEnumerator EnvironAttack()
     {
         enemyUI.ActionImageOff();
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX5, transform.position);
 
         ClearRangeList();
 
@@ -111,7 +111,7 @@ public class Xynus : Enemy {
 
     IEnumerator MeeleAttack()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX5, transform.position);
         enemyUI.ActionImageOff();
         List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
         for (int i = 0; i < tiles.Count; i++)

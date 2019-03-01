@@ -23,7 +23,7 @@ public enum MonoSound//1개만 재생되는것들
     BUTTONYES,
     BUTTONNO
 }
-public enum EffectSound//재생할때마다 prefab 생성되는것들
+public enum SoundEffect//재생할때마다 prefab 생성되는것들
 {
     SFX1,
     SFX2,
@@ -124,7 +124,7 @@ public class SoundDelegate : MonoBehaviour {
         monosound.clip = ArchLoader.instance.GetMono(mono);
         monosound.Play();
     }
-    public void PlayEffectSound(EffectSound eType, Vector3 position)
+    public void PlayEffectSound(SoundEffect eType, Vector3 position)
     {
         ArchLoader.instance.GetSoundObject().clip = ArchLoader.instance.GetSoundEffect(eType);
         Instantiate(ArchLoader.instance.GetSoundObject(), position, Quaternion.identity);

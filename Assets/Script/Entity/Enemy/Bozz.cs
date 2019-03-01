@@ -34,7 +34,7 @@ public class Bozz : Enemy {
           IEnumerator AttackThenRangeOffAction()
         {
             List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
-            SoundDelegate.instance.PlayEffectSound(EffectSound.SFX2, transform.position);
+            SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX2, transform.position);
             enemyUI.ActionImageOff();
 
 

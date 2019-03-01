@@ -8,11 +8,31 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
 {
 
     private Hand hand;
+    private Image upgrade;
+    private Image isEnable;
+    private Text caution;
+    private int currentPos;//핸드에서의 현재 위치
+    private int totalCount;//핸드 총 수 
+    bool isSpecial = false;//특수카드인가?
 
+    protected override void Awake()
+    {
+        base.Awake();
+        upgrade = transform.Find("upgrade").GetComponent<Image>();
+        isEnable = transform.Find("enable").GetComponent<Image>();
+        caution = transform.Find("caution").GetComponent<Text>();
+    }
     public override void SetCardData(Card _data)
     {
         base.SetCardData(_data);
         StartCoroutine(CardRenderingUpdate());
+        upgrade.enabled = data.IsUpgraded;
+        isEnable.enabled = !data.IsCostAvailable();
+        caution.enabled = false;
+        if (data.Type == CardType.S)
+        {
+            isSpecial = true;
+        }
     }
 
     public void SetHand(Hand _hand)
@@ -37,7 +57,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
 
         if (!IsAvailable())
         {
-            SoundDelegate.instance.PlayEffectSound(EffectSound.AKSLOW, PlayerControl.player.transform.position);
+            SoundDelegate.instance.PlayEffectSound(SoundEffect.AKSLOW, PlayerControl.player.transform.position);
             return;
         }
         if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
@@ -111,6 +131,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         {
             StopCoroutine(locateRoutine);
         }
+
         originPos = GetPosition(total, target);
 
         if (isHided)
@@ -122,18 +143,18 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         {
             locateRoutine = StartCoroutine(LocateRoutine(originPos));
         }
+
+        totalCount = total;
+        currentPos = target;
     }
     /// <summary>
     /// 반환
     /// </summary>
     public void ReturnCard()
     {
-        if(!(data is Card_Reload))//리로드카드는 반환X
-        {
             data.OnCardReturned();
             hand.RemoveCard(this);
-            Destroy(gameObject);
-        }
+            Destroy(gameObject);       
     }
 
     /// <summary>
@@ -190,6 +211,19 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         while(true)
         {
             render.UpdateRender(data);
+            upgrade.enabled = data.IsUpgraded;
+            isEnable.enabled = !data.IsCostAvailable();
+            if(isSpecial)
+            {
+                if(currentPos == 0 && totalCount>=5)
+                {
+                    caution.enabled = true;
+                }
+                else
+                {
+                    caution.enabled = false;
+                }
+            }
             yield return new WaitForSeconds(0.05f);
         }
     }

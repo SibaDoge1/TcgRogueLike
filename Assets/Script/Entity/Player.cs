@@ -81,9 +81,9 @@ public class Player : Character
         {
             damage = 0;
         }
-        if(atker != this)//return, 자기피해
+        if(atker == this)//return, 자기피해
         {
-            SoundDelegate.instance.PlayEffectSound(EffectSound.DAMAGE, transform.position);
+            SoundDelegate.instance.PlayEffectSound(SoundEffect.DAMAGE, transform.position);
             MyCamera.instance.ShakeCamera();
             SetPlayerAnim(1);
         }
@@ -104,7 +104,7 @@ public class Player : Character
     }
     public override bool GetHeal(int heal)
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.HEAL, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.HEAL, transform.position);
         return base.GetHeal(heal);
     }
 
@@ -134,7 +134,7 @@ public class Player : Character
     public void OnReturned()
     {
         SetPlayerAnim(2);
-        SoundDelegate.instance.PlayEffectSound(EffectSound.CARD, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.CARD, transform.position);
     }
 
     private void SetPlayerAnim(int num)

@@ -10,6 +10,8 @@ public class CardInfoPanel : MonoBehaviour {
     private Image cardUpgrade;
     private Image cost;
     private Image[] currentCost;
+    private Image range;
+
 
     private Text text;
     private Text cardName;
@@ -22,7 +24,7 @@ public class CardInfoPanel : MonoBehaviour {
         cardUpgrade = transform.Find("Upgrade").GetComponent<Image>();
         cost = transform.Find("Cost").GetComponent<Image>();
         currentCost = transform.Find("Cost").GetComponentsInChildren<Image>();
-        cardAttribute.gameObject.SetActive(true);
+        range = transform.Find("Range").GetComponent<Image>();
     }
 
     public void SetUnknown()
@@ -30,8 +32,9 @@ public class CardInfoPanel : MonoBehaviour {
         cardName.text = "???";
         text.text = "카드 데이터를 읽어올 수 없습니다. 단말기에서 카드를 먼저 해독해주세요";
         render.sprite = ArchLoader.instance.GetCardSprite("error");
-        cardAttribute.gameObject.SetActive(false);
+        cardAttribute.sprite = ArchLoader.instance.GetCardSprite("error");
         cardUpgrade.enabled = false;
+        range.sprite = ArchLoader.instance.GetCardSprite("error");
         SetCost(0);
     }
 
@@ -40,9 +43,8 @@ public class CardInfoPanel : MonoBehaviour {
         cardName.text = data.Name;
         text.text = data.Info;
         render.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);
-
         cardAttribute.sprite = ArchLoader.instance.GetCardAttribute(data.Type);
-        
+        range.sprite = ArchLoader.instance.GetCardRangeImage(data.Range);
         cardUpgrade.enabled = data.IsUpgraded;
         SetCost(data.Cost);
     }

@@ -71,10 +71,7 @@ public class PlayerControl : MonoBehaviour {
 			hand.DrawHand (deck.Draw ());
 		}else
         {
-            if(!deck.isDrawEnd)
-            {
-                hand.ReturnCard();//가장왼쪽의 카드 제거
-            }
+            hand.ReturnCard();//가장왼쪽의 카드 제거           
             hand.DrawHand(deck.Draw());
         }
 	}
@@ -86,8 +83,7 @@ public class PlayerControl : MonoBehaviour {
     public void AddToAttain(Card cData)
     {
         PlayerData.AttainCards.Add(cData);
-        ArchLoader.instance.MadeEffect(UIEffect.CARD, UIManager.instance.transform);
-        //TODO : UI 애니메이션 Instantiate가 아니라 그냥 재생만 하는식으로 바꾸기
+        UIManager.instance.StartUIAnim(UIAnimation.Attain);
     }
 
 

@@ -30,8 +30,6 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     private void Awake()
     {
-        //Changes: 안드로이드 설정 메인메뉴씬으로 옮김
-
         if (instance == null)
         {
             instance = this;
@@ -114,18 +112,18 @@ public class GameManager : MonoBehaviour
             if (newRoom.roomType == RoomType.BOSS)
             {
                 PlayBossBGM(currentMap.Floor);
+            }else
+            {
+                PlayBGM(currentMap.Floor);
             }
         }
         SetCurrentRoom(newRoom);
-
-        //TODO : 방마다 BGM 바꾸게 변경
-        PlayBGM(currentMap.Floor);
     }
 
     public void OnPlayerClearRoom()
     {
         PlayerControl.instance.OnRoomClear();
-        SoundDelegate.instance.PlayEffectSound(EffectSound.ROOMCLEAR,player.transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.ROOMCLEAR,player.transform.position);
         PlayerData.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
         {
@@ -172,7 +170,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.GAMEOVER, Camera.main.transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.GAMEOVER, Camera.main.transform.position);
         UIManager.instance.GameOverUIOn();
         IsInputOk = false;
     }
@@ -210,17 +208,23 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void BuildDeck()
     {
-        for(int i=0; i<9;i++) //노말카드 랜덤 9장 생성
-          PlayerData.Deck.Add(Card.GetCardByNum(0));
-
-        for(int i=0; i<6;i++)//특수카드 3장 생성
+        if(Config.instance.CardTestMode)
         {
-            if(Config.instance.CardTestMode)
+            for( int i=0; i<Config.instance.cardList.Length;i++)
             {
-                PlayerData.Deck.Add(Card.GetCardByNum(Config.instance.cardNum));
+                PlayerData.Deck.Add(Card.GetCardByNum(Config.instance.cardList[i]));
             }
         }
-        PlayerData.Deck.Add(Card.GetCardByNum(99));//Reload
+        else
+        {
+            for (int i = 0; i < 3; i++)//노말카드 랜덤 12장 생성
+            {
+                PlayerData.Deck.Add(Card.GetCardByNum(91));
+                PlayerData.Deck.Add(Card.GetCardByNum(92));
+                PlayerData.Deck.Add(Card.GetCardByNum(93));
+                PlayerData.Deck.Add(Card.GetCardByNum(94));
+            }
+        }
     }
     private void GetRandomCardToAttain(string name)
     {

@@ -5,13 +5,11 @@ using UnityEngine.UI;
 
 public class BuffUI : MonoBehaviour
 {
-    Animator anim;
     Text text;
     bool text1On, text2On, text3On;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
         text = transform.Find("text").GetComponent<Text>();
     }
 
@@ -37,8 +35,5 @@ public class BuffUI : MonoBehaviour
         text.text = s;
     }
 
-    public void ShowAnim()
-    {        
-        anim.Play("errorPopUp",-1,0);
-    }
+
 }

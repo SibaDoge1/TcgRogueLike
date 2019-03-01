@@ -41,7 +41,7 @@ public class SteelEye : Enemy {
     {
         List<Arch.Tile> tiles = GetTileList(dir);
 
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX9, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
         for(int i=0; i<tiles.Count;i++)
         {
             ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);

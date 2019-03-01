@@ -11,7 +11,11 @@ public static class PlayerData
     public static List<Card> Deck
     {
         get { return deck; }
-        set{deck = value;}
+        set
+        {
+            deck = value;
+            PlayerControl.instance.deck.OnDeckChanged(deck);
+        }
     }
     static List<Card> attainCards = new List<Card>();
     public static List<Card> AttainCards

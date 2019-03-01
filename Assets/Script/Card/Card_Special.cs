@@ -19,6 +19,7 @@ public class Card_Special : Card
         spritePath = cardData.spritePath;
         cardEffect = cardData.effect;
         cardSound = cardData.sound;
+        cardRange = cardData.range;
     }
     public override void OnCardReturned()
     {
@@ -52,20 +53,7 @@ public class Card_Special : Card
     }
 }
 
-public class Card_Reload : Card_Special
-{
-    public Card_Reload(CardData cd) : base(cd)
-    {
-    }
-    public override void CardReturnCallBack(Card data)
-    {
-    }
-    protected override void CardActive()
-    {
-        PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE,3);
-        PlayerControl.instance.ReLoadDeck();
-    }
-}
+
 
 //2마리 이상 적을 타격 시 체력 2 회복
 public class Card_RedGrasp : Card_Special

@@ -48,7 +48,7 @@ public class SteelBozz : Enemy {
         {
             enemyUI.ActionImageOff();
         }
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX5, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX5, transform.position);
 
         List<Arch.Tile> tiles = TileUtils.EmptySquareRange(currentTile, 2);
         for (int i = 0; i < tiles.Count; i++)
@@ -78,7 +78,7 @@ public class SteelBozz : Enemy {
         {
             PlayerControl.player.GetDamage(atk);
         }
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX4, transform.position);
 
         yield return StartCoroutine(AnimationRoutine(0));
     }

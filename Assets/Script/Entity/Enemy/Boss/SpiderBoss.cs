@@ -87,7 +87,7 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator WideAttack()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX9, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
 
         ClearRangeList();
         for(int i=0; i<targetList.Count;i++)
@@ -129,7 +129,7 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator Attack()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX9, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
 
         List<Tile> tiles = TileUtils.CrossRange(currentTile, 2);
         for(int i=0; i<tiles.Count;i++)
@@ -181,7 +181,7 @@ public class SpiderBoss : Enemy {
     }
     IEnumerator WebAttack()
     {
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX9, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
         ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, aimedTile);
         if (PlayerControl.player.currentTile == aimedTile)
         {

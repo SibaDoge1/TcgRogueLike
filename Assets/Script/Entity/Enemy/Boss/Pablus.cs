@@ -58,7 +58,7 @@ public class Pablus : Enemy {
         ClearRangeList();
         List<Arch.Tile> targets = GetBlowAwayRange();
 
-        SoundDelegate.instance.PlayEffectSound(EffectSound.SFX4, transform.position);
+        SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX4, transform.position);
 
         for (int i = 0; i < targets.Count; i++)
         {
