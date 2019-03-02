@@ -96,7 +96,7 @@ public class Pablus : Enemy {
         yield return null;
     }
 
-    List<Arch.Tile> move;
+  /*  List<Arch.Tile> move;
     IEnumerator SelectFireWall()
     {
         move = GetRandomFireRange();
@@ -124,15 +124,17 @@ public class Pablus : Enemy {
         }
 
         yield return null;
-    }
+    }*/
 
 
     IEnumerator Spawn()
     {
-        SpawnEnemy(4008,currentRoom.GetTile(new Vector2Int(5,3)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 3)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 2)));
-        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(7, 4)));
+        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 5)));
+        SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(9, 3)));
+        SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 1)));
+        SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 2)));
+        SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 4)));
+        SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(6, 3)));
 
         yield return StartCoroutine(AnimationRoutine(0));
     }
@@ -169,17 +171,13 @@ public class Pablus : Enemy {
     {
         if (tile.IsStandAble(this))
         {
-            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 5)));
-            SpawnEnemy(4008, currentRoom.GetTile(new Vector2Int(9, 3)));
-            SpawnEnemy(4001, currentRoom.GetTile(new Vector2Int(9, 1)));
-            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 2)));
-            SpawnEnemy((Random.Range(4005, 4008)), currentRoom.GetTile(new Vector2Int(7, 4)));
-            SpawnEnemy(4004, currentRoom.GetTile(new Vector2Int(6, 3)));
-
+            Entity e = ArchLoader.instance.GetEntity(num);
+            e.Init((short)num);
+            e.SetRoom(currentRoom, tile);
         }
     }
 
-    private List<Arch.Tile> GetRandomFireRange()
+  /*  private List<Arch.Tile> GetRandomFireRange()
     {
         int ran = Random.Range(0, 3);
         List<Arch.Tile> targetTiles = new List<Arch.Tile>();
@@ -236,7 +234,8 @@ public class Pablus : Enemy {
             targetTiles.Add(currentRoom.GetTile(tiles[i].pos + Vector2Int.left));
         }
         return targetTiles;
-    }
+    }*/
+
     private List<Arch.Tile> GetBlowAwayRange()
     {
         List<Arch.Tile> targetTiles = new List<Arch.Tile>();

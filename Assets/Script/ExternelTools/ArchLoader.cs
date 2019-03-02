@@ -51,6 +51,10 @@ public class ArchLoader : MonoBehaviour {
     }
 
     #region Get
+    public Sprite GetWarningImage()
+    {
+        return warningImage;
+    }
     public Sprite GetCardAttribute(CardType type)
     {
         switch(type)
@@ -232,6 +236,7 @@ public class ArchLoader : MonoBehaviour {
     /// </summary>
     Dictionary<int, Sprite> structureImages = new Dictionary<int, Sprite>();
     Dictionary<int, GameObject> enemies = new Dictionary<int, GameObject>();
+    Sprite warningImage;
     private void CacheEntity()
     {
         GameObject[] objects = Resources.LoadAll<GameObject>("Fields/Entity");
@@ -245,6 +250,7 @@ public class ArchLoader : MonoBehaviour {
         {
             structureImages.Add(int.Parse(sprites[i].name), sprites[i]);
         }
+        warningImage = Resources.Load<Sprite>("Graphic/warning");
     }
     /// <summary>
     /// Tile 로드 하고 , 이미지들도 로드

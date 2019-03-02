@@ -94,7 +94,7 @@ public static class BuildRoom
     static void Draw()
     {
         short tile; short offtile;  short entity;
-
+        Debug.Log("Draw Start , Floor : " + currentMap.Floor + " RoomType : " + currentRoom.roomType + " RoomName :" + currentRoom.RoomName);
 
         //string을 다시 tile , item, player , height 항목으로 나눕니다
         for (int i = 0; i < size.y ; i++)

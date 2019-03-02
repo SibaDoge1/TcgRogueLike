@@ -17,15 +17,29 @@ public abstract class Entity : MonoBehaviour
         gameObject.name = "" + entityNum;
     }
 
-    protected SpriteRenderer spriteRender;
-	protected virtual void  Awake ()
+    private SpriteRenderer spriteRender;
+    protected virtual SpriteRenderer SpriteRender
     {
-        SetSpriteRender();
+        get
+        {
+            if(spriteRender == null)
+            {
+                SetSpriteRender();
+            }
+                return spriteRender;           
+        }
+        set
+        {
+            spriteRender = value;
+        }
     }
 
     protected virtual void SetSpriteRender()
     {
         spriteRender = GetComponent<SpriteRenderer>();
+    }
+	protected virtual void  Awake ()
+    {
     }
 
     public virtual void SetRoom(Room room,Vector2Int _pos)
@@ -41,36 +55,39 @@ public abstract class Entity : MonoBehaviour
         this.Teleport(_pos.pos);
     }
     #region MoveMethod
-    public virtual bool Teleport(Vector2Int _pos){
-		if (!currentRoom.GetTile(_pos).IsStandAble(this))
+    public virtual bool Teleport(Vector2Int newPos){
+		if (currentRoom.GetTile(newPos) == null || !currentRoom.GetTile(newPos).IsStandAble(this))
 		{
 			return false;
 		}
         
-		if (currentRoom.GetTile(pos) && currentRoom.GetTile(pos).OnTileObj == this)
+		if (currentRoom.GetTile(pos) != null && currentRoom.GetTile(pos).OnTileObj == this)
 			currentRoom.GetTile(pos).OnTileObj = null;
 
         if (moveAnim != null)
         {
             StopCoroutine(moveAnim);
         }
-        pos = _pos;
+
+        SpriteRender.sortingOrder = -pos.y;
+
+        pos = newPos;
 		currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
-        transform.localPosition = currentTile.transform.localPosition - (Vector3.back*_pos.y);
+        transform.localPosition = currentTile.transform.localPosition - (Vector3.back*newPos.y);
         return true;
 	}
 
     Coroutine moveAnim;
-    public virtual bool MoveTo(Vector2Int _pos)
+    public virtual bool MoveTo(Vector2Int newPos)
     {
         
-        if (currentRoom.GetTile(_pos) == null ||!currentRoom.GetTile(_pos).IsStandAble(this))
+        if (currentRoom.GetTile(newPos) == null ||!currentRoom.GetTile(newPos).IsStandAble(this))
         {
 			return false;
         }
 
-        if (currentRoom.GetTile(pos).OnTileObj == this)
+        if (currentRoom.GetTile(pos) != null && currentRoom.GetTile(pos).OnTileObj == this)
             currentRoom.GetTile(pos).OnTileObj = null;
 
         if (moveAnim != null)
@@ -78,12 +95,10 @@ public abstract class Entity : MonoBehaviour
             StopCoroutine(moveAnim);
         }
 
-        if (spriteRender == null)
-            spriteRender = GetComponent<SpriteRenderer>();
-        moveAnim = StartCoroutine(MoveAnimationRoutine(pos,_pos));
+        SpriteRender.sortingOrder = -pos.y;
 
-        pos = _pos;
-
+        moveAnim = StartCoroutine(MoveAnimationRoutine(pos,newPos));
+        pos = newPos;
         currentTile = currentRoom.GetTile(pos);
         currentTile.OnTileObj = this;
         return true;

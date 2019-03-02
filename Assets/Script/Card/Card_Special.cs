@@ -242,15 +242,15 @@ public class Card_Bishop : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-      //  MakeEffect(TileUtils.DiagonalRange(player.currentTile, 2));
-        PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
-        if (PlayerControl.instance.deck.DeckCount<=val2)
+
+        if (PlayerControl.instance.deck.DeckCount>=val2)
         {
-            PlayerControl.playerBuff.EraseDeBuff();
+            PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
         }
     }
 }
 
+//야행매복의 룬다
 public class Card_WolfBite : Card_Special
 {
     public Card_WolfBite(CardData cd) : base(cd)
@@ -316,11 +316,14 @@ public class Card_WolfBite : Card_Special
         }
       // MakeEffect(GetRange());
 
-        player.GetDamage(val3, player);
+        if(PlayerControl.instance.deck.DeckCount<=val2)
+        {
+            player.GetDamage(val3, player);
+        }
 
     }
 }
-
+//줄리아나의 앞발
 public class Card_BearClaw : Card_Special
 {
     public Card_BearClaw(CardData cd) : base(cd)
@@ -385,8 +388,11 @@ public class Card_BearClaw : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-       // MakeEffect(GetRange());
-        player.GetDamage(val3, player);
+        // MakeEffect(GetRange());
+        if (PlayerControl.instance.deck.DeckCount <= val2)
+        {
+            player.GetDamage(val3, player);
+        }
     }
 }
 
@@ -415,8 +421,9 @@ public class Card_Justice : Card_Special
             {
                 DamageToTarget(enemies[i], val1);
             }
+            player.GetHeal(val3);
         }
-        player.GetHeal(val3);
+        
        //MakeEffect(TileUtils.EmptySquareRange(player.currentTile,2));
     }
 }
@@ -566,6 +573,7 @@ public class Card_HalfMask : Card_Special
         return targetTiles;
     }
 }
+//검은 번개
 public class Card_BlackThunder : Card_Special
 {
 
@@ -629,10 +637,21 @@ public class Card_BlackThunder : Card_Special
         }
         return targetTiles;
     }
+    int upgradeCount;
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        UpgradeThis();
+        if(upgradeCount<3)
+        {
+            UpgradeThis();
+            upgradeCount++;
+        }
+    }
+
+    public override void UpgradeReset()
+    {
+        base.UpgradeReset();
+        upgradeCount = 0;
     }
 }
 public class Card_PoisonSnail : Card_Special
@@ -995,6 +1014,7 @@ public class Card_WormHole : Card_Special
             {
                 DamageToTarget(enemies[i], val1);
             }
+            player.GetHeal(val3);
         }
        // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
@@ -1008,7 +1028,7 @@ public class Card_WormHole : Card_Special
                 }
             }
         }
-        player.GetHeal(val3);
+        
     }
 }
 
@@ -1176,6 +1196,7 @@ public class Card_Needle : Card_Special
             {
                 DamageToTarget(enemies[i], val1);
             }
+            player.GetHeal(val3);
         }
       //  MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
@@ -1187,6 +1208,6 @@ public class Card_Needle : Card_Special
             }
         }
         PlayerData.AkashaGage += val3;
-        player.GetHeal(val3);
+        
     }
 }

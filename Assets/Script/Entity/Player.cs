@@ -147,9 +147,9 @@ public class Player : Character
     }
     protected override IEnumerator AnimationRoutine(int num, float animationTime = 0.5F)
     {
-        spriteRender.sprite = actionSprites[num];
+        SpriteRender.sprite = actionSprites[num];
         yield return new WaitForSeconds(animationTime);
-        spriteRender.sprite = normalSprites;
+        SpriteRender.sprite = normalSprites;
         playerAnim = null;
         yield return null;
     }

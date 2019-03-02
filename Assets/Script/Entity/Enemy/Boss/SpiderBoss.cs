@@ -33,7 +33,7 @@ public class SpiderBoss : Enemy {
             }
         }else
         {
-            if (currentHp<=18)
+            if (currentHp<=FullHp/2)
             {
                 currentActionList = changePhaseList;
             }else

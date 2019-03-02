@@ -44,6 +44,7 @@ public class Deck : MonoBehaviour {
             {
                 ((Card_Special)playingDeck[i]).CostReset();
             }
+            playingDeck[i].UpgradeReset();
         }     
         LoadCallBack();
     }
@@ -51,11 +52,6 @@ public class Deck : MonoBehaviour {
 
     public void OnRoomClear()
     {
-        foreach(Card c in playingDeck)
-        {
-            c.UpgradeReset();
-        }
-
         ReLoad();
 	}
 

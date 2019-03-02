@@ -7,31 +7,34 @@ public abstract class Character : Entity {
     public Sprite[] actionSprites;
     protected Sprite normalSprites;
     Coroutine anim;
+    bool isFirst = true;
 
     protected override void Awake()
     {
         base.Awake();
-        normalSprites = spriteRender.sprite;
+        normalSprites = SpriteRender.sprite;
     }
+
     protected override void SetSpriteRender()
     {
-        spriteRender = GetComponentInChildren<SpriteRenderer>();
+        SpriteRender = GetComponentInChildren<SpriteRenderer>();
     }
+
     public override bool MoveTo(Vector2Int _pos)
     {
         int xOffset = pos.x - _pos.x;
-        SetLocalScale(xOffset);
+        SetFlip(xOffset);
 		return  base.MoveTo(_pos);
     }
-    protected virtual void SetLocalScale(int x)
+    protected virtual void SetFlip(int x)
     {
         if(x>0)
         {
-            spriteRender.flipX = false;
+            SpriteRender.flipX = false;
         }
         else if (x<0)
         {
-            spriteRender.flipX = true;
+            SpriteRender.flipX = true;
         }
     }
 
@@ -76,8 +79,13 @@ public abstract class Character : Entity {
         }
         set
         {
-            if(currentHp != 0)
-            DamageEffect(value - CurrentHp);
+            if(isFirst)
+            {
+                isFirst = false;
+            }else
+            {
+                DamageEffect(value - CurrentHp);
+            }
 
             if (value<=0)
             {
@@ -105,8 +113,8 @@ public abstract class Character : Entity {
 
     protected virtual IEnumerator AnimationRoutine(int num, float animationTime = 0.5f)
     {
-        spriteRender.sprite = actionSprites[num];
+        SpriteRender.sprite = actionSprites[num];
         yield return new WaitForSeconds(animationTime);
-        spriteRender.sprite = normalSprites;
+        SpriteRender.sprite = normalSprites;
     }
 }

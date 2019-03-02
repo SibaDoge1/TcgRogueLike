@@ -95,41 +95,40 @@ public class Card_Normal : Card
                 range = 1;
                 spritePath = "Card_X";
                 cardRange = "range_5_1";
+                name = "DX-2 결정형";
                 break;
             case Figure.CROSS:
                 range = 1;
                 spritePath = "Card_Cross";
                 cardRange = "range_1_1";
+                name = "CR-1 집중형";
                 break;
             case Figure.HORIZION:
                 range = 1;
                 cardRange = "range_3_1";
                 spritePath = "Card_Horizon";//이미지 현재 없음
+                name = "HZ-3 사각형";
                 break;
             case Figure.SQUARE:
                 range = 1;
                 spritePath = "Card_Square";
                 cardRange = "range_2_1";
+                name = "SQ-5 격류형";
                 break;
             case Figure.VERTICAL:
                 range = 1;
                 cardRange = "range_4_1";
                 spritePath = "Card_Vertical";//이미지 현재 없음
+                name = "VT-4 낙뢰형";
                 break;
             default:
                 Debug.LogError("Normal카드 FigureError");
                 break;
         }
-        name = figure.ToString();
     }
 
     protected override void CardActive()
     {
-         if (cardType == CardType.V)
-        {
-            player.GetHeal(1); // CardType : V
-        }
-
         if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
         {
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
@@ -137,6 +136,10 @@ public class Card_Normal : Card
             {
 
                     DamageToTarget(enemies[i], val1);              
+            }
+            if (cardType == CardType.V)
+            {
+                player.GetHeal(1); // CardType : V
             }
         }
         //MakeEffect(TileUtils.Range(player.currentTile,range,figure));

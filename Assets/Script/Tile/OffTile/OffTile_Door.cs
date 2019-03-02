@@ -47,7 +47,12 @@ public class OffTile_Door : OffTile
     {
         if (ot is Player)
         {
-			(ot as Player).EnterRoom(this);
+            bool isVisited = targetRoom.IsVisited;
+            (ot as Player).EnterRoom(this);
+            if(!isVisited)
+            {
+                MinimapTexture.DrawHallWay(transform.position,connectedDoor.transform.position, Dir);
+            }           
         }
     }
     public void Open()

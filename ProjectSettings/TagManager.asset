@@ -59,11 +59,8 @@ TagManager:
   - name: Effect
     uniqueID: 3072091491
     locked: 0
-  - name: Entity(Structure)
+  - name: Entity
     uniqueID: 3174531655
-    locked: 0
-  - name: Entity(Character)
-    uniqueID: 1113074499
     locked: 0
   - name: WorldUI
     uniqueID: 3665753965

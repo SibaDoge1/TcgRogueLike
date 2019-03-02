@@ -299,7 +299,7 @@ public class Card_Reload : Card
         val1 = 0;
         val2 = 0;
         val3 = 0;
-        info = "덱을 리로드 합니다.";
+        info = "덱을 리로드한 뒤, AKS  3 감소, 이동불가 2턴 상태가 된다.";
         spritePath = "Card_Reload";
         cardEffect = CardEffect.FIRE;
         cardSound = SoundEffect.RELOADCARD;

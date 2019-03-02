@@ -73,13 +73,6 @@ public abstract class Enemy : Character {
         EnemyControl.instance.EnemyEndCallBack();
     }
 
-
-    protected override void SetLocalScale(int x)
-    {
-        base.SetLocalScale(x);
-        enemyUI.SetLocalScale(x);
-    }
-
     protected override int CurrentHp
     {
         get

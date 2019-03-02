@@ -12,7 +12,8 @@ public delegate void EventTileCallBack();
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    public Text remainText;
+    Text remainText;
+    Text floorText;
     private void Awake()
     {
         instance = this;
@@ -31,6 +32,9 @@ public class UIManager : MonoBehaviour
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
         buffUI = transform.Find("Anim").Find("Buff").GetComponent<BuffUI>();
         uianimations = transform.Find("Anim").GetComponent<UIAnim>();
+
+        remainText = transform.Find("StatusUI").Find("CardRemain").GetComponentInChildren<Text>();
+        floorText = transform.Find("Frame").Find("floor").GetComponentInChildren<Text>();
     }
 
     TextUI textUI;
@@ -181,5 +185,10 @@ public class UIManager : MonoBehaviour
     public void DeckCont(int count)
     {
         remainText.text = "" + count;
+    }
+
+    public void FloorCount(int count)
+    {
+        floorText.text = count + "F";
     }
 }

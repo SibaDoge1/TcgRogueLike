@@ -90,7 +90,7 @@ public class MapGenerator : MonoBehaviour
     Room startRoom;
     List<Room> connectedRooms;//현재 놓여진 방들
     List<Room> roomsToSet;//놓아야 하는 방들
-    public int space = 3;
+    public int space;
 
 
 

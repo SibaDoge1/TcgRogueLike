@@ -72,6 +72,8 @@ public class GameManager : MonoBehaviour
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
 
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
+
+        UIManager.instance.FloorCount(level);
     }
   
 
@@ -104,19 +106,21 @@ public class GameManager : MonoBehaviour
             MinimapTexture.DrawRoom(newRoom);
             //SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
-            if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
+            if (newRoom.roomType == RoomType.START)
             {
                 newRoom.OpenDoors();
             }
-
-            if (newRoom.roomType == RoomType.BOSS)
-            {
-                PlayBossBGM(currentMap.Floor);
-            }else
-            {
-                PlayBGM(currentMap.Floor);
-            }
         }
+
+        if (newRoom.roomType == RoomType.BOSS && newRoom.IsVisited == false)
+        {
+            PlayBossBGM(currentMap.Floor);
+        }
+        else
+        {
+            PlayBGM(currentMap.Floor);
+        }
+
         SetCurrentRoom(newRoom);
     }
 
@@ -217,13 +221,15 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < 3; i++)//노말카드 랜덤 12장 생성
+            for (int i = 0; i < 10; i++)//노말카드 랜덤 12장 생성
             {
                 PlayerData.Deck.Add(Card.GetCardByNum(91));
-                PlayerData.Deck.Add(Card.GetCardByNum(92));
-                PlayerData.Deck.Add(Card.GetCardByNum(93));
-                PlayerData.Deck.Add(Card.GetCardByNum(94));
             }
+            PlayerData.Deck.Add(Card.GetCardByNum(92));
+            PlayerData.Deck.Add(Card.GetCardByNum(92));
+            PlayerData.Deck.Add(Card.GetCardByNum(93));
+            PlayerData.Deck.Add(Card.GetCardByNum(93));
+            PlayerData.Deck.Add(Card.GetCardByNum(94));
         }
     }
     private void GetRandomCardToAttain(string name)
