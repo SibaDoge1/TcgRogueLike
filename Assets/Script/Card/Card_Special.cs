@@ -641,7 +641,7 @@ public class Card_BlackThunder : Card_Special
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        if(upgradeCount<3)
+        if(PlayerControl.instance.hand.isOnHand(this) && upgradeCount<3)
         {
             UpgradeThis();
             upgradeCount++;

@@ -5845,8 +5845,8 @@ MonoBehaviour:
     bossRoom: 0
     endRoom: 0
   RoomTestMode: 0
-  TestRoomType: 2
-  TestRoomName: EVENT1
+  TestRoomType: 1
+  TestRoomName: test9
   CardTestMode: 0
   cardList: 5a0000005a0000005a0000005a0000005a0000005a0000005a0000005a00000013000000130000001300000013000000
 --- !u!4 &1133748037
@@ -7779,7 +7779,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 1552c3d9c039cd940896c06bb9266728, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26fc3bfc0986e8d4fbc39ed776f73e7b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

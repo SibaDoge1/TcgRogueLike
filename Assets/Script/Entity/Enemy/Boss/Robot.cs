@@ -59,7 +59,7 @@ public class Robot : Enemy
     }
     IEnumerator SelfDestruct()
     {
-        GetDamage(fullHp/4);
+        GetDamage(FullHp/4);
         yield return null;
     }
     int turn = 0;
@@ -157,6 +157,14 @@ public class Robot : Enemy
         stair.Init(95);
         currentTile.offTile = stair;
         stair.targetFloor = 5;
+
+        for(int i=currentRoom.enemyList.Count-1; i>=0;i--)
+        {
+            if(currentRoom.enemyList[i] != this)
+            {
+                currentRoom.enemyList[i].DestroyThis();
+            }
+        }
 
         base.OnDieCallback();
     }

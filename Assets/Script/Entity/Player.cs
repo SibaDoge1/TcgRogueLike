@@ -54,7 +54,7 @@ public class Player : Character
     }
 	protected override void OnDieCallback()
     {
-        base.OnDieCallback();
+        gameObject.SetActive(false);
         GameManager.instance.GameOver();
     }
 
@@ -84,9 +84,9 @@ public class Player : Character
         if(atker == this)//return, 자기피해
         {
             SoundDelegate.instance.PlayEffectSound(SoundEffect.DAMAGE, transform.position);
-            MyCamera.instance.ShakeCamera();
             SetPlayerAnim(1);
         }
+        MyCamera.instance.ShakeCamera();
 
         return base.GetDamage(damage, atker);
     }

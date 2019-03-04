@@ -107,7 +107,7 @@ public class Card_Normal : Card
                 range = 1;
                 cardRange = "range_3_1";
                 spritePath = "Card_Horizon";//이미지 현재 없음
-                name = "HZ-3 사각형";
+                name = "HZ-3 사격형";
                 break;
             case Figure.SQUARE:
                 range = 1;

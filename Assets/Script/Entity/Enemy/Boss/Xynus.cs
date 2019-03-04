@@ -184,5 +184,16 @@ public class Xynus : Enemy {
         return targetTiles;
 
     }
+    protected override void OnDieCallback()
+    {
+        for (int i = currentRoom.enemyList.Count - 1; i >= 0; i--)
+        {
+            if (currentRoom.enemyList[i] != this)
+            {
+                currentRoom.enemyList[i].DestroyThis();
+            }
+        }
 
+        base.OnDieCallback();
+    }
 }
