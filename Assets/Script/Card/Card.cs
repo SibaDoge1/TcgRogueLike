@@ -44,7 +44,8 @@ public abstract class Card
     public string Range { get { return cardRange; } }
     protected CardType cardType = CardType.A;
     public CardType Type { get { return cardType; } }
-
+    protected Figure cardFigure = Figure.CIRCLE;
+    public Figure CardFigure { get { return cardFigure; } }
     protected int val1;
     protected int val2;
     protected int val3;
@@ -299,7 +300,7 @@ public class Card_Reload : Card
         val1 = 0;
         val2 = 0;
         val3 = 0;
-        info = "덱을 리로드 합니다.";
+        info = "덱을 리로드한 뒤, AKS  3 감소, 이동불가 2턴 상태가 된다.";
         spritePath = "Card_Reload";
         cardEffect = CardEffect.FIRE;
         cardSound = SoundEffect.RELOADCARD;
@@ -314,8 +315,7 @@ public class Card_Reload : Card
     public override void OnCardReturned()
     {
         base.OnCardReturned();
-        player.GetDamage(1, player);
-        player.OnReturned();
+        player.GetDamage(1, player,true);
     }
 
     protected override void CardActive()

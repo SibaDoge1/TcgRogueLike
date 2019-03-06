@@ -28,13 +28,16 @@ public class DeckEditUI : MonoBehaviour
     RectTransform exchangePopUp;
 
     Button changeButton;
-
+    Text deckText;
+    Text attainText;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
         deckViewPort = transform.Find("DeckPanel").Find("DeckCardPool").Find("viewport").GetComponent<RectTransform>();
         attainViewPort = transform.Find("DeckPanel").Find("AttainCardPool").Find("viewport").GetComponent<RectTransform>();
 
+        attainText = transform.Find("DeckPanel").Find("Texts").Find("attainText").GetComponent<Text>();
+        deckText = transform.Find("DeckPanel").Find("Texts").Find("deckText").GetComponent<Text>(); 
         changeButton = transform.Find("DeckPanel").Find("Buttons").Find("changeButton").GetComponent<Button>();
         exchangePopUp = transform.Find("DeckPanel").Find("Buttons").Find("check").GetComponent<RectTransform>();
     }
@@ -49,8 +52,10 @@ public class DeckEditUI : MonoBehaviour
         //if
         RevealAttainCards();
         deckSelected = new List<EditCardObject>();
-        attainSelected = new List<EditCardObject>();  
-        //     
+        attainSelected = new List<EditCardObject>();
+        //    
+        attainText.text = "0/3";
+        deckText.text = "0/3"; 
         UIManager.instance.CardInfoPanel_Off();
     }
     public void Off()
@@ -58,6 +63,7 @@ public class DeckEditUI : MonoBehaviour
         UIManager.instance.CardInfoPanel_Off();
         StartCoroutine(OffRoutine());
         changeButton.interactable = false;
+        PlayerControl.player.GetHeal(1);
     }
 
     public void ExchangePopUp_On()
@@ -105,6 +111,9 @@ public class DeckEditUI : MonoBehaviour
         changeButton.interactable = false;
         UIManager.instance.CardInfoPanel_Off();
         ExchangePopUp_Off();
+
+        deckText.text = "";
+        attainText.text = "";
     }
 
 
@@ -117,13 +126,14 @@ public class DeckEditUI : MonoBehaviour
         ec.HighLightOff();
         deckSelected.Remove(ec);
         CheckExchangeAvail();
-
+        deckText.text = deckSelected.Count + "/3";
     }
     public void AttainCardSelectOff(EditCardObject ec)
     {
         ec.HighLightOff();
         attainSelected.Remove(ec);
         CheckExchangeAvail();
+        attainText.text = attainSelected.Count + "/3";
     }
     public void DeckCardSelect(EditCardObject ec)
     {
@@ -134,6 +144,7 @@ public class DeckEditUI : MonoBehaviour
         ec.HighLightOn();
         deckSelected.Add(ec);
         CheckExchangeAvail();
+        deckText.text = deckSelected.Count + "/3";
     }
     public void AttainCardSelect(EditCardObject ec)
     {
@@ -144,6 +155,7 @@ public class DeckEditUI : MonoBehaviour
         ec.HighLightOn();
         attainSelected.Add(ec);
         CheckExchangeAvail();
+        attainText.text = attainSelected.Count + "/3";
     }
     void CheckExchangeAvail()
     {
@@ -224,8 +236,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index;
-            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index;
+            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
+            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -234,8 +246,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index;
-            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index;
+            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
+            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)

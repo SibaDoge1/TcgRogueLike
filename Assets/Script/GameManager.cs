@@ -26,6 +26,18 @@ public class GameManager : MonoBehaviour
         get { return isInputOk; }
         set { isInputOk = value; }
     }
+    private Dictionary<string, bool> endingConditions;
+    public Dictionary<string, bool> EndingConditions
+    {
+        get
+        {
+            return endingConditions;
+        }
+        set
+        {
+            endingConditions = value;
+        }
+    }
 
     public static GameManager instance;
     private void Awake()
@@ -44,6 +56,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetSeed();
+        EndingConditions = new Dictionary<string, bool>();
+        EndingConditions.Add("Pablus", false);
+        EndingConditions.Add("Xynus", false);
 
         if(!ArchLoader.instance.IsCached)
         {
@@ -58,7 +73,6 @@ public class GameManager : MonoBehaviour
         LoadLevel(Config.instance.floorNum);
         
     }
-
     
     public void LoadLevel(int level)
     {
@@ -73,6 +87,8 @@ public class GameManager : MonoBehaviour
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
 
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
+
+        UIManager.instance.FloorCount(level);
     }
   
 
@@ -105,19 +121,21 @@ public class GameManager : MonoBehaviour
             MinimapTexture.DrawRoom(newRoom);
             //SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
-            if (!(newRoom.roomType == RoomType.BATTLE) && !(newRoom.roomType == RoomType.BOSS))
+            if (newRoom.roomType == RoomType.START)
             {
                 newRoom.OpenDoors();
             }
-
-            if (newRoom.roomType == RoomType.BOSS)
-            {
-                PlayBossBGM(currentMap.Floor);
-            }else
-            {
-                PlayBGM(currentMap.Floor);
-            }
         }
+
+        if (newRoom.roomType == RoomType.BOSS && newRoom.IsVisited == false)
+        {
+            PlayBossBGM(currentMap.Floor);
+        }
+        else
+        {
+            PlayBGM(currentMap.Floor);
+        }
+
         SetCurrentRoom(newRoom);
     }
 
@@ -218,13 +236,15 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < 3; i++)//노말카드 랜덤 12장 생성
+            for (int i = 0; i < 10; i++)//노말카드 랜덤 12장 생성
             {
                 PlayerData.Deck.Add(Card.GetCardByNum(91));
-                PlayerData.Deck.Add(Card.GetCardByNum(92));
-                PlayerData.Deck.Add(Card.GetCardByNum(93));
-                PlayerData.Deck.Add(Card.GetCardByNum(94));
             }
+            PlayerData.Deck.Add(Card.GetCardByNum(92));
+            PlayerData.Deck.Add(Card.GetCardByNum(92));
+            PlayerData.Deck.Add(Card.GetCardByNum(93));
+            PlayerData.Deck.Add(Card.GetCardByNum(93));
+            PlayerData.Deck.Add(Card.GetCardByNum(94));
         }
     }
     private void GetRandomCardToAttain(string name)

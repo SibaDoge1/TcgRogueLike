@@ -32,7 +32,7 @@ public class SteelEye : Enemy {
         }
 
         enemyUI.ActionImageOn();
-        spriteRender.sprite = actionSprites[0];
+        SpriteRender.sprite = actionSprites[0];
         yield return null;
     }
 

@@ -10,7 +10,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     private Hand hand;
     private Image upgrade;
     private Image isEnable;
-    private Text caution;
+    private Image caution;
     private int currentPos;//핸드에서의 현재 위치
     private int totalCount;//핸드 총 수 
     bool isSpecial = false;//특수카드인가?
@@ -20,7 +20,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         base.Awake();
         upgrade = transform.Find("upgrade").GetComponent<Image>();
         isEnable = transform.Find("enable").GetComponent<Image>();
-        caution = transform.Find("caution").GetComponent<Text>();
+        caution = transform.Find("caution").GetComponent<Image>();
     }
     public override void SetCardData(Card _data)
     {
@@ -57,7 +57,8 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
 
         if (!IsAvailable())
         {
-            SoundDelegate.instance.PlayEffectSound(SoundEffect.AKSLOW, PlayerControl.player.transform.position);
+            //사운드 이상해서 일단 꺼둠
+            //SoundDelegate.instance.PlayEffectSound(SoundEffect.AKSLOW, PlayerControl.player.transform.position);
             return;
         }
         if (!GameManager.instance.IsInputOk || PlayerControl.instance.IsDirCardSelected)
@@ -154,7 +155,8 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     {
             data.OnCardReturned();
             hand.RemoveCard(this);
-            Destroy(gameObject);       
+        data.CancelPreview();
+        Destroy(gameObject);       
     }
 
     /// <summary>
@@ -163,6 +165,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     public void DumpCard()
     {
         hand.RemoveCard(this);
+        data.CancelPreview();
         Destroy(gameObject);
     }
 

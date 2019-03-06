@@ -70,14 +70,11 @@ public abstract class Enemy : Character {
     }
     protected virtual void OnEndTurn()
     {
-        EnemyControl.instance.EnemyEndCallBack();
-    }
-
-
-    protected override void SetLocalScale(int x)
-    {
-        base.SetLocalScale(x);
-        enemyUI.SetLocalScale(x);
+        if(isActing)
+        {
+            EnemyControl.instance.EnemyEndCallBack();
+            isActing = false;
+        }
     }
 
     protected override int CurrentHp
@@ -109,6 +106,7 @@ public abstract class Enemy : Character {
     }
     protected State currentState;
     private int delayCount; private int actCount;
+    private bool isActing = false;
 
     protected List<Action> DelayList;
     protected List<Action> currentActionList;
@@ -116,6 +114,7 @@ public abstract class Enemy : Character {
 
     public IEnumerator AIRoutine()
     {
+        isActing = true;
         if(currentState == State.OFF)
         {
             if(TileUtils.AI_SquareFind(currentTile,visionDistance))

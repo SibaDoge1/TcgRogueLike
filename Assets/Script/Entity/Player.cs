@@ -54,7 +54,7 @@ public class Player : Character
     }
 	protected override void OnDieCallback()
     {
-        base.OnDieCallback();
+        gameObject.SetActive(false);
         GameManager.instance.GameOver();
     }
 
@@ -75,18 +75,24 @@ public class Player : Character
             UIManager.instance.HpUpdate(currentHp);
         }
     }
-    public override bool GetDamage(int damage, Entity atker = null)
+    public override bool GetDamage(int damage, Entity atker = null, bool isReturn = false)
     {
         if(!PlayerControl.playerBuff.IsHitAble)
         {
             damage = 0;
         }
-        if(atker == this)//return, 자기피해
+        if(atker == this && isReturn)//반환
+        {
+            SetPlayerAnim(2);
+            SoundDelegate.instance.PlayEffectSound(SoundEffect.CARD, transform.position);
+        }
+        else//일반 피격
         {
             SoundDelegate.instance.PlayEffectSound(SoundEffect.DAMAGE, transform.position);
             MyCamera.instance.ShakeCamera();
             SetPlayerAnim(1);
         }
+
 
         return base.GetDamage(damage, atker);
     }
@@ -131,11 +137,7 @@ public class Player : Character
     {
         SetPlayerAnim(0);
     }
-    public void OnReturned()
-    {
-        SetPlayerAnim(2);
-        SoundDelegate.instance.PlayEffectSound(SoundEffect.CARD, transform.position);
-    }
+
 
     private void SetPlayerAnim(int num)
     {
@@ -147,9 +149,9 @@ public class Player : Character
     }
     protected override IEnumerator AnimationRoutine(int num, float animationTime = 0.5F)
     {
-        spriteRender.sprite = actionSprites[num];
+        SpriteRender.sprite = actionSprites[num];
         yield return new WaitForSeconds(animationTime);
-        spriteRender.sprite = normalSprites;
+        SpriteRender.sprite = normalSprites;
         playerAnim = null;
         yield return null;
     }

@@ -49,7 +49,13 @@ public class Room : MonoBehaviour
 		OpenDoors ();
 		GameManager.instance.OnPlayerClearRoom ();
 	}
-
+    public void SetAllEnemyDead()
+    {
+        for (int i = enemyList.Count - 1; i >= 0; i--)
+        {
+            enemyList[i].DestroyThis();
+        }
+    }
 	public bool IsEnemyAlive(){
 		return enemyList.Count > 0;
 	}

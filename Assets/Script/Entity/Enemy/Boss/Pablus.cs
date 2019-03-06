@@ -96,7 +96,7 @@ public class Pablus : Enemy {
         yield return null;
     }
 
-    List<Arch.Tile> move;
+  /*  List<Arch.Tile> move;
     IEnumerator SelectFireWall()
     {
         move = GetRandomFireRange();
@@ -124,7 +124,7 @@ public class Pablus : Enemy {
         }
 
         yield return null;
-    }
+    }*/
 
 
     IEnumerator Spawn()
@@ -175,11 +175,10 @@ public class Pablus : Enemy {
             Entity e = ArchLoader.instance.GetEntity(num);
             e.Init((short)num);
             e.SetRoom(currentRoom, tile);
-
         }
     }
 
-    private List<Arch.Tile> GetRandomFireRange()
+  /*  private List<Arch.Tile> GetRandomFireRange()
     {
         int ran = Random.Range(0, 3);
         List<Arch.Tile> targetTiles = new List<Arch.Tile>();
@@ -236,7 +235,8 @@ public class Pablus : Enemy {
             targetTiles.Add(currentRoom.GetTile(tiles[i].pos + Vector2Int.left));
         }
         return targetTiles;
-    }
+    }*/
+
     private List<Arch.Tile> GetBlowAwayRange()
     {
         List<Arch.Tile> targetTiles = new List<Arch.Tile>();
@@ -257,4 +257,17 @@ public class Pablus : Enemy {
         }
         return targetTiles;
     }
+    protected override void OnDieCallback()
+    {
+        for (int i = currentRoom.enemyList.Count - 1; i >= 0; i--)
+        {
+            if (currentRoom.enemyList[i] != this)
+            {
+                currentRoom.enemyList[i].DestroyThis();
+            }
+        }
+        GameManager.instance.EndingConditions["Pablus"] = true;
+        base.OnDieCallback();
+    }
+
 }

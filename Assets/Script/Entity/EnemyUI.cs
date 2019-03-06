@@ -23,7 +23,8 @@ public class EnemyUI : MonoBehaviour {
         //attImage.color = Color.clear;
         fullHpUI.color = Color.clear;
         currentHpUI.color = Color.clear;
-
+        actionImage.sprite = ArchLoader.instance.GetWarningImage();
+        actionImage.rectTransform.localScale = new Vector3(2, 2, 2);
         actionImage.enabled = false;
     }
     public void HpOn(int fullHp,int currentHp)
