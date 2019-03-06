@@ -1,10 +1,13 @@
-﻿using System.Collections;
+﻿//#define GPGS_Enabled ///구글 연동 사용할 경우 요거 주석 풀기
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using GooglePlayGames.BasicApi.SavedGame;
 using System;
+
 
 //참고한 자료 : https://minhyeokism.tistory.com/72?category=700407, https://huiyoi.tistory.com/95
 public static class GooglePlayManager
@@ -19,9 +22,8 @@ public static class GooglePlayManager
 
 
     public static void Init()
-
     {
-#if UNITY_ANDROID
+#if GPGS_Enabled
         //if (PlayGamesPlatform.Instance != null) return;
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         // enables saving game progress.
@@ -48,8 +50,6 @@ public static class GooglePlayManager
         // Activate the Google Play Games platform
         PlayGamesPlatform.Activate();
         Debug.Log("init!");
-#elif UNITY_IOS
-        GameCenterPlatform.ShowDefaultAchievementCompletionBanner(true);
 #endif
 
     }
@@ -57,54 +57,70 @@ public static class GooglePlayManager
 
     //인증여부 확인
 
-    public static void LogIn(voidFunc successFunc, voidFunc failFunc)
+    public static void LogIn(voidFunc successFunc = null, voidFunc failFunc = null)
     {
+#if GPGS_Enabled
         Debug.Log("login");
         Social.localUser.Authenticate((bool success) =>
         {
             if (success)
             {
                 Debug.Log("login success");
-                successFunc();
+                if (successFunc != null)
+                    successFunc();
                 // to do ...
                 // 구글 플레이 게임 서비스 로그인 성공 처리
             }
             else
             {
                 Debug.Log("login fail");
-                failFunc();
+                if(failFunc != null)
+                    failFunc();
                 // to do ...
                 // 구글 플레이 게임 서비스 로그인 실패 처리
             }
         });
+#endif
     }
 
     public static void LogOut()
     {
+#if GPGS_Enabled
         PlayGamesPlatform.Instance.SignOut();
+#endif
     }
 
     public static bool CheckLogin()
-
     {
 
+#if GPGS_Enabled
         return Social.localUser.authenticated;
-
+#else
+        return false;
+#endif
     }
 
     public static void UnlockAchievement(string achive, int score)
     {
-        if (score >= 100)
+#if GPGS_Enabled
+        if (PlayGamesPlatform.Instance == null)
         {
-#if UNITY_ANDROID
-            Social.ReportProgress(achive, 100f, null);
-#elif UNITY_IOS
-            Social.ReportProgress("Score_100", 100f, null);
-#endif
+            Init();
         }
+        if (CheckLogin() == false)
+        {
+            LogIn(null, () => { return; });
+        }
+        if (score >= 100)
+            Social.ReportProgress(achive, 100f, null);
+        else
+            Social.ReportProgress(achive, score, null);
+#endif
     }
+
     public static void ShowAchievementUI()
     {
+#if GPGS_Enabled
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -113,96 +129,48 @@ public static class GooglePlayManager
         // Sign In 후 업적 UI 표시 요청할 것
         if (CheckLogin() == false)
         {
-            Social.localUser.Authenticate((bool success) =>
-            {
-                if (success)
-                {
-                    Debug.Log("login success");
-                    Social.ShowAchievementsUI();
-                    return;
-                }
-                else
-                {
-                    Debug.Log("login fail");
-                    return;
-                }
-            });
+            LogIn(Social.ShowAchievementsUI,()=>{ return; });
         }
 
         Social.ShowAchievementsUI();
+#endif
     }
 
     public static void ReportScore(string borad, int score)
     {
-#if UNITY_ANDROID
-        Social.ReportScore(score, borad, (bool success) =>
+#if GPGS_Enabled
+        if (PlayGamesPlatform.Instance == null)
         {
-            if (success)
-            {
-                // Report 성공
-                // 그에 따른 처리
-            }
-            else
-            {
-                // Report 실패
-                // 그에 따른 처리
-            }
-        });
-#elif UNITY_IOS
- 
-        Social.ReportScore(score, "Leaderboard_ID", (bool success) =>
-            {
-                if (success)
-                {
-                    // Report 성공
-                    // 그에 따른 처리
-                }
-                else
-                {
-                    // Report 실패
-                    // 그에 따른 처리
-                }
-            });
-        
+            Init();
+        }
+        if (CheckLogin() == false)
+        {
+            LogIn(null, () => { return; });
+        }
+        Social.ReportScore(score, borad, null);
 #endif
     }
 
     public static void ShowLeaderboardUI()
     {
+#if GPGS_Enabled
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
         }
-        // Sign In 이 되어있지 않은 상태라면
-        // Sign In 후 리더보드 UI 표시 요청할 것
         if (CheckLogin() == false)
         {
-            Social.localUser.Authenticate((bool success) =>
-            {
-                if (success)
-                {
-                    Debug.Log("login success");
-                    Social.ShowLeaderboardUI();
-                    return;
-                }
-                else
-                {
-                    Debug.Log("login fail");
-                    return;
-                }
-            });
+            LogIn(null, () => { return; });
         }
 
-#if UNITY_ANDROID
         Social.ShowLeaderboardUI();
-#elif UNITY_IOS
-        GameCenterPlatform.ShowLeaderboardUI("Leaderboard_ID", UnityEngine.SocialPlatforms.TimeScope.AllTime);
 #endif
     }
 
     //--------------------------------------------------------------------
     public static void ShowSelectUI()
     {
+#if GPGS_Enabled
         uint maxNumToDisplay = 5;
         bool allowCreateNew = false;
         bool allowDelete = true;
@@ -213,6 +181,7 @@ public static class GooglePlayManager
             allowCreateNew,
             allowDelete,
             OnSavedGameSelected);
+#endif
     }
 
 
@@ -227,13 +196,13 @@ public static class GooglePlayManager
             // handle cancel or error
         }
     }
-
+//---------------------------------------------------------------------------------
     //게임 저장은 다음과 같이 합니다.
 
     public static void SaveToCloud()
-
     {
-        if(PlayGamesPlatform.Instance == null)
+#if GPGS_Enabled
+        if (PlayGamesPlatform.Instance == null)
         {
             Init();
         }
@@ -250,6 +219,7 @@ public static class GooglePlayManager
         //파일이름에 적당히 사용하실 파일이름을 지정해줍니다.
 
         OpenSavedGame("SaveData", true);
+#endif
 
     }
 
@@ -337,6 +307,7 @@ public static class GooglePlayManager
 
     public static void LoadFromCloud()
     {
+#if GPGS_Enabled
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -348,6 +319,7 @@ public static class GooglePlayManager
         }
         //내가 사용할 파일이름을 지정해줍니다. 그냥 컴퓨터상의 파일과 똑같다 생각하시면됩니다.
         OpenSavedGame("SaveData", false);
+#endif
     }
 
 
@@ -362,9 +334,6 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 로드 중 파일열기에 실패 했습니다: " + status);
-            SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
-            SaveManager.FirstSetUp();
-            SaveManager.ApplySave();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
         }
     }
@@ -392,9 +361,6 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 로드 중 데이터 읽기에 실패 했습니다: " + status);
-            SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
-            SaveManager.FirstSetUp();
-            SaveManager.ApplySave();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
         }
     }
@@ -402,10 +368,12 @@ public static class GooglePlayManager
     //--------------세이브 삭제 ------------------
     public static void DeleteGameData(string filename)
     {
+#if GPGS_Enabled
         // Open the file to get the metadata.
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
             ConflictResolutionStrategy.UseLongestPlaytime, DeleteSavedGame);
+#endif
     }
 
     static void DeleteSavedGame(SavedGameRequestStatus status, ISavedGameMetadata game)

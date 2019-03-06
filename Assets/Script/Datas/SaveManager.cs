@@ -46,11 +46,11 @@ public static class SaveManager
     public static string Ext = ".dat";
     public static string FileName = "save";
     public static string Path = Application.persistentDataPath;
+    private static byte[] primaryData;
 
     #region FirstSetUp
     public static void FirstSetUp()
     {
-        bool loadComplete = JsonLoad(FileName, Path); //클라우드시 제거
         if (saveData == null)
             saveData = new SaveData();
         if (saveData.isSet)
@@ -60,6 +60,7 @@ public static class SaveManager
             InitDiaryUnlockDatas();
             InitMonsterKillDatas();
             InitStageArriveDatas();
+            saveData.savedTime = DateTime.Now;
             return;
         }
         else
@@ -74,11 +75,6 @@ public static class SaveManager
             InitStageArriveDatas();
             saveData.savedTime = DateTime.Now;
             saveData.isSet = true;
-        }
-        
-        if (!loadComplete) //클라우드시 제거
-        {
-            JsonSave(FileName, Path);
         }
         
         Debug.Log(JsonConvert.SerializeObject(saveData));
@@ -277,6 +273,7 @@ public static class SaveManager
                 return;
             }
         }
+        SaveAll();
     }
 
     /// <summary>
@@ -294,6 +291,7 @@ public static class SaveManager
         {
             SetCardUnlockData(int.Parse(Database.achiveDatas[i].cardReward), true);
         }
+        SaveAll();
     }
 
 
@@ -312,6 +310,7 @@ public static class SaveManager
         int randomIdx = UnityEngine.Random.Range(0, unobtainedCards.Count);
         SetCardUnlockData(unobtainedCards[randomIdx], true);
 
+        SaveAll();
     }
 
     /// <summary>
@@ -329,6 +328,7 @@ public static class SaveManager
                 return;
             }
         }
+        SaveAll();
     }
 
     /// <summary>
@@ -345,6 +345,7 @@ public static class SaveManager
                 return;
             }
         }
+        SaveAll();
         SceneManager.LoadScene("EndingScene");
     }
 
@@ -361,16 +362,45 @@ public static class SaveManager
                 GetAchivement(pair.Key);
             }
         }
+        SaveAll();
     }
 
     public static void ApplySave()
     {
         if (saveData == null) return;
+        FirstSetUp();
         SetBgmValue(saveData.bgmValue);
         SetFxValue(saveData.fxValue);
         SetUIValue(saveData.UIValue);
     }
 
+    /// <summary>
+    /// 세이브시에 부르는 메소드
+    /// </summary>
+    public static void SaveAll()
+    {
+        if (saveData == null) FirstSetUp();
+
+        string json = JsonConvert.SerializeObject(saveData);
+        Debug.Log("Saving: " + json);
+        primaryData = Encoding.UTF8.GetBytes(json);
+        BinarySave(primaryData, FileName, Path);
+
+        GooglePlayManager.SaveToCloud();
+    }
+
+    /// <summary>
+    /// 로드시에 부르는 메소드
+    /// </summary>
+    public static void LoadAll()
+    {
+        SaveManager.BinaryLoad(SaveManager.FileName, SaveManager.Path);
+        ApplySave();
+        GooglePlayManager.LoadFromCloud();
+    }
+
+
+    #region For Diary
     public static bool CheckNew()
     {
         for (int i = 1; i < saveData.diaryUnlockData.Count; i++)
@@ -384,27 +414,19 @@ public static class SaveManager
     {
         saveData.diaryUnlockData[i][1] = false;
     }
+    #endregion
 
     #region For Save/Load
 
-    public static void SaveAll()
-    {
-        GooglePlayManager.SaveToCloud();
-    }
-    public static void LoadAll()
-    {
-        SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
-        GooglePlayManager.LoadFromCloud();
-    }
 
     public static byte[] OnCloudSaveStart()
     {
-        if (saveData == null) FirstSetUp();
-        saveData.savedTime = DateTimeOffset.Now;
-        string json = JsonConvert.SerializeObject(saveData);
-        JsonSave(FileName, Path);
-        return Encoding.UTF8.GetBytes(json);
+        if (primaryData != null)
+            return primaryData;
+        else
+            return null;
     }
+
     public static void OnCloudLoadCompleted(byte[] byteArr)
     {
         string json = Encoding.UTF8.GetString(byteArr);
@@ -423,44 +445,48 @@ public static class SaveManager
                 return;
             }
         }
-        saveData = JsonConvert.DeserializeObject<SaveData>(json);
+        saveData = cloud;
+        ApplySave();
         return;
     }
 
-    public static bool JsonSave(string filename, string path)
+    public static bool BinarySave(byte[] json, string filename, string path)
     {
-        saveData.savedTime = DateTimeOffset.Now;
-        string json = JsonConvert.SerializeObject(saveData);
-        FileStream file = new FileStream(path + "/" + filename + Ext, FileMode.Create);
-        if (file == null)
+        using (FileStream file = new FileStream(path + "/" + filename + Ext, FileMode.Create))
         {
-            Debug.LogError("file Create Error!");
-            file.Close();
-            return false;
+            using (BufferedStream buf = new BufferedStream(file))
+            {
+                if (file == null)
+                {
+                    Debug.LogError("file Create Error!");
+                    return false;
+                }
+                buf.Write(json, 0, json.Length);
+                Debug.Log("Local Save Complete" + json);
+                return true;
+            }
         }
-        StreamWriter writer = new StreamWriter(file);
-        writer.Write(json);
-
-        writer.Close();
-        Debug.Log("Local Save Complete" + json);
-        return true;
     }
 
-    public static bool JsonLoad(string filename, string path)
+    public static bool BinaryLoad(string filename, string path)
     {
-        FileStream file = new FileStream(path + "/" + filename + Ext, FileMode.OpenOrCreate);
-        StreamReader reader = new StreamReader(file);
-        string json = reader.ReadToEnd();
-        if (file.Length == 0)
+        using (FileStream file = new FileStream(path + "/" + filename + Ext, FileMode.OpenOrCreate))
         {
-            Debug.Log("make new Local Save");
-            reader.Close();
-            return false;
+            using (BufferedStream buf = new BufferedStream(file))
+            {
+                byte[] primary = new byte[buf.Length];
+                buf.Read(primary, 0, primary.Length);
+                string json = Encoding.UTF8.GetString(primary);
+                if (json.Length == 0)
+                {
+                    Debug.Log("no local Save");
+                    return false;
+                }
+                saveData = JsonConvert.DeserializeObject<SaveData>(json);
+                Debug.Log("Local Save Loaded" + json);
+                return true;
+            }
         }
-        saveData = JsonConvert.DeserializeObject<SaveData>(json);
-        reader.Close();
-        Debug.Log("Local Save Loaded" + json);
-        return true;
     }
     #endregion
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Category { records , humans, irregulars, raChips }
+public enum Category { records , humans, irregulars, raChips, etc }
 
 public class Diary : MonoBehaviour {
     public Dictionary<Category, List<int>> Diaries { get; private set; }

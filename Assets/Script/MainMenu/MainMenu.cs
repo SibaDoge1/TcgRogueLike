@@ -28,22 +28,17 @@ public class MainMenu : MonoBehaviour
         option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
+
         Database.ReadDatas();
         ArchLoader.instance.StartCache();
-        SaveManager.FirstSetUp();
         GooglePlayManager.Init();
-#if UNITY_ANDROID
-        Debug.Log("안드로이드");
-#endif
     }
 
     void Start()
     {
-        //GooglePlayManager.LoadFromCloud(); //클라우드시 사용
-        SaveManager.ApplySave();
+        SaveManager.LoadAll();
         CheckNew();
         SoundDelegate.instance.PlayBGM(BGM.FIELDTITLECUT);
-        //GooglePlayManager.SaveToCloud();
     }
 
     public void CheckNew()

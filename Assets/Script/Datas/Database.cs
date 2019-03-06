@@ -176,6 +176,7 @@ public class DiaryData
             case "R.A.칩": category = Category.raChips; break;
             case "기록": category = Category.records; break;
             case "인물": category = Category.humans; break;
+            case "etc": category = Category.etc; break;
             default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!"); break;
         }
         title = data[2];

@@ -18,6 +18,7 @@ public class Exit : MonoBehaviour {
     public void QuitGame()
     {
         MainMenu.ButtonDown();
+        SaveManager.SaveAll();
         Application.Quit();
     }
 }
