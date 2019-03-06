@@ -71,8 +71,7 @@ public class Xynus : Enemy {
             PlayerControl.player.GetDamage(atk);
         }
 
-        //yield return StartCoroutine(AnimationRoutine(0));
-        yield return null;
+        yield return StartCoroutine(AnimationRoutine(0));
     }
 
     IEnumerator SpawnOrDelay()
@@ -125,8 +124,7 @@ public class Xynus : Enemy {
         }
 
 
-        //yield return StartCoroutine(AnimationRoutine(0));
-        yield return null;
+        yield return StartCoroutine(AnimationRoutine(0));
     }
     IEnumerator Delay()
     {
@@ -194,6 +192,7 @@ public class Xynus : Enemy {
             }
         }
 
+        GameManager.instance.EndingConditions["Xynus"] = true;
         base.OnDieCallback();
     }
 }

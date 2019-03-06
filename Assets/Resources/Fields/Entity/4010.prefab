@@ -176,7 +176,8 @@ MonoBehaviour:
   currentTile: {fileID: 0}
   pos: {x: 0, y: 0}
   entityNum: 0
-  actionSprites: []
+  actionSprites:
+  - {fileID: 21300000, guid: b3fd10fb40df9174c9bea741234be1a0, type: 3}
   isElite: 0
 --- !u!114 &114395368806572882
 MonoBehaviour:

@@ -44,7 +44,8 @@ public abstract class Card
     public string Range { get { return cardRange; } }
     protected CardType cardType = CardType.A;
     public CardType Type { get { return cardType; } }
-
+    protected Figure cardFigure = Figure.CIRCLE;
+    public Figure CardFigure { get { return cardFigure; } }
     protected int val1;
     protected int val2;
     protected int val3;
@@ -314,8 +315,7 @@ public class Card_Reload : Card
     public override void OnCardReturned()
     {
         base.OnCardReturned();
-        player.GetDamage(1, player);
-        player.OnReturned();
+        player.GetDamage(1, player,true);
     }
 
     protected override void CardActive()

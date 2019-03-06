@@ -24,8 +24,7 @@ public class Card_Special : Card
     public override void OnCardReturned()
     {
         base.OnCardReturned();
-        player.GetDamage(1,player);
-        player.OnReturned();
+        player.GetDamage(1,player,true);
     }
     public override void CardReturnCallBack(Card data)
     {
@@ -318,7 +317,7 @@ public class Card_WolfBite : Card_Special
 
         if(PlayerControl.instance.deck.DeckCount<=val2)
         {
-            player.GetDamage(val3, player);
+            player.GetDamage(val3,player);
         }
 
     }
@@ -391,7 +390,7 @@ public class Card_BearClaw : Card_Special
         // MakeEffect(GetRange());
         if (PlayerControl.instance.deck.DeckCount <= val2)
         {
-            player.GetDamage(val3, player);
+            player.GetDamage(val3,player);
         }
     }
 }

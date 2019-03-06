@@ -26,6 +26,18 @@ public class GameManager : MonoBehaviour
         get { return isInputOk; }
         set { isInputOk = value; }
     }
+    private Dictionary<string, bool> endingConditions;
+    public Dictionary<string, bool> EndingConditions
+    {
+        get
+        {
+            return endingConditions;
+        }
+        set
+        {
+            endingConditions = value;
+        }
+    }
 
     public static GameManager instance;
     private void Awake()
@@ -44,6 +56,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         SetSeed();
+        EndingConditions = new Dictionary<string, bool>();
+        EndingConditions.Add("Pablus", false);
+        EndingConditions.Add("Xynus", false);
 
         if(!ArchLoader.instance.IsCached)
         {
@@ -57,7 +72,6 @@ public class GameManager : MonoBehaviour
 
         LoadLevel(Config.instance.floorNum);
     }
-
     
     public void LoadLevel(int level)
     {

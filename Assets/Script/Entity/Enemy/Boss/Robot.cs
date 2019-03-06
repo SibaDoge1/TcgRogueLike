@@ -153,11 +153,6 @@ public class Robot : Enemy
 
     protected override void OnDieCallback()
     {
-        OffTile_Floor stair = ArchLoader.instance.GetOffTile(95) as OffTile_Floor;
-        stair.Init(95);
-        currentTile.offTile = stair;
-        stair.targetFloor = 5;
-
         for(int i=currentRoom.enemyList.Count-1; i>=0;i--)
         {
             if(currentRoom.enemyList[i] != this)
@@ -165,6 +160,18 @@ public class Robot : Enemy
                 currentRoom.enemyList[i].DestroyThis();
             }
         }
+
+        if(GameManager.instance.EndingConditions["Pablus"] && GameManager.instance.EndingConditions["Xynus"] )
+        {
+            OffTile_Floor stair = ArchLoader.instance.GetOffTile(95) as OffTile_Floor;
+            stair.Init(95);
+            currentTile.offTile = stair;
+            stair.targetFloor = 5;
+        }else
+        {
+            //BAD END
+        }
+
 
         base.OnDieCallback();
     }

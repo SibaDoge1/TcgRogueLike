@@ -155,7 +155,8 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     {
             data.OnCardReturned();
             hand.RemoveCard(this);
-            Destroy(gameObject);       
+        data.CancelPreview();
+        Destroy(gameObject);       
     }
 
     /// <summary>
@@ -164,6 +165,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     public void DumpCard()
     {
         hand.RemoveCard(this);
+        data.CancelPreview();
         Destroy(gameObject);
     }
 

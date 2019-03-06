@@ -207,7 +207,7 @@ public class DeckCheckUI : MonoBehaviour
                 aIndex = int.MaxValue;
             }else
             {
-                aIndex = (int)A.GetCardData.Type * 1000 + A.GetCardData.Index;
+                aIndex = (int)A.GetCardData.Type * 1000 + A.GetCardData.Index * 100 + (int)A.GetCardData.CardFigure;
             }
 
             if(B.IsAttain)
@@ -215,7 +215,7 @@ public class DeckCheckUI : MonoBehaviour
                 bIndex = int.MaxValue;
             }else
             {
-                bIndex = (int)B.GetCardData.Type * 1000 + B.GetCardData.Index;
+                bIndex = (int)B.GetCardData.Type * 1000 + B.GetCardData.Index * 100 + (int)B.GetCardData.CardFigure;
             }
             
             if (aIndex > bIndex)

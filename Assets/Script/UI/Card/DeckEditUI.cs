@@ -63,7 +63,7 @@ public class DeckEditUI : MonoBehaviour
         UIManager.instance.CardInfoPanel_Off();
         StartCoroutine(OffRoutine());
         changeButton.interactable = false;
-        PlayerControl.player.GetHeal(2);
+        PlayerControl.player.GetHeal(1);
     }
 
     public void ExchangePopUp_On()
@@ -236,8 +236,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index;
-            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index;
+            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
+            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -246,8 +246,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index;
-            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index;
+            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
+            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)

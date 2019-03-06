@@ -7,7 +7,6 @@ using System;
 
 public class Card_Normal : Card
 {
-    private Figure figure;
     private int range;
 
     /// <summary>
@@ -16,7 +15,7 @@ public class Card_Normal : Card
     public Card_Normal(Figure _figure,CardType _type)
     {
 
-        figure = _figure;
+        cardFigure = _figure;
         cardType = _type;
 
         GenerateCardData();
@@ -28,7 +27,7 @@ public class Card_Normal : Card
     public Card_Normal(CardType _type)
     {
 
-        figure = (Figure)UnityEngine.Random.Range(1, 6);
+        cardFigure = (Figure)UnityEngine.Random.Range(1, 6);
         cardType = _type;
 
         GenerateCardData();
@@ -39,7 +38,7 @@ public class Card_Normal : Card
     /// </summary>
     public Card_Normal()
     {
-        figure = (Figure)UnityEngine.Random.Range(1, 6);
+        cardFigure = (Figure)UnityEngine.Random.Range(1, 6);
         cardType = (CardType)UnityEngine.Random.Range(0, 4);
 
         GenerateCardData();
@@ -89,7 +88,7 @@ public class Card_Normal : Card
 
         }
 
-        switch(figure)
+        switch(cardFigure)
         {
             case Figure.Diagonal:
                 range = 1;
@@ -129,9 +128,9 @@ public class Card_Normal : Card
 
     protected override void CardActive()
     {
-        if (TileUtils.IsEnemyInRange(player.currentTile, range, figure))
+        if (TileUtils.IsEnemyInRange(player.currentTile, range, cardFigure))
         {
-            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, figure);
+            List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, range, cardFigure);
             for (int i = 0; i < enemies.Count; i++)
             {
 
@@ -200,7 +199,7 @@ public class Card_Normal : Card
         }
         else
         {
-            targetTiles = TileUtils.Range(player.currentTile, range, figure);
+            targetTiles = TileUtils.Range(player.currentTile, range, cardFigure);
             for (int i = 0; i < targetTiles.Count; i++)
             {
                 ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));

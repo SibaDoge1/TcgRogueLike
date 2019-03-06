@@ -6,11 +6,11 @@ using Arch;
 public enum Figure
 {
     NONE,
+    SQUARE,
+    VERTICAL,
+    HORIZION,
     Diagonal,
     CROSS,
-    HORIZION,
-    VERTICAL,
-    SQUARE,
     EMPTYSQUARE,
     CIRCLE,
 }

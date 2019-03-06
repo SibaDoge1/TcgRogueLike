@@ -39,12 +39,12 @@ public abstract class Character : Entity {
     }
 
 
-    public virtual bool GetDamage(int damage, Entity atker = null)
+    public virtual bool GetDamage(int damage, Entity atker = null, bool isReturn = false)
     {      
             CurrentHp -= damage;
             return true;
     }
-    public virtual bool GetDamage(float damage, Entity atker = null)
+    public virtual bool GetDamage(float damage, Entity atker = null,bool isReturn = false)
     {
         return GetDamage((int)damage,atker);
     }
