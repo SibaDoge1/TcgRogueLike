@@ -288,8 +288,6 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 저장 중 파일열기에 실패 했습니다: " + status);
-            SaveManager.FirstSetUp();
-            SaveManager.JsonSave(SaveManager.FileName, SaveManager.Path);
             //파일열기에 실패 했습니다. 오류메시지를 출력하든지 합니다.
         }
     }
@@ -328,8 +326,6 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 저장에 실패 했습니다: " + status);
-            SaveManager.FirstSetUp();
-            SaveManager.JsonSave(SaveManager.FileName, SaveManager.Path);
             //데이터 저장에 실패 했습니다.
         }
     }

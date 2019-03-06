@@ -393,6 +393,7 @@ public static class SaveManager
     }
     public static void LoadAll()
     {
+        SaveManager.JsonLoad(SaveManager.FileName, SaveManager.Path);
         GooglePlayManager.LoadFromCloud();
     }
 
@@ -401,17 +402,18 @@ public static class SaveManager
         if (saveData == null) FirstSetUp();
         saveData.savedTime = DateTimeOffset.Now;
         string json = JsonConvert.SerializeObject(saveData);
-        return Encoding.UTF8.GetBytes(json); ;
+        JsonSave(FileName, Path);
+        return Encoding.UTF8.GetBytes(json);
     }
     public static void OnCloudLoadCompleted(byte[] byteArr)
     {
         string json = Encoding.UTF8.GetString(byteArr);
         if (json.Length == 0)
         {
-            Debug.Log("0 lenth data from save, exit");
+            Debug.Log("0 lenth data from cloud save, quit");
             return;
         }
-        Debug.Log("loaded save: " + json);
+        Debug.Log("cloud load: " + json);
         SaveData cloud = JsonConvert.DeserializeObject<SaveData>(json);
         if (saveData != null)
         {
