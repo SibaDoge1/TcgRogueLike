@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
         deck = transform.Find("Deck").GetComponent<Deck>();
         deckEdit = transform.Find("Deck").Find("DeckEdit").GetComponent<DeckEditUI>();
         deckCheck = transform.Find("Deck").Find("DeckCheck").GetComponent<DeckCheckUI>();
+        menuUI = transform.Find("Menu").GetComponent<MenuUI>();
 
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
@@ -50,7 +51,7 @@ public class UIManager : MonoBehaviour
     GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
     UIAnim uianimations;
-
+    MenuUI menuUI;
     #region Status
     public void HpUpdate(int currentHp_)
     {
@@ -177,9 +178,10 @@ public class UIManager : MonoBehaviour
         gameWinUI.On();
     }
 
-    public void OptionUIOn()
+    public void MenuUIOn()
     {
-        //optionUI.On();
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONTITLE);
+        menuUI.On();
     }
 
     /// <summary>

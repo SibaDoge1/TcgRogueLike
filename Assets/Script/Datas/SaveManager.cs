@@ -53,28 +53,17 @@ public static class SaveManager
     {
         if (saveData == null)
             saveData = new SaveData();
-        if (saveData.isSet)
-        {
-            InitCardUnlockDatas();
-            InitAchiveUnlockDatas();
-            InitDiaryUnlockDatas();
-            InitMonsterKillDatas();
-            InitStageArriveDatas();
-            saveData.savedTime = DateTime.Now;
-            return;
-        }
-        else
+
+        InitCardUnlockDatas();
+        InitAchiveUnlockDatas();
+        InitDiaryUnlockDatas();
+        InitMonsterKillDatas();
+        InitStageArriveDatas();
+        if(saveData.isSet == false)
         {
             SetBgmValue(1f);
             SetFxValue(1f);
             SetUIValue(1f);
-            InitCardUnlockDatas();
-            InitAchiveUnlockDatas();
-            InitDiaryUnlockDatas();
-            InitMonsterKillDatas();
-            InitStageArriveDatas();
-            saveData.savedTime = DateTime.Now;
-            saveData.isSet = true;
         }
         
         Debug.Log(JsonConvert.SerializeObject(saveData));
@@ -365,22 +354,15 @@ public static class SaveManager
         SaveAll();
     }
 
-    public static void ApplySave()
-    {
-        if (saveData == null) return;
-        FirstSetUp();
-        SetBgmValue(saveData.bgmValue);
-        SetFxValue(saveData.fxValue);
-        SetUIValue(saveData.UIValue);
-    }
 
     /// <summary>
     /// 세이브시에 부르는 메소드
     /// </summary>
     public static void SaveAll()
     {
-        if (saveData == null) FirstSetUp();
-
+        FirstSetUp();
+        saveData.savedTime = DateTime.Now;
+        saveData.isSet = true;
         string json = JsonConvert.SerializeObject(saveData);
         Debug.Log("Saving: " + json);
         primaryData = Encoding.UTF8.GetBytes(json);
@@ -418,6 +400,13 @@ public static class SaveManager
 
     #region For Save/Load
 
+    public static void ApplySave()
+    {
+        FirstSetUp();
+        SetBgmValue(saveData.bgmValue);
+        SetFxValue(saveData.fxValue);
+        SetUIValue(saveData.UIValue);
+    }
 
     public static byte[] OnCloudSaveStart()
     {

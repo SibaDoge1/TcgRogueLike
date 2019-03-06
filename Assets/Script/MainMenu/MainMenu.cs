@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    private LoadingManager loadingPanel;
     private Tutorial tutorial;
     private GameObject _new;
     private Option option;
@@ -22,7 +21,6 @@ public class MainMenu : MonoBehaviour
         Application.targetFrameRate = 60;
         Screen.orientation = ScreenOrientation.Landscape;
         #endregion
-        loadingPanel = GameObject.Find("Canvas").transform.Find("LoadingPanel").GetComponent<LoadingManager>();
         tutorial = GameObject.Find("Canvas").transform.Find("Tutorial").gameObject.GetComponent<Tutorial>();
         _new = GameObject.Find("Canvas").transform.Find("NewIcon").gameObject ;
         option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
@@ -59,7 +57,7 @@ public class MainMenu : MonoBehaviour
     {
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
-        loadingPanel.LoadScene();
+        LoadingManager.LoadScene("Levels/Floor0");
     }
 
     public void OnTutorialButtonDown()
