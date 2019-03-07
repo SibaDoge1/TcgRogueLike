@@ -12,6 +12,7 @@ public class Diary : MonoBehaviour {
     private DiaryTab human;
     private DiaryTab irregular;
     private DiaryTab raChip;
+    private DiaryTab etc;
     private Color activeColor = new Color(0.9f, 0.9f, 0.9f, 255);
     private Color deActiveColor = new Color(0.3f,0.3f,0.3f,255);
     private Transform content;
@@ -24,7 +25,8 @@ public class Diary : MonoBehaviour {
         human = transform.Find("Human").GetComponent<DiaryTab>();
         irregular = transform.Find("Irregular").GetComponent<DiaryTab>();
         raChip = transform.Find("R.A.Chip").GetComponent<DiaryTab>();
-        content= transform.Find("List").Find("Scroll View").Find("Viewport").Find("Content");
+        etc = transform.Find("ETC").GetComponent<DiaryTab>();
+        content = transform.Find("List").Find("Scroll View").Find("Viewport").Find("Content");
         unlockRate = transform.Find("PercentText").GetComponent<Text>();
         ParseDiary();
     }
@@ -74,6 +76,13 @@ public class Diary : MonoBehaviour {
         DisplayList(Category.raChips);
     }
 
+    public void OnEtcButtonDown()
+    {
+        MainMenu.ButtonDown();
+        SetTabColor(Category.etc);
+        DisplayList(Category.etc);
+    }
+
     public void ParseDiary()
     {
         Diaries = new Dictionary<Category, List<int>>();
@@ -81,6 +90,7 @@ public class Diary : MonoBehaviour {
         Diaries.Add(Category.humans, new List<int>());
         Diaries.Add(Category.irregulars, new List<int>());
         Diaries.Add(Category.raChips, new List<int>());
+        Diaries.Add(Category.etc, new List<int>());
         for (int i = 1; i <= Database.diaryDatas.Count; i++)
         {
             switch (Database.diaryDatas[i].category)
@@ -89,6 +99,7 @@ public class Diary : MonoBehaviour {
                 case Category.raChips: Diaries[Category.raChips].Add(i); break;
                 case Category.records: Diaries[Category.records].Add(i); break;
                 case Category.humans: Diaries[Category.humans].Add(i); break;
+                case Category.etc: Diaries[Category.etc].Add(i); break;
             }
         }
     }
@@ -129,12 +140,14 @@ public class Diary : MonoBehaviour {
         human.SetTabColor(deActiveColor);
         irregular.SetTabColor(deActiveColor);
         raChip.SetTabColor(deActiveColor);
+        etc.SetTabColor(deActiveColor);
         switch (category)
         {
             case Category.irregulars: irregular.SetTabColor(activeColor); break;
             case Category.raChips: raChip.SetTabColor(activeColor); break;
             case Category.records: record.SetTabColor(activeColor); break;
             case Category.humans: human.SetTabColor(activeColor); break;
+            case Category.etc: etc.SetTabColor(activeColor); break;
         }
     }
 

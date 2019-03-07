@@ -29,7 +29,7 @@ public class Tutorial : MonoBehaviour {
         {
             maxPage += pages[curChapter].page.Count;
         }
-
+        maxPage++;
     }
 
     private void DisplayCount()
@@ -106,6 +106,7 @@ public class Tutorial : MonoBehaviour {
     {
         gameObject.SetActive(true);
         image.sprite = pages[0].page[0];
+        DisplayCount();
     }
     public void Off()
     {

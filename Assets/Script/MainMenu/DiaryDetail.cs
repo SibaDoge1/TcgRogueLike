@@ -38,6 +38,7 @@ public class DiaryDetail : MonoBehaviour {
             case Category.raChips: objectPath = "Card"; break;
             case Category.records: objectPath = "Record"; break;
             case Category.humans: objectPath = "Human"; break;
+            case Category.etc: objectPath = "Record"; break;
         }
         categoryObject = transform.Find(objectPath);
 
@@ -53,10 +54,33 @@ public class DiaryDetail : MonoBehaviour {
         categoryObject.gameObject.SetActive(true);
         title.text = diaryData.title;
         content.text = diaryData.info;
-        //if (categoryObject.Find("Image") != null)
-           // categoryObject.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + objectPath + "/" + diaryData.spritePath);
         if (categoryObject.Find("Name") != null)
             categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
+
+
+        string imagePath;
+        switch (diaryData.category)
+        {
+            case Category.irregulars: imagePath = "Monster"; break;
+            case Category.raChips: imagePath = "Card"; break;
+            case Category.humans: imagePath = "Human"; break;
+            default: imagePath = null; break;
+        }
+        if (imagePath != null)
+        {
+            Image image = categoryObject.Find("Image").GetComponent<Image>();
+            Sprite spr = Resources.Load<Sprite>("Graphic/Diary/Images/" + imagePath + "/" + diaryData.spritePath + "_thumbnail");
+            if (spr != null)
+            {
+                image.sprite = spr;
+            }
+            else
+            {
+                image.sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_thumbnail");
+            }
+        }
+        //if (categoryObject.Find("Image") != null)
+        // categoryObject.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + objectPath + "/" + diaryData.spritePath);
     }
 
     public void Off()
@@ -81,8 +105,28 @@ public class DiaryDetail : MonoBehaviour {
     {
         MainMenu.ButtonDown();
         zoomPanel.SetActive(true);
-        if (diaryData.spritePath.Length != 0) return;
-        zoomPanel.transform.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>(objectPath + "Full");
+        string imagePath;
+        switch (diaryData.category)
+        {
+            case Category.irregulars: imagePath = "Monster"; break;
+            case Category.raChips: imagePath = "Card"; break;
+            case Category.humans: imagePath = "Human"; break;
+            default: imagePath = null; break;
+        }
+        Image image = zoomPanel.transform.Find("Image").GetComponent<Image>();
+        if (imagePath != null)
+        {
+            
+            Sprite spr = Resources.Load<Sprite>("Graphic/Diary/Images/" + imagePath + "/" + diaryData.spritePath + "_full");
+            if (spr != null)
+            {
+                image.sprite = spr;
+            }
+            else
+            {
+                image.sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_full");
+            }
+        }
     }
 
     public void ZoomOff()

@@ -245,7 +245,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Work/GitHub/TcgRogueLike/AKLG.keystore
+  AndroidKeystoreName: D:/Work/GitHub/AKLG.keystore
   AndroidKeyaliasName: aklg
   AndroidTVCompatibility: 1
   AndroidIsGame: 1

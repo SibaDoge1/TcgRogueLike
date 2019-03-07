@@ -176,7 +176,8 @@ public static class CsvParser
                 result[1] = split[0].Split(',')[1];
                 result[2] = split[0].Split(',')[2];
                 result[3] = split[1];
-                result[4] = split[2].Split(',')[1];
+                string spritePath = split[2].Split(',')[1];
+                result[4] = spritePath.Substring(0, spritePath.Length-1);
             }
             if (result[0].Length == 0)
             {

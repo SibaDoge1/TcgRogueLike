@@ -37,12 +37,24 @@ public class DiaryEntity : MonoBehaviour {
         {
             case Category.irregulars: imagePath = "Monster"; break;
             case Category.raChips: imagePath = "Card"; break;
-            case Category.records: imagePath = "Record"; break;
             case Category.humans: imagePath = "Human"; break;
             default: imagePath = null; break;
         }
-        //if (imagePath != null)
-            //image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/"+imagePath+"/"+diaryData.spritePath);
+        Debug.Log(imagePath);
+        if (imagePath != null)
+        {
+            Debug.Log("Graphic/Diary/Images/" + imagePath + "/" + diaryData.spritePath + "_list");
+            Sprite spr = Resources.Load<Sprite>("Graphic/Diary/Images/" + imagePath + "/" + diaryData.spritePath + "_list");
+            Debug.Log(diaryData.spritePath.Length);
+            if (spr != null)
+            {
+                image.GetComponent<Image>().sprite = spr;
+            }
+            else
+            {
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_list");
+            }
+        }
     }
 	
     public void OnClick()

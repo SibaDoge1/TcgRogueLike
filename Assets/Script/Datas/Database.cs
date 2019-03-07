@@ -177,12 +177,12 @@ public class DiaryData
             case "기록": category = Category.records; break;
             case "인물": category = Category.humans; break;
             case "etc": category = Category.etc; break;
-            default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!"); break;
+            default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!" + data[0] + data[1]); break;
         }
         title = data[2];
         info = data[3].Replace("$", "\n");
         //Debug.Log(data[3]);
-        spritePath = data[4];
+        spritePath = data[4].Replace("\r","");
     }
 }
 
