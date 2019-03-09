@@ -18,7 +18,7 @@ public class PlayerControl : MonoBehaviour {
 
     public void EndTurnButton()
     {
-        if (GameManager.instance.CurrentTurn == Turn.PLAYER)
+        if (GameManager.instance.CurrentTurn == Turn.PLAYER && selectedDirCard == null)
         {
             if(player.currentRoom.IsEnemyAlive())
             {
@@ -83,7 +83,7 @@ public class PlayerControl : MonoBehaviour {
     public void AddToAttain(Card cData)
     {
         PlayerData.AttainCards.Add(cData);
-        UIManager.instance.StartUIAnim(UIAnimation.Attain);
+        //UIManager.instance.StartUIAnim(UIAnimation.Attain);
     }
 
 
@@ -157,9 +157,16 @@ public class PlayerControl : MonoBehaviour {
         }
         SelectedDirCard = null;
     }
-    public void ToggleHand()
+    public void ReturnToStart()
     {
-        hand.ToggleHand();
+        if(!GameManager.instance.CurrentRoom().IsEnemyAlive())
+        {
+            if(GameManager.instance.IsInputOk && GameManager.instance.CurrentTurn == Turn.PLAYER)
+            {
+                player.EnterRoom(GameManager.instance.CurrentMap.StartRoom);
+                MinimapTexture.DrawPlayerPos(GameManager.instance.CurrentRoom().transform.position, PlayerControl.player.pos);
+            }
+        }
     }
     #endregion
 }

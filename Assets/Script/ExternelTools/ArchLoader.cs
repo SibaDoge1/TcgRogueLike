@@ -128,7 +128,7 @@ public class ArchLoader : MonoBehaviour {
     {
         //타일 생성하고 이미지 입힌다음 리턴
         Tile t = Instantiate(tile).GetComponent<Tile>();
-        if(num!=0)
+        if(num!=0 && tileImages.ContainsKey(num))
         {
             t.SetSprite(tileImages[num]);
         }
@@ -157,6 +157,10 @@ public class ArchLoader : MonoBehaviour {
     public AudioSource GetSoundObject()
     {
         return soundObject;
+    }
+    public Sprite GetBuffImage(BUFF s)
+    {
+        return buffImages[s.ToString()];
     }
     #endregion
     #region MADE EFFECT
@@ -344,7 +348,7 @@ public class ArchLoader : MonoBehaviour {
     Dictionary<string, GameObject> cardEffectPrefabs = new Dictionary<string, GameObject>();
     Dictionary<string, GameObject> monsterEffectPrefabs = new Dictionary<string, GameObject>();
     Dictionary<string, GameObject> rangeEffectPrefabs = new Dictionary<string, GameObject>();
-
+    Dictionary<string, Sprite> buffImages = new Dictionary<string, Sprite>();
     GameObject textEffectPrefab;
 
     private void CacheEffects()
@@ -363,6 +367,11 @@ public class ArchLoader : MonoBehaviour {
         for (int i = 0; i < prefabs.Length; i++)
         {
             rangeEffectPrefabs.Add(prefabs[i].name, prefabs[i]);
+        }
+        Sprite[] images = Resources.LoadAll<Sprite>("Graphic/UI/BuffImages");
+        for(int i=0; i<images.Length;i++)
+        {
+            buffImages.Add(images[i].name, images[i]);
         }
 
         textEffectPrefab = Resources.Load<GameObject>("EFFECT/TEXT/DamageText");

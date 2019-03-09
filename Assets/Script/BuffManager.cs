@@ -71,17 +71,17 @@ public class BuffManager
         {
             case BUFF.AKASHA:
                 akasha.UpdateTurn(turn);
-                UIManager.instance.StartUIAnim(UIAnimation.Buff);
+                UIManager.instance.StartUIAnim(UIAnimation.Buff,buff);
                 SoundDelegate.instance.PlayEffectSound(SoundEffect.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.CARD:
                 card.UpdateTurn(turn);
-                UIManager.instance.StartUIAnim(UIAnimation.Buff);
+                UIManager.instance.StartUIAnim(UIAnimation.Buff, buff);
                 SoundDelegate.instance.PlayEffectSound(SoundEffect.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.MOVE:
                 move.UpdateTurn(turn);
-                UIManager.instance.StartUIAnim(UIAnimation.Buff);
+                UIManager.instance.StartUIAnim(UIAnimation.Buff, buff);
                 SoundDelegate.instance.PlayEffectSound(SoundEffect.ERROR, PlayerControl.player.transform.position);
                 break;
             case BUFF.IMMUNE:

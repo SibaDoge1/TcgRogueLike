@@ -64,6 +64,7 @@ public class DeckEditUI : MonoBehaviour
         StartCoroutine(OffRoutine());
         changeButton.interactable = false;
         PlayerControl.player.GetHeal(1);
+        GameManager.instance.IsInputOk = true;
     }
 
     public void ExchangePopUp_On()

@@ -43,6 +43,7 @@ public class Player : Character
     //워프하듯 이동
     public void EnterRoom(Room room)
     {
+
         if (currentRoom != null)
             currentTile.OnTileObj = null;
 

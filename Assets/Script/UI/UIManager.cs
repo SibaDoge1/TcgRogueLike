@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     Text remainText;
     Text floorText;
+    Text roomDebugText;
     private void Awake()
     {
         instance = this;
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
 
         remainText = transform.Find("StatusUI").Find("CardRemain").GetComponentInChildren<Text>();
         floorText = transform.Find("Frame").Find("floor").GetComponentInChildren<Text>();
+        roomDebugText = transform.Find("Frame").Find("roomDebugText").GetComponent<Text>();
     }
 
     TextUI textUI;
@@ -75,7 +77,6 @@ public class UIManager : MonoBehaviour
     public void DeckEditUIOff()
     {
         deckEdit.Off();
-        GameManager.instance.IsInputOk = true;
     }
     public Deck GetDeck()
     {
@@ -126,6 +127,10 @@ public class UIManager : MonoBehaviour
     {
         uianimations.ShowAnim(ani);
     }
+    public void StartUIAnim(UIAnimation ani,BUFF buff)
+    {
+        uianimations.ShowAnim(ani,buff);
+    }
     public void StatusTextUpdate()
     {
         buffUI.TextUpdate();
@@ -165,6 +170,16 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    public void HandOn()
+    {
+        hand.On();
+    }
+
+    public void HandOff()
+    {
+        hand.Off();
+    }
+
     public Hand GetHand()
     {
         return hand;
@@ -185,6 +200,13 @@ public class UIManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 귀환 버튼
+    /// </summary>
+    public void ReturnButton()
+    {
+        PlayerControl.instance.ReturnToStart();
+    }
+    /// <summary>
     /// 현재 덱의 남아있는 카드 수
     /// </summary>
     /// <param name="count"></param>
@@ -196,5 +218,16 @@ public class UIManager : MonoBehaviour
     public void FloorCount(int count)
     {
         floorText.text = count + "F";
+    }
+    public void RoomDebugText(string s,bool making = false)
+    {
+        if(making)
+        {
+            roomDebugText.text = "만드는중 : " + s;
+        }
+        else
+        {
+            roomDebugText.text = "방이름 : " + s;
+        }
     }
 }

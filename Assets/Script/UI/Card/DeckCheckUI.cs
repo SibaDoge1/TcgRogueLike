@@ -33,10 +33,11 @@ public class DeckCheckUI : MonoBehaviour
     /// </summary>
     public void On()
     {
+        GameManager.instance.IsInputOk = false;
         MakeCards();
-        UIManager.instance.CardInfoPanel_Off();
         SetDeckCheckMode("ALL");
         rect.anchoredPosition = Vector3.zero;
+        UIManager.instance.CardInfoPanel_Off();
     }
 
     /// <summary>
@@ -47,6 +48,7 @@ public class DeckCheckUI : MonoBehaviour
         DeleteCards();
         UIManager.instance.CardInfoPanel_Off();
         rect.anchoredPosition = offPos;
+        GameManager.instance.IsInputOk = true;
     }
 
     /// <summary>

@@ -87,7 +87,6 @@ public class GameManager : MonoBehaviour
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
 
         UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
-
         UIManager.instance.FloorCount(level);
     }
   
@@ -108,6 +107,7 @@ public class GameManager : MonoBehaviour
             currentMap.SetRoomOff(currentMap.CurrentRoom);
         }
         CurrentMap.CurrentRoom = room_;
+        UIManager.instance.RoomDebugText(CurrentRoom().RoomName);
         currentMap.SetRoomOn(CurrentMap.CurrentRoom);
     }
 
