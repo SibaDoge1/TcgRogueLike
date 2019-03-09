@@ -22,7 +22,6 @@ public class UIManager : MonoBehaviour
         hpUI = transform.Find("StatusUI").Find("HpUI").GetComponent<HpUI>();
         akashaUI = transform.Find("StatusUI").Find("AkashaUI").GetComponent<AkashaUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
-        gameWinUI = transform.Find("GameWinUI").GetComponent<GameWinUI>();
 
         cardInfoPanel = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
         deck = transform.Find("Deck").GetComponent<Deck>();
@@ -50,7 +49,6 @@ public class UIManager : MonoBehaviour
     Deck deck;
     Hand hand;
     BuffUI buffUI;
-    GameWinUI gameWinUI;
     CardInfoPanel cardInfoPanel;
     UIAnim uianimations;
     MenuUI menuUI;
@@ -187,10 +185,6 @@ public class UIManager : MonoBehaviour
     public void GameOverUIOn()
     {
         gameOverUI.On();
-    }
-    public void GameWinUIOn()
-    {
-        gameWinUI.On();
     }
 
     public void MenuUIOn()

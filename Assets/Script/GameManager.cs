@@ -189,18 +189,14 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        SoundDelegate.instance.PlayEffectSound(SoundEffect.GAMEOVER, Camera.main.transform.position);
-        UIManager.instance.GameOverUIOn();
+        FadeTool.FadeOutIn(3.5f,2,UIManager.instance.GameOverUIOn);
+        SoundDelegate.instance.PlayGameOverSound(BGM.NONE,3.5f);
         IsInputOk = false;
     }
-    public void GameWin()
+
+    public void ReGame(int i)
     {
-        IsInputOk = false;
-        UIManager.instance.GameWinUIOn();
-    }
-    public void ReGame()
-    {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(i);
     }
 
 
