@@ -114,6 +114,15 @@ public class GameManager : MonoBehaviour
     public void OnPlayerEnterRoom(Room newRoom)
     {
 
+        if (newRoom.roomType == RoomType.BOSS && newRoom.IsVisited == false)
+        {
+            PlayBossBGM(currentMap.Floor);
+        }
+        else
+        {
+            PlayBGM(currentMap.Floor);
+        }
+
         if (newRoom.IsVisited == false)
         {
             newRoom.IsVisited = true;
@@ -125,15 +134,6 @@ public class GameManager : MonoBehaviour
             {
                 newRoom.OpenDoors();
             }
-        }
-
-        if (newRoom.roomType == RoomType.BOSS && newRoom.IsVisited == false)
-        {
-            PlayBossBGM(currentMap.Floor);
-        }
-        else
-        {
-            PlayBGM(currentMap.Floor);
         }
 
         SetCurrentRoom(newRoom);

@@ -20,7 +20,7 @@ public abstract class Enemy : Character {
 
         MonsterData data = Database.GetMonsterData(entityNum);
 
-        fullHp = data.hp; currentHp = fullHp;
+        fullHp = data.hp; CurrentHp = fullHp;
         Atk = data.atk;
         value = data.rank;
         vision = data.vision;
