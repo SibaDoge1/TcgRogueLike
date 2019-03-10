@@ -244,7 +244,7 @@ public abstract class Card
                 case 99:
                     return new Card_Reload();
                 default:
-                    if(Database.GetCardData(i) != null)
+                    if(Database.CheckCardDataKey(i))
                     {
                     return GetSpecialCard(Database.GetCardData(i));
                     }else

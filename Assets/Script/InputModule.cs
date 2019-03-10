@@ -10,25 +10,8 @@ public class InputModule : MonoBehaviour {
 	void Start(){
 #if UNITY_EDITOR
         StartCoroutine (TileSelectRoutine ());
-        StartCoroutine(KeyBoardInputs());
 #endif
     }
-    IEnumerator KeyBoardInputs()
-    {
-        while(true)
-        {
-              if(Input.GetKeyDown(KeyCode.F1))
-            {
-                GameManager.instance.LoadLevel(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.F5))
-            {
-                GameManager.instance.ReGame();
-            }
-            yield return null;
-        }
-     }
         IEnumerator TileSelectRoutine(){
 		while (true) {
             if (GameManager.instance.CurrentTurn==Turn.PLAYER && GameManager.instance.IsInputOk)        

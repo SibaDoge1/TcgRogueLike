@@ -73,15 +73,13 @@ public class Deck : MonoBehaviour {
 
 	#region Private
 
-    /// <summary>
-    /// 맨 마지막 카드 제외하고 셔플
-    /// </summary>
+
 	private void Shuffle()
     {
 		Card temp;
 		int randIndex;
-		for (int i = 0; i < playingDeck.Count - 1; i++) {
-			randIndex = Random.Range (0, playingDeck.Count-1);
+		for (int i = 0; i < playingDeck.Count; i++) {
+			randIndex = Random.Range (0, playingDeck.Count);
 			temp = playingDeck [i];
 			playingDeck [i] = playingDeck [randIndex];
 			playingDeck [randIndex] = temp;

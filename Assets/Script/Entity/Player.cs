@@ -8,7 +8,8 @@ public class Player : Character
     protected override void Awake()
     {
         base.Awake();
-        FullHp = 10; CurrentHp = 10;
+        FullHp = 10;
+        CurrentHp = 10;
         Atk = 1;
     }
     //문을 통해서 이동
@@ -43,6 +44,7 @@ public class Player : Character
     //워프하듯 이동
     public void EnterRoom(Room room)
     {
+
         if (currentRoom != null)
             currentTile.OnTileObj = null;
 

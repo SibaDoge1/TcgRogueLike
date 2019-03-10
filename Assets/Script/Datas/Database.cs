@@ -26,7 +26,11 @@ public static class Database
     }
     public static CardData GetCardData(int i)
     {
-        return cardDatas[i];
+            return cardDatas[i];
+    }
+    public static bool CheckCardDataKey(int i)
+    {
+        return cardDatas.ContainsKey(i);
     }
     public static CardPoolData GetCardPool(string name)
     { 

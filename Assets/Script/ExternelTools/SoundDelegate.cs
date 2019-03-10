@@ -56,27 +56,23 @@ public class SoundDelegate : MonoBehaviour {
     BGM current = BGM.NONE;
     AudioSource monosound;
 
-    private float bgmSound = 1f;
     public float BGMSound
     {
-        get { return bgmSound; }
+        get { return bgm.volume; }
         set
         {
-            bgmSound = value;
-            bgm.volume = bgmSound;
+            bgm.volume = value;
         }
     }
 
-    private float effectSound =1f;
     public float EffectSound
     {
-        get { return effectSound; }
+        get { return monosound.volume; }
         set
         {
-            effectSound = value;
-            monosound.volume = effectSound;
+            monosound.volume = value;
             if(ArchLoader.instance.GetSoundObject() != null)
-            ArchLoader.instance.GetSoundObject().volume = effectSound;
+            ArchLoader.instance.GetSoundObject().volume = value;
         }
     }
 
@@ -126,5 +122,25 @@ public class SoundDelegate : MonoBehaviour {
     {
         ArchLoader.instance.GetSoundObject().clip = ArchLoader.instance.GetSoundEffect(eType);
         Instantiate(ArchLoader.instance.GetSoundObject(), position, Quaternion.identity);
+    }
+
+    public void PlayGameOverSound(BGM targetBGM, float time)
+    {
+        PlayEffectSound(SoundEffect.GAMEOVER, Camera.main.transform.position);
+        StartCoroutine(BgmFade(targetBGM,time));
+    }
+
+    IEnumerator BgmFade(BGM targetBGM,float time)
+    {
+        float value = BGMSound;
+        float counter = 0;
+        while(counter<time)
+        {        
+            BGMSound = Mathf.Lerp(value, 0, counter / time);
+            counter += Time.deltaTime;
+            yield return null;
+        }
+        PlayBGM(targetBGM);
+        BGMSound = value;
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class MyCamera : MonoBehaviour {
 
     public float shake;
-    public int speed;
+    public float speed;
     public static MyCamera instance;
     Camera cam;
     private void Awake()

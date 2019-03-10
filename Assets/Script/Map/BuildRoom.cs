@@ -32,10 +32,12 @@ public static class BuildRoom
         tiles = new Tile[size.x, size.y];
         currentRoom.SetTileArray(tiles);
         currentRoom.RoomName = name;
+        UIManager.instance.RoomDebugText(currentRoom.RoomName, true);
+
         Draw();
         GenerateGraph();
-
         roomData = null;
+
         return currentRoom;
     }
 
@@ -57,10 +59,12 @@ public static class BuildRoom
         currentRoom.size = size;
         tiles = new Tile[size.x, size.y];
         currentRoom.SetTileArray(tiles);
+        UIManager.instance.RoomDebugText(currentRoom.RoomName,true);
+
         Draw();
         GenerateGraph();
-
         roomData = null;
+
         return currentRoom;
     }
 
@@ -107,7 +111,7 @@ public static class BuildRoom
                 entity = short.Parse(temp[2]);
 
                     Tile tempTile = ArchLoader.instance.GetTile(tile);
-                tempTile.Init(tile);
+                    tempTile.Init(tile);
                     tempTile.SetRoom(currentRoom, new Vector2Int(j, (size.y - 1) - i));
                     tiles[j, (size.y-1)-i] = tempTile;
 

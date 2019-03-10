@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public class Hand : MonoBehaviour {
 	private Vector3 originLocalPosition;
+    private Vector3 hideLocalPosition = new Vector3(5000, 0);
 	void Awake()
     {
 		originLocalPosition = transform.localPosition;
@@ -114,16 +115,6 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	public void ToggleHand()
-    {
-		if(isHided)
-        {
-            ShowAll();
-		}else{
-            HideAll();
-        }
-    }
-
 
 
 
@@ -190,22 +181,13 @@ public class Hand : MonoBehaviour {
 		}
 	}
 
-	private void HideAll()
+	public void On()
     {
-		isHided = true;
-		SetCardPosition ();
-		if (handRoutine != null) {
-			StopCoroutine (handRoutine);
-		}
-		handRoutine = StartCoroutine (HandRoutine (isHided));
+        transform.localPosition = originLocalPosition;
 	}
-	private void ShowAll(){
-		isHided = false;
-		SetCardPosition ();
-		if (handRoutine != null) {
-			StopCoroutine (handRoutine);
-		}
-		handRoutine = StartCoroutine (HandRoutine (isHided));
+	public void Off()
+    {
+        transform.localPosition = hideLocalPosition;
 	}
 	#endregion
 }

@@ -19,7 +19,6 @@ public class MainMenu : MonoBehaviour
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
-        Screen.orientation = ScreenOrientation.Landscape;
         #endregion
         tutorial = GameObject.Find("Canvas").transform.Find("Tutorial").gameObject.GetComponent<Tutorial>();
         _new = GameObject.Find("Canvas").transform.Find("NewIcon").gameObject ;
