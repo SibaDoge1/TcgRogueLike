@@ -12,10 +12,12 @@ public class MainMenu : MonoBehaviour
     private Exit exitPanel;
     private Diary diary;
     public delegate void voidFunc();
+    public bool isBtnEnable;
 
     void Awake()
     {
-        FadeTool.FadeIn(1f, null);
+        isBtnEnable = false;
+        FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
@@ -25,7 +27,6 @@ public class MainMenu : MonoBehaviour
         option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
-
         Database.ReadDatas();
         ArchLoader.instance.StartCache();
         GooglePlayManager.Init();
@@ -54,6 +55,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnStartButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
         LoadingManager.LoadScene("Levels/Floor0");
@@ -61,12 +63,14 @@ public class MainMenu : MonoBehaviour
 
     public void OnTutorialButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
         tutorial.On();
     }
 
     public void OnDiaryButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
         voidFunc checkNew = new voidFunc(CheckNew);
         diary.On(checkNew);
@@ -74,12 +78,14 @@ public class MainMenu : MonoBehaviour
 
     public void OnOptionButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
         option.On();
     }
 
     public void OnExitButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
         exitPanel.on();
     }
@@ -93,5 +99,4 @@ public class MainMenu : MonoBehaviour
     {
         SaveManager.SetCardAllTrue();
     }
-
 }

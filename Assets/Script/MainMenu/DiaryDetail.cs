@@ -20,7 +20,7 @@ public class DiaryDetail : MonoBehaviour {
     void Awake()
     {
         title = transform.Find("Title").GetComponent<Text>();
-        content = transform.Find("TextBG").Find("Scroll View").Find("Viewport").Find("Content").Find("Text").GetComponent<Text>();
+        content = transform.Find("TextBG").Find("Scroll View").Find("Viewport").Find("Content").GetComponent<Text>();
         diary = transform.parent.GetComponent<Diary>();
         noData = transform.Find("NO DATA").gameObject;
         zoomPanel = transform.Find("ZoomPanel").gameObject;
@@ -53,7 +53,8 @@ public class DiaryDetail : MonoBehaviour {
         noData.SetActive(false);
         categoryObject.gameObject.SetActive(true);
         title.text = diaryData.title;
-        content.text = diaryData.info;
+        content.text = "\n" + diaryData.info;
+        content.rectTransform.sizeDelta = new Vector2(0, content.preferredHeight);
         if (categoryObject.Find("Name") != null)
             categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
 
