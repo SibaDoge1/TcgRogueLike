@@ -27,7 +27,8 @@ GameObject:
   - component: {fileID: 400002}
   - component: {fileID: 19800002}
   - component: {fileID: 19900002}
-  - component: {fileID: 114269542481615408}
+  - component: {fileID: 114647162370044238}
+  - component: {fileID: 114455540048515090}
   m_Layer: 0
   m_Name: FORCE
   m_TagString: Untagged
@@ -6747,7 +6748,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100002}
   m_IsPrefabParent: 1
---- !u!114 &114269542481615408
+--- !u!114 &114455540048515090
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -6758,4 +6759,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
+--- !u!114 &114647162370044238
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4084fe9fb18f37e4490c6a06dde07209, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlay: 1
+  destroyTime: 1
+  objectPool: {fileID: 0}

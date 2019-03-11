@@ -22,14 +22,13 @@ public class UIManager : MonoBehaviour
         hpUI = transform.Find("StatusUI").Find("HpUI").GetComponent<HpUI>();
         akashaUI = transform.Find("StatusUI").Find("AkashaUI").GetComponent<AkashaUI>();
         gameOverUI = transform.Find("GameOverUI").GetComponent<GameOverUI>();
-
+        saveUI = transform.Find("SaveUI").GetComponent<SaveUI>();
         cardInfoPanel = transform.Find("CardInfoPanel").GetComponent<CardInfoPanel>();
-        deck = transform.Find("Deck").GetComponent<Deck>();
         deckEdit = transform.Find("Deck").Find("DeckEdit").GetComponent<DeckEditUI>();
         deckCheck = transform.Find("Deck").Find("DeckCheck").GetComponent<DeckCheckUI>();
         menuUI = transform.Find("Menu").GetComponent<MenuUI>();
 
-        hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<Hand>();
+        hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<HandManager>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
         buffUI = transform.Find("Anim").Find("Buff").GetComponent<BuffUI>();
         uianimations = transform.Find("Anim").GetComponent<UIAnim>();
@@ -46,11 +45,11 @@ public class UIManager : MonoBehaviour
     DeckEditUI deckEdit;
     DeckCheckUI deckCheck;
     MapUI mapUI;
-    Deck deck;
-    Hand hand;
+    HandManager hand;
     BuffUI buffUI;
     CardInfoPanel cardInfoPanel;
     UIAnim uianimations;
+    SaveUI saveUI;
     MenuUI menuUI;
     #region Status
     public void HpUpdate(int currentHp_)
@@ -75,10 +74,6 @@ public class UIManager : MonoBehaviour
     public void DeckEditUIOff()
     {
         deckEdit.Off();
-    }
-    public Deck GetDeck()
-    {
-        return deck;
     }
     public void DeckCheckUIOn()
     {
@@ -178,7 +173,11 @@ public class UIManager : MonoBehaviour
         hand.Off();
     }
 
-    public Hand GetHand()
+    public void SaveUIOn()
+    {
+        saveUI.SaveUIOn();
+    }
+    public HandManager GetHand()
     {
         return hand;
     }

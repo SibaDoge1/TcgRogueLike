@@ -189,7 +189,7 @@ public class Card_Normal : Card
 
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR,player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.DIR,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;
@@ -202,7 +202,7 @@ public class Card_Normal : Card
             targetTiles = TileUtils.Range(player.currentTile, range, cardFigure);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD,player, targetTiles[i]));
                 if (ranges[i] != null)
                 {
                     ranges[i].transform.parent = player.transform;

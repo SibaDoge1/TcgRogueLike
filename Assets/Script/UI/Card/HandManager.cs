@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Hand
 /// </summary>
-public class Hand : MonoBehaviour {
+public class HandManager : MonoBehaviour {
 	private Vector3 originLocalPosition;
     private Vector3 hideLocalPosition = new Vector3(5000, 0);
 	void Awake()

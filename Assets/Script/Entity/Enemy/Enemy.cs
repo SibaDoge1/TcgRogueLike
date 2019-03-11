@@ -5,7 +5,7 @@ using Arch;
 
 public delegate IEnumerator Action();
 public abstract class Enemy : Character {
-    protected List<GameObject> rangeList = new List<GameObject>();
+    protected List<EffectObject> rangeList = new List<EffectObject>();
     protected EnemyUI enemyUI;
 
     public bool isElite;//엘리트 몹인가?
@@ -51,7 +51,7 @@ public abstract class Enemy : Character {
     {
         ClearRangeList();
 		currentRoom.OnEnemyDead (this);
-        ArchLoader.instance.MadeEffect(EnemyEffect.DIE, currentTile);
+        ObjectPoolManager.instance.PoolEffect(EnemyEffect.DIE, currentTile);
         if(GameManager.instance.CurrentTurn == Turn.ENEMY)
         {
             OnEndTurn();
@@ -94,8 +94,8 @@ public abstract class Enemy : Character {
     {
         if (rangeList != null)
         {
-            ArchLoader.instance.DestroyEffect(rangeList);
-            rangeList = new List<GameObject>();
+            ObjectPoolManager.instance.DeActiveRange(rangeList);
+            rangeList = new List<EffectObject>();
         }
     }
 

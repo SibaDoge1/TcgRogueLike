@@ -9,12 +9,20 @@ public class Player : Character
     {
         base.Awake();
         FullHp = 10;
-        CurrentHp = 10;
         Atk = 1;
     }
     //문을 통해서 이동
     public void EnterRoom(OffTile_Door door)
     {
+        if(currentRoom != null)
+        {
+            if (currentRoom.roomType == RoomType.START && GameManager.instance.CurrentMap.SaveTile != null)
+            {
+                GameManager.instance.CurrentMap.SaveTile.DestroyThis();
+            }
+        }
+
+
         Vector2Int temp;
 
         if (currentRoom != null)
@@ -39,7 +47,7 @@ public class Player : Character
 
         SetRoom(door.TargetRoom,temp);
 
-		GameManager.instance.OnPlayerEnterRoom(currentRoom);
+        GameManager.instance.OnPlayerEnterRoom(currentRoom);
     }
     //워프하듯 이동
     public void EnterRoom(Room room)
@@ -66,6 +74,13 @@ public class Player : Character
         {
             base.FullHp = value;
             UIManager.instance.HpUpdate(currentHp);
+        }
+    }
+    public int GetHp
+    {
+        get
+        {
+            return currentHp;
         }
     }
 

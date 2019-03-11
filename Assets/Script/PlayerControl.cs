@@ -8,7 +8,6 @@ public class PlayerControl : MonoBehaviour {
     public static BuffManager playerBuff;//Status
     public static Player player;//PlayerEntity
 
-
     void Awake()
     {
         instance = this;
@@ -29,11 +28,11 @@ public class PlayerControl : MonoBehaviour {
     }
 
     #region Card
-    private Deck _deck;
-    private Hand _hand;
+    private DeckManager deck;
+    private HandManager hand;
 
-	public Deck deck { get { return _deck; } set { _deck = value; } }
-	public Hand hand { get { return _hand; } set { _hand = value; } }
+	public DeckManager DeckManager { get { return deck; } set { deck = value; } }
+	public HandManager Hand { get { return hand; } set { hand = value; } }
 
     private bool isDirCardSelected = false;
     public bool IsDirCardSelected
@@ -67,12 +66,12 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw Each Turn
 	/// </summary>
 	public void NaturalDraw(){
-		if (hand.CurrentHandCount < Config.instance.HandMax) {
-			hand.DrawHand (deck.Draw ());
+		if (Hand.CurrentHandCount < Config.instance.HandMax) {
+			Hand.DrawHand (DeckManager.Draw ());
 		}else
         {
-            hand.ReturnCard();//가장왼쪽의 카드 제거           
-            hand.DrawHand(deck.Draw());
+            Hand.ReturnCard();//가장왼쪽의 카드 제거           
+            Hand.DrawHand(DeckManager.Draw());
         }
 	}
 
@@ -82,31 +81,27 @@ public class PlayerControl : MonoBehaviour {
     /// <param name="cData"></param>
     public void AddToAttain(Card cData)
     {
-        PlayerData.AttainCards.Add(cData);
+        DeckManager.AttainCards.Add(cData);
         //UIManager.instance.StartUIAnim(UIAnimation.Attain);
     }
 
 
     public void ReLoadDeck()
     {
-        hand.DumpAll();
-		deck.ReLoad ();
+        Hand.DumpAll();
+		DeckManager.ReLoad ();
         for(int i=0; i<3; i++)
         {
-            hand.DrawHand(deck.Draw());
+            Hand.DrawHand(DeckManager.Draw());
         }
     }
 
     public void OnRoomClear()
     {
-        hand.DumpAll();
-        deck.OnRoomClear();
-        for (int i = 0; i < 3; i++)
-        {
-            hand.DrawHand(deck.Draw());
-        }
+        ReLoadDeck();
         playerBuff.EraseDeBuff();
     }
+
 
     #endregion
     #region PlayerInput
@@ -142,7 +137,7 @@ public class PlayerControl : MonoBehaviour {
                 if (player.currentRoom.IsEnemyAlive())
                 {
                     NaturalDraw();
-                    PlayerData.AkashaGage += 1;              
+                    AkashaGage += 1;              
                 }
                 GameManager.instance.OnEndPlayerTurn();
             }
@@ -168,5 +163,56 @@ public class PlayerControl : MonoBehaviour {
             }
         }
     }
+    #endregion
+
+    #region Akasha
+
+    int akashaGage;
+    public int AkashaGage
+    {
+        get { return akashaGage; }
+        set
+        {
+            if (value >= 10)
+            {
+                akashaGage = 10;
+            }
+            else if (value < 0)
+            {
+                akashaGage = 0;
+            }
+            else
+            {
+                if (PlayerControl.playerBuff.IsAkashaAble)
+                {
+                    akashaGage = value;
+                }
+                else
+                {
+                    if (value <= akashaGage)
+                    {
+                        akashaGage = value;
+                    }
+                }
+            }
+            UIManager.instance.AkashaUpdate(AkashaGage);
+        }
+    }
+
+    public void AttackedTarget()
+    {
+        if (!isAttacked)
+        {
+            AkashaGage++;
+            isAttacked = true;
+        }
+    }
+
+    private bool isAttacked = false;
+    public void OnPlayerTurn()
+    {
+        isAttacked = false;
+    }
+
     #endregion
 }

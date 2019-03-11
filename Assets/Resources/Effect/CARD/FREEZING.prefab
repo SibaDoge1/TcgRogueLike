@@ -21,7 +21,8 @@ GameObject:
   - component: {fileID: 4327228085307550}
   - component: {fileID: 212392544738950440}
   - component: {fileID: 95074955166158052}
-  - component: {fileID: 114120999632867340}
+  - component: {fileID: 114095598139786048}
+  - component: {fileID: 114999287703782790}
   m_Layer: 0
   m_Name: FREEZING
   m_TagString: Untagged
@@ -59,7 +60,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114120999632867340
+--- !u!114 &114095598139786048
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1314994249875652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4db299e94ea40547b6d7387cb9b9081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPlay: 1
+  destroyTime: 1
+  objectPool: {fileID: 0}
+  animationName: freezing
+  anim: {fileID: 0}
+--- !u!114 &114999287703782790
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -70,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!212 &212392544738950440
 SpriteRenderer:

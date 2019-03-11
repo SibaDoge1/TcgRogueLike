@@ -53,7 +53,7 @@ public class Pablus : Enemy {
         List<Arch.Tile> targets = GetBlowAwayRange();
         for (int i = 0; i < targets.Count; i++)
         {
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, targets[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, targets[i]));
         }
 
         yield return null;
@@ -67,7 +67,7 @@ public class Pablus : Enemy {
 
         for (int i = 0; i < targets.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.EXPLOSIONB, targets[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.EXPLOSIONB, targets[i]);
         }
 
         if (TileUtils.AI_Find(targets))
@@ -91,7 +91,7 @@ public class Pablus : Enemy {
 
         for(int i=0; i<targets.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.FIREBREATH,targets[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.FIREBREATH,targets[i]);
         }
         yield return null;
     }
@@ -266,7 +266,7 @@ public class Pablus : Enemy {
                 currentRoom.enemyList[i].DestroyThis();
             }
         }
-        GameManager.instance.EndingConditions["Pablus"] = true;
+        GameManager.instance.Pablus = true;
         base.OnDieCallback();
     }
 

@@ -172,7 +172,7 @@ public class DeckEditUI : MonoBehaviour
     #region private
     private void MakeCardObjects()
     {
-        deck = new List<Card>(PlayerData.Deck);
+        deck = new List<Card>(PlayerControl.instance.DeckManager.Deck);
         deckCardObjects = new List<EditCardObject>();
         for(int i=0; i<deck.Count;i++)
         {
@@ -185,7 +185,7 @@ public class DeckEditUI : MonoBehaviour
             deckCardObjects[i].SetRenderKnown();
         }
 
-        attain = new List<Card>(PlayerData.AttainCards);
+        attain = new List<Card>(PlayerControl.instance.DeckManager.AttainCards);
         attainCardObjects = new List<EditCardObject>();
         for (int i = 0; i < attain.Count; i++)
         {
@@ -218,7 +218,6 @@ public class DeckEditUI : MonoBehaviour
             if(!attainCardObjects[i].IsReavealed)
             {
                 attainCardObjects[i].SetRenderKnown();
-                //TODO : 미지카드밝혀지는 애니메이션
             }
         }
         yield return null;
@@ -226,8 +225,9 @@ public class DeckEditUI : MonoBehaviour
     IEnumerator OffRoutine()
     {
 
-         PlayerData.Deck = deck;
-         PlayerData.AttainCards.Clear();
+        PlayerControl.instance.DeckManager.Deck = deck;
+        PlayerControl.instance.DeckManager.AttainCards.Clear();
+        PlayerControl.instance.ReLoadDeck();
          yield return null;
 
         DeleteAllObjects();

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPointerUpHandler
 {
 
-    private Hand hand;
+    private HandManager hand;
     private Image upgrade;
     private Image isEnable;
     private Image caution;
@@ -35,7 +35,7 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         }
     }
 
-    public void SetHand(Hand _hand)
+    public void SetHand(HandManager _hand)
     {
         hand = _hand;
     }

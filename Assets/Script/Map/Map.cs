@@ -39,6 +39,12 @@ public class Map : MonoBehaviour
         get { return currentRoom; }
         set { currentRoom = value; }
     }
+    private OffTile_Save saveTile;
+    public OffTile_Save SaveTile
+    {
+        get { return saveTile; }
+        set { saveTile = value; }
+    }
 
     #region variables
     private int floor;//층 수

@@ -8,7 +8,6 @@ public enum Turn
     PLAYER,
     ENEMY
 }
-
 public delegate void OnRoomClearDelegater();
 
 public class GameManager : MonoBehaviour
@@ -26,17 +25,17 @@ public class GameManager : MonoBehaviour
         get { return isInputOk; }
         set { isInputOk = value; }
     }
-    private Dictionary<string, bool> endingConditions;
-    public Dictionary<string, bool> EndingConditions
+    private bool xynus;
+    public bool Xynus
     {
-        get
-        {
-            return endingConditions;
-        }
-        set
-        {
-            endingConditions = value;
-        }
+        get { return xynus; }
+        set { xynus = value; }
+    }
+    private bool pablus;
+    public bool Pablus
+    {
+        get { return pablus; }
+        set { pablus = value; }
     }
 
     public static GameManager instance;
@@ -51,14 +50,18 @@ public class GameManager : MonoBehaviour
             UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
             Destroy(this);
         }
+#if UNITY_EDITOR
+        Application.targetFrameRate = 60;
+        #endif
     }
+    private int startLevel;
+    private int startHp;
+    List<Card> startDeck = new List<Card>();
+    List<Card> startAttain = new List<Card>();
+
     //Start of Everything
     private void Start()
     {
-        SetSeed();
-        EndingConditions = new Dictionary<string, bool>();
-        EndingConditions.Add("Pablus", false);
-        EndingConditions.Add("Xynus", false);
 
         if(!ArchLoader.instance.IsCached)
         {
@@ -67,11 +70,11 @@ public class GameManager : MonoBehaviour
         }
 
         player = ArchLoader.instance.GetPlayer();
-        PlayerData.Clear();
-        BuildDeck();
+        player.gameObject.SetActive(true);
 
-        LoadLevel(Config.instance.floorNum);
-        
+        ObjectPoolManager.instance.MakeEffects();
+        LoadIngameSaveData();
+        LoadLevel(startLevel);       
     }
     
     public void LoadLevel(int level)
@@ -79,17 +82,14 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
         DestroyMap();
         currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
-        SetMap(level);
-
+        BuildMap(level);
         MinimapTexture.Init(currentMap);
-        SettingtPlayer();
 
-        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, PlayerControl.player.pos);
-
-        UIManager.instance.AkashaUpdate(PlayerData.AkashaGage);
+        player.EnterRoom(CurrentMap.StartRoom);
+        MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, player.pos);
         UIManager.instance.FloorCount(level);
+        PlayerControl.instance.AkashaGage = 0;
     }
-  
 
     private Map currentMap;
     public Map CurrentMap
@@ -100,13 +100,13 @@ public class GameManager : MonoBehaviour
     {
         return CurrentMap.CurrentRoom;
     }
-    public void SetCurrentRoom(Room room_)
+    public void SetCurrentRoom(Room newRoom)
     {
         if (currentMap.CurrentRoom != null)
         {
             currentMap.SetRoomOff(currentMap.CurrentRoom);
         }
-        CurrentMap.CurrentRoom = room_;
+        CurrentMap.CurrentRoom = newRoom;
         UIManager.instance.RoomDebugText(CurrentRoom().RoomName);
         currentMap.SetRoomOn(CurrentMap.CurrentRoom);
     }
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerControl.instance.OnRoomClear();
         SoundDelegate.instance.PlayEffectSound(SoundEffect.ROOMCLEAR,player.transform.position);
-        PlayerData.AkashaGage = 0;
+        PlayerControl.instance.AkashaGage = 0;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
         {
             GetRandomCardToAttain(CurrentRoom().RoomName);
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
     {
         currentTurn = Turn.PLAYER;
         PlayerControl.playerBuff.OnPlayerTurn();
-        PlayerData.PlayerTurnStart();
+        PlayerControl.instance.OnPlayerTurn();
         MinimapTexture.DrawEnemies(CurrentRoom().transform.position, CurrentRoom().GetEnemyPoses());
     }
 
@@ -193,12 +193,6 @@ public class GameManager : MonoBehaviour
         SoundDelegate.instance.PlayGameOverSound(BGM.NONE,3.5f);
         IsInputOk = false;
     }
-
-    public void ReGame(int i)
-    {
-        SceneManager.LoadScene(i);
-    }
-
 
     private bool isGamePaused;
     public bool IsGamePaused
@@ -218,60 +212,71 @@ public class GameManager : MonoBehaviour
     }
 
     #region private
-    /// <summary>
-    /// 게임 시작시 덱 빌드
-    /// </summary>
-    private void BuildDeck()
-    {
-        if(Config.instance.CardTestMode)
-        {
-            for( int i=0; i<Config.instance.cardList.Length;i++)
-            {
-                PlayerData.Deck.Add(Card.GetCardByNum(Config.instance.cardList[i]));
-            }
-        }
-        else
-        {
-            for (int i = 0; i < 10; i++)//노말카드 랜덤 12장 생성
-            {
-                PlayerData.Deck.Add(Card.GetCardByNum(91));
-            }
-            PlayerData.Deck.Add(Card.GetCardByNum(92));
-            PlayerData.Deck.Add(Card.GetCardByNum(92));
-            PlayerData.Deck.Add(Card.GetCardByNum(93));
-            PlayerData.Deck.Add(Card.GetCardByNum(93));
-            PlayerData.Deck.Add(Card.GetCardByNum(94));
-        }
-    }
     private void GetRandomCardToAttain(string name)
     {
         PlayerControl.instance.AddToAttain(Database.GetCardPool(name).GetRandomCard());       
     }
     
-    private void SettingtPlayer()
+    private void LoadIngameSaveData()
     {
-        player.gameObject.SetActive(true);
-        PlayerControl pc = player.GetComponent<PlayerControl>();
-        pc.deck = UIManager.instance.GetDeck();
-        pc.hand = UIManager.instance.GetHand();
-        pc.OnRoomClear();
-        Card.SetPlayer(player);
-        MyCamera.instance.PlayerTrace(player);
-        player.EnterRoom(CurrentMap.StartRoom);
-    }
-    private void SetSeed()
-    {
-        if (Config.instance.UseRandomSeed)
+        if (InGameSave.SaveManager.CheckSaveData())
         {
-            MyRandom.SetSeed(Random.Range(int.MinValue, int.MaxValue));
+            List<int> deckData = InGameSave.SaveManager.DeckCards;
+            List<int> attainData = InGameSave.SaveManager.AttainCards;
+
+            for (int i = 0; i < deckData.Count; i++)
+            {
+                startDeck.Add(Card.GetCardByNum(deckData[i]));
+            }
+            for (int i = 0; i < attainData.Count; i++)
+            {
+                startAttain.Add(Card.GetCardByNum(attainData[i]));
+            }
+
+            Pablus = InGameSave.SaveManager.Pablus;
+            Xynus = InGameSave.SaveManager.Xynus;
+            SetSeed(InGameSave.SaveManager.Seed);
+            startLevel = InGameSave.SaveManager.Floor;
+            startHp = InGameSave.SaveManager.Hp;
+            InGameSave.SaveManager.ClearSaveData();
         }
         else
         {
-            MyRandom.SetSeed(Config.instance.Seed);
+            for (int i = 0; i < 10; i++)//노말카드 랜덤 12장 생성
+            {
+                startDeck.Add(Card.GetCardByNum(91));
+            }
+            startDeck.Add(Card.GetCardByNum(92));
+            startDeck.Add(Card.GetCardByNum(92));
+            startDeck.Add(Card.GetCardByNum(93));
+            startDeck.Add(Card.GetCardByNum(93));
+            startDeck.Add(Card.GetCardByNum(94));
+
+            Pablus = false;
+            Xynus = false;
+            SetSeed(Random.Range(int.MinValue, int.MaxValue));
+            startLevel = 1;
+            startHp = 10;
         }
+
+        PlayerControl pc = player.GetComponent<PlayerControl>();
+        pc.DeckManager = new DeckManager();
+        pc.Hand = UIManager.instance.GetHand();
+
+        pc.DeckManager.Deck = startDeck;
+        pc.DeckManager.AttainCards = startAttain;
+        pc.ReLoadDeck();
+
+        player.SetHp(startHp);
+        Card.SetPlayer(player);
+        MyCamera.instance.PlayerTrace(player);
+    }
+    private void SetSeed(int seed)
+    {
+            MyRandom.SetSeed(seed);       
     }
 
-    private void SetMap(int level)
+    private void BuildMap(int level)
     {
         MapGenerator mapGenerator = currentMap.GetComponent<MapGenerator>();
 

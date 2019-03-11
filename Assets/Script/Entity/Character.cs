@@ -108,7 +108,7 @@ public abstract class Character : Entity {
 
     protected virtual void DamageEffect(int value)
     {
-        ArchLoader.instance.MadeEffect(value, transform.position);
+        ObjectPoolManager.instance.PoolEffect(value, transform.position);
     }
 
     protected virtual IEnumerator AnimationRoutine(int num, float animationTime = 0.5f)

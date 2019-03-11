@@ -45,7 +45,7 @@ public class SteelHand : Enemy {
 
         for(int i=0; i<tiles.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.ELECTRICG,tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.ELECTRICG,tiles[i]);
         }
         if (TileUtils.AI_Find(tiles))
         {

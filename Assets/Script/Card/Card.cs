@@ -79,13 +79,20 @@ public abstract class Card
     public string SpritePath { get { return spritePath; } }
 
     protected CardEffect cardEffect = CardEffect.HIT;
+    public CardEffect CardEffect
+    {
+        get { return cardEffect; }
+    }
     protected SoundEffect cardSound = SoundEffect.SFX1;
-
+    public SoundEffect CardSound
+    {
+        get { return cardSound; }
+    }
     public float effectTime = 0.1f;
     #endregion
 
 
-    protected List<GameObject> ranges = new List<GameObject>();
+    protected List<EffectObject> ranges = new List<EffectObject>();
     
     public static void SetPlayer(Player p)
     {
@@ -144,7 +151,7 @@ public abstract class Card
     /// </summary>
     public virtual void OnCardReturned()
     {
-        PlayerControl.instance.deck.OnCardReturned(this);
+        PlayerControl.instance.DeckManager.OnCardReturned(this);
     }
 
     /// <summary>
@@ -158,18 +165,18 @@ public abstract class Card
 
     protected virtual void MakeEffect(Vector3 target)
     {
-        ArchLoader.instance.MadeEffect(cardEffect, target);
+        ObjectPoolManager.instance.PoolEffect(cardEffect, target);
     }
     protected virtual void MakeEffect(Arch.Tile target)
     {
-        ArchLoader.instance.MadeEffect(cardEffect, target);
+        ObjectPoolManager.instance.PoolEffect(cardEffect, target);
     }
 
     protected virtual void MakeEffect(List<Arch.Tile> tiles)
     {
         for(int i=0; i<tiles.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(cardEffect, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(cardEffect, tiles[i]);
         }
     }
 
@@ -180,17 +187,17 @@ public abstract class Card
 
     protected virtual void ConsumeAkasha()
     {
-        PlayerData.AkashaGage -= cost;
+        PlayerControl.instance.AkashaGage -= cost;
     }
     public virtual bool IsCostAvailable()
     {
-            return (PlayerData.AkashaGage >= cost) ? true : false;
+            return (PlayerControl.instance.AkashaGage >= cost) ? true : false;
     }
 
 	public virtual void CardEffectPreview(){		
 	}
 	public virtual void CancelPreview(){
-        ArchLoader.instance.DestroyEffect(ranges);
+        ObjectPoolManager.instance.DeActiveRange(ranges);
         ranges.Clear();
     }
     
@@ -266,7 +273,7 @@ public abstract class Card
             MakeEffect(target.transform.position);
             MakeSound(target.transform.position);
             target.GetDamage(dam * player.Atk, player);
-            PlayerData.AttackedTarget();
+            PlayerControl.instance.AttackedTarget();
             player.OnAttack();
         }
     }
@@ -321,7 +328,7 @@ public class Card_Reload : Card
     protected override void CardActive()
     {
         PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);
-        PlayerData.AkashaGage -= 3;
+        PlayerControl.instance.AkashaGage -= 3;
         PlayerControl.instance.ReLoadDeck();
     }
 }

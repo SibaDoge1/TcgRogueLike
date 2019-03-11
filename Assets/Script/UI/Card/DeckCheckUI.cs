@@ -152,10 +152,10 @@ public class DeckCheckUI : MonoBehaviour
     {
         int all, unknown, special=0, normal=0;
 
-        List<Card> deck = PlayerData.Deck;
+        List<Card> deck = PlayerControl.instance.DeckManager.Deck;
         for (int i=0; i<deck.Count; i++)//덱에있는 카드들 만들기
         {
-            CheckCardObject card = PlayerData.Deck[i].InstantiateCheckCard();
+            CheckCardObject card = PlayerControl.instance.DeckManager.Deck[i].InstantiateCheckCard();
             checkCards.Add(card);
             card.SetRenderKnown();
 
@@ -168,10 +168,10 @@ public class DeckCheckUI : MonoBehaviour
             }
         }
 
-        List<Card> attain = PlayerData.AttainCards;
+        List<Card> attain = PlayerControl.instance.DeckManager.AttainCards;
         for(int i=0; i<attain.Count;i++)
         {
-            CheckCardObject card = PlayerData.AttainCards[i].InstantiateCheckCard();
+            CheckCardObject card = PlayerControl.instance.DeckManager.AttainCards[i].InstantiateCheckCard();
             checkCards.Add(card);
             card.SetRenderUnknown();
         }

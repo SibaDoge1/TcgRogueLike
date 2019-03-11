@@ -53,7 +53,7 @@ public class Chicken : Enemy {
         List<Arch.Tile> tiles = TileUtils.DiagonalRange(currentTile, 1);
         for (int i = 0; i < tiles.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.HITBLUE, tiles[i]);
         }
         PlayerControl.player.GetDamage(atk);
         yield return StartCoroutine(AnimationRoutine(0));

@@ -29,7 +29,7 @@ public class Card_Special : Card
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        if(PlayerControl.instance.hand.isOnHand(this))
+        if(PlayerControl.instance.Hand.isOnHand(this))
         {
             if(cost>1)
             {
@@ -67,7 +67,7 @@ public class Card_RedGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -102,7 +102,7 @@ public class Card_BlueGrasp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -113,7 +113,7 @@ public class Card_BlueGrasp : Card_Special
             List<Enemy> enemies = TileUtils.GetEnemies(player.currentTile, 1, Figure.SQUARE);
             if (enemies.Count >= val2)
             {
-                PlayerData.AkashaGage += val3;
+                PlayerControl.instance.AkashaGage += val3;
             }
             for (int i = 0; i < enemies.Count; i++)
             {
@@ -136,7 +136,7 @@ public class Card_TimeFrog : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 1, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -151,7 +151,7 @@ public class Card_TimeFrog : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        PlayerData.AkashaGage += val3;
+        PlayerControl.instance.AkashaGage += val3;
       //  MakeEffect(TileUtils.SquareRange(player.currentTile, 1));
 
         MoveToRandom();
@@ -192,7 +192,7 @@ public class Card_CrimsonCrow : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CROSS);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -207,7 +207,7 @@ public class Card_CrimsonCrow : Card_Special
                 DamageToTarget(enemies[i], val1);
             }
         }
-        PlayerData.AkashaGage += val3;
+        PlayerControl.instance.AkashaGage += val3;
         PlayerControl.playerBuff.UpdateBuff(BUFF.IMMUNE,val2);
       //  MakeEffect(TileUtils.CrossRange(player.currentTile, 2));
 
@@ -226,7 +226,7 @@ public class Card_Bishop : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.Diagonal);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -242,7 +242,7 @@ public class Card_Bishop : Card_Special
             }
         }
 
-        if (PlayerControl.instance.deck.DeckCount>=val2)
+        if (PlayerControl.instance.DeckManager.DeckCount>=val2)
         {
             PlayerControl.playerBuff.UpdateBuff(BUFF.AKASHA, val3);
         }
@@ -298,7 +298,7 @@ public class Card_WolfBite : Card_Special
 
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -315,7 +315,7 @@ public class Card_WolfBite : Card_Special
         }
       // MakeEffect(GetRange());
 
-        if(PlayerControl.instance.deck.DeckCount<=val2)
+        if(PlayerControl.instance.DeckManager.DeckCount<=val2)
         {
             player.GetDamage(val3,player);
         }
@@ -372,7 +372,7 @@ public class Card_BearClaw : Card_Special
 
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -388,7 +388,7 @@ public class Card_BearClaw : Card_Special
             }
         }
         // MakeEffect(GetRange());
-        if (PlayerControl.instance.deck.DeckCount <= val2)
+        if (PlayerControl.instance.DeckManager.DeckCount <= val2)
         {
             player.GetDamage(val3,player);
         }
@@ -406,7 +406,7 @@ public class Card_Justice : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.EMPTYSQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -438,7 +438,7 @@ public class Card_WindCat : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -521,7 +521,7 @@ public class Card_HalfMask : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -585,7 +585,7 @@ public class Card_BlackThunder : Card_Special
         List<Tile> targetTiles = GetRange();
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD,player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD,player, targetTiles[i]));
         }
     }
 
@@ -640,7 +640,7 @@ public class Card_BlackThunder : Card_Special
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        if(PlayerControl.instance.hand.isOnHand(this) && upgradeCount<3)
+        if(PlayerControl.instance.Hand.isOnHand(this) && upgradeCount<3)
         {
             UpgradeThis();
             upgradeCount++;
@@ -664,7 +664,7 @@ public class Card_PoisonSnail : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.SQUARE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -700,7 +700,7 @@ public class Card_Shield : Card_Special
             List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile, 2);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         }
         else
@@ -708,7 +708,7 @@ public class Card_Shield : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
             }
         }
 
@@ -810,13 +810,13 @@ public class Card_Rush : Card_Special
             List<Tile> targetTiles = TileUtils.CrossRange(player.currentTile,2);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
             }
 
             targetTiles = GetRange4();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.DIR, player, targetTiles[i]));
             }
         
     }
@@ -955,7 +955,7 @@ public class Card_Mist : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -974,7 +974,7 @@ public class Card_Mist : Card_Special
         }
        // MakeEffect(TileUtils.CircleRange(player.currentTile,2));
 
-        foreach (Card c in PlayerData.Deck)
+        foreach (Card c in PlayerControl.instance.DeckManager.Deck)
         {
             if (c.Type == CardType.A)
             {
@@ -997,7 +997,7 @@ public class Card_WormHole : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -1017,7 +1017,7 @@ public class Card_WormHole : Card_Special
         }
        // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
-        foreach (Card c in PlayerData.Deck)
+        foreach (Card c in PlayerControl.instance.DeckManager.Deck)
         {
             if (c.Type == CardType.P)
             {
@@ -1045,7 +1045,7 @@ public class Card_Plant : Card_Special
             List<Tile> targetTiles = GetRange();
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.DIR, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.DIR, player, targetTiles[i]));
 
             }
         }
@@ -1054,7 +1054,7 @@ public class Card_Plant : Card_Special
             List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
             for (int i = 0; i < targetTiles.Count; i++)
             {
-                ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+                ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
             }
         }
@@ -1074,7 +1074,7 @@ public class Card_Plant : Card_Special
         }
        // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
-        foreach (Card c in PlayerData.Deck)
+        foreach (Card c in PlayerControl.instance.DeckManager.Deck)
         {
             if (c.Type == CardType.V)
             {
@@ -1141,7 +1141,7 @@ public class Card_Stamp : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
 
         }
     }
@@ -1158,7 +1158,7 @@ public class Card_Stamp : Card_Special
         }
        // MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
-        foreach (Card c in PlayerData.Deck)
+        foreach (Card c in PlayerControl.instance.DeckManager.Deck)
         {
             if (c.Type == CardType.S)
             {
@@ -1168,7 +1168,7 @@ public class Card_Stamp : Card_Special
                 }
             }
         }
-        PlayerData.AkashaGage += val3;
+        PlayerControl.instance.AkashaGage += val3;
     }
 }
 public class Card_Needle : Card_Special
@@ -1182,7 +1182,7 @@ public class Card_Needle : Card_Special
         List<Tile> targetTiles = TileUtils.Range(player.currentTile, 2, Figure.CIRCLE);
         for (int i = 0; i < targetTiles.Count; i++)
         {
-            ranges.Add(ArchLoader.instance.MadeEffect(RangeEffectType.CARD, player, targetTiles[i]));
+            ranges.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.CARD, player, targetTiles[i]));
         }
     }
 
@@ -1199,14 +1199,14 @@ public class Card_Needle : Card_Special
         }
       //  MakeEffect(TileUtils.CircleRange(player.currentTile, 2));
 
-        foreach (Card c in PlayerData.Deck)
+        foreach (Card c in PlayerControl.instance.DeckManager.Deck)
         {
             for (int i = 0; i < val2; i++)
             {
                 c.UpgradeThis();
             }
         }
-        PlayerData.AkashaGage += val3;
+        PlayerControl.instance.AkashaGage += val3;
         
     }
 }

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4384733505624682}
   - component: {fileID: 212595869186792768}
   - component: {fileID: 95684901310096756}
-  - component: {fileID: 114444653697409144}
+  - component: {fileID: 114384986228947738}
   m_Layer: 0
   m_Name: CLAWS
   m_TagString: Untagged
@@ -59,7 +59,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114444653697409144
+--- !u!114 &114384986228947738
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!212 &212595869186792768
 SpriteRenderer:

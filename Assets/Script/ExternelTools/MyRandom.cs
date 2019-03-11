@@ -12,7 +12,11 @@ using UnityEngine;
             ranSeed = seed;
             Random.InitState(seed);           
         }
-        static int ranSeed;
+            static int ranSeed;
+        public static int GetSeed()
+        {
+            return ranSeed;
+        }
 
         /// <summary>
         /// Size between numbers must be more than 2 and e is inexclusive

@@ -69,7 +69,7 @@ public class SteelChicken : Enemy {
         List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
         for (int i = 0; i < tiles.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(CardEffect.OUTWARD, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(CardEffect.OUTWARD, tiles[i]);
         }
         SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX2, transform.position);
         PlayerControl.player.GetDamage(atk);

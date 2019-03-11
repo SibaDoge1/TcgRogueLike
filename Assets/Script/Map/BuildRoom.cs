@@ -123,6 +123,9 @@ public static class BuildRoom
                         if (offtile < 5)//문
                         {
                             currentRoom.doorList.Add(ot as OffTile_Door);
+                        }else if(offtile == 101)//세이브
+                        {
+                            currentMap.SaveTile = ot as OffTile_Save;
                         }
                     }
 

@@ -13,4 +13,13 @@ public class GameOverUI : MonoBehaviour {
     {
         transform.localPosition = new Vector3(0, 0, 0);
     }
+
+    public void OnTitleButtonDown()
+    {
+        LoadingManager.LoadScene("Levels/MainMenu");
+    }
+    public void OnRetryButtonDown()
+    {
+        LoadingManager.LoadScene("Levels/floor0");
+    }
 }
