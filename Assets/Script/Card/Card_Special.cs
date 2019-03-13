@@ -29,7 +29,7 @@ public class Card_Special : Card
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        if(PlayerControl.instance.Hand.isOnHand(this))
+        if(PlayerControl.instance.HandManager.isOnHand(this))
         {
             if(cost>1)
             {
@@ -640,7 +640,7 @@ public class Card_BlackThunder : Card_Special
     public override void CardReturnCallBack(Card data)
     {
         base.CardReturnCallBack(data);
-        if(PlayerControl.instance.Hand.isOnHand(this) && upgradeCount<3)
+        if(PlayerControl.instance.HandManager.isOnHand(this) && upgradeCount<3)
         {
             UpgradeThis();
             upgradeCount++;

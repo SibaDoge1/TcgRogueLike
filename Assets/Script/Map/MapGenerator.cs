@@ -197,7 +197,7 @@ public class MapGenerator : MonoBehaviour
         OffTile_Door room2Door = null;
         bool success = false;
         
-        if (room2.RoomName.Contains("end") && room1.Distance < 3) //끝방 조건
+        if (room2.RoomName.Contains("end") && room1.Distance < 3) //끝방 조건(시작방으로부터 일정거리 떨어져야 만들어짐!!!)
         {
             return false;
         }

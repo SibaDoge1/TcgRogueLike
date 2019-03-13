@@ -14,7 +14,9 @@ public class DeckCheckUI : MonoBehaviour
     private List<CheckCardObject> checkCards = new List<CheckCardObject>();
     private List<CheckCardObject> viewCards = new List<CheckCardObject>();
     private Text Count_All, Count_Unknown, Count_Special, Count_Normal;
-
+    private Image tap_All, tap_Normal, tap_Special, tap_Unknown;
+    Color unPressedColor = Color.gray;
+    Color pressedColor = Color.white;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
@@ -26,6 +28,19 @@ public class DeckCheckUI : MonoBehaviour
         Count_Special = transform.Find("DeckPanel").Find("tap").Find("Special").Find("Count").GetComponent<Text>();
         Count_Normal = transform.Find("DeckPanel").Find("tap").Find("Normal").Find("Count").GetComponent<Text>();
 
+        tap_All = transform.Find("DeckPanel").Find("tap").Find("All").GetComponent<Image>();
+        tap_Unknown = transform.Find("DeckPanel").Find("tap").Find("Unknown").GetComponent<Image>();
+        tap_Special = transform.Find("DeckPanel").Find("tap").Find("Special").GetComponent<Image>();
+        tap_Normal = transform.Find("DeckPanel").Find("tap").Find("Normal").GetComponent<Image>();
+        SetAllTapColor(unPressedColor);
+    }
+
+    private void SetAllTapColor(Color color)
+    {
+        tap_All.color = color;
+        tap_Unknown.color = color;
+        tap_Special.color = color;
+        tap_Normal.color = color;
     }
 
     /// <summary>
@@ -57,6 +72,7 @@ public class DeckCheckUI : MonoBehaviour
     public void SetDeckCheckMode(string mode)
     {
         viewCards.Clear();
+        SetAllTapColor(unPressedColor);
         switch (mode)
         {
             case "ALL":
@@ -66,6 +82,7 @@ public class DeckCheckUI : MonoBehaviour
                     checkCards[i].SetParent(viewPort);
                     viewCards.Add(checkCards[i]);
                 }
+                tap_All.color = pressedColor;
                 break;
             case "NORMAL":
                 for(int i=0; i<checkCards.Count;i++)
@@ -93,6 +110,7 @@ public class DeckCheckUI : MonoBehaviour
                     }
 
                 }
+                tap_Normal.color = pressedColor;
                 break;
             case "SPECIAL":
 
@@ -120,7 +138,7 @@ public class DeckCheckUI : MonoBehaviour
 
                     }
                 }
-
+                tap_Special.color = pressedColor;
                 break;
             case "UNKNOWN":
 
@@ -138,7 +156,7 @@ public class DeckCheckUI : MonoBehaviour
                         checkCards[i].SetParent(hold);
                     }
                 }
-
+                tap_Unknown.color = pressedColor;
                 break;
         }
         SortCards();

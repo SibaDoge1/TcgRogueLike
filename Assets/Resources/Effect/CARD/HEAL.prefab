@@ -38,7 +38,6 @@ GameObject:
   - component: {fileID: 4388956944681744}
   - component: {fileID: 198958788617170686}
   - component: {fileID: 199503454849882754}
-  - component: {fileID: 114748228292303294}
   - component: {fileID: 114129126485201274}
   m_Layer: 0
   m_Name: HEAL
@@ -87,20 +86,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCount: 1
   destroyTime: 0.5
---- !u!114 &114748228292303294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1318864140253558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4084fe9fb18f37e4490c6a06dde07209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
 --- !u!198 &198018274662257780
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -44,7 +44,6 @@ GameObject:
   - component: {fileID: 400004}
   - component: {fileID: 19800004}
   - component: {fileID: 19900004}
-  - component: {fileID: 114022179934216824}
   - component: {fileID: 114232897758799342}
   m_Layer: 0
   m_Name: HITA
@@ -10242,20 +10241,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100004}
   m_IsPrefabParent: 1
---- !u!114 &114022179934216824
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100004}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4084fe9fb18f37e4490c6a06dde07209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
 --- !u!114 &114232897758799342
 MonoBehaviour:
   m_ObjectHideFlags: 1

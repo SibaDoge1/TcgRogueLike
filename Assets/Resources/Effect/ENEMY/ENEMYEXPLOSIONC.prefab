@@ -55,7 +55,6 @@ GameObject:
   - component: {fileID: 4348507253001032}
   - component: {fileID: 198831222391895636}
   - component: {fileID: 199424031492782150}
-  - component: {fileID: 114470802555304162}
   - component: {fileID: 114420995379404020}
   m_Layer: 0
   m_Name: ENEMYEXPLOSIONC
@@ -118,20 +117,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCount: 1
   destroyTime: 0.5
---- !u!114 &114470802555304162
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1778400382004266}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4084fe9fb18f37e4490c6a06dde07209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
 --- !u!198 &198351276312158956
 ParticleSystem:
   m_ObjectHideFlags: 1

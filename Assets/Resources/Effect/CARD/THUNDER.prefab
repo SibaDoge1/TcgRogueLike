@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4260598967974920}
   - component: {fileID: 212890587478082522}
   - component: {fileID: 95783897084104230}
-  - component: {fileID: 114431336841834466}
   - component: {fileID: 114142959747837642}
   m_Layer: 0
   m_Name: THUNDER
@@ -73,22 +72,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCount: 1
   destroyTime: 0.5
---- !u!114 &114431336841834466
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1148608794682400}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4db299e94ea40547b6d7387cb9b9081, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
-  animationName: thunder
-  anim: {fileID: 0}
 --- !u!212 &212890587478082522
 SpriteRenderer:
   m_ObjectHideFlags: 1

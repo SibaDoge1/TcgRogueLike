@@ -21,7 +21,7 @@ public class SaveUI : MonoBehaviour
             PlayerControl.player.GetHp,
             CardsToNumber(PlayerControl.instance.DeckManager.Deck),
             CardsToNumber(PlayerControl.instance.DeckManager.AttainCards),
-             GameManager.instance.BuildState,
+             GameManager.instance.BuildSeed,
                 GameManager.instance.Pablus,
                 GameManager.instance.Xynus);
         

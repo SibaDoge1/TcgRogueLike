@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4007225732127372}
   - component: {fileID: 198887423384862546}
   - component: {fileID: 199296298105770670}
-  - component: {fileID: 114225375566133224}
   - component: {fileID: 114085170619652912}
   m_Layer: 0
   m_Name: EXPLOSIONB
@@ -185,20 +184,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCount: 1
   destroyTime: 0.5
---- !u!114 &114225375566133224
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033472435718110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4084fe9fb18f37e4490c6a06dde07209, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
 --- !u!114 &114821728481716554
 MonoBehaviour:
   m_ObjectHideFlags: 1

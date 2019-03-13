@@ -251,13 +251,13 @@ public abstract class Card
                 case 99:
                     return new Card_Reload();
                 default:
-                    if(Database.CheckCardDataKey(i))
+                     if(Database.CheckCardDataKey(i))
                     {
-                    return GetSpecialCard(Database.GetCardData(i));
+                        return GetSpecialCard(Database.GetCardData(i));
                     }else
                     {
                     Debug.Log("UnExpected CardNumber " + i);
-                    return new Card_Normal();
+                        return new Card_Normal();
                     }
             }
         
@@ -292,8 +292,7 @@ public abstract class Card
     /// </summary>
     public virtual void UpgradeReset()
     {
-    } 
-
+    }
 }
 
 public class Card_Reload : Card

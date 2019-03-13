@@ -11,10 +11,9 @@ public class HandManager : MonoBehaviour {
     {
 		originLocalPosition = transform.localPosition;
         drawStartPosition = transform.Find("CardDrawPosition");
-        MakeCards(5);
 	}
 
-    private void MakeCards(int num)
+    public void MakeCards(int num)
     {
         for(int i=0; i< num; i++)
         {

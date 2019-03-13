@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4435008837132866}
   - component: {fileID: 212059129887583720}
   - component: {fileID: 95882218973113912}
-  - component: {fileID: 114558186264837784}
   - component: {fileID: 114000041128038608}
   m_Layer: 0
   m_Name: DIE
@@ -73,22 +72,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isCount: 1
   destroyTime: 0.5
---- !u!114 &114558186264837784
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1022765111111238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4db299e94ea40547b6d7387cb9b9081, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlay: 1
-  destroyTime: 1
-  objectPool: {fileID: 0}
-  animationName: Blood
-  anim: {fileID: 0}
 --- !u!212 &212059129887583720
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -51,7 +51,6 @@ public class DeckManager
         Shuffle();
         for(int i=0; i<deck.Count;i++)
         {
-            Debug.Log(deck[i].Index);
             if(deck[i] is Card_Special)
             {
                 ((Card_Special)deck[i]).CostReset();

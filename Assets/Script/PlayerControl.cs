@@ -32,7 +32,7 @@ public class PlayerControl : MonoBehaviour {
     private HandManager hand;
 
 	public DeckManager DeckManager { get { return deck; } set { deck = value; } }
-	public HandManager Hand { get { return hand; } set { hand = value; } }
+	public HandManager HandManager { get { return hand; } set { hand = value; } }
 
     private bool isDirCardSelected = false;
     public bool IsDirCardSelected
@@ -66,12 +66,12 @@ public class PlayerControl : MonoBehaviour {
 	/// Draw Each Turn
 	/// </summary>
 	public void NaturalDraw(){
-		if (Hand.CurrentHandCount < Config.instance.HandMax) {
-			Hand.DrawHand (DeckManager.Draw ());
+		if (HandManager.CurrentHandCount < Config.instance.HandMax) {
+			HandManager.DrawHand (DeckManager.Draw ());
 		}else
         {
-            Hand.ReturnCard();//가장왼쪽의 카드 제거           
-            Hand.DrawHand(DeckManager.Draw());
+            HandManager.ReturnCard();//가장왼쪽의 카드 제거           
+            HandManager.DrawHand(DeckManager.Draw());
         }
 	}
 
@@ -88,11 +88,11 @@ public class PlayerControl : MonoBehaviour {
 
     public void ReLoadDeck()
     {
-        Hand.DumpAll();
+        HandManager.DumpAll();
 		DeckManager.ReLoad ();
         for(int i=0; i<3; i++)
         {
-            Hand.DrawHand(DeckManager.Draw());
+            HandManager.DrawHand(DeckManager.Draw());
         }
     }
 

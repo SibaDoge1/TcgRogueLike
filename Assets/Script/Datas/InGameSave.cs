@@ -19,7 +19,7 @@ namespace InGameSave
         public List<int> attainCards;
         public bool pablus;
         public bool xynus;
-        public Random.State seed;
+        public int seed;
     }
 
 
@@ -73,7 +73,7 @@ namespace InGameSave
         {
             get{return SaveData.xynus;}
         }
-        public static Random.State Seed
+        public static int Seed
         {
             get { return SaveData.seed; }
         }
@@ -125,7 +125,7 @@ namespace InGameSave
 
 
         public static void WriteAndSave(int _floor, int _hp, List<int> _deckCards,
-            List<int> _attainCards,Random.State _seed, bool _Pablus, bool _Xynus)
+            List<int> _attainCards,int _seed, bool _Pablus, bool _Xynus)
         {
             SaveData.floor = _floor;
             SaveData.hp = _hp;

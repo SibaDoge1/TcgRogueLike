@@ -13,6 +13,7 @@ public delegate void OnRoomClearDelegater();
 public class GameManager : MonoBehaviour
 {
     private Player player;
+    private bool isLoaded; //인게임세이브가 로드됬는가를 나타냄
     private Turn currentTurn;
     public Turn CurrentTurn
     {
@@ -37,10 +38,10 @@ public class GameManager : MonoBehaviour
         get { return pablus; }
         set { pablus = value; }
     }
-    private Random.State buildState;
-    public Random.State BuildState
+    private int buildSeed;
+    public int BuildSeed
     {
-        get { return buildState; }
+        get { return buildSeed; }
     }
 
     public static GameManager instance;
@@ -79,17 +80,25 @@ public class GameManager : MonoBehaviour
 
         ObjectPoolManager.instance.MakeEffects();
         LoadIngameSaveData();
-        Random.state = buildState;
         LoadLevel(startLevel);       
     }
     
     public void LoadLevel(int level)
     {
-        buildState = Random.state;
 
         StopAllCoroutines();
         DestroyMap();
         currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
+        if(isLoaded)
+        {         
+            Random.InitState(buildSeed);
+            isLoaded = false;//초기화
+        }else
+        {
+            buildSeed = Random.Range(int.MinValue, int.MaxValue);
+            Random.InitState(buildSeed);
+        }
+        Debug.Log("Seed : "+buildSeed);
         BuildMap(level);
         MinimapTexture.Init(currentMap);
 
@@ -227,6 +236,15 @@ public class GameManager : MonoBehaviour
     
     private void LoadIngameSaveData()
     {
+        PlayerControl pc = player.GetComponent<PlayerControl>();
+        pc.DeckManager = new DeckManager();
+        pc.HandManager = UIManager.instance.GetHand();
+
+        pc.DeckManager.Deck = startDeck;
+        pc.DeckManager.AttainCards = startAttain;
+        pc.HandManager.MakeCards(5);
+
+
         if (InGameSave.SaveManager.CheckSaveData())
         {
             List<int> deckData = InGameSave.SaveManager.DeckCards;
@@ -245,9 +263,10 @@ public class GameManager : MonoBehaviour
             Xynus = InGameSave.SaveManager.Xynus;
             startLevel = InGameSave.SaveManager.Floor;
             startHp = InGameSave.SaveManager.Hp;
-            InGameSave.SaveManager.ClearSaveData();
+            buildSeed = InGameSave.SaveManager.Seed;
+            isLoaded = true;
 
-            buildState = InGameSave.SaveManager.Seed;
+            InGameSave.SaveManager.ClearSaveData();
         }
         else
         {
@@ -266,15 +285,10 @@ public class GameManager : MonoBehaviour
             startLevel = 1;
             startHp = 10;
 
-            buildState = Random.state;
+            isLoaded = false;
         }
 
-        PlayerControl pc = player.GetComponent<PlayerControl>();
-        pc.DeckManager = new DeckManager();
-        pc.Hand = UIManager.instance.GetHand();
 
-        pc.DeckManager.Deck = startDeck;
-        pc.DeckManager.AttainCards = startAttain;
         pc.ReLoadDeck();
 
         player.SetHp(startHp);

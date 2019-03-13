@@ -12,7 +12,7 @@ public class Card_Normal : Card
     /// <summary>
     /// 타입, 형태 지정해서 생성 
     /// </summary>
-    public Card_Normal(Figure _figure,CardType _type)
+    public Card_Normal(CardType _type, Figure _figure)
     {
 
         cardFigure = _figure;
