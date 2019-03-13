@@ -124,7 +124,7 @@ public abstract class Entity : MonoBehaviour
     protected virtual void OnDieCallback()
     {
         currentTile.OnTileObj = null;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
     #endregion
 

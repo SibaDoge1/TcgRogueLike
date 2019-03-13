@@ -93,7 +93,7 @@ public class ObjectPoolManager : MonoBehaviour
         
         for(int i=0; i<keys.Count;i++)
         {
-            enemyEffectPools[keys[i]] = GetObjectPool(dictionary[keys[i]],20);
+            enemyEffectPools[keys[i]] = GetObjectPool(dictionary[keys[i]],30);
         }
     }
     #endregion
@@ -107,7 +107,7 @@ public class ObjectPoolManager : MonoBehaviour
 
         for (int i = 0; i < keys.Count; i++)
         {
-            rangeEffectPools[keys[i]] = GetObjectPool(dictionary[keys[i]], 20);
+            rangeEffectPools[keys[i]] = GetObjectPool(dictionary[keys[i]], 25);
         }
     }
     #endregion
@@ -116,7 +116,7 @@ public class ObjectPoolManager : MonoBehaviour
     ObjectPool damageEffectPool;
     private void MakeTextEffects()
     {
-        damageEffectPool = GetObjectPool(ArchLoader.instance.GetDamageEffect(),20);
+        damageEffectPool = GetObjectPool(ArchLoader.instance.GetDamageEffect(),25);
     }
     #endregion
 

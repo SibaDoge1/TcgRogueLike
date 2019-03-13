@@ -32,6 +32,9 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
         if (data.Type == CardType.S)
         {
             isSpecial = true;
+        }else
+        {
+            isSpecial = false;
         }
     }
 
@@ -90,9 +93,9 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
 
         if (((Vector2)base.transform.localPosition - (Vector2)originPos).magnitude > ActiveThreshold && GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.CurrentRoom().IsEnemyAlive() && IsAvailable())
         {
-            hand.RemoveCard(this);
+            hand.RemoveFromActive(this);
             ActiveSelf();
-            Destroy(gameObject);
+            hand.DeActiveCard(this);
         }
         else
         {
@@ -153,10 +156,10 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     /// </summary>
     public void ReturnCard()
     {
-            data.OnCardReturned();
-            hand.RemoveCard(this);
+        hand.RemoveFromActive(this);
+        data.OnCardReturned();
         data.CancelPreview();
-        Destroy(gameObject);       
+        hand.DeActiveCard(this);  
     }
 
     /// <summary>
@@ -164,9 +167,9 @@ public class HandCardObject : CardObject, IDragHandler, IPointerDownHandler, IPo
     /// </summary>
     public void DumpCard()
     {
-        hand.RemoveCard(this);
+        hand.RemoveFromActive(this);
         data.CancelPreview();
-        Destroy(gameObject);
+        hand.DeActiveCard(this);
     }
 
     #region Private

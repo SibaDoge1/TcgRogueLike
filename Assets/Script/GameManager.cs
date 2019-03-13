@@ -37,6 +37,11 @@ public class GameManager : MonoBehaviour
         get { return pablus; }
         set { pablus = value; }
     }
+    private Random.State buildState;
+    public Random.State BuildState
+    {
+        get { return buildState; }
+    }
 
     public static GameManager instance;
     private void Awake()
@@ -74,11 +79,14 @@ public class GameManager : MonoBehaviour
 
         ObjectPoolManager.instance.MakeEffects();
         LoadIngameSaveData();
+        Random.state = buildState;
         LoadLevel(startLevel);       
     }
     
     public void LoadLevel(int level)
     {
+        buildState = Random.state;
+
         StopAllCoroutines();
         DestroyMap();
         currentMap = Instantiate(Resources.Load<GameObject>("Map")).GetComponent<Map>();
@@ -235,10 +243,11 @@ public class GameManager : MonoBehaviour
 
             Pablus = InGameSave.SaveManager.Pablus;
             Xynus = InGameSave.SaveManager.Xynus;
-            SetSeed(InGameSave.SaveManager.Seed);
             startLevel = InGameSave.SaveManager.Floor;
             startHp = InGameSave.SaveManager.Hp;
             InGameSave.SaveManager.ClearSaveData();
+
+            buildState = InGameSave.SaveManager.Seed;
         }
         else
         {
@@ -254,9 +263,10 @@ public class GameManager : MonoBehaviour
 
             Pablus = false;
             Xynus = false;
-            SetSeed(Random.Range(int.MinValue, int.MaxValue));
             startLevel = 1;
             startHp = 10;
+
+            buildState = Random.state;
         }
 
         PlayerControl pc = player.GetComponent<PlayerControl>();
@@ -270,10 +280,6 @@ public class GameManager : MonoBehaviour
         player.SetHp(startHp);
         Card.SetPlayer(player);
         MyCamera.instance.PlayerTrace(player);
-    }
-    private void SetSeed(int seed)
-    {
-            MyRandom.SetSeed(seed);       
     }
 
     private void BuildMap(int level)

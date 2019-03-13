@@ -100,14 +100,14 @@ public abstract class Card
     }
 
 
-	public HandCardObject InstantiateHandCard(){
+	/*public HandCardObject InstantiateHandCard(){
 
 		HandCardObject cardObject;
         cardObject = ArchLoader.instance.GetCardObject();
         cardObject.SetCardData(this);
 
 		return cardObject;
-	}
+	}*/
     public EditCardObject InstantiateEditCard()
     {
         EditCardObject cardObject;

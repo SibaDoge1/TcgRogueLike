@@ -34,15 +34,15 @@ public class DeckManager
         }
     }
 
-	public HandCardObject Draw(){
+	public Card Draw(){
 		if (deck.Count <= count) {
-			return Card.GetCardByNum(99).InstantiateHandCard();
+			return Card.GetCardByNum(99);
 		}
-		Card c = deck [count];
+		Card card = deck [count];
         count++;
 
         DrawCallBack();
-        return c.InstantiateHandCard ();
+        return card;
 	}
 
     public void ReLoad()

@@ -11,6 +11,7 @@ namespace InGameSave
     public class SaveData
     {
         public bool isSaved = false;
+        public string version;
 
         public int floor;
         public int hp;
@@ -18,15 +19,15 @@ namespace InGameSave
         public List<int> attainCards;
         public bool pablus;
         public bool xynus;
-        public int seed;
+        public Random.State seed;
     }
 
 
     public static class SaveManager
     {
 
-        static string dataPath=Application.persistentDataPath + "/SaveData.dat";
-
+        static string dataPath=Application.persistentDataPath + "/Ingame.dat";
+        static string version = "0312";
         static SaveData saveData;
         static SaveData SaveData
         {
@@ -72,7 +73,7 @@ namespace InGameSave
         {
             get{return SaveData.xynus;}
         }
-        public static int Seed
+        public static Random.State Seed
         {
             get { return SaveData.seed; }
         }
@@ -124,7 +125,7 @@ namespace InGameSave
 
 
         public static void WriteAndSave(int _floor, int _hp, List<int> _deckCards,
-            List<int> _attainCards,int _seed, bool _Pablus, bool _Xynus)
+            List<int> _attainCards,Random.State _seed, bool _Pablus, bool _Xynus)
         {
             SaveData.floor = _floor;
             SaveData.hp = _hp;
@@ -133,7 +134,8 @@ namespace InGameSave
             SaveData.pablus = _Pablus;
             SaveData.xynus = _Xynus;
             SaveData.isSaved = true;
-            saveData.seed = _seed;
+            SaveData.seed = _seed;
+            SaveData.version = version;
             Save(dataPath);
         }
 
@@ -146,6 +148,10 @@ namespace InGameSave
         public static bool CheckSaveData()
         {
             if(!SaveData.isSaved)
+            {
+                return false;
+            }
+            if(SaveData.version != version)
             {
                 return false;
             }
