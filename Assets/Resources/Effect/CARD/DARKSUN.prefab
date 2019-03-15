@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4116505092594254}
   - component: {fileID: 198425424774629254}
   - component: {fileID: 199676493445397550}
-  - component: {fileID: 114366872207251218}
+  - component: {fileID: 114558039991589926}
   m_Layer: 0
   m_Name: DARKSUN
   m_TagString: Untagged
@@ -104,7 +104,7 @@ Transform:
   m_Father: {fileID: 4116505092594254}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114366872207251218
+--- !u!114 &114558039991589926
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198053395880981610
 ParticleSystem:

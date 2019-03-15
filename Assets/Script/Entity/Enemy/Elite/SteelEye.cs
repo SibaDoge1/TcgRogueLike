@@ -28,7 +28,7 @@ public class SteelEye : Enemy {
 
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
 
         enemyUI.ActionImageOn();
@@ -44,7 +44,7 @@ public class SteelEye : Enemy {
         SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
         for(int i=0; i<tiles.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.HITBLUE, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.HITBLUE, tiles[i]);
         }
         for(int i=0; i<3; i++)
         {

@@ -38,8 +38,4 @@ public class Config : MonoBehaviour
     public bool RoomTestMode;
     public RoomType TestRoomType;
     public string TestRoomName;
-
-    [Header("CardTest")]
-    public bool CardTestMode;
-    public int[] cardList;
 }

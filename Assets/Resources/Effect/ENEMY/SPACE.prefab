@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114137656688440424}
   - component: {fileID: 198950359402605760}
   - component: {fileID: 199726573929817812}
-  - component: {fileID: 114705421913400346}
+  - component: {fileID: 114884516792720268}
   m_Layer: 0
   m_Name: SPACE
   m_TagString: Untagged
@@ -126,18 +126,6 @@ MonoBehaviour:
   HelpText: This effect uses Cartoon FX 4's special shader to make it look great over
     any kind of background color, including very bright backgrounds!
   MsgType: 1
---- !u!114 &114705421913400346
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1064464772128222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destroyTime: 0.5
 --- !u!114 &114728562954708606
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -153,6 +141,19 @@ MonoBehaviour:
   delay: 0
   finalIntensity: 0
   autodestruct: 0
+--- !u!114 &114884516792720268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1064464772128222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCount: 1
+  destroyTime: 0.5
 --- !u!198 &198950359402605760
 ParticleSystem:
   m_ObjectHideFlags: 1

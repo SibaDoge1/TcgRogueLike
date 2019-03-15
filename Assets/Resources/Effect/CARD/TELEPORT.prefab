@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4388956944681744}
   - component: {fileID: 198958788617170686}
   - component: {fileID: 199503454849882754}
-  - component: {fileID: 114399622783423046}
+  - component: {fileID: 114833986775022746}
   m_Layer: 0
   m_Name: TELEPORT
   m_TagString: Untagged
@@ -73,7 +73,7 @@ Transform:
   m_Father: {fileID: 4388956944681744}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &114399622783423046
+--- !u!114 &114833986775022746
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198018274662257780
 ParticleSystem:

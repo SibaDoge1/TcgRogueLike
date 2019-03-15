@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Hand
 /// </summary>
-public class Hand : MonoBehaviour {
+public class HandManager : MonoBehaviour {
 	private Vector3 originLocalPosition;
     private Vector3 hideLocalPosition = new Vector3(5000, 0);
 	void Awake()
@@ -13,32 +13,62 @@ public class Hand : MonoBehaviour {
         drawStartPosition = transform.Find("CardDrawPosition");
 	}
 
+    public void MakeCards(int num)
+    {
+        for(int i=0; i< num; i++)
+        {
+            HandCardObject cardObject = ArchLoader.instance.GetCardObject();
+            deactiveList.Add(cardObject);
+            cardObject.gameObject.SetActive(false);
+            cardObject.SetParent(transform);
+            cardObject.SetHand(this);
+        }
+    }
+    private HandCardObject ActiveCard()
+    {
+        HandCardObject active = deactiveList[0];
+        activeList.Add(active);
+        deactiveList.Remove(active);
+        active.gameObject.SetActive(true);
+        return active;
+    }
+    public void DeActiveCard(HandCardObject handCard)
+    {
+        if(!deactiveList.Contains(handCard))
+        {
+            deactiveList.Add(handCard);
+            handCard.gameObject.SetActive(false);
+            SetCardPosition();
+        }
+    }
 
-	public int CurrentHandCount{
-		get{ return handList.Count; }
+
+    public int CurrentHandCount{
+		get{ return activeList.Count; }
 	}
 
     public GameObject joyStick;
 	private Transform drawStartPosition;
     private bool isHided;
-	private List<HandCardObject> handList = new List<HandCardObject> ();
+	private List<HandCardObject> activeList = new List<HandCardObject> ();
+    private List<HandCardObject> deactiveList = new List<HandCardObject>();
 
     public List<Card> GetHandCardList()
     {
         List<Card> cards = new List<Card>();
 
-        for(int i=0; i<handList.Count;i++)
+        for(int i=0; i<activeList.Count;i++)
         {
-            cards.Add(handList[i].Data);
+            cards.Add(activeList[i].Data);
         }
 
         return cards;
     }
     public bool isOnHand(Card data)
     {
-        for(int i=0; i<handList.Count; i++)
+        for(int i=0; i<activeList.Count; i++)
         {
-            if(data == handList[i].Data)
+            if(data == activeList[i].Data)
             {
                 return true;
             }
@@ -49,33 +79,19 @@ public class Hand : MonoBehaviour {
     {
         joyStick.gameObject.SetActive(b);
     }
+
 	//Add from Deck
-	public void DrawHand(HandCardObject cardObject){
-		if(cardObject == null){
+	public void DrawHand(Card data){
+		if(data == null){
 			return;
 		}
+        HandCardObject newCard = ActiveCard();
+        newCard.SetCardData(data);
+        newCard.transform.position = drawStartPosition.position;
 
-		cardObject.SetParent (this.transform);
-        cardObject.SetHand(this);
-		cardObject.transform.position = drawStartPosition.position;
-
-		handList.Add (cardObject);
 		SetCardPosition ();
 	}
 
-	//Add from Others (different animation)
-	public void AddHand(HandCardObject cardObject){
-		if(cardObject == null){
-			return;
-		}
-        cardObject.SetParent(this.transform);
-        cardObject.SetHand(this);
-        cardObject.transform.localPosition = Vector3.zero;
-		cardObject.transform.localScale = Vector3.one;
-
-		handList.Add (cardObject);
-		StartCoroutine (AddHandRoutine (cardObject));
-	}
 
 	private IEnumerator AddHandRoutine(CardObject co){
 		co.transform.localScale = Vector3.zero;
@@ -92,7 +108,6 @@ public class Hand : MonoBehaviour {
 	}
 
 
-	private Coroutine handRoutine;
 	private IEnumerator HandRoutine(bool isHided){
 		float timer = 0;
 		Vector3 targetScale = Vector3.one;
@@ -120,31 +135,35 @@ public class Hand : MonoBehaviour {
 
 
     /// <summary>
-    /// List에서 지우기만 , CardObject는 따로 Destroy 해줘야함
-    /// </summary>
-    public void RemoveCard(HandCardObject co)
+    /// ActiveList에서 지우기만 , DeActivate는 따로해줘야함
+    /// 일케안하면 오류생김
+    /// </summary> 
+    public void RemoveFromActive(HandCardObject co)
     {
-        handList.Remove(co);
+        activeList.Remove(co);
         SetCardPosition();
     }
+    
+
     public void DumpCard()
     {
-            handList[0].DumpCard();
-            SetCardPosition();      
+            activeList[0].DumpCard();
     }
+
+
     public void DumpAll()
     {
-        for(int i = handList.Count-1; i>=0;i--)
+        for(int i = activeList.Count-1; i>=0;i--)
         {
-            handList[i].DumpCard();
+            activeList[i].DumpCard();
         }
     }
+
     public void ReturnCard()
     {
         if(PlayerControl.player.currentRoom.IsEnemyAlive())
         {
-            handList[0].ReturnCard();
-            SetCardPosition();
+            activeList[0].ReturnCard();
         }
     }
 
@@ -176,8 +195,8 @@ public class Hand : MonoBehaviour {
 	}
 	#region Private
 	private void SetCardPosition(){
-		for (int i = 0; i < handList.Count; i++) {
-			handList [i].SetLocation (handList.Count, i, isHided);
+		for (int i = 0; i < activeList.Count; i++) {
+			activeList [i].SetLocation (activeList.Count, i, isHided);
 		}
 	}
 

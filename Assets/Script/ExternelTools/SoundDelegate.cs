@@ -71,8 +71,6 @@ public class SoundDelegate : MonoBehaviour {
         set
         {
             monosound.volume = value;
-            if(ArchLoader.instance.GetSoundObject() != null)
-            ArchLoader.instance.GetSoundObject().volume = value;
         }
     }
 
@@ -120,8 +118,8 @@ public class SoundDelegate : MonoBehaviour {
     }
     public void PlayEffectSound(SoundEffect eType, Vector3 position)
     {
-        ArchLoader.instance.GetSoundObject().clip = ArchLoader.instance.GetSoundEffect(eType);
-        Instantiate(ArchLoader.instance.GetSoundObject(), position, Quaternion.identity);
+        ObjectPoolManager.instance.PoolSoundEffect().
+            Init(ArchLoader.instance.GetSoundEffect(eType),EffectSound,position);
     }
 
     public void PlayGameOverSound(BGM targetBGM, float time)

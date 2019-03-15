@@ -30,6 +30,7 @@ public class MainMenu : MonoBehaviour
         Database.ReadDatas();
         ArchLoader.instance.StartCache();
         GooglePlayManager.Init();
+        
     }
 
     void Start()
@@ -37,6 +38,11 @@ public class MainMenu : MonoBehaviour
         SaveManager.LoadAll();
         CheckNew();
         SoundDelegate.instance.PlayBGM(BGM.FIELDTITLECUT);
+
+        if(!InGameSave.SaveManager.CheckSaveData())//GTS : 인게임 세이브 체크 추가
+        {
+            GameObject.Find("Canvas").transform.Find("Btn_Continue").gameObject.SetActive(false);
+        }
     }
 
     public void CheckNew()
@@ -52,12 +58,20 @@ public class MainMenu : MonoBehaviour
     {
         SoundDelegate.instance.PlayMono(MonoSound.BUTTONTITLE);
     }
-
+    /// <summary>
+    /// GTS : 이어하기 버튼 추가
+    /// </summary>
+    public void OnContinueButtonDown()
+    {
+        ButtonDown();
+        LoadingManager.LoadScene("Levels/Floor0");
+    }
     public void OnStartButtonDown()
     {
         if (!isBtnEnable) return;
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
+        InGameSave.SaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
         LoadingManager.LoadScene("Levels/Floor0");
     }
 

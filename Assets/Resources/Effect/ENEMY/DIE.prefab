@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4435008837132866}
   - component: {fileID: 212059129887583720}
   - component: {fileID: 95882218973113912}
-  - component: {fileID: 114867242460366038}
+  - component: {fileID: 114000041128038608}
   m_Layer: 0
   m_Name: DIE
   m_TagString: Untagged
@@ -59,7 +59,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114867242460366038
+--- !u!114 &114000041128038608
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -70,6 +70,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!212 &212059129887583720
 SpriteRenderer:

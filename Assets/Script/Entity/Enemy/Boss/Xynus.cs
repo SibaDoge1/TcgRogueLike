@@ -49,7 +49,7 @@ public class Xynus : Enemy {
         for (int i = 0; i < environ.Count; i++)
         {
             //TODO : MAKE EFFECT
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, environ[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, environ[i]));
         }
 
         yield return null;
@@ -64,7 +64,7 @@ public class Xynus : Enemy {
 
         for(int i=0; i<environ.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.SPACE, environ[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.SPACE, environ[i]);
         }
         if (TileUtils.AI_Find(environ))
         {
@@ -115,7 +115,7 @@ public class Xynus : Enemy {
         List<Arch.Tile> tiles = TileUtils.SquareRange(currentTile, 1);
         for (int i = 0; i < tiles.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.SPACE, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.SPACE, tiles[i]);
         }
 
         if (TileUtils.AI_SquareFind(currentTile,1))
@@ -192,7 +192,7 @@ public class Xynus : Enemy {
             }
         }
 
-        GameManager.instance.EndingConditions["Xynus"] = true;
+        GameManager.instance.Xynus = true;
         base.OnDieCallback();
     }
 }

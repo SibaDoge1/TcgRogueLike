@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4256581340469548}
   - component: {fileID: 212756379584230984}
+  - component: {fileID: 114528379310800280}
   m_Layer: 0
   m_Name: CARD
   m_TagString: Untagged
@@ -40,6 +41,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114528379310800280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1901324666352306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCount: 0
+  destroyTime: 1
 --- !u!212 &212756379584230984
 SpriteRenderer:
   m_ObjectHideFlags: 1

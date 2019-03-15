@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4139945913386528}
   - component: {fileID: 198260618507122086}
   - component: {fileID: 199718806781768602}
-  - component: {fileID: 114479971135228718}
+  - component: {fileID: 114232397925127886}
   m_Layer: 0
   m_Name: POWERAURA
   m_TagString: Untagged
@@ -73,7 +73,7 @@ Transform:
   m_Father: {fileID: 4139945913386528}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114479971135228718
+--- !u!114 &114232397925127886
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198260618507122086
 ParticleSystem:

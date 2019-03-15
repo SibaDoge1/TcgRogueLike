@@ -118,7 +118,7 @@ public class Robot : Enemy
         List<Arch.Tile> tiles = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
 
         yield return null;
@@ -131,7 +131,7 @@ public class Robot : Enemy
         List<Arch.Tile> targets = TileUtils.CrossRange(currentTile, 4);
         for (int i = 0; i < targets.Count; i++)
         {
-            ArchLoader.instance.MadeEffect(EnemyEffect.ENEMYEXPLOSIONC, targets[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.ENEMYEXPLOSIONC, targets[i]);
         }
         if (TileUtils.AI_Find(targets))
         {
@@ -161,7 +161,7 @@ public class Robot : Enemy
             }
         }
 
-        if(GameManager.instance.EndingConditions["Pablus"] && GameManager.instance.EndingConditions["Xynus"] )
+        if(GameManager.instance.Pablus && GameManager.instance.Xynus )
         {
             OffTile_Floor stair = ArchLoader.instance.GetOffTile(95) as OffTile_Floor;
             stair.Init(95);

@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 114084398061660576}
   - component: {fileID: 198349879019565450}
   - component: {fileID: 199692102340826766}
-  - component: {fileID: 114902048620948036}
+  - component: {fileID: 114762623311248550}
   m_Layer: 0
   m_Name: FIRE
   m_TagString: Untagged
@@ -202,7 +202,7 @@ MonoBehaviour:
   loop: 1
   smoothFactor: 4
   addIntensity: 0.5
---- !u!114 &114902048620948036
+--- !u!114 &114762623311248550
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -213,6 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198038081008626366
 ParticleSystem:

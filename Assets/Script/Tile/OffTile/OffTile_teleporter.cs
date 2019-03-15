@@ -12,7 +12,7 @@ public class OffTile_teleporter : OffTile
         {
             if(PlayerControl.player.currentRoom.IsEnemyAlive())
             {
-                PlayerData.AkashaGage += 3;
+                PlayerControl.instance.AkashaGage += 3;
                 PlayerControl.player.Teleport(center);
             }
         }

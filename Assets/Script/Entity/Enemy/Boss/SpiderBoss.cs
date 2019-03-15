@@ -81,7 +81,7 @@ public class SpiderBoss : Enemy {
         targetList = TileUtils.CircleRange(currentTile, 2);
         for (int i = 0; i < targetList.Count; i++)
         {
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, targetList[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, targetList[i]));
         }
         yield return null;
     }
@@ -92,7 +92,7 @@ public class SpiderBoss : Enemy {
         ClearRangeList();
         for(int i=0; i<targetList.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, targetList[i]);
+            ObjectPoolManager.instance.PoolEffect(CardEffect.DARKSUN, targetList[i]);
         }
         if (TileUtils.AI_Find(targetList))
         {
@@ -115,7 +115,7 @@ public class SpiderBoss : Enemy {
         List<Arch.Tile> tiles = TileUtils.CrossRange(currentTile, 2);
         for (int i = 0; i < tiles.Count; i++)
         {
-            rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, tiles[i]));
+            rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, tiles[i]));
         }
         yield return null;
     }
@@ -130,7 +130,7 @@ public class SpiderBoss : Enemy {
         List<Tile> tiles = TileUtils.CrossRange(currentTile, 2);
         for(int i=0; i<tiles.Count;i++)
         {
-            ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(CardEffect.DARKSUN, tiles[i]);
         }
 
         if (TileUtils.AI_Find(tiles))
@@ -172,13 +172,13 @@ public class SpiderBoss : Enemy {
     IEnumerator WebReady()
     {
         aimedTile = PlayerControl.player.currentTile;
-        rangeList.Add(ArchLoader.instance.MadeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
+        rangeList.Add(ObjectPoolManager.instance.PoolRangeEffect(RangeEffectType.ENEMY, PlayerControl.player.currentTile));
         yield return null;
     }
     IEnumerator WebAttack()
     {
         SoundDelegate.instance.PlayEffectSound(SoundEffect.SFX9, transform.position);
-        ArchLoader.instance.MadeEffect(CardEffect.DARKSUN, aimedTile);
+        ObjectPoolManager.instance.PoolEffect(CardEffect.DARKSUN, aimedTile);
         if (PlayerControl.player.currentTile == aimedTile)
         {
             PlayerControl.playerBuff.UpdateBuff(BUFF.MOVE, 3);

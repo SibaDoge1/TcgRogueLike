@@ -40,7 +40,7 @@ public class Bozz : Enemy {
 
         for (int i=0; i<tiles.Count;i++)
             {
-                ArchLoader.instance.MadeEffect(EnemyEffect.POW, tiles[i]);
+            ObjectPoolManager.instance.PoolEffect(EnemyEffect.POW, tiles[i]);
             }
 
             if (TileUtils.AI_Find(tiles))

@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4592664104363496}
   - component: {fileID: 198591319186534902}
   - component: {fileID: 199362430287266510}
-  - component: {fileID: 114053896942447724}
+  - component: {fileID: 114241520590328594}
   m_Layer: 0
   m_Name: ENEMYEXPLOSION
   m_TagString: FxTemporaire
@@ -104,7 +104,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114053896942447724
+--- !u!114 &114241520590328594
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198072999681653690
 ParticleSystem:

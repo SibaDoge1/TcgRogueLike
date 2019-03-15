@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4216412776792316}
   - component: {fileID: 198915159206252654}
   - component: {fileID: 199135737046137454}
-  - component: {fileID: 114616443718304850}
+  - component: {fileID: 114404532872962432}
   m_Layer: 0
   m_Name: HIT
   m_TagString: Untagged
@@ -166,7 +166,7 @@ Transform:
   m_Father: {fileID: 4216412776792316}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114616443718304850
+--- !u!114 &114404532872962432
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!198 &198078864831986732
 ParticleSystem:

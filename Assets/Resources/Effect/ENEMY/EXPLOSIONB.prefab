@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4007225732127372}
   - component: {fileID: 198887423384862546}
   - component: {fileID: 199296298105770670}
-  - component: {fileID: 114455908261677704}
+  - component: {fileID: 114085170619652912}
   m_Layer: 0
   m_Name: EXPLOSIONB
   m_TagString: FxTemporaire
@@ -171,7 +171,7 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114455908261677704
+--- !u!114 &114085170619652912
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -182,6 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCount: 1
   destroyTime: 0.5
 --- !u!114 &114821728481716554
 MonoBehaviour:

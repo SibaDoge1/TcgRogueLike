@@ -3,12 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Deck : MonoBehaviour {
+public class DeckManager
+{
 
-    private List<Card> playingDeck = PlayerData.Deck;
-    public List<Card> PlayingDeck
+    private List<Card> deck;
+    public List<Card> Deck
     {
-        get { return playingDeck; }
+        get { return deck; }
+        set
+        {
+            deck = value;
+        }
+    }
+    List<Card> attainCards;
+    public List<Card> AttainCards
+    {
+        get { return attainCards; }
+        set { attainCards = value; }
     }
 
     int count = 0;
@@ -16,61 +27,49 @@ public class Deck : MonoBehaviour {
     {
         get
         {
-            if (playingDeck.Count <= count)
+            if (deck.Count <= count)
                 return true;
             else
                 return false;
         }
     }
 
-	public HandCardObject Draw(){
-		if (playingDeck.Count <= count) {
-			return Card.GetCardByNum(99).InstantiateHandCard();
+	public Card Draw(){
+		if (deck.Count <= count) {
+			return Card.GetCardByNum(99);
 		}
-		Card c = playingDeck [count];
+		Card card = deck [count];
         count++;
 
         DrawCallBack();
-        return c.InstantiateHandCard ();
+        return card;
 	}
 
     public void ReLoad()
     {
         count = 0;
         Shuffle();
-        for(int i=0; i<playingDeck.Count;i++)
+        for(int i=0; i<deck.Count;i++)
         {
-            if(playingDeck[i] is Card_Special)
+            if(deck[i] is Card_Special)
             {
-                ((Card_Special)playingDeck[i]).CostReset();
+                ((Card_Special)deck[i]).CostReset();
             }
-            playingDeck[i].UpgradeReset();
+            deck[i].UpgradeReset();
         }     
         LoadCallBack();
     }
 
-
-    public void OnRoomClear()
-    {
-        ReLoad();
-	}
-
     public void OnCardReturned(Card card)
     {
-        for(int i=0; i< playingDeck.Count;i++)
+        for(int i=0; i< deck.Count;i++)
         {
-            if(playingDeck[i] is Card_Special)
+            if(deck[i] is Card_Special)
             {
-                playingDeck[i].CardReturnCallBack(card);
+                deck[i].CardReturnCallBack(card);
             }
         }
     }
-    public void OnDeckChanged(List<Card> deck)
-    {
-        playingDeck = deck;
-        PlayerControl.instance.ReLoadDeck();
-    }
-
 	#region Private
 
 
@@ -78,11 +77,11 @@ public class Deck : MonoBehaviour {
     {
 		Card temp;
 		int randIndex;
-		for (int i = 0; i < playingDeck.Count; i++) {
-			randIndex = Random.Range (0, playingDeck.Count);
-			temp = playingDeck [i];
-			playingDeck [i] = playingDeck [randIndex];
-			playingDeck [randIndex] = temp;
+		for (int i = 0; i < deck.Count; i++) {
+			randIndex = Random.Range (0, deck.Count);
+			temp = deck [i];
+			deck [i] = deck [randIndex];
+			deck [randIndex] = temp;
 		}
 	}
 
@@ -90,16 +89,16 @@ public class Deck : MonoBehaviour {
     {
         get
         {
-            return playingDeck.Count-count;
+            return deck.Count-count;
         }
     }
     private void DrawCallBack()
     {
-        UIManager.instance.DeckCont(playingDeck.Count-count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
     private void LoadCallBack()
     {
-        UIManager.instance.DeckCont(playingDeck.Count-count);
+        UIManager.instance.DeckCont(deck.Count-count);
     }
 
     #endregion

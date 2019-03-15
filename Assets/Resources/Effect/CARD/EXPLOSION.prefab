@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 11400000}
   - component: {fileID: 19800002}
   - component: {fileID: 19900002}
-  - component: {fileID: 114058060113511838}
+  - component: {fileID: 114919632743197724}
   m_Layer: 0
   m_Name: EXPLOSION
   m_TagString: FxTemporaire
@@ -13593,7 +13593,7 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100006}
   m_IsPrefabParent: 1
---- !u!114 &114058060113511838
+--- !u!114 &114919632743197724
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -13604,4 +13604,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53ac67eea5e46d045abd308fca5e789a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyTime: 1
+  isCount: 1
+  destroyTime: 0.5
