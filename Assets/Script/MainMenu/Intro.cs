@@ -38,7 +38,7 @@ public class Intro : MonoBehaviour {
 
         image.sprite = pages[pageCount];
         FadeTool.FadeIn(0.5f);
-        yield return new WaitForSeconds(7f);
+        yield return new WaitForSeconds(6f);
         FadeTool.FadeOut(0.5f);
         yield return new WaitForSeconds(1f);
         pageCount++;
@@ -46,7 +46,7 @@ public class Intro : MonoBehaviour {
         {
             image.sprite = pages[pageCount];
             FadeTool.FadeIn(0.5f);
-            yield return new WaitForSeconds(3.7f);
+            yield return new WaitForSeconds(3.5f);
             FadeTool.FadeOut(0.5f);
             yield return new WaitForSeconds(0.8f);
             pageCount++;
