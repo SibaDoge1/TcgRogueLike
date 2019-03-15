@@ -13,6 +13,10 @@ using System;
 public static class GooglePlayManager
 {
     public delegate void voidFunc();
+    public delegate void OnLoadComplete(byte[] data);
+
+    private static byte[] buffedData;
+    private static OnLoadComplete onLoadComplete;
 
     //게임서비스 플러그인 초기화시에 EnableSavedGames()를 넣어서 저장된 게임 사용할 수 있게 합니다.
 
@@ -199,7 +203,7 @@ public static class GooglePlayManager
 //---------------------------------------------------------------------------------
     //게임 저장은 다음과 같이 합니다.
 
-    public static void SaveToCloud()
+    public static void SaveToCloud(string saveName, byte[] saveData)
     {
 #if GPGS_Enabled
         if (PlayGamesPlatform.Instance == null)
@@ -215,10 +219,10 @@ public static class GooglePlayManager
 
         }
 
-
+        buffedData = saveData;
         //파일이름에 적당히 사용하실 파일이름을 지정해줍니다.
 
-        OpenSavedGame("SaveData", true);
+        OpenSavedGame(saveName, true);
 #endif
 
     }
@@ -252,7 +256,7 @@ public static class GooglePlayManager
             // handle reading or writing of saved game.
             //파일이 준비되었습니다. 실제 게임 저장을 수행합니다.
             //저장할데이터바이트배열에 저장하실 데이터의 바이트 배열을 지정합니다.
-            SaveGame(game, SaveManager.OnCloudSaveStart(), DateTime.Now.TimeOfDay);
+            SaveGame(game, buffedData, DateTime.Now.TimeOfDay);
             //SaveGame(game, "저장할데이터바이트배열", DateTime.Now.TimeOfDay);
         }
         else
@@ -305,7 +309,7 @@ public static class GooglePlayManager
 
     //클라우드로 부터 파일읽기
 
-    public static void LoadFromCloud()
+    public static void LoadFromCloud(string fileName, OnLoadComplete _onLoadComplete)
     {
 #if GPGS_Enabled
         if (PlayGamesPlatform.Instance == null)
@@ -317,8 +321,10 @@ public static class GooglePlayManager
             LogIn(null, null);
             //로그인되지 않았으니 로그인 루틴을 진행하던지 합니다.
         }
+
+        onLoadComplete = _onLoadComplete;
         //내가 사용할 파일이름을 지정해줍니다. 그냥 컴퓨터상의 파일과 똑같다 생각하시면됩니다.
-        OpenSavedGame("SaveData", false);
+        OpenSavedGame(fileName, false);
 #endif
     }
 
@@ -353,10 +359,7 @@ public static class GooglePlayManager
             // handle processing the byte array data
             //데이터 읽기에 성공했습니다.
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
-            SaveManager.OnCloudLoadCompleted(data);
-            SaveManager.FirstSetUp();
-            SaveManager.ApplySave();
-            SaveToCloud();
+            onLoadComplete(data);
         }
         else
         {

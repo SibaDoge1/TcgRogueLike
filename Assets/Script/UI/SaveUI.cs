@@ -16,7 +16,7 @@ public class SaveUI : MonoBehaviour
 
     public void OnYesButtonDown()
     {
-        InGameSave.SaveManager.WriteAndSave
+        InGameSaveManager.WriteAndSave
             (GameManager.instance.CurrentMap.Floor,
             PlayerControl.player.GetHp,
             CardsToNumber(PlayerControl.instance.DeckManager.Deck),
@@ -24,8 +24,8 @@ public class SaveUI : MonoBehaviour
              GameManager.instance.BuildSeed,
                 GameManager.instance.Pablus,
                 GameManager.instance.Xynus);
-        
 
+        SaveManager.SaveAll();
         LoadingManager.LoadScene("Levels/MainMenu");      
     }
     public void OnNoButtonDown()

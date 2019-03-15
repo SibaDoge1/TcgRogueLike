@@ -31,11 +31,11 @@ public class GooglePlayUI : MonoBehaviour {
     }
     public void OnSave()
     {
-        GooglePlayManager.SaveToCloud();
+        SaveManager.SaveAll();
     }
     public void OnLoad()
     {
-        GooglePlayManager.LoadFromCloud();
+        SaveManager.LoadAll();
     }
     public void OnInit()
     {

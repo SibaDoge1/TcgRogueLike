@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tool : MonoBehaviour {
+public class UITool : MonoBehaviour {
 
-    public static Tool instance;
+    public static UITool instance;
 
     void Awake()
     {

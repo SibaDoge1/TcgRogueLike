@@ -10,7 +10,7 @@ public static class LoadingManager {
     {
         if (panel == null)
         {
-            panel = GameObject.Find("Canvas").transform.Find("LoadingPanel").GetComponent<LoadingPanel>();
+            panel = GameObject.Find("Tools_UI").transform.Find("LoadingPanel").GetComponent<LoadingPanel>();
             return panel != null;
         }
         else
@@ -23,7 +23,6 @@ public static class LoadingManager {
         {
             SceneManager.LoadScene(scene);
         }
-        panel.gameObject.SetActive(true);
         panel.LoadAsync(scene);
     }
 

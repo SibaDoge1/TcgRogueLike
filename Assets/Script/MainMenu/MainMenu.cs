@@ -11,13 +11,14 @@ public class MainMenu : MonoBehaviour
     private Option option;
     private Exit exitPanel;
     private Diary diary;
+    private Intro intro;
     public delegate void voidFunc();
     public bool isBtnEnable;
 
     void Awake()
     {
-        isBtnEnable = false;
-        FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
+        isBtnEnable = true;
+        //FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
@@ -27,6 +28,8 @@ public class MainMenu : MonoBehaviour
         option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
+        intro = GameObject.Find("Canvas").transform.Find("Intro").gameObject.GetComponent<Intro>();
+        //intro.On();
         Database.ReadDatas();
         ArchLoader.instance.StartCache();
         GooglePlayManager.Init();
@@ -35,14 +38,14 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
-        SaveManager.LoadAll();
-        CheckNew();
         SoundDelegate.instance.PlayBGM(BGM.FIELDTITLECUT);
-
-        if(!InGameSave.SaveManager.CheckSaveData())//GTS : 인게임 세이브 체크 추가
+        if (!InGameSaveManager.CheckSaveData())//GTS : 인게임 세이브 체크 추가
         {
             GameObject.Find("Canvas").transform.Find("Btn_Continue").gameObject.SetActive(false);
         }
+
+        SaveManager.LoadAll();
+        CheckNew();
     }
 
     public void CheckNew()
@@ -71,7 +74,7 @@ public class MainMenu : MonoBehaviour
         if (!isBtnEnable) return;
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
-        InGameSave.SaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
+        InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
         LoadingManager.LoadScene("Levels/Floor0");
     }
 

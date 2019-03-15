@@ -39,7 +39,7 @@ public static class FadeTool
     {
         if (fade == null)
         {
-            fade = GameObject.Find("Canvas").transform.Find("Fade").GetComponent<Fade>();
+            fade = GameObject.Find("Tools_UI").transform.Find("Fade").GetComponent<Fade>();
             return fade != null;
         }
         else

@@ -245,10 +245,10 @@ public class GameManager : MonoBehaviour
         pc.HandManager.MakeCards(5);
 
 
-        if (InGameSave.SaveManager.CheckSaveData())
+        if (InGameSaveManager.CheckSaveData())
         {
-            List<int> deckData = InGameSave.SaveManager.DeckCards;
-            List<int> attainData = InGameSave.SaveManager.AttainCards;
+            List<int> deckData = InGameSaveManager.DeckCards;
+            List<int> attainData = InGameSaveManager.AttainCards;
 
             for (int i = 0; i < deckData.Count; i++)
             {
@@ -259,14 +259,14 @@ public class GameManager : MonoBehaviour
                 startAttain.Add(Card.GetCardByNum(attainData[i]));
             }
 
-            Pablus = InGameSave.SaveManager.Pablus;
-            Xynus = InGameSave.SaveManager.Xynus;
-            startLevel = InGameSave.SaveManager.Floor;
-            startHp = InGameSave.SaveManager.Hp;
-            buildSeed = InGameSave.SaveManager.Seed;
+            Pablus = InGameSaveManager.Pablus;
+            Xynus = InGameSaveManager.Xynus;
+            startLevel = InGameSaveManager.Floor;
+            startHp = InGameSaveManager.Hp;
+            buildSeed = InGameSaveManager.Seed;
             isLoaded = true;
 
-            InGameSave.SaveManager.ClearSaveData();
+            InGameSaveManager.ClearSaveData();
         }
         else
         {

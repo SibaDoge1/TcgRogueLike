@@ -7,7 +7,13 @@ public class LoadingPanel : MonoBehaviour {
 
     public void LoadAsync(string scene)
     {
+        gameObject.SetActive(true);
         StartCoroutine(LoadSceneRoutine(scene));
+    }
+
+    public void OnLoadComplete()
+    {
+        gameObject.SetActive(false);
     }
 
     private IEnumerator LoadSceneRoutine(string scene)
@@ -24,6 +30,8 @@ public class LoadingPanel : MonoBehaviour {
             {
                 //gameObject.SetActive(false);
                 op.allowSceneActivation = true;
+                yield return new WaitForSeconds(0.5f);
+                OnLoadComplete();
             }
         }
     }

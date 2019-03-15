@@ -86,8 +86,8 @@ public class SoundDelegate : MonoBehaviour {
         }
         else if (instance != this)
         {
-            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
-            Destroy(this);
+            UnityEngine.Debug.LogWarning("SingleTone Error : " + this.name);
+            Destroy(gameObject);
         }
         bgm = transform.Find("BGM").GetComponent<AudioSource>();
         monosound = transform.Find("MONO").GetComponent<AudioSource>();
