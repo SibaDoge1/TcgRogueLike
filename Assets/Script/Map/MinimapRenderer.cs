@@ -10,24 +10,30 @@ public  static class MinimapTexture
 {
     private static readonly Color emptyColor = Color.clear;
     private static readonly Color wallColor = Color.clear;
-	private static readonly Color tileColor = Color.blue;
-    private static readonly Color playerColor = Color.green;
+    private static readonly Color playerColor = Color.black;
     private static readonly Color enemyColor = Color.red;
-    private static readonly Color doorColor = new Color(139/255f,69/255f,19/255f);
-    private static readonly Color hallWayColor = Color.yellow;
-    private static readonly Color eventRoomDoor;
-    private static readonly Color bossRoomDoor;
-    private static readonly Color endRoomDoor;
+    private static readonly Color normalRoomColor = Color.white;
+    private static readonly Color startRoomColor = new Color(190 / 255f, 230 / 255f, 245 / 255f);
+    private static readonly Color eventRoomColor = new Color(255 / 255f, 230 / 255f, 175 / 255f);
+    private static readonly Color bossRoomColor = new Color(255/255f, 200 / 255f, 195 / 255f);
+
+    private static readonly Color doorColor = new Color(160 / 255f, 160 / 255f, 160 / 255f);
+    private static readonly Color hallWayColor = new Color(160 / 255f, 160 / 255f, 160 / 255f);
+
+    private static readonly Color floorColor = new Color(235 / 255f, 180 / 255f, 10 / 255f);
+    private static readonly Color deckEditColor = new Color(65 / 255f, 100 / 255f, 250 / 255f);
+    private static readonly Color saveColor = new Color(180 / 255f, 110 / 255f, 200 / 255f);
 
     static int space;
-
-
-	private static Texture2D texture;
+    static Color roomColor = startRoomColor;
+    static Color oldRoomColor = startRoomColor;
+    private static Texture2D texture;
     private static Vector2Int textureSize;
 	private static Vector2Int minBorder;
 	private static Vector2Int maxBorder;
     private static Vector2Int playerMapPos;
     private static List<Vector2Int> enemyPoses = new List<Vector2Int>();
+    static bool isEnterRoom;
 
     static public  void Init(Map map)
     {
@@ -55,7 +61,7 @@ public  static class MinimapTexture
     }
 
     static public void DrawRoom(Room room)
-    {
+    { 
         Vector2Int pos = WorldPosToMapPos(room.transform.position);
         for(int i=0; i<room.size.y;i++)
         {
@@ -66,16 +72,38 @@ public  static class MinimapTexture
                     texture.SetPixel(pos.x+j,pos.y+i, emptyColor);
                 else
                 {
-                    if(t.offTile is OffTile_Door && !((OffTile_Door)t.offTile).IsDestroyed)
+                    if(t.offTile == null)
                     {
-                        texture.SetPixel(pos.x + j, pos.y + i,doorColor);
+                        if (t.OnTileObj is Structure)
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, wallColor);
+                        }
+                        else
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, roomColor);
+                        }
                     }
-                    else if(t.OnTileObj is Structure)
+                    else
                     {
-                        texture.SetPixel(pos.x + j, pos.y + i, wallColor);
-                    }else
-                    {
-                        texture.SetPixel(pos.x + j, pos.y + i, tileColor);
+                        if (t.offTile is OffTile_Door && !((OffTile_Door)t.offTile).IsDestroyed)
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, doorColor);
+                        }
+                        else if (t.offTile is OffTile_Floor)
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, floorColor);
+                        }
+                        else if (t.offTile is OffTile_Shop)
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, deckEditColor);
+                        }
+                        else if (t.offTile is OffTile_Save)
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, saveColor);
+                        }else
+                        {
+                            texture.SetPixel(pos.x + j, pos.y + i, roomColor);
+                        }
                     }
                 }
             }
@@ -93,8 +121,15 @@ public  static class MinimapTexture
             firstTime = false;
         }
         else
-        {            
-            texture.SetPixel(oldPos.x, oldPos.y, tileColor);
+        {   
+            if(isEnterRoom)
+            {
+                texture.SetPixel(oldPos.x, oldPos.y, oldRoomColor);
+                isEnterRoom = false;
+            }else
+            {
+                texture.SetPixel(oldPos.x, oldPos.y, roomColor);
+            }
         }
 
         playerMapPos = RoomPosToMapPos(roomPos, pPos);
@@ -107,7 +142,7 @@ public  static class MinimapTexture
     {
         for(int i=0; i<enemyPoses.Count;i++) //적 위치 초기화
         {
-            texture.SetPixel(enemyPoses[i].x, enemyPoses[i].y, tileColor);
+            texture.SetPixel(enemyPoses[i].x, enemyPoses[i].y, roomColor);
         }
         enemyPoses.Clear();
 
@@ -140,7 +175,33 @@ public  static class MinimapTexture
     {
         return new Vector2Int((int)pos.x, (int)pos.y) - minBorder + new Vector2Int(space, space);
     }
-
+    static public void SetRoomColor(Room room)
+    {
+        oldRoomColor = roomColor;
+        isEnterRoom = true;
+        switch (room.roomType)
+        {
+            case RoomType.BATTLE:
+                roomColor = normalRoomColor;
+                break;
+            case RoomType.BOSS:
+                roomColor = bossRoomColor;
+                break;
+            case RoomType.EVENT:
+                roomColor = eventRoomColor;
+                break;
+            case RoomType.START:
+                if (room.RoomName.Contains("end"))
+                {
+                    roomColor = normalRoomColor;
+                }
+                else
+                {
+                    roomColor = startRoomColor;
+                }
+                break;
+        }
+    }
     static public void DrawHallWay(Vector3 doorPos,Vector3 connectedPos,Direction d)
     {
         int doorSpace = (int)Vector3.Magnitude(connectedPos - doorPos);
@@ -154,7 +215,7 @@ public  static class MinimapTexture
                 }
                 break;
             case Direction.NORTH:
-                for (int i = 1; i < doorSpace; i++)
+                for (int i = 1; i <doorSpace; i++)
                 {
                     texture.SetPixel(pos.x, pos.y+i, doorColor);
                 }

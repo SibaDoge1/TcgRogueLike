@@ -210,7 +210,8 @@ public class SpiderBoss : Enemy {
             }
         }
 
-        //TODO : 게임 승리 트리거
+        GameManager.instance.GetEnding(false);
+
         base.OnDieCallback();
     }
 

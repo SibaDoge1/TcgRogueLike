@@ -28,6 +28,8 @@ public class CardRender : MonoBehaviour {
         thisName.text = data.Name;
         SetRank(data.Cost);
         SetAttribute(data.Type);
+
+        img_Graphic.enabled = true;
         img_Graphic.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);
     }
     public void UpdateRender(Card data)
@@ -37,10 +39,10 @@ public class CardRender : MonoBehaviour {
 
     public void SetRender()
     {
-        thisName.text = "???";
+        thisName.text = "";
         SetRank(0);
-        SetAttribute(CardType.A);
-        img_Graphic.sprite = ArchLoader.instance.GetCardSprite("error");
+        img_Frame.sprite = ArchLoader.instance.GetCardFrame("unknown");
+        img_Graphic.enabled = false;
     }
 
     private void SetAttribute(CardType attribute)
@@ -52,16 +54,16 @@ public class CardRender : MonoBehaviour {
                     break;
                 case CardType.P:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("p");
-                break;
+                    break;
                 case CardType.T:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("t");
-                break;
+                    break;
                 case CardType.V:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("v");
-                break;
-            case CardType.S:
+                    break;
+                case CardType.S:
                     img_Frame.sprite = ArchLoader.instance.GetCardFrame("a");
-                break;
+                    break;
             }
     }
     

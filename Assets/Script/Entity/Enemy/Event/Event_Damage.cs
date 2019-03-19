@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Event_Damage : Enemy
 {
-    bool isFailed=false;
-
     protected override void SetActionLists()
     {
         DelayList = null;
@@ -24,18 +22,9 @@ public class Event_Damage : Enemy
     }
     IEnumerator Destroy()
     {
-        isFailed = true;
-        currentRoom.RoomName = "fail_damage";
+        currentRoom.RoomName = "fail";
         DestroyThis();
         yield return null;
     }
-    protected override void OnDieCallback()
-    {
-        if (!isFailed)
-        {
-            UIManager.instance.StartUIAnim(UIAnimation.Attain);
-        }
 
-        base.OnDieCallback();
-    }
 }

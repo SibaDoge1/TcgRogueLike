@@ -19,15 +19,16 @@ public class SaveUI : MonoBehaviour
         InGameSaveManager.WriteAndSave
             (GameManager.instance.CurrentMap.Floor,
             PlayerControl.player.GetHp,
-            CardsToNumber(PlayerControl.instance.DeckManager.Deck),
+            CardsToDataClass(PlayerControl.instance.DeckManager.Deck),
             CardsToNumber(PlayerControl.instance.DeckManager.AttainCards),
              GameManager.instance.BuildSeed,
-                GameManager.instance.Pablus,
-                GameManager.instance.Xynus);
+                GameManager.instance.EndingCondition);
 
         SaveManager.SaveAll();
+        DisableAllChildren();
         LoadingManager.LoadScene("Levels/MainMenu");      
     }
+
     public void OnNoButtonDown()
     {
         transform.localPosition = offPos;
@@ -42,5 +43,21 @@ public class SaveUI : MonoBehaviour
             numbers.Add(datas[i].Index);
         }
         return numbers;
+    }
+    private List<CardSaveData> CardsToDataClass(List<Card> datas)
+    {
+        List<CardSaveData> data = new List<CardSaveData>();
+        for (int i = 0; i < datas.Count; i++)
+        {
+            data.Add(new CardSaveData(datas[i].Index, datas[i].Type, datas[i].CardFigure));
+        }
+        return data;
+    }
+    private void DisableAllChildren()
+    {
+        for(int i=0; i<transform.childCount;i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
     }
 }

@@ -281,6 +281,7 @@ public static class SaveManager
     public static void killMonster(int i)
     {
         saveData.monsterKillData[i]++;
+        Debug.Log("Save - [Monster] , num : " + i + " count : " + saveData.monsterKillData[i]);
         if (saveData.monsterKillData[i] - 1 > 0) return; //버그시 확인 필
 
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
@@ -300,14 +301,15 @@ public static class SaveManager
     public static void GetAchivement(int i)
     {
         saveData.achiveUnlockData[i] = true;
+        Debug.Log("Save - [Achivement] , Num : " + i);
         if (Database.achiveDatas[i].reward.Length != 0)
         {
             SetDiaryUnlockData(int.Parse(Database.achiveDatas[i].reward), true);
         }
-        if (Database.achiveDatas[i].cardReward.Length != 0)
+        /*if (Database.achiveDatas[i].cardReward.Length != 0)
         {
             SetCardUnlockData(int.Parse(Database.achiveDatas[i].cardReward), true);
-        }
+        }*/
         SaveAll();
     }
 
@@ -335,6 +337,7 @@ public static class SaveManager
     public static void GetCard(int i)
     {
         SetCardUnlockData(i, true);
+        Debug.Log("Save - [Card] , num : " + i);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
             if (pair.Value.type.Equals("card") && int.Parse(pair.Value.condition) == i)
@@ -350,6 +353,7 @@ public static class SaveManager
     public static void ArriveStage(int i)
     {
         saveData.stageArriveData[i]++;
+        Debug.Log("Save - [Stage] , num : " + i + " count : " + saveData.stageArriveData[i]);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
             if (pair.Value.Equals("floor") && int.Parse(pair.Value.condition) == i)
@@ -366,6 +370,7 @@ public static class SaveManager
     public static void GetEnding(int num)
     {
         saveData.ending[num] = true;
+        Debug.Log("Save - [Ending] , num : " + num);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
             if (pair.Value.Equals("ending") && int.Parse(pair.Value.condition) == num)
@@ -384,6 +389,7 @@ public static class SaveManager
     public static void GetGameOver()
     {
         saveData.gameOverNum++;
+        Debug.Log("Save - [GameOver] , count : " + saveData.gameOverNum);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
             if (pair.Value.Equals("gameover") && int.Parse(pair.Value.condition) >= saveData.gameOverNum)
@@ -427,7 +433,21 @@ public static class SaveManager
         GooglePlayManager.LoadFromCloud(FileName, OnCloudLoadCompleted);
     }
 
+    #region Debug
+    private static void SaveDebug(string s)
+    {
+    #if UNITY_EDITOR
+        Debug.Log(s);
+    #endif
+    }
+    private static void SaveDebug(int s)
+    {
+    #if UNITY_EDITOR
+        Debug.Log(s);
+    #endif
+    }
 
+    #endregion
     #region For Diary
     public static bool CheckNew()
     {

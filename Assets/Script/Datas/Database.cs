@@ -135,7 +135,7 @@ public class CardPoolData
     /// </summary>
     public Card GetRandomCard()
     {
-        return Card.GetCardByNum(cardPool[Random.Range(0, cardPool.Count)]);
+        return Card.GetCard(cardPool[Random.Range(0, cardPool.Count)]);
     }
 }
 

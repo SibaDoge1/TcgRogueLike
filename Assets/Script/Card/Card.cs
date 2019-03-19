@@ -233,7 +233,7 @@ public abstract class Card
         }
     }
 
-    public static Card GetCardByNum(int i)
+    public static Card GetCard(int i)
     {        
 
             switch(i)
@@ -263,6 +263,32 @@ public abstract class Card
         
     }
 
+    public static Card GetCard(CardSaveData data)
+    {
+        if(data.type == CardType.S)
+        {
+            return  GetCard(data.index);
+        }else//기본카드
+        {
+            switch(data.index)
+            {
+                case 90:
+                    return new Card_Normal();
+                case 91:
+                    return new Card_Normal(CardType.A,data.figure);
+                case 92:
+                    return new Card_Normal(CardType.P, data.figure);
+                case 93:
+                    return new Card_Normal(CardType.T, data.figure);
+                case 94:
+                    return new Card_Normal(CardType.V, data.figure);
+                default:
+                    Debug.Log("UnExpected CardData " + data.index);
+                    return new Card_Normal();
+            }
+        }
+
+    }
     /// <summary>
     /// 공격카드에서 데미지를 가할때는 이함수로 할것
     /// </summary>

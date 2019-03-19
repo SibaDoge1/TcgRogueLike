@@ -26,22 +26,16 @@ public class GameManager : MonoBehaviour
         get { return isInputOk; }
         set { isInputOk = value; }
     }
-    private bool xynus;
-    public bool Xynus
-    {
-        get { return xynus; }
-        set { xynus = value; }
-    }
-    private bool pablus;
-    public bool Pablus
-    {
-        get { return pablus; }
-        set { pablus = value; }
-    }
+
     private int buildSeed;
     public int BuildSeed
     {
         get { return buildSeed; }
+    }
+    private EndingConditions endingCondition;
+    public EndingConditions EndingCondition
+    {
+        get { return endingCondition; }
     }
 
     public static GameManager instance;
@@ -106,6 +100,9 @@ public class GameManager : MonoBehaviour
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, player.pos);
         UIManager.instance.FloorCount(level);
         PlayerControl.instance.AkashaGage = 0;
+
+        ///업적: 층
+        SaveManager.ArriveStage(level);
     }
 
     private Map currentMap;
@@ -130,14 +127,16 @@ public class GameManager : MonoBehaviour
 
     public void OnPlayerEnterRoom(Room newRoom)
     {
+        MinimapTexture.SetRoomColor(newRoom);
 
         if (newRoom.roomType == RoomType.BOSS && newRoom.IsVisited == false)
         {
-            PlayBossBGM(currentMap.Floor);
+            PlayBossBGM(CurrentMap.Floor);
+            ShowBossPopUP(CurrentMap.Floor);
         }
         else
         {
-            PlayBGM(currentMap.Floor);
+            PlayBGM(CurrentMap.Floor);
         }
 
         if (newRoom.IsVisited == false)
@@ -145,7 +144,6 @@ public class GameManager : MonoBehaviour
             newRoom.IsVisited = true;
             EnemyControl.instance.SetRoom(newRoom);
             MinimapTexture.DrawRoom(newRoom);
-            //SoundDelegate.instance.PlayEffectSound(EffectSound.MOVE, Camera.main.transform.position);
 
             if (newRoom.roomType == RoomType.START)
             {
@@ -161,9 +159,21 @@ public class GameManager : MonoBehaviour
         PlayerControl.instance.OnRoomClear();
         SoundDelegate.instance.PlayEffectSound(SoundEffect.ROOMCLEAR,player.transform.position);
         PlayerControl.instance.AkashaGage = 0;
-        if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS || CurrentRoom().roomType == RoomType.EVENT)
+        if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS)
         {
             GetRandomCardToAttain(CurrentRoom().RoomName);
+        }
+        else if(CurrentRoom().roomType == RoomType.EVENT)
+        {
+            GetRandomCardToAttain(CurrentRoom().RoomName);
+            if (CurrentRoom().RoomName == "fail")
+            {
+                UIManager.instance.uiAnim.ShowAnim(false);
+            }
+            else
+            {
+                UIManager.instance.uiAnim.ShowAnim(true);
+            }
         }
     }
 
@@ -206,11 +216,30 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        FadeTool.FadeOutIn(3.5f,2,UIManager.instance.GameOverUIOn);
-        SoundDelegate.instance.PlayGameOverSound(BGM.NONE,3.5f);
+        ///업적 : Gameover
+        SaveManager.GetGameOver();
+        FadeTool.FadeOutIn(2.5f,1.5f,UIManager.instance.GameOverUIOn);
+        SoundDelegate.instance.PlayGameOverSound(BGM.NONE,3f);
         IsInputOk = false;
     }
 
+    /// <summary>
+    /// 1 -> Bad , 2 -> Normal , 3-> True
+    /// </summary>
+    public void GetEnding(bool isBad)
+    {
+        if(isBad)
+        {
+            SaveManager.GetEnding(1);//BadEnd
+        }else
+        {
+            if (EndingCondition.IsEdited)
+                SaveManager.GetEnding(2);// normalEnd
+            else
+                SaveManager.GetEnding(3); // trueEnd
+        }
+
+    }
     private bool isGamePaused;
     public bool IsGamePaused
     {
@@ -247,20 +276,19 @@ public class GameManager : MonoBehaviour
 
         if (InGameSaveManager.CheckSaveData())
         {
-            List<int> deckData = InGameSaveManager.DeckCards;
+            List<CardSaveData> deckData = InGameSaveManager.DeckCards;
             List<int> attainData = InGameSaveManager.AttainCards;
 
             for (int i = 0; i < deckData.Count; i++)
             {
-                startDeck.Add(Card.GetCardByNum(deckData[i]));
+                startDeck.Add(Card.GetCard(deckData[i]));
             }
             for (int i = 0; i < attainData.Count; i++)
             {
-                startAttain.Add(Card.GetCardByNum(attainData[i]));
+                startAttain.Add(Card.GetCard(attainData[i]));
             }
 
-            Pablus = InGameSaveManager.Pablus;
-            Xynus = InGameSaveManager.Xynus;
+            endingCondition = InGameSaveManager.Ending;
             startLevel = InGameSaveManager.Floor;
             startHp = InGameSaveManager.Hp;
             buildSeed = InGameSaveManager.Seed;
@@ -272,16 +300,15 @@ public class GameManager : MonoBehaviour
         {
             for (int i = 0; i < 10; i++)//노말카드 랜덤 12장 생성
             {
-                startDeck.Add(Card.GetCardByNum(91));
+                startDeck.Add(Card.GetCard(91));
             }
-            startDeck.Add(Card.GetCardByNum(92));
-            startDeck.Add(Card.GetCardByNum(92));
-            startDeck.Add(Card.GetCardByNum(93));
-            startDeck.Add(Card.GetCardByNum(93));
-            startDeck.Add(Card.GetCardByNum(94));
+            startDeck.Add(Card.GetCard(92));
+            startDeck.Add(Card.GetCard(92));
+            startDeck.Add(Card.GetCard(93));
+            startDeck.Add(Card.GetCard(93));
+            startDeck.Add(Card.GetCard(94));
 
-            Pablus = false;
-            Xynus = false;
+            endingCondition = new EndingConditions();
             startLevel = 1;
             startHp = 10;
 
@@ -351,6 +378,24 @@ public class GameManager : MonoBehaviour
                 break;
             case 5:
                 SoundDelegate.instance.PlayBGM(BGM.BOSSSPIDER);
+                break;
+        }
+    }
+    private void ShowBossPopUP(int floor)
+    {
+        switch(floor)
+        {
+            case 2:
+                UIManager.instance.uiAnim.ShowAnim("pablus");
+                break;
+            case 3:
+                UIManager.instance.uiAnim.ShowAnim("xynus");
+                break;
+            case 4:
+                UIManager.instance.uiAnim.ShowAnim("robot");
+                break;
+            case 5:
+                UIManager.instance.uiAnim.ShowAnim("spiderboss");
                 break;
         }
     }

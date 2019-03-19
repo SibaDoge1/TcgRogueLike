@@ -157,9 +157,9 @@ public class ArchLoader : MonoBehaviour {
     {
         return soundObject;
     }
-    public Sprite GetBuffImage(BUFF s)
+    public Sprite GetPopUpImage(string s)
     {
-        return buffImages[s.ToString()];
+        return popUpImages[s];
     }
     #endregion
     #region Get EFFECT
@@ -299,7 +299,7 @@ public class ArchLoader : MonoBehaviour {
     Dictionary<CardEffect, EffectObject> cardEffectPrefabs = new Dictionary<CardEffect, EffectObject>();
     Dictionary<EnemyEffect, EffectObject> monsterEffectPrefabs = new Dictionary<EnemyEffect, EffectObject>();
     Dictionary<RangeEffectType, EffectObject> rangeEffectPrefabs = new Dictionary<RangeEffectType, EffectObject>();
-    Dictionary<string, Sprite> buffImages = new Dictionary<string, Sprite>();
+    Dictionary<string, Sprite> popUpImages = new Dictionary<string, Sprite>();
     EffectObject textEffectPrefab;
 
     private void CacheEffects()
@@ -319,10 +319,10 @@ public class ArchLoader : MonoBehaviour {
         {
             rangeEffectPrefabs.Add((RangeEffectType)Enum.Parse(typeof(RangeEffectType), prefabs[i].gameObject.name), prefabs[i]);
         }
-        Sprite[] images = Resources.LoadAll<Sprite>("Graphic/UI/BuffImages");
+        Sprite[] images = Resources.LoadAll<Sprite>("Graphic/UI/PopUP");
         for(int i=0; i<images.Length;i++)
         {
-            buffImages.Add(images[i].name, images[i]);
+            popUpImages.Add(images[i].name, images[i]);
         }
 
         textEffectPrefab = Resources.Load<EffectObject>("EFFECT/TEXT/DamageText");
