@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Ending : MonoBehaviour {
-    public float scrollTime = 4f;
+    public float scrollTime = 10f;
     public List<Sprite> endImages;
     //public float scrollSpeed = 1f;
     ScrollRect view;
@@ -16,6 +16,13 @@ public class Ending : MonoBehaviour {
     // Use this for initialization
     void Awake()
     {
+        ArchLoader.instance.StartCache();
+        switch (SaveManager.curEnding)
+        {
+            case 2: SoundDelegate.instance.PlayBGM(BGM.NORMALENDINGCUT); break;
+            case 3: SoundDelegate.instance.PlayBGM(BGM.TRUEENDINGCUT); break;
+            default: break;
+        }
         FadeTool.FadeIn(1f, StartCredit);
         view = GameObject.Find("Canvas").transform.Find("Credit").GetComponent<ScrollRect>();
         bar = view.transform.Find("Scrollbar Vertical").GetComponent<Scrollbar>();
@@ -25,7 +32,7 @@ public class Ending : MonoBehaviour {
 
     public void OnExitButtonDown()
     {
-        SceneManager.LoadScene("MainMenu");
+        LoadingManager.LoadScene("MainMenu");
     }
 
     public void StartCredit()
@@ -37,8 +44,8 @@ public class Ending : MonoBehaviour {
     {
         switch (SaveManager.curEnding)
         {
-            case 0: image.sprite = endImages[SaveManager.curEnding]; SoundDelegate.instance.PlayBGM(BGM.NORMALENDING); break;
-            case 1: image.sprite = endImages[SaveManager.curEnding]; SoundDelegate.instance.PlayBGM(BGM.TRUEENDING); break;
+            case 2: image.sprite = endImages[SaveManager.curEnding]; break;
+            case 3: image.sprite = endImages[SaveManager.curEnding]; break;
             default: break;
         }
         image.gameObject.SetActive(true);
@@ -52,7 +59,7 @@ public class Ending : MonoBehaviour {
             bar.value -= Time.deltaTime / scrollTime;
             yield return null;
         }
-        FadeTool.FadeOutIn(1f, 1f, ShowImage);
+        FadeTool.FadeOutIn(1.5f, 1f, ShowImage);
     }
     /*
     IEnumerator CreditBySpeedRoutine()

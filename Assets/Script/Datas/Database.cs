@@ -107,6 +107,7 @@ public class CardData
         val2 = int.Parse(data[5]);
         val3 = int.Parse(data[6]);
 
+        Debug.Log(data[0] + data[1]);
         _info = data[7];
         spritePath = data[8];
         className = data[9];
@@ -185,7 +186,6 @@ public class DiaryData
         }
         title = data[2];
         info = data[3].Replace("$", "\n");
-        //Debug.Log(data[3]);
         spritePath = data[4];
     }
 }

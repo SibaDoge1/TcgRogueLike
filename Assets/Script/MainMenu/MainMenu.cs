@@ -32,13 +32,12 @@ public class MainMenu : MonoBehaviour
         if (!SaveManager.isintroSeen)
         {
             SaveManager.isintroSeen = true;
+            Database.ReadDatas();
+            ArchLoader.instance.StartCache();
+            GooglePlayManager.Init();
             intro.On();
-
         }
-        Database.ReadDatas();
-        ArchLoader.instance.StartCache();
-        GooglePlayManager.Init();
-        
+
     }
 
     void Start()

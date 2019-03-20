@@ -13,8 +13,8 @@ public enum BGM
     BOSSROBOT,//기계
     BOSSSPIDER,//거미신부
     FIELDTITLECUT,
-    NORMALENDING,
-    TRUEENDING
+    NORMALENDINGCUT,
+    TRUEENDINGCUT
 }
 public enum MonoSound//1개만 재생되는것들
 {

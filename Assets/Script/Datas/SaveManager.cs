@@ -51,7 +51,7 @@ public static class SaveManager
     public static string Ext = ".dat";
     public static string FileName = "SaveData";
     public static string Path = Application.persistentDataPath;
-    public static int curEnding = -1;
+    public static int curEnding = 0;
     public static bool isintroSeen = false;
 
     #region FirstSetUp
@@ -65,8 +65,16 @@ public static class SaveManager
         InitDiaryUnlockDatas();
         InitMonsterKillDatas();
         InitStageArriveDatas();
-        if(saveData.isSet == false)
+        InitEndingDatas();
+        if (saveData.isSet == false)
         {
+            foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
+            {
+                if (pair.Value.type == AchiveType.etc && pair.Value.reward.Length != 0)
+                {
+                    SetDiaryUnlockData(int.Parse(pair.Value.reward), true);
+                }
+            }
             SetBgmValue(1f);
             SetFxValue(1f);
             SetUIValue(1f);
@@ -196,7 +204,7 @@ public static class SaveManager
     }
     private static void InitEndingDatas()
     {
-        for (int i = saveData.ending.Count; i < 3; i++)
+        for (int i = saveData.ending.Count; i < 4; i++)
         {
             saveData.ending.Add(false);
         }
@@ -299,11 +307,11 @@ public static class SaveManager
         }
         saveData.monsterKillData[i]++;
         Debug.Log("Save - [Monster] , num : " + i + " count : " + saveData.monsterKillData[i]);
-        if (saveData.monsterKillData[i] - 1 > 0) return; //버그시 확인 필
+        if (saveData.monsterKillData[i] > 1) return; //버그시 확인 필
 
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if(pair.Value.type == AchiveType.kill && int.Parse(pair.Value.condition) == i)
+            if(int.Parse(pair.Value.condition) == i && pair.Value.type == AchiveType.kill)
             {
                 GetAchivement(pair.Key);
                 return;
@@ -409,6 +417,7 @@ public static class SaveManager
     public static void GetGameOver()
     {
         saveData.gameOverNum++;
+        SaveAll();
         Debug.Log("Save - [GameOver] , count : " + saveData.gameOverNum);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
