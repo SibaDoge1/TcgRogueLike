@@ -6,6 +6,11 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum AchiveType
+{
+    floor, ending, gameover, achive, kill, card, etc
+}
+
 [Serializable]
 public class SaveData
 {
@@ -46,6 +51,8 @@ public static class SaveManager
     public static string Ext = ".dat";
     public static string FileName = "SaveData";
     public static string Path = Application.persistentDataPath;
+    public static int curEnding = -1;
+    public static bool isintroSeen = false;
 
     #region FirstSetUp
     public static void UpdateSaveData()
@@ -73,27 +80,32 @@ public static class SaveManager
     {
         if (!saveData.cardUnlockData.ContainsKey(i))
         {
-            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: " + i);
             //saveData.cardUnlockData.Add(i, isUnlock);
             return;
         }
         saveData.cardUnlockData[i] = isUnlock;
     }
-    private static void SetAchiveUnlockData(int i, bool isUnlock)
+    private static bool SetAchiveUnlockData(int i, bool isUnlock)
     {
         if (!saveData.achiveUnlockData.ContainsKey(i))
         {
-            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: " + i);
             //saveData.achiveUnlockData.Add(i, isUnlock);
-            return;
+            return false;
+        }
+        if(isUnlock == true && saveData.achiveUnlockData[i] == true)
+        {
+            return false;
         }
         saveData.achiveUnlockData[i] = isUnlock;
+        return true;
     }
     private static void SetDiaryUnlockData(int i, bool isUnlock)
     {
         if (!saveData.diaryUnlockData.ContainsKey(i))
         {
-            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: "+i);
             //saveData.diaryUnlockData.Add(i, new bool[] { isUnlock, false });
             return;
         }
@@ -110,7 +122,7 @@ public static class SaveManager
             }
             foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
             {
-                if (pair.Value.type.Equals("achive") && int.Parse(pair.Value.condition) == unlockCount)
+                if (pair.Value.type == AchiveType.achive && int.Parse(pair.Value.condition) == unlockCount)
                     GetAchivement(pair.Key);
             }
             */
@@ -121,7 +133,7 @@ public static class SaveManager
     {
         if (!saveData.monsterKillData.ContainsKey(i))
         {
-            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: " + i);
             //saveData.monsterKillData.Add(i, value);
             return;
         }
@@ -131,7 +143,7 @@ public static class SaveManager
     {
         if (i > saveData.stageArriveData.Count)
         {
-            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다.");
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: " + i);
             //saveData.stageArriveData.Add(0);
             //return;
         }
@@ -280,12 +292,17 @@ public static class SaveManager
     /// <param name="i"> DB상의 몬스터 번호 </param>
     public static void killMonster(int i)
     {
+        if (!saveData.monsterKillData.ContainsKey(i))
+        {
+            Debug.LogWarning("키가 딕셔너리에 존재하지 않습니다: "+ i);
+            return;
+        }
         saveData.monsterKillData[i]++;
         if (saveData.monsterKillData[i] - 1 > 0) return; //버그시 확인 필
 
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if(pair.Value.type.Equals("kill") && int.Parse(pair.Value.condition) == i)
+            if(pair.Value.type == AchiveType.kill && int.Parse(pair.Value.condition) == i)
             {
                 GetAchivement(pair.Key);
                 return;
@@ -299,7 +316,8 @@ public static class SaveManager
     /// <param name="i">업적번호</param>
     public static void GetAchivement(int i)
     {
-        saveData.achiveUnlockData[i] = true;
+        if (!SetAchiveUnlockData(i, true))
+            return;
         if (Database.achiveDatas[i].reward.Length != 0)
         {
             SetDiaryUnlockData(int.Parse(Database.achiveDatas[i].reward), true);
@@ -337,7 +355,7 @@ public static class SaveManager
         SetCardUnlockData(i, true);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (pair.Value.type.Equals("card") && int.Parse(pair.Value.condition) == i)
+            if (pair.Value.type == AchiveType.card && int.Parse(pair.Value.condition) == i)
                 GetAchivement(pair.Key);
         }
     }
@@ -352,7 +370,7 @@ public static class SaveManager
         saveData.stageArriveData[i]++;
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (pair.Value.Equals("floor") && int.Parse(pair.Value.condition) == i)
+            if (pair.Value.type == AchiveType.floor && int.Parse(pair.Value.condition) == i)
             {
                 GetAchivement(pair.Key);
                 return;
@@ -366,15 +384,17 @@ public static class SaveManager
     public static void GetEnding(int num)
     {
         saveData.ending[num] = true;
+        curEnding = num;
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (pair.Value.Equals("ending") && int.Parse(pair.Value.condition) == num)
+            if (pair.Value.type == AchiveType.ending && int.Parse(pair.Value.condition) == num)
             {
                 GetAchivement(pair.Key);
                 LoadingManager.LoadScene("EndingScene");
                 return;
             }
         }
+        SaveAll();
         LoadingManager.LoadScene("EndingScene");
     }
 
@@ -386,7 +406,7 @@ public static class SaveManager
         saveData.gameOverNum++;
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (pair.Value.Equals("gameover") && int.Parse(pair.Value.condition) >= saveData.gameOverNum)
+            if (pair.Value.type == AchiveType.gameover && int.Parse(pair.Value.condition) >= saveData.gameOverNum)
             {
                 GetAchivement(pair.Key);
                 return;

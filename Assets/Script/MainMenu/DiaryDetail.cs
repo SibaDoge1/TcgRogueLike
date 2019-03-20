@@ -14,6 +14,7 @@ public class DiaryDetail : MonoBehaviour {
     private GameObject zoomPanel;
     private DiaryData diaryData;
     private Transform categoryObject;
+    private Scrollbar bar;
 
     private string objectPath;
 
@@ -24,6 +25,7 @@ public class DiaryDetail : MonoBehaviour {
         diary = transform.parent.GetComponent<Diary>();
         noData = transform.Find("NO DATA").gameObject;
         zoomPanel = transform.Find("ZoomPanel").gameObject;
+        bar = transform.Find("TextBG").Find("Scroll View").Find("Scrollbar Vertical").GetComponent<Scrollbar>();
         noData.SetActive(true);
     }
 
@@ -55,6 +57,7 @@ public class DiaryDetail : MonoBehaviour {
         title.text = diaryData.title;
         content.text = "\n" + diaryData.info;
         content.rectTransform.sizeDelta = new Vector2(0, content.preferredHeight);
+        bar.value = 1f;
         if (categoryObject.Find("Name") != null)
             categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
 

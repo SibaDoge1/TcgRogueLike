@@ -186,7 +186,7 @@ public class DiaryData
         title = data[2];
         info = data[3].Replace("$", "\n");
         //Debug.Log(data[3]);
-        spritePath = data[4].Replace("\r","");
+        spritePath = data[4];
     }
 }
 
@@ -194,7 +194,7 @@ public class AchiveData
 {
     public readonly byte num;
     public readonly string info;
-    public readonly string type;
+    public readonly AchiveType type;
     public readonly string condition;
     public readonly string reward;
     public readonly string cardReward;
@@ -203,9 +203,20 @@ public class AchiveData
     {
         num = byte.Parse(data[0]);
         info = data[1];
-        type = data[2];
+        switch (data[2])
+        {
+            case "floor": type = AchiveType.floor; break;
+            case "gameover": type = AchiveType.gameover; break;
+            case "kill": type = AchiveType.kill; break;
+            case "etc": type = AchiveType.etc; break;
+            case "archive": type = AchiveType.achive; break;
+            case "ending": type = AchiveType.ending; break;
+            case "card": type = AchiveType.card; break;
+            default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!" + data[0] + data[2]); break;
+        }
         condition = data[3];
         reward = data[4];
-        cardReward = data[5];
+        if(data.Length >= 6)
+            cardReward = data[5];
     }
 }

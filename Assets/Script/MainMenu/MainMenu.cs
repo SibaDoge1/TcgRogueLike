@@ -29,7 +29,12 @@ public class MainMenu : MonoBehaviour
         exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
         diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
         intro = GameObject.Find("Canvas").transform.Find("Intro").gameObject.GetComponent<Intro>();
-        intro.On();
+        if (!SaveManager.isintroSeen)
+        {
+            SaveManager.isintroSeen = true;
+            intro.On();
+
+        }
         Database.ReadDatas();
         ArchLoader.instance.StartCache();
         GooglePlayManager.Init();

@@ -40,7 +40,6 @@ public class DiaryEntity : MonoBehaviour {
             case Category.humans: imagePath = "Human"; break;
             default: imagePath = null; break;
         }
-        Debug.Log(imagePath);
         if (imagePath != null)
         {
             Debug.Log("Graphic/Diary/Images/" + imagePath + "/" + diaryData.spritePath + "_list");

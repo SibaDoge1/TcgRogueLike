@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +11,15 @@ public static class LoadingManager {
     {
         if (panel == null)
         {
-            panel = GameObject.Find("Tools_UI").transform.Find("LoadingPanel").GetComponent<LoadingPanel>();
+            try
+            {
+                panel = GameObject.Find("Tools_UI").transform.Find("LoadingPanel").GetComponent<LoadingPanel>();
+            }
+            catch(NullReferenceException e)
+            {
+                Debug.Log("Loading object dosen't exist");
+                panel = null;
+            }
             return panel != null;
         }
         else
@@ -23,7 +32,8 @@ public static class LoadingManager {
         {
             SceneManager.LoadScene(scene);
         }
-        panel.LoadAsync(scene);
+        FadeTool.FadeOutIn(0.5f, 0, () => { panel.LoadAsync(scene); }, null);
+        //panel.LoadAsync(scene);
     }
 
     public static void OnLoadComplete()

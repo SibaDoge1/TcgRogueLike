@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -39,7 +40,15 @@ public static class FadeTool
     {
         if (fade == null)
         {
-            fade = GameObject.Find("Tools_UI").transform.Find("Fade").GetComponent<Fade>();
+            try
+            {
+                fade = GameObject.Find("Tools_UI").transform.Find("Fade").GetComponent<Fade>();
+            }
+            catch(NullReferenceException e)
+            {
+                Debug.LogWarning("Fade object dosen't exist");
+                fade = null;
+            }
             return fade != null;
         }
         else
