@@ -228,17 +228,17 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GetEnding(bool isBad)
     {
-        if(isBad)
-        {
-            SaveManager.GetEnding(1);//BadEnd
-        }else
-        {
-            if (EndingCondition.IsEdited)
-                SaveManager.GetEnding(2);// normalEnd
-            else
-                SaveManager.GetEnding(3); // trueEnd
-        }
+        int idx;
 
+        if (isBad)
+            idx = 1; //BadEnd
+        else if (EndingCondition.IsEdited)
+            idx = 2; // normalEnd
+        else
+            idx = 3; // trueEnd
+
+        Debug.Log("Ending: " + idx);
+        SaveManager.GetEnding(idx);
     }
     private bool isGamePaused;
     public bool IsGamePaused
