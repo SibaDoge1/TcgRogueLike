@@ -49,6 +49,10 @@ public class UIManager : MonoBehaviour
     BuffUI buffUI;
     CardInfoPanel cardInfoPanel;
     UIAnim uianimations;
+    public UIAnim uiAnim
+    {
+        get { return uianimations; }
+    }
     SaveUI saveUI;
     MenuUI menuUI;
     #region Status
@@ -116,14 +120,6 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    public void StartUIAnim(UIAnimation ani)
-    {
-        uianimations.ShowAnim(ani);
-    }
-    public void StartUIAnim(UIAnimation ani,BUFF buff)
-    {
-        uianimations.ShowAnim(ani,buff);
-    }
     public void StatusTextUpdate()
     {
         buffUI.TextUpdate();

@@ -13,15 +13,60 @@ public class InGameSaveData
 
     public int floor;
     public int hp;
-    public List<int> deckCards;
+    public List<CardSaveData> deckCards;
     public List<int> attainCards;
-    public bool pablus;
-    public bool xynus;
+    public EndingConditions ending;
     public int seed;
     public DateTimeOffset savedTime;
 }
 
-
+/// <summary>
+/// 범위도 똫같이 로드하기위해 필요함
+/// </summary>
+[System.Serializable]
+public class CardSaveData
+{
+    public int index;
+    public CardType type;
+    public Figure figure;
+    public CardSaveData(int _index,CardType _type, Figure _figure)
+    {
+        index = _index;
+        type = _type;
+        figure = _figure;
+    }
+}
+[System.Serializable]
+public class EndingConditions
+{
+    private bool isEdit = false;
+    public bool IsEdited
+    {
+        get { return isEdit; }
+    }
+    public void EditModeOpened()
+    {
+        isEdit = true;
+    }
+    private bool xynus = false;
+    public bool Xynus
+    {
+        get { return xynus; }
+    }
+    public void KillXynus()
+    {
+        xynus = true;
+    }
+    private bool pablus = false;
+    public bool Pablus
+    {
+        get { return pablus; }
+    }
+    public void KillPablus()
+    {
+        pablus = true;
+    }
+}
 public static class InGameSaveManager
 {
     static string fileName = "Ingame.dat";
@@ -56,7 +101,7 @@ public static class InGameSaveManager
             return SaveData.hp;
         }
     }
-    public static List<int> DeckCards
+    public static List<CardSaveData> DeckCards
     {
         get { return SaveData.deckCards; }
     }
@@ -64,13 +109,9 @@ public static class InGameSaveManager
     {
         get { return SaveData.attainCards; }
     }
-    public static bool Pablus
+    public static EndingConditions Ending
     {
-        get { return SaveData.pablus; }
-    }
-    public static bool Xynus
-    {
-        get { return SaveData.xynus; }
+        get { return SaveData.ending ; }
     }
     public static int Seed
     {
@@ -124,15 +165,14 @@ public static class InGameSaveManager
 
 
 
-    public static void WriteAndSave(int _floor, int _hp, List<int> _deckCards,
-        List<int> _attainCards, int _seed, bool _Pablus, bool _Xynus)
+    public static void WriteAndSave(int _floor, int _hp, List<CardSaveData> _deckCards,
+        List<int> _attainCards, int _seed, EndingConditions _ending)
     {
         SaveData.floor = _floor;
         SaveData.hp = _hp;
         SaveData.deckCards = _deckCards;
         SaveData.attainCards = _attainCards;
-        SaveData.pablus = _Pablus;
-        SaveData.xynus = _Xynus;
+        SaveData.ending = _ending;
         SaveData.isSaved = true;
         SaveData.seed = _seed;
         SaveData.version = version;

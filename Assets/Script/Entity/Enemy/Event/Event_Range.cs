@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Event_Range : Enemy
 {
-    bool isFailed=false;
     protected override void SetActionLists()
     {
         act = new List<Action>() {new Action(Delay),new Action(Destroy)};
@@ -23,18 +22,8 @@ public class Event_Range : Enemy
     }
     IEnumerator Destroy()
     {
-        isFailed = true;
-        currentRoom.RoomName = "fail_range";
+        currentRoom.RoomName = "fail";
         DestroyThis();
         yield return null;
-    }
-    protected override void OnDieCallback()
-    {
-        if(!isFailed)
-        {
-            UIManager.instance.StartUIAnim(UIAnimation.Attain);
-        }
-
-        base.OnDieCallback();
     }
 }

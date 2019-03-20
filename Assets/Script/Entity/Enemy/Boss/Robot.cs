@@ -161,7 +161,7 @@ public class Robot : Enemy
             }
         }
 
-        if(GameManager.instance.Pablus && GameManager.instance.Xynus )
+        if(GameManager.instance.EndingCondition.Pablus && GameManager.instance.EndingCondition.Xynus )
         {
             OffTile_Floor stair = ArchLoader.instance.GetOffTile(95) as OffTile_Floor;
             stair.Init(95);
@@ -169,7 +169,7 @@ public class Robot : Enemy
             stair.targetFloor = 5;
         }else
         {
-            //BAD END
+            GameManager.instance.GetEnding(true);
         }
 
 

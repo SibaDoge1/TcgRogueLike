@@ -19,11 +19,6 @@ public class Config : MonoBehaviour
         instance = this;
     }
 
-
-    [Header("Seed")]
-    public bool UseRandomSeed;
-    public int Seed;
-
     [Header("Deck Settings")]
     public int HandMax = 5;
 

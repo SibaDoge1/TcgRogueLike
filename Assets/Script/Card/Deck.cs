@@ -12,7 +12,7 @@ public class DeckManager
         get { return deck; }
         set
         {
-            deck = value;
+            deck = value;            
         }
     }
     List<Card> attainCards;
@@ -36,7 +36,7 @@ public class DeckManager
 
 	public Card Draw(){
 		if (deck.Count <= count) {
-			return Card.GetCardByNum(99);
+			return Card.GetCard(99);
 		}
 		Card card = deck [count];
         count++;
@@ -70,6 +70,7 @@ public class DeckManager
             }
         }
     }
+
 	#region Private
 
 

@@ -29,17 +29,29 @@ public class CardInfoPanel : MonoBehaviour {
 
     public void SetUnknown()
     {
-        cardName.text = "???";
+        render.enabled = false;
+        cardAttribute.enabled = false;
+        range.enabled = false;
+        cost.gameObject.SetActive(false);
+        range.gameObject.SetActive(false);
+        cardAttribute.gameObject.SetActive(false);
+
+        cardName.text = "";
         text.text = "카드 데이터를 읽어올 수 없습니다. 단말기에서 카드를 먼저 해독해주세요";
-        render.sprite = ArchLoader.instance.GetCardSprite("error");
-        cardAttribute.sprite = ArchLoader.instance.GetCardSprite("error");
+
         cardUpgrade.enabled = false;
-        range.sprite = ArchLoader.instance.GetCardSprite("error");
         SetCost(0);
     }
 
     public void SetCard(Card data)
     {
+        render.enabled = true; 
+        cardAttribute.enabled = true;
+        range.enabled = true;
+        cost.gameObject.SetActive(true);
+        range.gameObject.SetActive(true);
+        cardAttribute.gameObject.SetActive(true);
+
         cardName.text = data.Name;
         text.text = data.Info;
         render.sprite = ArchLoader.instance.GetCardSprite(data.SpritePath);

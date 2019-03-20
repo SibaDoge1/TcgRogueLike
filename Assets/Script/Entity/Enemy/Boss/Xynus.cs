@@ -192,7 +192,7 @@ public class Xynus : Enemy {
             }
         }
 
-        GameManager.instance.Xynus = true;
+        GameManager.instance.EndingCondition.KillXynus();
         base.OnDieCallback();
     }
 }

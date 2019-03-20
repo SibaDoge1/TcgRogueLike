@@ -52,6 +52,9 @@ public abstract class Enemy : Character {
         ClearRangeList();
 		currentRoom.OnEnemyDead (this);
         ObjectPoolManager.instance.PoolEffect(EnemyEffect.DIE, currentTile);
+        ///업적 : 몬스터 킬
+
+        SaveManager.killMonster(entityNum);
         if(GameManager.instance.CurrentTurn == Turn.ENEMY)
         {
             OnEndTurn();

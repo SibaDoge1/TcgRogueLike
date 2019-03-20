@@ -3,43 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum UIAnimation {Buff,Attain,Report}
 public class UIAnim : MonoBehaviour {
 
     Animator Buff;
     Animator AttainCard;
-    Animator Report;
+    Animator Entry;
     Image buffImage;
+    Image entryImage;
+    Image attainImage;
 
-    
     private void Awake()
     {
         Buff = transform.Find("Buff").GetComponent<Animator>();
         buffImage = Buff.GetComponent<Image>();
 
+        Entry = transform.Find("EntryPopUp").GetComponent<Animator>();
+        entryImage = Entry.GetComponent<Image>();
+
         AttainCard = transform.Find("AttainCard").GetComponent<Animator>();
-        Report = transform.Find("Report").GetComponent<Animator>();
+        attainImage = AttainCard.GetComponent<Image>();
     }
 
-    public void ShowAnim(UIAnimation ani)
+    /// <summary>
+    /// 이벤트룸 팝업
+    /// </summary>
+    /// <param name="success"></param>
+    public void ShowAnim(bool success)
     {
-        switch(ani)
+        if(success)
         {
-            case UIAnimation.Buff:
-                Buff.Play("PopUp", -1, 0);
-                break;
-            case UIAnimation.Attain:
-                AttainCard.Play("PopUp", -1, 0);
-                break;
-            case UIAnimation.Report:
-                Report.Play("PopUp", -1, 0);
-                break;
+            attainImage.sprite = ArchLoader.instance.GetPopUpImage("success");
+        }else
+        {
+            attainImage.sprite = ArchLoader.instance.GetPopUpImage("fail");
         }
+
+        AttainCard.Play("PopUp", -1, 0);
     }
-    public void ShowAnim(UIAnimation ani,BUFF buff)
+    public void ShowAnim(BUFF buff)
     {
-        buffImage.sprite = ArchLoader.instance.GetBuffImage(buff);
+        buffImage.sprite = ArchLoader.instance.GetPopUpImage(buff.ToString());
         Buff.Play("PopUp", -1, 0);
+    }
+    public void ShowAnim(string boss)
+    {
+        entryImage.sprite = ArchLoader.instance.GetPopUpImage(boss);
+        Entry.Play("PopUp", -1, 0);
     }
 
 }

@@ -48,15 +48,13 @@ public class DeckEditUI : MonoBehaviour
         isEditOk = true;//bool
         rect.anchoredPosition = Vector3.zero;
         MakeCardObjects();
-        changeButton.gameObject.SetActive(true);//b
-        //if
-        RevealAttainCards();
+        changeButton.gameObject.SetActive(true);
         deckSelected = new List<EditCardObject>();
-        attainSelected = new List<EditCardObject>();
-        //    
+        attainSelected = new List<EditCardObject>(); 
         attainText.text = "0/3";
         deckText.text = "0/3"; 
         UIManager.instance.CardInfoPanel_Off();
+        GameManager.instance.EndingCondition.EditModeOpened();
     }
     public void Off()
     {
@@ -77,7 +75,6 @@ public class DeckEditUI : MonoBehaviour
     }
     public void ExchangeCards()
     {
-
             for(int i=0; i<deckSelected.Count;i++)
             {
                 int di = deckSelected[i].Index;
@@ -97,7 +94,14 @@ public class DeckEditUI : MonoBehaviour
                 attainSelected[i].SetParent(deckViewPort, true);
                 attainSelected[i].Index = di;
                 attainSelected[i].Locate(di);
-            }
+                
+                ///업적 : 카드 획득
+                if(attainSelected[i].GetCard().Type == CardType.S)
+                {
+                    SaveManager.GetCard(attainSelected[i].Index);
+                }
+
+        }
          
         for(int i=deckSelected.Count-1; i>=0;i--)
         {
@@ -195,7 +199,7 @@ public class DeckEditUI : MonoBehaviour
         {
             attainCardObjects[i].SetParent(attainViewPort,false);
             attainCardObjects[i].SetDeckUI(this);
-            attainCardObjects[i].SetRenderUnknown();
+            attainCardObjects[i].SetRenderKnown();
         }
         SortCards();
     }

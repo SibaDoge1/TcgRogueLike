@@ -266,7 +266,7 @@ public class Pablus : Enemy {
                 currentRoom.enemyList[i].DestroyThis();
             }
         }
-        GameManager.instance.Pablus = true;
+        GameManager.instance.EndingCondition.KillPablus();
         base.OnDieCallback();
     }
 
