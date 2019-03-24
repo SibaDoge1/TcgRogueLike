@@ -23,7 +23,7 @@ public class EditCardObject : CardObject, IPointerClickHandler
     private bool isOnDeck;
 
 
-    public Card GetCard()
+    public Card GetData()
     {
         return data;
     }
