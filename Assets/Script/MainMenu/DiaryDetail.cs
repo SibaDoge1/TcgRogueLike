@@ -57,7 +57,6 @@ public class DiaryDetail : MonoBehaviour {
         title.text = diaryData.title;
         content.text = "\n" + diaryData.info;
         content.rectTransform.sizeDelta = new Vector2(0, content.preferredHeight);
-        bar.value = 1f;
         if (categoryObject.Find("Name") != null)
             categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
 
@@ -83,6 +82,7 @@ public class DiaryDetail : MonoBehaviour {
                 image.sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_thumbnail");
             }
         }
+        bar.value = 0.99f;
         //if (categoryObject.Find("Image") != null)
         // categoryObject.Find("Image").GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + objectPath + "/" + diaryData.spritePath);
     }
@@ -95,6 +95,7 @@ public class DiaryDetail : MonoBehaviour {
             OffNew();
         diary.CheckNew();
         categoryObject.gameObject.SetActive(false);
+        bar.value = 1f;
         gameObject.SetActive(false);
     }
 

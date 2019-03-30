@@ -7,8 +7,8 @@ public class Intro : MonoBehaviour {
 
     public List<Sprite> pages;
     private Image image;
-    private Animator anim;
     private int pageCount;
+    private Animator anim;
 
     public void OnSkipButtonDown()
     {
@@ -37,18 +37,18 @@ public class Intro : MonoBehaviour {
         pageCount = 0;
 
         image.sprite = pages[pageCount];
-        FadeTool.FadeIn(0.5f);
-        yield return new WaitForSeconds(6f);
-        FadeTool.FadeOut(0.5f);
-        yield return new WaitForSeconds(1f);
+        FadeTool.FadeIn(0.4f);
+        yield return new WaitForSeconds(4f);
+        FadeTool.FadeOut(0.4f);
+        yield return new WaitForSeconds(0.8f);
         pageCount++;
         while (pageCount < pages.Count)
         {
             image.sprite = pages[pageCount];
-            FadeTool.FadeIn(0.5f);
-            yield return new WaitForSeconds(3.5f);
-            FadeTool.FadeOut(0.5f);
-            yield return new WaitForSeconds(0.8f);
+            FadeTool.FadeIn(0.4f);
+            yield return new WaitForSeconds(2f);
+            FadeTool.FadeOut(0.4f);
+            yield return new WaitForSeconds(0.7f);
             pageCount++;
         } 
         FadeTool.FadeIn(0.01f);
@@ -56,4 +56,5 @@ public class Intro : MonoBehaviour {
         yield return new WaitForSeconds(2f);
         Off();
     }
+    
 }

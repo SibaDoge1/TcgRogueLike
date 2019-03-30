@@ -12,6 +12,10 @@ public class Ending : MonoBehaviour {
     Scrollbar bar;
     Transform content;
     Image image;
+    GameObject BadImage;
+
+    public List<Sprite> badPages;
+    private int pageCount;
 
     // Use this for initialization
     void Awake()
@@ -19,15 +23,19 @@ public class Ending : MonoBehaviour {
         ArchLoader.instance.StartCache();
         switch (SaveManager.curEnding)
         {
-            case 2: SoundDelegate.instance.PlayBGM(BGM.NORMALENDINGCUT); break;
-            case 3: SoundDelegate.instance.PlayBGM(BGM.TRUEENDINGCUT); break;
+            case 1: SoundDelegate.instance.PlayBGM(BGM.NORMALENDINGCUT);
+                FadeTool.FadeOutIn(0.5f, 1f, ShowBadImage); break;
+            case 2: SoundDelegate.instance.PlayBGM(BGM.NORMALENDINGCUT);
+                FadeTool.FadeIn(1f, StartCredit); break;
+            case 3: SoundDelegate.instance.PlayBGM(BGM.TRUEENDINGCUT);
+                FadeTool.FadeIn(1f, StartCredit); break;
             default: break;
         }
-        FadeTool.FadeIn(1f, StartCredit);
         view = GameObject.Find("Canvas").transform.Find("Credit").GetComponent<ScrollRect>();
         bar = view.transform.Find("Scrollbar Vertical").GetComponent<Scrollbar>();
         //content = view.transform.Find("");
         image = GameObject.Find("Canvas").transform.Find("Image").GetComponent<Image>();
+        BadImage = GameObject.Find("Canvas").transform.Find("BadImage").gameObject;
     }
 
     public void OnExitButtonDown()
@@ -42,13 +50,12 @@ public class Ending : MonoBehaviour {
 
     public void ShowImage()
     {
-        switch (SaveManager.curEnding)
-        {
-            case 2: image.sprite = endImages[SaveManager.curEnding]; break;
-            case 3: image.sprite = endImages[SaveManager.curEnding]; break;
-            default: break;
-        }
+        image.sprite = endImages[SaveManager.curEnding];
         image.gameObject.SetActive(true);
+    }
+    public void ShowBadImage()
+    {
+        BadImage.SetActive(true);
     }
 
     IEnumerator CreditByTimeRoutine()
@@ -73,4 +80,25 @@ public class Ending : MonoBehaviour {
         FadeTool.FadeOutIn(0.5f, 0.5f, ShowImage);
     }
 */
+
+    IEnumerator BadCreditRoutine()
+    {
+        pageCount = 0;
+
+        image.sprite = badPages[pageCount];
+        FadeTool.FadeIn(0.4f);
+        yield return new WaitForSeconds(4f);
+        FadeTool.FadeOut(0.4f);
+        yield return new WaitForSeconds(0.8f);
+        pageCount++;
+        while (pageCount < badPages.Count)
+        {
+            image.sprite = badPages[pageCount];
+            FadeTool.FadeIn(0.4f);
+            yield return new WaitForSeconds(2f);
+            FadeTool.FadeOut(0.4f);
+            yield return new WaitForSeconds(0.7f);
+            pageCount++;
+        }
+    }
 }

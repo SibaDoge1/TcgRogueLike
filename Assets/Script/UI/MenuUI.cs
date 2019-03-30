@@ -7,9 +7,11 @@ using UnityEngine.UI;
 public class MenuUI : MonoBehaviour
 {
     private Option opt;
+    private Transform exit;
     void Awake()
     {
         opt = transform.Find("Option").GetComponent<Option>();
+        exit = transform.Find("ExitPanel");
     }
 
     public void On()
@@ -30,7 +32,19 @@ public class MenuUI : MonoBehaviour
     public void OnTitleButtonDown()
     {
         MainMenu.ButtonDown();
+        exit.gameObject.SetActive(true);
+    }
+
+    public void OnYesButtonDown()
+    {
+        MainMenu.ButtonDown();
         LoadingManager.LoadScene("Levels/MainMenu");
+    }
+
+    public void OnNoButtonDown()
+    {
+        MainMenu.ButtonDown();
+        exit.gameObject.SetActive(false);
     }
     public void OnExitButtonDown()
     {

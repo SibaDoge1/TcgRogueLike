@@ -185,7 +185,7 @@ public class DiaryData
             default: Debug.Log("다이어리 카테고리 형식이 맞지 않습니다!" + data[0] + data[1]); break;
         }
         title = data[2];
-        info = data[3].Replace("$", "\n");
+        info = data[3].Replace("$", "\n").Replace("\"", "");
         spritePath = data[4];
     }
 }

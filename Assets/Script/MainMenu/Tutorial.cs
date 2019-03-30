@@ -30,6 +30,7 @@ public class Tutorial : MonoBehaviour {
             maxPage += pages[curChapter].page.Count;
         }
         maxPage++;
+        Debug.Log(maxPage);
     }
 
     private void DisplayCount()
@@ -40,7 +41,7 @@ public class Tutorial : MonoBehaviour {
             totalPage += pages[chap].page.Count;
         }
         totalPage += curPage+1;
-        text.text = totalPage + " / " + maxPage;
+        text.text = totalPage + " / " + 24;
     }
 
     public void Next()
