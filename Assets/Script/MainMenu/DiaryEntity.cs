@@ -51,7 +51,8 @@ public class DiaryEntity : MonoBehaviour {
             }
             else
             {
-                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_list");
+                image.SetActive(false);
+                //image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Graphic/Diary/Images/" + "default_list");
             }
         }
     }
