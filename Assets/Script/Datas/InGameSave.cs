@@ -44,7 +44,7 @@ public class EndingConditions
     {
         get { return isEdit; }
     }
-    public void EditModeOpened()
+    public void CardExchanged()
     {
         isEdit = true;
     }

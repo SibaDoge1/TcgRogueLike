@@ -54,7 +54,6 @@ public class DeckEditUI : MonoBehaviour
         attainText.text = "0/3";
         deckText.text = "0/3"; 
         UIManager.instance.CardInfoPanel_Off();
-        GameManager.instance.EndingCondition.EditModeOpened();
     }
     public void Off()
     {
@@ -75,33 +74,35 @@ public class DeckEditUI : MonoBehaviour
     }
     public void ExchangeCards()
     {
+            for(int i=0; i<attainSelected.Count; i++)
+            {
+                ///업적 : 카드 획득
+                if (attainSelected[i].GetData().Type == CardType.S)
+                {
+                SaveManager.GetCard(attainSelected[i].GetData().Index);
+                }
+           }
+
             for(int i=0; i<deckSelected.Count;i++)
             {
                 int di = deckSelected[i].Index;
                 int ai = attainSelected[i].Index;
-                deck.Remove(deckSelected[i].GetCard());//덱에서 어테인으로
+                deck.Remove(deckSelected[i].GetData());//덱에서 어테인으로
                 deckCardObjects.Remove(deckSelected[i]);
-                attain.Add(deckSelected[i].GetCard());
+                attain.Add(deckSelected[i].GetData());
                 attainCardObjects.Add(deckSelected[i]);
                 deckSelected[i].SetParent(attainViewPort, false);
                 deckSelected[i].Index = ai;
                 deckSelected[i].Locate(ai);
 
-                attain.Remove(attainSelected[i].GetCard());//어테인에서 덱으로
+                attain.Remove(attainSelected[i].GetData());//어테인에서 덱으로
                 attainCardObjects.Remove(attainSelected[i]);
-                deck.Add(attainSelected[i].GetCard());
+                deck.Add(attainSelected[i].GetData());
                 deckCardObjects.Add(attainSelected[i]);
                 attainSelected[i].SetParent(deckViewPort, true);
                 attainSelected[i].Index = di;
                 attainSelected[i].Locate(di);
-                
-                ///업적 : 카드 획득
-                if(attainSelected[i].GetCard().Type == CardType.S)
-                {
-                    SaveManager.GetCard(attainSelected[i].Index);
-                }
-
-        }
+            }
          
         for(int i=deckSelected.Count-1; i>=0;i--)
         {
@@ -119,6 +120,7 @@ public class DeckEditUI : MonoBehaviour
 
         deckText.text = "";
         attainText.text = "";
+        GameManager.instance.EndingCondition.CardExchanged();
     }
 
 
@@ -241,8 +243,8 @@ public class DeckEditUI : MonoBehaviour
     {
         deckCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {
-            int aIndex = (int)A.GetCard().Type*1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
-            int bIndex = (int)B.GetCard().Type*1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
+            int aIndex = (int)A.GetData().Type*1000 + A.GetData().Index*100 + (int)A.GetData().CardFigure;
+            int bIndex = (int)B.GetData().Type*1000 + B.GetData().Index*100 + (int)B.GetData().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
@@ -251,8 +253,8 @@ public class DeckEditUI : MonoBehaviour
         });
         attainCardObjects.Sort(delegate (EditCardObject A, EditCardObject B)
         {           
-            int aIndex = (int)A.GetCard().Type * 1000 + A.GetCard().Index*100 + (int)A.GetCard().CardFigure;
-            int bIndex = (int)B.GetCard().Type * 1000 + B.GetCard().Index*100 + (int)B.GetCard().CardFigure;
+            int aIndex = (int)A.GetData().Type * 1000 + A.GetData().Index*100 + (int)A.GetData().CardFigure;
+            int bIndex = (int)B.GetData().Type * 1000 + B.GetData().Index*100 + (int)B.GetData().CardFigure;
             if (aIndex > bIndex)
                 return 1;
             else if (aIndex < bIndex)
