@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
         remainText = transform.Find("StatusUI").Find("CardRemain").GetComponentInChildren<Text>();
         floorText = transform.Find("Frame").Find("floor").GetComponentInChildren<Text>();
         roomDebugText = transform.Find("Frame").Find("roomDebugText").GetComponent<Text>();
+        roomDebugText.gameObject.SetActive(false); //Change: 방번호 창 비활성화해둠
     }
 
     TextUI textUI;
@@ -169,9 +170,9 @@ public class UIManager : MonoBehaviour
         hand.Off();
     }
 
-    public void SaveUIOn()
+    public void SaveUIOn(voidFunc OnSave)
     {
-        saveUI.SaveUIOn();
+        saveUI.SaveUIOn(OnSave);
     }
     public HandManager GetHand()
     {

@@ -9,14 +9,17 @@ public class Intro : MonoBehaviour {
     private Image image;
     private int pageCount;
     private Animator anim;
+    private voidFunc onEnd;
 
     public void OnSkipButtonDown()
     {
+        FadeTool.FadeIn(0.01f);
         Off();
     }
 
-    public void On()
+    public void On(voidFunc OnEnd)
     {
+        onEnd = OnEnd;
         image = transform.Find("Image").GetComponent<Image>();
         anim = transform.Find("Anim").GetComponent<Animator>();
         anim.Play("default");
@@ -30,6 +33,7 @@ public class Intro : MonoBehaviour {
         image.sprite = pages[0];
         StopCoroutine(StartIntro());
         gameObject.SetActive(false);
+        onEnd();
     }
 
     IEnumerator StartIntro()

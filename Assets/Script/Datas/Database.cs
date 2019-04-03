@@ -107,7 +107,7 @@ public class CardData
         val2 = int.Parse(data[5]);
         val3 = int.Parse(data[6]);
 
-        Debug.Log(data[0] + data[1]);
+        //Debug.Log(data[0] + data[1]);
         _info = data[7];
         spritePath = data[8];
         className = data[9];

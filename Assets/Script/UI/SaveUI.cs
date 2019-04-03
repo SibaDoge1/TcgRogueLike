@@ -6,9 +6,11 @@ public class SaveUI : MonoBehaviour
 {
     Vector3 offPos = new Vector3(0, -5000, 0);
     float originVolume;
+    voidFunc onSave;
 
-    public void SaveUIOn()
+    public void SaveUIOn(voidFunc OnSave = null)
     {
+        onSave = OnSave;
         transform.localPosition = new Vector3(0, 0, 0);
         originVolume = SoundDelegate.instance.BGMSound;
         SoundDelegate.instance.BGMSound = 0;
@@ -24,6 +26,7 @@ public class SaveUI : MonoBehaviour
              GameManager.instance.BuildSeed,
                 GameManager.instance.EndingCondition);
 
+        onSave();
         SaveManager.SaveAll();
         DisableAllChildren();
         LoadingManager.LoadScene("Levels/MainMenu");      

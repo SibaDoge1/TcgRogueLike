@@ -13,11 +13,11 @@ public class MainMenu : MonoBehaviour
     private Diary diary;
     private Intro intro;
     public delegate void voidFunc();
-    public bool isBtnEnable;
+    public static bool isBtnEnable;
 
     void Awake()
     {
-        isBtnEnable = true;
+        isBtnEnable = false;
         //FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
@@ -35,7 +35,11 @@ public class MainMenu : MonoBehaviour
             Database.ReadDatas();
             ArchLoader.instance.StartCache();
             GooglePlayManager.Init();
-            intro.On();
+            intro.On(()=>
+            {
+                GooglePlayManager.LogIn(SaveManager.LoadAll, SaveManager.LoadAll);
+                CheckNew();
+            });
         }
 
     }
@@ -47,9 +51,6 @@ public class MainMenu : MonoBehaviour
         {
             GameObject.Find("Canvas").transform.Find("Btn_Continue").gameObject.SetActive(false);
         }
-
-        SaveManager.LoadAll();
-        CheckNew();
     }
 
     public void CheckNew()

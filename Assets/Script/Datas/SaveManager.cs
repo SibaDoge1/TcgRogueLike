@@ -26,6 +26,7 @@ public class SaveData
         gameOverNum = 0;
         isSet = false;
         savedTime = DateTimeOffset.Parse("2000/01/01 00:00:00");
+        diaryUnlockCount = 0;
     }
     public float bgmValue;
     public float fxValue;
@@ -39,6 +40,7 @@ public class SaveData
     public uint gameOverNum;
     public bool isSet;
     public DateTimeOffset savedTime;
+    public int diaryUnlockCount;
 }
 
 /// <summary>
@@ -117,23 +119,20 @@ public static class SaveManager
             //saveData.diaryUnlockData.Add(i, new bool[] { isUnlock, false });
             return;
         }
-        saveData.diaryUnlockData[i][0] = isUnlock;
 
-        if (isUnlock == true)
+        if (saveData.diaryUnlockData[i][0] != true)
         {
-            saveData.diaryUnlockData[i][1] = true;
-            /*
-            int unlockCount = 0;
-            foreach(KeyValuePair<int, bool[]> pair in saveData.achiveUnlockData)
+            saveData.diaryUnlockData[i][0] = isUnlock;
+            if(isUnlock == true)
             {
-                if (pair.Value[0] == true) unlockCount++;
+                saveData.diaryUnlockData[i][1] = true;
+                saveData.diaryUnlockCount++;
+                foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
+                {
+                    if (pair.Value.type == AchiveType.achive && int.Parse(pair.Value.condition) == saveData.diaryUnlockCount)
+                        GetAchivement(pair.Key);
+                }
             }
-            foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
-            {
-                if (pair.Value.type == AchiveType.achive && int.Parse(pair.Value.condition) == unlockCount)
-                    GetAchivement(pair.Key);
-            }
-            */
         }
         else saveData.diaryUnlockData[i][1] = false;
     }
@@ -219,6 +218,13 @@ public static class SaveManager
         {
             SetDiaryUnlockData(pair.Key, true);
         }
+        /*
+        foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
+        {
+            if (int.Parse(pair.Value.reward) != 56)
+                GetAchivement(pair.Key);
+        }
+        */
     }
     public static void SetCardAllTrue()
     {
@@ -503,6 +509,12 @@ public static class SaveManager
         SetUIValue(saveData.UIValue);
     }
 
+    public static void OnCloudLoadFailed()
+    {
+        MainMenu.isBtnEnable = true;
+        return;
+    }
+
     public static void OnCloudLoadCompleted(byte[] byteArr)
     {
         string json = Encoding.UTF8.GetString(byteArr);
@@ -523,6 +535,7 @@ public static class SaveManager
         }
         saveData = cloud;
         ApplySave();
+        MainMenu.isBtnEnable = true;
         return;
     }
 

@@ -1,4 +1,4 @@
-﻿//#define GPGS_Enabled ///구글 연동 사용할 경우 요거 주석 풀기
+﻿#define GPGS_Enabled ///구글 연동 사용할 경우 요거 주석 풀기
 
 using System.Collections;
 using System.Collections.Generic;
@@ -234,6 +234,12 @@ public static class GooglePlayManager
 
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 
+        if(savedGameClient == null)
+        {
+            Debug.LogWarning("클라우드 셋팅이 잘못되었습니다");
+            SaveManager.OnCloudLoadFailed();
+            return;
+        }
 
         if (bSave)
 
@@ -312,13 +318,31 @@ public static class GooglePlayManager
     public static void LoadFromCloud(string fileName, OnLoadComplete _onLoadComplete)
     {
 #if GPGS_Enabled
+        onLoadComplete = _onLoadComplete;
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
         }
         if (!CheckLogin())
         {
-            LogIn(null, null);
+            Social.localUser.Authenticate((bool success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("login success");
+                    OpenSavedGame(fileName, false);
+                    // to do ...
+                    // 구글 플레이 게임 서비스 로그인 성공 처리
+                }
+                else
+                {
+                    Debug.Log("login fail");
+                    SaveManager.OnCloudLoadFailed();
+                    // to do ...
+                    // 구글 플레이 게임 서비스 로그인 실패 처리
+                }
+            });
+            return;
             //로그인되지 않았으니 로그인 루틴을 진행하던지 합니다.
         }
 
@@ -340,6 +364,7 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 로드 중 파일열기에 실패 했습니다: " + status);
+            SaveManager.OnCloudLoadFailed();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
         }
     }
@@ -364,6 +389,7 @@ public static class GooglePlayManager
         else
         {
             Debug.LogWarning("클라우드 로드 중 데이터 읽기에 실패 했습니다: " + status);
+            SaveManager.OnCloudLoadFailed();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
         }
     }
