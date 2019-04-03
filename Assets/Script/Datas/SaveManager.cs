@@ -521,6 +521,7 @@ public static class SaveManager
         if (json.Length == 0)
         {
             Debug.Log("0 lenth data from cloud save, quit");
+            MainMenu.isBtnEnable = true;
             return;
         }
         Debug.Log("cloud load: " + json);
@@ -530,6 +531,7 @@ public static class SaveManager
             if (DateTimeOffset.Compare(cloud.savedTime, saveData.savedTime) < 0)
             {
                 Debug.Log("로컬이 클라우드보다 최신입니다. 로컬세이브를 적용합니다. ");
+                MainMenu.isBtnEnable = true;
                 return;
             }
         }
