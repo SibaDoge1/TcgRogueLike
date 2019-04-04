@@ -10,7 +10,7 @@ public class OffTile_Save : OffTile {
         if(ot is Player)
         {
             UIManager.instance.SaveUIOn(DestroyThis);
-            DestroyThis();
+            //DestroyThis();
         }
     }
 
