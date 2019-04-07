@@ -122,6 +122,19 @@ public static class GooglePlayManager
 #endif
     }
 
+    public static void CheckGoogleAchive(int i)
+    {
+        switch (i)
+        {
+            case 1: UnlockAchievement(GPGSIds.achievement, 100); break;
+            case 7: UnlockAchievement(GPGSIds.achievement_2, 100); break;
+            case 4: UnlockAchievement(GPGSIds.achievement_3, 100); break;
+            case 5: UnlockAchievement(GPGSIds.achievement_4, 100); break;
+            case 6: UnlockAchievement(GPGSIds.achievement_5, 100); break;
+            default: break;
+        }
+    }
+
     public static void ShowAchievementUI()
     {
 #if GPGS_Enabled
@@ -385,6 +398,7 @@ public static class GooglePlayManager
             //데이터 읽기에 성공했습니다.
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
             onLoadComplete(data);
+            onLoadComplete = null;
         }
         else
         {

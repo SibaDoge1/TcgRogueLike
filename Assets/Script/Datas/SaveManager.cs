@@ -134,7 +134,6 @@ public static class SaveManager
                 }
             }
         }
-        else saveData.diaryUnlockData[i][1] = false;
     }
     private static void SetMonsterKillData(int i, int value)
     {
@@ -319,8 +318,8 @@ public static class SaveManager
         {
             if(int.Parse(pair.Value.condition) == i && pair.Value.type == AchiveType.kill)
             {
-                GetAchivement(pair.Key);
-                return;
+                    GetAchivement(pair.Key);
+                    return;
             }
         }
     }
@@ -331,6 +330,8 @@ public static class SaveManager
     /// <param name="i">업적번호</param>
     public static void GetAchivement(int i)
     {
+        if (GetAchiveUnlockData(i) == true)
+            return;
         if (!SetAchiveUnlockData(i, true))
             return;
         Debug.Log("Save - [Achivement] , Num : " + i);
@@ -342,6 +343,7 @@ public static class SaveManager
         {
             SetCardUnlockData(int.Parse(Database.achiveDatas[i].cardReward), true);
         }*/
+        GooglePlayManager.CheckGoogleAchive(i);
         SaveAll();
     }
 
@@ -427,8 +429,10 @@ public static class SaveManager
         Debug.Log("Save - [GameOver] , count : " + saveData.gameOverNum);
         foreach (KeyValuePair<int, AchiveData> pair in Database.achiveDatas)
         {
-            if (pair.Value.type == AchiveType.gameover && int.Parse(pair.Value.condition) >= saveData.gameOverNum)
+            if (pair.Value.type == AchiveType.gameover && int.Parse(pair.Value.condition) == saveData.gameOverNum)
             {
+                if (GetAchiveUnlockData(pair.Key) == true)
+                    return;
                 GetAchivement(pair.Key);
                 return;
             }
@@ -452,11 +456,14 @@ public static class SaveManager
         GooglePlayManager.SaveToCloud("SaveData", binaryData);
     }
 
+
+    static event voidFunc OnCloudLoadCompleteEvent;
     /// <summary>
     /// 로드시에 부르는 메소드
     /// </summary>
-    public static void LoadAll()
+    public static void LoadAll(bool isCloud, voidFunc onCloudLoadComplete = null)
     {
+        OnCloudLoadCompleteEvent += onCloudLoadComplete;
         byte[] binary = BinaryLocalLoad(SaveManager.FileName, SaveManager.Path);
         if(binary != null)
         {
@@ -465,7 +472,8 @@ public static class SaveManager
             Debug.Log("Local Save Loaded" + json);
         }
         ApplySave();
-        GooglePlayManager.LoadFromCloud(FileName, OnCloudLoadCompleted);
+        if(isCloud)
+            GooglePlayManager.LoadFromCloud(FileName, OnCloudLoadCompleted);
     }
 
     #region Debug
@@ -537,7 +545,9 @@ public static class SaveManager
         }
         saveData = cloud;
         ApplySave();
-        MainMenu.isBtnEnable = true;
+        if(OnCloudLoadCompleteEvent != null)
+            OnCloudLoadCompleteEvent();
+        OnCloudLoadCompleteEvent = null;
         return;
     }
 

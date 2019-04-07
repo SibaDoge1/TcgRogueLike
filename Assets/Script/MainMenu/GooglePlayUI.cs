@@ -23,7 +23,7 @@ public class GooglePlayUI : MonoBehaviour {
     }
     public void OnAchiveClear()
     {
-        GooglePlayManager.UnlockAchievement(GPGSIds.achievement_end,100);
+        GooglePlayManager.UnlockAchievement(GPGSIds.achievement,100);
     }
     public void OnAchive()
     {
@@ -35,7 +35,11 @@ public class GooglePlayUI : MonoBehaviour {
     }
     public void OnLoad()
     {
-        SaveManager.LoadAll();
+        SaveManager.LoadAll(true, OnLoadComplete);
+    }
+    public void OnLoadComplete()
+    {
+        NoticeTool.Notice("Cloud Load Complete!", 2f);
     }
     public void OnInit()
     {

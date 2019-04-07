@@ -90,7 +90,7 @@ public class Diary : MonoBehaviour {
         Diaries.Add(Category.humans, new List<int>());
         Diaries.Add(Category.irregulars, new List<int>());
         Diaries.Add(Category.raChips, new List<int>());
-        Diaries.Add(Category.etc, new List<int>());
+        //Diaries.Add(Category.etc, new List<int>());
         for (int i = 1; i <= Database.diaryDatas.Count; i++)
         {
             switch (Database.diaryDatas[i].category)
@@ -140,7 +140,7 @@ public class Diary : MonoBehaviour {
         human.SetTabColor(deActiveColor);
         irregular.SetTabColor(deActiveColor);
         raChip.SetTabColor(deActiveColor);
-        etc.SetTabColor(deActiveColor);
+        //etc.SetTabColor(deActiveColor);
         switch (category)
         {
             case Category.irregulars: irregular.SetTabColor(activeColor); break;

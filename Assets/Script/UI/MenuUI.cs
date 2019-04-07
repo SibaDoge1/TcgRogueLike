@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class MenuUI : MonoBehaviour
 {
+    private Tutorial tuto;
     private Option opt;
     private Transform exit;
     void Awake()
     {
         opt = transform.Find("Option").GetComponent<Option>();
+        tuto = transform.Find("Tutorial").GetComponent<Tutorial>();
         exit = transform.Find("ExitPanel");
     }
 
@@ -27,6 +29,12 @@ public class MenuUI : MonoBehaviour
     {
         MainMenu.ButtonDown();
         opt.On();
+    }
+
+    public void OnTutoButtonDown()
+    {
+        MainMenu.ButtonDown();
+        tuto.On();
     }
 
     public void OnTitleButtonDown()

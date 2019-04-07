@@ -56,7 +56,7 @@ public class DiaryDetail : MonoBehaviour {
         categoryObject.gameObject.SetActive(true);
         title.text = diaryData.title;
         content.text = "\n" + diaryData.info;
-        content.rectTransform.sizeDelta = new Vector2(0, content.preferredHeight);
+        content.rectTransform.sizeDelta = new Vector2(1111.6f, content.preferredHeight);
         if (categoryObject.Find("Name") != null)
             categoryObject.Find("Name").GetComponent<Text>().text = diaryData.title;
 

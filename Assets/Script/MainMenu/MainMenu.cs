@@ -6,39 +6,44 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    private Transform canvas;
     private Tutorial tutorial;
     private GameObject _new;
+    private GameObject loadPanel;
     private Option option;
     private Exit exitPanel;
     private Diary diary;
     private Intro intro;
     public delegate void voidFunc();
-    public static bool isBtnEnable;
+    public static bool isBtnEnable = false;
 
     void Awake()
     {
-        isBtnEnable = false;
         //FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
         Application.targetFrameRate = 60;
         #endregion
-        tutorial = GameObject.Find("Canvas").transform.Find("Tutorial").gameObject.GetComponent<Tutorial>();
-        _new = GameObject.Find("Canvas").transform.Find("NewIcon").gameObject ;
-        option = GameObject.Find("Canvas").transform.Find("Option").gameObject.GetComponent<Option>();
-        exitPanel = GameObject.Find("Canvas").transform.Find("ExitPanel").gameObject.GetComponent<Exit>();
-        diary = GameObject.Find("Canvas").transform.Find("Diary").gameObject.GetComponent<Diary>();
-        intro = GameObject.Find("Canvas").transform.Find("Intro").gameObject.GetComponent<Intro>();
+        canvas = GameObject.Find("Canvas").transform;
+        tutorial = canvas.Find("Tutorial").gameObject.GetComponent<Tutorial>();
+        _new = canvas.Find("NewIcon").gameObject ;
+        option = canvas.Find("Option").gameObject.GetComponent<Option>();
+        exitPanel = canvas.Find("ExitPanel").gameObject.GetComponent<Exit>();
+        diary = canvas.Find("Diary").gameObject.GetComponent<Diary>();
+        intro = canvas.Find("Intro").gameObject.GetComponent<Intro>();
+        loadPanel = canvas.Find("LoadPanel").gameObject;
         if (!SaveManager.isintroSeen)
         {
             SaveManager.isintroSeen = true;
             Database.ReadDatas();
             ArchLoader.instance.StartCache();
+            SaveManager.LoadAll(false);
+            loadPanel.SetActive(true);
             GooglePlayManager.Init();
+            GooglePlayManager.LogIn(OnLogInComplete, OnLogInComplete);
             intro.On(()=>
             {
-                GooglePlayManager.LogIn(SaveManager.LoadAll, SaveManager.LoadAll);
-                CheckNew();
+                isBtnEnable = true;
             });
         }
 
@@ -49,8 +54,9 @@ public class MainMenu : MonoBehaviour
         SoundDelegate.instance.PlayBGM(BGM.FIELDTITLECUT);
         if (!InGameSaveManager.CheckSaveData())//GTS : 인게임 세이브 체크 추가
         {
-            GameObject.Find("Canvas").transform.Find("Btn_Continue").gameObject.SetActive(false);
+            canvas.Find("Btn_Continue").gameObject.SetActive(false);
         }
+        CheckNew();
     }
 
     public void CheckNew()
@@ -110,6 +116,11 @@ public class MainMenu : MonoBehaviour
         if (!isBtnEnable) return;
         ButtonDown();
         exitPanel.on();
+    }
+
+    public void OnLogInComplete()
+    {
+        loadPanel.SetActive(false);
     }
 
 
