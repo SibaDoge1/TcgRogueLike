@@ -27,7 +27,7 @@ public static class GooglePlayManager
 
     public static void Init()
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         //if (PlayGamesPlatform.Instance != null) return;
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         // enables saving game progress.
@@ -63,7 +63,7 @@ public static class GooglePlayManager
 
     public static void LogIn(voidFunc successFunc = null, voidFunc failFunc = null)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         Debug.Log("login");
         Social.localUser.Authenticate((bool success) =>
         {
@@ -89,15 +89,14 @@ public static class GooglePlayManager
 
     public static void LogOut()
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         PlayGamesPlatform.Instance.SignOut();
 #endif
     }
 
     public static bool CheckLogin()
     {
-
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         return Social.localUser.authenticated;
 #else
         return false;
@@ -106,7 +105,7 @@ public static class GooglePlayManager
 
     public static void UnlockAchievement(string achive, int score)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -137,7 +136,7 @@ public static class GooglePlayManager
 
     public static void ShowAchievementUI()
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -155,7 +154,7 @@ public static class GooglePlayManager
 
     public static void ReportScore(string borad, int score)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -170,7 +169,7 @@ public static class GooglePlayManager
 
     public static void ShowLeaderboardUI()
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -187,7 +186,7 @@ public static class GooglePlayManager
     //--------------------------------------------------------------------
     public static void ShowSelectUI()
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         uint maxNumToDisplay = 5;
         bool allowCreateNew = false;
         bool allowDelete = true;
@@ -218,7 +217,7 @@ public static class GooglePlayManager
 
     public static void SaveToCloud(string saveName, byte[] saveData)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -330,7 +329,7 @@ public static class GooglePlayManager
 
     public static void LoadFromCloud(string fileName, OnLoadComplete _onLoadComplete)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         onLoadComplete = _onLoadComplete;
         if (PlayGamesPlatform.Instance == null)
         {
@@ -411,7 +410,7 @@ public static class GooglePlayManager
     //--------------세이브 삭제 ------------------
     public static void DeleteGameData(string filename)
     {
-#if GPGS_Enabled
+#if !UNITY_EDITOR
         // Open the file to get the metadata.
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,

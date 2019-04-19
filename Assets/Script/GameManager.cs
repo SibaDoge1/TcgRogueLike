@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         {
             ArchLoader.instance.StartCache();
             Database.ReadDatas();
+            SaveManager.LoadAll(false);
         }
 
         player = ArchLoader.instance.GetPlayer();

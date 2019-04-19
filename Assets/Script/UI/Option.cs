@@ -7,12 +7,14 @@ public class Option : MonoBehaviour {
     private Slider bgmSlider;
     private Slider fxSlider;
     private Slider UISlider;
+    private ResetUI resetUI;
 
     void Awake()
     {
         bgmSlider = transform.Find("Slider_Bgm").GetComponent<Slider>();
         fxSlider = transform.Find("Slider_Fx").GetComponent<Slider>();
         UISlider = transform.Find("Slider_UI").GetComponent<Slider>();
+        resetUI = transform.Find("Panel").GetComponent<ResetUI>();
     }
 
     void OnEnable()
@@ -23,6 +25,7 @@ public class Option : MonoBehaviour {
     public void On()
     {
         gameObject.SetActive(true);
+        SetSliderValues();
     }
 
     public void Off()
@@ -58,4 +61,26 @@ public class Option : MonoBehaviour {
         Off();
     }
 
+    public void OnAchiveButtonDown()
+    {
+        MainMenu.ButtonDown();
+        GooglePlayManager.ShowAchievementUI();
+    }
+
+    public void OnCloudButtonDown()
+    {
+        MainMenu.ButtonDown();
+        SaveManager.LoadAll(true, OnLoadComplete);
+    }
+
+    public void OnResetButtonDown()
+    {
+        MainMenu.ButtonDown();
+        resetUI.On();
+    }
+
+    public void OnLoadComplete()
+    {
+        NoticeTool.Notice("Cloud Load Complete!", 2f);
+    }
 }

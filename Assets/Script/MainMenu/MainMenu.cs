@@ -10,6 +10,7 @@ public class MainMenu : MonoBehaviour
     private Tutorial tutorial;
     private GameObject _new;
     private GameObject loadPanel;
+    private GameObject startPanel;
     private Option option;
     private Exit exitPanel;
     private Diary diary;
@@ -32,6 +33,7 @@ public class MainMenu : MonoBehaviour
         diary = canvas.Find("Diary").gameObject.GetComponent<Diary>();
         intro = canvas.Find("Intro").gameObject.GetComponent<Intro>();
         loadPanel = canvas.Find("LoadPanel").gameObject;
+        startPanel = canvas.Find("StartPanel").gameObject;
         if (!SaveManager.isintroSeen)
         {
             SaveManager.isintroSeen = true;
@@ -41,11 +43,15 @@ public class MainMenu : MonoBehaviour
             loadPanel.SetActive(true);
             GooglePlayManager.Init();
             GooglePlayManager.LogIn(OnLogInComplete, OnLogInComplete);
-            intro.On(()=>
-            {
-                isBtnEnable = true;
-            });
+                intro.On(() =>
+                {
+                    isBtnEnable = true;
+                });
+            
         }
+#if UNITY_EDITOR
+        OnLogInComplete();
+#endif
 
     }
 
@@ -85,8 +91,24 @@ public class MainMenu : MonoBehaviour
         if (!isBtnEnable) return;
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
+        if (InGameSaveManager.CheckSaveData())
+        {
+            startPanel.SetActive(true);
+            return;
+        }
         InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
         LoadingManager.LoadScene("Levels/Floor0");
+    }
+
+    public void GameStart()
+    {
+        InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
+        LoadingManager.LoadScene("Levels/Floor0");
+    }
+
+    public void StartPanelOff()
+    {
+        startPanel.SetActive(false);
     }
 
     public void OnTutorialButtonDown()

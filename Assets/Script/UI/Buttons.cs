@@ -8,10 +8,12 @@ public class Buttons : MonoBehaviour
 {
     public void EndTurnButton()
     {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONNORMAL);
         PlayerControl.instance.EndTurnButton();
     }
     public void UpButton()
     {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONNORMAL);
         if (GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.IsInputOk)
         {
             if (PlayerControl.instance.IsDirCardSelected)
@@ -25,6 +27,7 @@ public class Buttons : MonoBehaviour
     }
     public void LeftButton()
     {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONNORMAL);
         if (GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.IsInputOk)
         {
             if (PlayerControl.instance.IsDirCardSelected)
@@ -39,6 +42,7 @@ public class Buttons : MonoBehaviour
     }
     public void RightButton()
     {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONNORMAL);
         if (GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.IsInputOk)
         {
             if (PlayerControl.instance.IsDirCardSelected)
@@ -53,6 +57,7 @@ public class Buttons : MonoBehaviour
     }
     public void DownButton()
     {
+        SoundDelegate.instance.PlayMono(MonoSound.BUTTONNORMAL);
         if (GameManager.instance.CurrentTurn == Turn.PLAYER && GameManager.instance.IsInputOk)
         {
             if (PlayerControl.instance.IsDirCardSelected)

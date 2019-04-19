@@ -135,7 +135,7 @@ public class Player : Character
     {
         if(PlayerControl.playerBuff.IsMoveAble)
         {
-            return base.MoveTo(_pos);
+            return base.MoveTo(_pos); //Change:텔레포트? 스무스?
         }else
         {
             return false;

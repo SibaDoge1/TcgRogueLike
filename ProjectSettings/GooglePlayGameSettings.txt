@@ -1,5 +1,5 @@
-lastUpgrade=00961
-proj.pluginVersion=0.9.61
+lastUpgrade=00962
+proj.pluginVersion=0.9.62
 proj.AppId=608495878461
 and.BundleId=com.CIEN.AKLG
 proj.classDir=Assets

@@ -14,6 +14,15 @@ public class Fade : MonoBehaviour
             fade = transform.GetComponent<Image>();
     }
 
+    public void Reset()
+    {
+        BeforeRoutine();
+        StopCoroutine("FadeInRoutine");
+        StopCoroutine("FadeOutRoutine");
+        StopCoroutine("FadeOutInRoutine");
+        fade.color = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
+    }
+
     public IEnumerator FadeOutRoutine(float time, voidFunc func)
     {
         BeforeRoutine();

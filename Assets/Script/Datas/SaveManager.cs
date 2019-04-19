@@ -83,6 +83,12 @@ public static class SaveManager
         }
         saveData.isSet = true;
     }
+    public static void CreateNew()
+    {
+        saveData = new SaveData();
+        UpdateSaveData();
+        SaveAll();
+    }
     #endregion
 
     #region defaultSetter
@@ -447,7 +453,6 @@ public static class SaveManager
     {
         UpdateSaveData();
         saveData.savedTime = DateTime.Now;
-        saveData.isSet = true;
         string json = JsonConvert.SerializeObject(saveData);
         Debug.Log("Saving: " + json);
         byte[] binaryData = Encoding.UTF8.GetBytes(json);
