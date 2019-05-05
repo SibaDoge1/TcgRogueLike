@@ -29,6 +29,7 @@ public class LoadingPanel : MonoBehaviour {
             if (op.progress >= 0.9f)
             {
                 //gameObject.SetActive(false);
+                MainMenu.isBtnEnable = true;
                 op.allowSceneActivation = true;
                 yield return new WaitForSeconds(0.5f);
                 OnLoadComplete();

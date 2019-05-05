@@ -83,7 +83,9 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnContinueButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
+        isBtnEnable = false;
         LoadingManager.LoadScene("Levels/Floor0");
     }
     public void OnStartButtonDown()
@@ -96,6 +98,7 @@ public class MainMenu : MonoBehaviour
             startPanel.SetActive(true);
             return;
         }
+        isBtnEnable = false;
         InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
         LoadingManager.LoadScene("Levels/Floor0");
     }

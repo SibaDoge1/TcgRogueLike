@@ -23,6 +23,12 @@ public class UIAnim : MonoBehaviour {
         AttainCard = transform.Find("AttainCard").GetComponent<Animator>();
         attainImage = AttainCard.GetComponent<Image>();
     }
+    
+    public void ShowAnimAttainCard()
+    {
+        attainImage.sprite = ArchLoader.instance.GetPopUpImage("popup_get_chip");
+        AttainCard.Play("PopUp", -1, 0);
+    }
 
     /// <summary>
     /// 이벤트룸 팝업
@@ -38,7 +44,6 @@ public class UIAnim : MonoBehaviour {
             attainImage.sprite = ArchLoader.instance.GetPopUpImage("fail");
         }
 
-        AttainCard.Play("PopUp", -1, 0);
     }
     public void ShowAnim(BUFF buff)
     {
@@ -48,7 +53,7 @@ public class UIAnim : MonoBehaviour {
     public void ShowAnim(string boss)
     {
         entryImage.sprite = ArchLoader.instance.GetPopUpImage(boss);
-        Entry.Play("PopUp", -1, 0);
+        Entry.Play("PopUpBoss", -1, 0);
     }
 
 }

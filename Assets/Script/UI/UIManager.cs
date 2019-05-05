@@ -220,4 +220,8 @@ public class UIManager : MonoBehaviour
             roomDebugText.text = "방이름 : " + s;
         }
     }
+    public void DebugButton()
+    {
+        uiAnim.ShowAnim("robot");
+    }
 }

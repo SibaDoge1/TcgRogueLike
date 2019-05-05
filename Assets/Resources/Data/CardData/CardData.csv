@@ -1,4 +1,4 @@
-﻿번호,이름,코스트,속성,val1,val2,val3,텍스트,이미지명,클래스명,이펙트명,사운드명,범위명
+번호,이름,코스트,속성,val1,val2,val3,텍스트,이미지명,클래스명,이펙트명,사운드명,범위명
 1,핏빛 손아귀,5,0,2,2,2,공격력 <val1>. <val2>마리 이상의 적을 타격 시 HP <val3> 회복,Card_RedGrasp,Card_RedGrasp,FIRESPIN,SFX5,range_2_1
 2,창백한 손아귀,5,0,2,2,3,공격력 <val1>. <val2>마리 이상의 적을 타격 시 AKS <val3> 회복,Card_BlueGrasp,Card_BlueGrasp,FREEZING,SFX9,range_2_1
 3,시간을 먹는 개구리,5,0,2,0,0,공격력 <val1>. 공격 후 방 내의 랜덤한 위치로 이동.,Card_TimeFrog,Card_TimeFrog,HIT,SFX8,range_2_1
@@ -7,7 +7,7 @@
 6,야행매복의 룬다,5,0,3,5,1,공격력 <val1>. 덱에 남은 R.A칩이 <val2>장 이하일 시 HP <val3> 감소,Card_WolfBite,Card_WolfBite,CLAWS,SFX6,range_11
 7,줄리아나의 앞발,5,0,3,5,1,공격력 <val1>. 덱에 남은 R.A칩이 <val2>장 이하일 시 HP <val3> 감소,Card_BearClaw,Card_BearClaw,CLAWS,SFX6,range_12
 8,정의집행자,5,0,2,0,1,공격력 <val1>. HP <val3> 회복,Card_Justice,Card_Justice,HEART,SFX8,range_2_2
-9,질풍삵,5,0,3,0,2,공격력 <val1>. 공격 후 방 내의 랜덤한 위치로 이동. 패널티: <val3>턴 이동불가.,Card_WindCat,Card_WindCat,OUTWARD,SFX9,range_6
+9,질풍삵,5,0,3,0,1,공격력 <val1>. 공격 후 방 내의 랜덤한 위치로 이동. 패널티: <val3>턴 이동불가.,Card_WindCat,Card_WindCat,OUTWARD,SFX9,range_6
 10,혼돈과 질서,5,0,2,0,1,공격력 <val1>. 적을 <val2>마리 타격 시 HP <val3> 회복,Card_HalfMask,Card_HalfMask,DRAIN,SFX9,range_10
 11,검은 번개,5,0,0,1,0,공격력 <val1>. 다른 R.A 칩이 반환될 때마다 자신의 공격력 강화 <val2> (최대 3회),Card_BlackThunder,Card_BlackThunder,THUNDER,SFX3,range_9
 12,겁쟁이 닐스,5,0,3,3,1,공격력 <val1>. HP <val2>이 된다. <val3>턴 동안 R.A 칩 사용&AKS 충전 불가 상태,Card_PoisonSnail,Card_PoisonSnail,EXPLOSION,SFX4,range_8

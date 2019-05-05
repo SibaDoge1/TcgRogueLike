@@ -163,6 +163,7 @@ public class GameManager : MonoBehaviour
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS)
         {
             GetRandomCardToAttain(CurrentRoom().RoomName);
+            UIManager.instance.uiAnim.ShowAnimAttainCard();
         }
         else if(CurrentRoom().roomType == RoomType.EVENT)
         {

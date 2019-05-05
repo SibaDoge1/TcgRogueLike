@@ -62,6 +62,7 @@ public class DeckEditUI : MonoBehaviour
         UIManager.instance.CardInfoPanel_Off();
         StartCoroutine(OffRoutine());
         changeButton.interactable = false;
+        ExitPanelOff();
         PlayerControl.player.GetHeal(1);
         GameManager.instance.IsInputOk = true;
     }

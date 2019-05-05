@@ -30,6 +30,7 @@ public static class LoadingManager {
     {
         if (!IsExist())
         {
+            MainMenu.isBtnEnable = true;
             SceneManager.LoadScene(scene);
         }
         FadeTool.FadeOutIn(0.5f, 0, () => { panel.LoadAsync(scene); }, null);

@@ -26,7 +26,8 @@ public class MyCamera : MonoBehaviour {
         while(true)
         {
             Target = new Vector3(player.transform.position.x, player.transform.position.y, -10);
-            transform.position = Vector3.Lerp(transform.position,Target,speed*Time.deltaTime);
+            //transform.position = Vector3.Lerp(transform.position,Target,speed*Time.deltaTime);
+            transform.position = Target;
             yield return null;
         }
     }
