@@ -9772,8 +9772,12 @@ MonoBehaviour:
     bossRoom: 0
     endRoom: 0
   RoomTestMode: 0
-  TestRoomType: 3
-  TestRoomName: boss5
+  TestRoomType: 2
+  TestRoomName: EVENT01
+  GodMode: 0
+  fullHp: 1000
+  maxAkasha: 100
+  defaultAkasha: 100
 --- !u!4 &1133748037
 Transform:
   m_ObjectHideFlags: 0

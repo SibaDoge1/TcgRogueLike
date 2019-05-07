@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
         player.EnterRoom(CurrentMap.StartRoom);
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, player.pos);
         UIManager.instance.FloorCount(level);
-        PlayerControl.instance.AkashaGage = 0;
+        PlayerControl.instance.AkashaGage = Config.instance.DefaultAkasha;
 
         ///업적: 층
         SaveManager.ArriveStage(level);
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
     {
         PlayerControl.instance.OnRoomClear();
         SoundDelegate.instance.PlayEffectSound(SoundEffect.ROOMCLEAR,player.transform.position);
-        PlayerControl.instance.AkashaGage = 0;
+        PlayerControl.instance.AkashaGage = Config.instance.DefaultAkasha;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS)
         {
             GetRandomCardToAttain(CurrentRoom().RoomName);
@@ -312,7 +312,7 @@ public class GameManager : MonoBehaviour
 
             endingCondition = new EndingConditions();
             startLevel = 1;
-            startHp = 10;
+            startHp = Config.instance.FullHp;
 
             isLoaded = false;
         }

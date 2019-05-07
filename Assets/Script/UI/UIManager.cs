@@ -57,13 +57,13 @@ public class UIManager : MonoBehaviour
     SaveUI saveUI;
     MenuUI menuUI;
     #region Status
-    public void HpUpdate(int currentHp_)
+    public void HpUpdate(int currentHp_ , int fullHp)
     {
-        hpUI.HpUpdate(currentHp_);
+        hpUI.HpUpdate(currentHp_, fullHp);
     }
-    public void AkashaUpdate(int current)
+    public void AkashaUpdate(int current, int maxAks)
     {
-        akashaUI.AkashaUpdate(current);
+        akashaUI.AkashaUpdate(current, maxAks);
     }
 
     #endregion

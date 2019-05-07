@@ -43,7 +43,7 @@ public class UIAnim : MonoBehaviour {
         {
             attainImage.sprite = ArchLoader.instance.GetPopUpImage("fail");
         }
-
+        AttainCard.Play("PopUp", -1, 0);
     }
     public void ShowAnim(BUFF buff)
     {
