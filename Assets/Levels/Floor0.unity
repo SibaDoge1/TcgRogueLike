@@ -9861,7 +9861,7 @@ MonoBehaviour:
     eventRoomNum: 1
     bossRoom: 0
     endRoom: 0
-  RoomTestMode: 1
+  RoomTestMode: 0
   TestRoomType: 2
   TestRoomName: EVENT01
   GodMode: 0
