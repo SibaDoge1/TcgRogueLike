@@ -208,5 +208,10 @@ public class HandManager : MonoBehaviour {
     {
         transform.localPosition = hideLocalPosition;
 	}
-	#endregion
+
+    public void SetEnable(bool val)
+    {
+        gameObject.SetActive(val);
+    }
+    #endregion
 }

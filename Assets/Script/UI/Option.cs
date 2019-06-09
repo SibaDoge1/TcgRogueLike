@@ -70,7 +70,10 @@ public class Option : MonoBehaviour {
     public void OnCloudButtonDown()
     {
         MainMenu.ButtonDown();
-        SaveManager.LoadAll(true, OnLoadComplete);
+        NoticeTool.Notice("클라우드 로드 중...", 10f);
+        Debug.Log("dasd");
+        MainMenu.instance.LoadPanelOn();
+        SaveManager.LoadAll(true, OnLoadComplete, OnLoadFail);
     }
 
     public void OnResetButtonDown()
@@ -81,6 +84,12 @@ public class Option : MonoBehaviour {
 
     public void OnLoadComplete()
     {
-        NoticeTool.Notice("Cloud Load Complete!", 2f);
+        MainMenu.instance.LoadPanelOff();
+        NoticeTool.Notice("로드 완료!", 2f);
+    }
+    public void OnLoadFail()
+    {
+        MainMenu.instance.LoadPanelOff();
+        NoticeTool.Notice("로드 실패, 네트워크환경을 확인하세요", 2f);
     }
 }

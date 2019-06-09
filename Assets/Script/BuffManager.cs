@@ -30,15 +30,27 @@ public class BuffManager
     {
         get { return IMMUNE.Turn > 0 ? false : true; }
     }
+    public int ImmuneTurn
+    {
+        get { return IMMUNE.Turn; }
+    }
 
     public bool IsMoveAble
     {
         get { return move.Turn>0 ? false:true ; }
     }
+    public int MoveTurn
+    {
+        get { return move.Turn; }
+    }
 
     public bool IsCardAble
     {
         get { return card.Turn>0 ? false:true; }
+    }
+    public int CardTurn
+    {
+        get { return card.Turn; }
     }
 
     public bool IsAkashaAble
@@ -47,6 +59,10 @@ public class BuffManager
         {
             return akasha.Turn>0 ? false:true;
         }
+    }
+    public int AkashaTurn
+    {
+        get { return akasha.Turn; }
     }
 
     public void OnPlayerTurn()

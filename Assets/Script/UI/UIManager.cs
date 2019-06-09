@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
         deckEdit = transform.Find("Deck").Find("DeckEdit").GetComponent<DeckEditUI>();
         deckCheck = transform.Find("Deck").Find("DeckCheck").GetComponent<DeckCheckUI>();
         menuUI = transform.Find("Menu").GetComponent<MenuUI>();
+        endTurnButton = transform.Find("JoyStick").Find("Akasha").gameObject;
 
         hand = transform.Find("HandCards").Find("HandOffSet").Find("Hand").GetComponent<HandManager>();
         textUI = transform.Find("TextUI").GetComponent<TextUI>();
@@ -50,6 +51,7 @@ public class UIManager : MonoBehaviour
     BuffUI buffUI;
     CardInfoPanel cardInfoPanel;
     UIAnim uianimations;
+    GameObject endTurnButton;
     public UIAnim uiAnim
     {
         get { return uianimations; }
@@ -168,6 +170,18 @@ public class UIManager : MonoBehaviour
     public void HandOff()
     {
         hand.Off();
+    }
+    public void HandSetEnable(bool val)
+    {
+        hand.SetEnable(val);
+    }
+    public void EndTurnButtonOn()
+    {
+        endTurnButton.SetActive(true);
+    }
+    public void EndTurnButtonOff()
+    {
+        endTurnButton.SetActive(false);
     }
 
     public void SaveUIOn(voidFunc OnSave)

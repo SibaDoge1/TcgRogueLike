@@ -1,26 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class MyCamera : MonoBehaviour {
+public class MyCamera : MonoBehaviour
+{
 
     public float shake;
     public float speed;
     public static MyCamera instance;
-    Camera cam;
+    Camera cam ;
+    private Player _player;
+    public Vector2 CamPos { get { return cam.transform.position; } }
     private void Awake()
     {
         instance = this;
         cam = GetComponentInChildren<Camera>();
-       // cam.aspect = 16f / 9f;
+        //cam = transform.GetComponent<Camera>();
+        // cam.aspect = 16f / 9f;
     }
 
-    public void PlayerTrace(Player player)
+    public void StartPlayerTrace(Player player)
     {
-        StartCoroutine(RoomTraceRoutine(player));
+        _player = player;
+        roomTrace = StartCoroutine(RoomTraceRoutine(_player));
     }
 
-     IEnumerator RoomTraceRoutine(Player player)
+    public void StopTrace()
+    {
+        if (roomTrace != null)
+        {
+            StopCoroutine(roomTrace);
+            roomTrace = null;
+        }
+    }
+    public void ReStartTrace()
+    {
+        if(roomTrace == null)
+            roomTrace = StartCoroutine(RoomTraceRoutine(_player));
+    }
+
+    public void MoveCam(Vector2 position)
+    {
+        Vector3 target= new Vector3(position.x, position.y, transform.position.z);
+        transform.position = target;
+    }
+
+    Coroutine roomTrace;
+    IEnumerator RoomTraceRoutine(Player player)
     {        
         Vector3 Target;
         while(true)
