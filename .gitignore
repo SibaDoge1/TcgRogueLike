@@ -36,3 +36,5 @@ sysinfo.txt
 *.unitypackage
 
 AKLG\.code-workspace
+
+Assets/StreamingAssets/build_info\.txt
