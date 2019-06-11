@@ -51,14 +51,14 @@ public class PlayerControl : MonoBehaviour {
             if (selectedDirCard == null)
             {
                 isDirCardSelected = false;
-                UIManager.instance.HandSetEnable(true);
+                UIManager.instance.UnhideHand();
                 UIManager.instance.EndTurnButtonOn();
                 old.CancelPreview();
             }
             else
             {
                 isDirCardSelected = true;
-                UIManager.instance.HandSetEnable(false);
+                UIManager.instance.HideHand();
                 UIManager.instance.EndTurnButtonOff();
                 selectedDirCard.CardEffectPreview();
             }

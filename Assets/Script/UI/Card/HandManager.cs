@@ -170,15 +170,15 @@ public class HandManager : MonoBehaviour {
     public void ChooseOne(){
 		if (moveRoutine != null) {
 			StopCoroutine (moveRoutine);
-		}
-		moveRoutine = StartCoroutine (HandMoveRoutine (originLocalPosition - new Vector3 (0, 1, 0)));
+        }
+        moveRoutine = StartCoroutine(HandMoveRoutine(originLocalPosition - new Vector3(0, 1, 0)));
 	}
 
 	public void ChooseRollback(){
 		if (moveRoutine != null) {
 			StopCoroutine (moveRoutine);
-		}
-		moveRoutine = StartCoroutine (HandMoveRoutine (originLocalPosition));
+        }
+        moveRoutine = StartCoroutine(HandMoveRoutine(originLocalPosition));
 	}
 	private Coroutine moveRoutine;
 	IEnumerator HandMoveRoutine(Vector3 targetLocalPosition){
@@ -209,9 +209,18 @@ public class HandManager : MonoBehaviour {
         transform.localPosition = hideLocalPosition;
 	}
 
-    public void SetEnable(bool val)
+    public void HideHand()
     {
-        gameObject.SetActive(val);
+        if (moveRoutine != null)
+        {
+            StopCoroutine(moveRoutine);
+        }
+        transform.localPosition = hideLocalPosition;
+    }
+    public void UnhideHand()
+    {
+        transform.localPosition = originLocalPosition;
+        ChooseRollback();
     }
     #endregion
 }

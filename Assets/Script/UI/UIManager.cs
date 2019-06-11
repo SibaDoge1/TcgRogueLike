@@ -162,19 +162,16 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    public void HandOn()
+    public void HideHand()
     {
-        hand.On();
+        hand.HideHand();
     }
 
-    public void HandOff()
+    public void UnhideHand()
     {
-        hand.Off();
+        hand.UnhideHand();
     }
-    public void HandSetEnable(bool val)
-    {
-        hand.SetEnable(val);
-    }
+
     public void EndTurnButtonOn()
     {
         endTurnButton.SetActive(true);
