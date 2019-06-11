@@ -20,6 +20,7 @@ public class NoticeUI : MonoBehaviour{
     public void Notice(string str, float time)
     {
         gameObject.SetActive(true);
+        StopAllCoroutines();
         BeforeRoutine();
         text.text = str;
         StartCoroutine(FadeOutInRoutine(0.3f, time));

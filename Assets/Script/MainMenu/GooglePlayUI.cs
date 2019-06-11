@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class GooglePlayUI : MonoBehaviour {
 
-	// Use this for initialization
-	public void OnLogIn () {
+    // Use this for initialization
+    public void OnReset()
+    {
+        SaveManager.CreateNew();
+    }
+    public void OnLogIn () {
         GooglePlayManager.LogIn(null, null);
     }
     public void OnLogOut()

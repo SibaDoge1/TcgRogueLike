@@ -33,4 +33,23 @@ public class Config : MonoBehaviour
     public bool RoomTestMode;
     public RoomType TestRoomType;
     public string TestRoomName;
+
+    [Header("Status")]
+    public bool GodMode;
+    public int fullHp;
+    public int maxAkasha;
+    public int defaultAkasha;
+
+    public int FullHp
+    {
+        get { return GodMode ? fullHp : 10; }
+    }
+    public int MaxAkasha
+    {
+        get { return GodMode ? maxAkasha : 10; }
+    }
+    public int DefaultAkasha
+    {
+        get { return GodMode ? defaultAkasha : 0; }
+    }
 }

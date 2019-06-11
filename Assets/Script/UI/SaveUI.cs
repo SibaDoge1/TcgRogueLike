@@ -12,8 +12,6 @@ public class SaveUI : MonoBehaviour
     {
         onSave = OnSave;
         transform.localPosition = new Vector3(0, 0, 0);
-        originVolume = SoundDelegate.instance.BGMSound;
-        SoundDelegate.instance.BGMSound = 0;
     }
 
     public void OnYesButtonDown()
@@ -35,7 +33,6 @@ public class SaveUI : MonoBehaviour
     public void OnNoButtonDown()
     {
         transform.localPosition = offPos;
-        SoundDelegate.instance.BGMSound = originVolume;
     }
 
     private List<int> CardsToNumber(List<Card> datas)

@@ -10,15 +10,26 @@ public class MainMenu : MonoBehaviour
     private Tutorial tutorial;
     private GameObject _new;
     private GameObject loadPanel;
+    private GameObject startPanel;
     private Option option;
     private Exit exitPanel;
     private Diary diary;
     private Intro intro;
     public delegate void voidFunc();
     public static bool isBtnEnable = false;
+    public static MainMenu instance;
 
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
+            Destroy(this);
+        }
         //FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
@@ -32,20 +43,25 @@ public class MainMenu : MonoBehaviour
         diary = canvas.Find("Diary").gameObject.GetComponent<Diary>();
         intro = canvas.Find("Intro").gameObject.GetComponent<Intro>();
         loadPanel = canvas.Find("LoadPanel").gameObject;
+        startPanel = canvas.Find("StartPanel").gameObject;
         if (!SaveManager.isintroSeen)
         {
             SaveManager.isintroSeen = true;
             Database.ReadDatas();
             ArchLoader.instance.StartCache();
             SaveManager.LoadAll(false);
-            loadPanel.SetActive(true);
+            LoadPanelOn();
             GooglePlayManager.Init();
-            GooglePlayManager.LogIn(OnLogInComplete, OnLogInComplete);
-            intro.On(()=>
-            {
-                isBtnEnable = true;
-            });
+            GooglePlayManager.LogIn(LoadPanelOff, LoadPanelOff);
+                intro.On(() =>
+                {
+                    isBtnEnable = true;
+                });
+            
         }
+#if !UNITY_ANDROID
+        LoadPanelOff();
+#endif
 
     }
 
@@ -77,7 +93,9 @@ public class MainMenu : MonoBehaviour
     /// </summary>
     public void OnContinueButtonDown()
     {
+        if (!isBtnEnable) return;
         ButtonDown();
+        isBtnEnable = false;
         LoadingManager.LoadScene("Levels/Floor0");
     }
     public void OnStartButtonDown()
@@ -85,8 +103,25 @@ public class MainMenu : MonoBehaviour
         if (!isBtnEnable) return;
         ButtonDown();
         //SceneManager.LoadScene("Levels/LoadingScene");
+        if (InGameSaveManager.CheckSaveData())
+        {
+            startPanel.SetActive(true);
+            return;
+        }
+        isBtnEnable = false;
         InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
         LoadingManager.LoadScene("Levels/Floor0");
+    }
+
+    public void GameStart()
+    {
+        InGameSaveManager.ClearSaveData();//GTS : 인게임 세이브 데이터 초기화
+        LoadingManager.LoadScene("Levels/Floor0");
+    }
+
+    public void StartPanelOff()
+    {
+        startPanel.SetActive(false);
     }
 
     public void OnTutorialButtonDown()
@@ -118,9 +153,13 @@ public class MainMenu : MonoBehaviour
         exitPanel.on();
     }
 
-    public void OnLogInComplete()
+    public void LoadPanelOff()
     {
         loadPanel.SetActive(false);
+    }
+    public void LoadPanelOn()
+    {
+        loadPanel.SetActive(true);
     }
 
 

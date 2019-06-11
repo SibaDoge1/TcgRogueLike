@@ -83,6 +83,12 @@ public static class SaveManager
         }
         saveData.isSet = true;
     }
+    public static void CreateNew()
+    {
+        saveData = new SaveData();
+        UpdateSaveData();
+        SaveAll();
+    }
     #endregion
 
     #region defaultSetter
@@ -447,7 +453,6 @@ public static class SaveManager
     {
         UpdateSaveData();
         saveData.savedTime = DateTime.Now;
-        saveData.isSet = true;
         string json = JsonConvert.SerializeObject(saveData);
         Debug.Log("Saving: " + json);
         byte[] binaryData = Encoding.UTF8.GetBytes(json);
@@ -458,12 +463,14 @@ public static class SaveManager
 
 
     static event voidFunc OnCloudLoadCompleteEvent;
+    static event voidFunc OnCloudLoadFailEvent;
     /// <summary>
     /// 로드시에 부르는 메소드
     /// </summary>
-    public static void LoadAll(bool isCloud, voidFunc onCloudLoadComplete = null)
+    public static void LoadAll(bool isCloud, voidFunc onCloudLoadComplete = null, voidFunc onCloudLoadFail = null)
     {
         OnCloudLoadCompleteEvent += onCloudLoadComplete;
+        OnCloudLoadFailEvent += onCloudLoadFail;
         byte[] binary = BinaryLocalLoad(SaveManager.FileName, SaveManager.Path);
         if(binary != null)
         {
@@ -473,7 +480,7 @@ public static class SaveManager
         }
         ApplySave();
         if(isCloud)
-            GooglePlayManager.LoadFromCloud(FileName, OnCloudLoadCompleted);
+            GooglePlayManager.LoadFromCloud(FileName);
     }
 
     #region Debug
@@ -519,7 +526,11 @@ public static class SaveManager
 
     public static void OnCloudLoadFailed()
     {
-        MainMenu.isBtnEnable = true;
+        if(OnCloudLoadFailEvent != null)
+        {
+            OnCloudLoadFailEvent();
+            OnCloudLoadCompleteEvent = null;
+        }
         return;
     }
 
@@ -529,7 +540,6 @@ public static class SaveManager
         if (json.Length == 0)
         {
             Debug.Log("0 lenth data from cloud save, quit");
-            MainMenu.isBtnEnable = true;
             return;
         }
         Debug.Log("cloud load: " + json);
@@ -539,7 +549,6 @@ public static class SaveManager
             if (DateTimeOffset.Compare(cloud.savedTime, saveData.savedTime) < 0)
             {
                 Debug.Log("로컬이 클라우드보다 최신입니다. 로컬세이브를 적용합니다. ");
-                MainMenu.isBtnEnable = true;
                 return;
             }
         }

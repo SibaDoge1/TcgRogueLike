@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
         {
             ArchLoader.instance.StartCache();
             Database.ReadDatas();
+            SaveManager.LoadAll(false);
         }
 
         player = ArchLoader.instance.GetPlayer();
@@ -93,13 +94,20 @@ public class GameManager : MonoBehaviour
             Random.InitState(buildSeed);
         }
         Debug.Log("Seed : "+buildSeed);
-        BuildMap(level);
+        if (Config.instance.RoomTestMode)
+        {
+            BuildMap(Config.instance.floorNum);
+        }
+        else
+        {
+            BuildMap(level);
+        }
         MinimapTexture.Init(currentMap);
 
         player.EnterRoom(CurrentMap.StartRoom);
         MinimapTexture.DrawPlayerPos(CurrentRoom().transform.position, player.pos);
         UIManager.instance.FloorCount(level);
-        PlayerControl.instance.AkashaGage = 0;
+        PlayerControl.instance.AkashaGage = Config.instance.DefaultAkasha;
 
         ///업적: 층
         SaveManager.ArriveStage(level);
@@ -158,10 +166,11 @@ public class GameManager : MonoBehaviour
     {
         PlayerControl.instance.OnRoomClear();
         SoundDelegate.instance.PlayEffectSound(SoundEffect.ROOMCLEAR,player.transform.position);
-        PlayerControl.instance.AkashaGage = 0;
+        PlayerControl.instance.AkashaGage = Config.instance.DefaultAkasha;
         if (CurrentRoom().roomType == RoomType.BATTLE || CurrentRoom().roomType == RoomType.BOSS)
         {
             GetRandomCardToAttain(CurrentRoom().RoomName);
+            UIManager.instance.uiAnim.ShowAnimAttainCard();
         }
         else if(CurrentRoom().roomType == RoomType.EVENT)
         {
@@ -186,6 +195,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentTurn = Turn.ENEMY;
         StartCoroutine(EndTurnDelay(time));
+        MyCamera.instance.ReStartTrace();
     }
     IEnumerator EndTurnDelay(float time)
     {
@@ -310,7 +320,7 @@ public class GameManager : MonoBehaviour
 
             endingCondition = new EndingConditions();
             startLevel = 1;
-            startHp = 10;
+            startHp = Config.instance.FullHp;
 
             isLoaded = false;
         }
@@ -320,7 +330,7 @@ public class GameManager : MonoBehaviour
 
         player.SetHp(startHp);
         Card.SetPlayer(player);
-        MyCamera.instance.PlayerTrace(player);
+        MyCamera.instance.StartPlayerTrace(player);
     }
 
     private void BuildMap(int level)

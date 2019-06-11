@@ -8,7 +8,9 @@ public class Player : Character
     protected override void Awake()
     {
         base.Awake();
-        FullHp = 10;
+        //FullHp = 10;
+        FullHp = Config.instance.FullHp;
+        Debug.Log(CurrentHp);
         Atk = 1;
     }
     //문을 통해서 이동
@@ -73,7 +75,7 @@ public class Player : Character
         set
         {
             base.FullHp = value;
-            UIManager.instance.HpUpdate(currentHp);
+            UIManager.instance.HpUpdate(currentHp, FullHp);
         }
     }
     public int GetHp
@@ -89,7 +91,7 @@ public class Player : Character
         set
         {
             base.CurrentHp = value;
-            UIManager.instance.HpUpdate(currentHp);
+            UIManager.instance.HpUpdate(currentHp, FullHp);
         }
     }
     public override bool GetDamage(int damage, Entity atker = null, bool isReturn = false)
@@ -135,7 +137,7 @@ public class Player : Character
     {
         if(PlayerControl.playerBuff.IsMoveAble)
         {
-            return base.MoveTo(_pos);
+            return base.MoveTo(_pos); //Change:텔레포트? 스무스?
         }else
         {
             return false;

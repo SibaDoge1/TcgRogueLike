@@ -13,7 +13,7 @@ public class Intro : MonoBehaviour {
 
     public void OnSkipButtonDown()
     {
-        FadeTool.FadeIn(0.01f);
+        FadeTool.Reset();
         Off();
     }
 
@@ -22,8 +22,8 @@ public class Intro : MonoBehaviour {
         onEnd = OnEnd;
         image = transform.Find("Image").GetComponent<Image>();
         anim = transform.Find("Anim").GetComponent<Animator>();
-        anim.Play("default");
         gameObject.SetActive(true);
+        anim.Play("default");
         StartCoroutine(StartIntro());
     }
 

@@ -51,11 +51,15 @@ public class PlayerControl : MonoBehaviour {
             if (selectedDirCard == null)
             {
                 isDirCardSelected = false;
+                UIManager.instance.UnhideHand();
+                UIManager.instance.EndTurnButtonOn();
                 old.CancelPreview();
             }
             else
             {
                 isDirCardSelected = true;
+                UIManager.instance.HideHand();
+                UIManager.instance.EndTurnButtonOff();
                 selectedDirCard.CardEffectPreview();
             }
 
@@ -173,9 +177,9 @@ public class PlayerControl : MonoBehaviour {
         get { return akashaGage; }
         set
         {
-            if (value >= 10)
+            if (value >= Config.instance.MaxAkasha)
             {
-                akashaGage = 10;
+                akashaGage = Config.instance.MaxAkasha;
             }
             else if (value < 0)
             {
@@ -195,7 +199,7 @@ public class PlayerControl : MonoBehaviour {
                     }
                 }
             }
-            UIManager.instance.AkashaUpdate(AkashaGage);
+            UIManager.instance.AkashaUpdate(AkashaGage, Config.instance.MaxAkasha);
         }
     }
 

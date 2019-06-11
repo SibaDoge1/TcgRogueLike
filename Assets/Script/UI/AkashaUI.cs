@@ -9,11 +9,11 @@ public class AkashaUI : MonoBehaviour {
     void Awake () {
         currents = transform.Find("Akasha").GetComponentsInChildren<Transform>();
     }
-	public void AkashaUpdate(int current)
+	public void AkashaUpdate(int current, int maxAks)
     {
-        if(current>10)
+        if(current> maxAks)
         {
-            current = 10;
+            current = maxAks;
             Debug.Log("최대 범위 보다 넘는 수치만큼 값이 들어왔습니다.");
         }
         for(int i =1; i<currents.Length;i++)

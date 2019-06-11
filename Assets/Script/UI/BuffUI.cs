@@ -18,19 +18,19 @@ public class BuffUI : MonoBehaviour
         string s = "";
         if(!PlayerControl.playerBuff.IsMoveAble)
         {
-            s += "이동불가! \n";
+            s += "이동불가! \n"+ PlayerControl.playerBuff.MoveTurn+"턴";
         }
         if(!PlayerControl.playerBuff.IsAkashaAble)
         {
-            s += "아카샤충전불가! \n";
+            s += "아카샤충전불가! \n" + PlayerControl.playerBuff.AkashaTurn + "턴";
         }
         if(!PlayerControl.playerBuff.IsCardAble)
         {
-            s += "카드사용불가! \n";
+            s += "카드사용불가! \n" + PlayerControl.playerBuff.CardTurn + "턴";
         }
         if(!PlayerControl.playerBuff.IsHitAble)
         {
-            s += "피해면역! \n";
+            s += "피해면역! \n" + PlayerControl.playerBuff.ImmuneTurn + "턴";
         }
         text.text = s;
     }

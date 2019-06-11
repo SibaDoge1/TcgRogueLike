@@ -12,11 +12,11 @@ public class HpUI : MonoBehaviour {
         currentHps = transform.Find("Current").GetComponentsInChildren<Transform>();
         hpText = transform.Find("text").GetComponent<Text>();
     }
-    public void HpUpdate(int currentHp_)
+    public void HpUpdate(int currentHp_, int fullHp)
     {
-        if (currentHp_ > 10)
+        if (currentHp_ > fullHp)
         {
-            currentHp_ = 10;
+            currentHp_ = fullHp;
             Debug.Log("최대 범위 보다 넘는 수치만큼 값이 들어왔습니다.");
         }
 
@@ -31,7 +31,7 @@ public class HpUI : MonoBehaviour {
                 currentHps[i].gameObject.SetActive(false);
             }
         }
-        hpText.text = currentHp_ + "/" + 10;
+        hpText.text = currentHp_ + "/" + fullHp;
     }
 
 }

@@ -7,12 +7,14 @@ public class Option : MonoBehaviour {
     private Slider bgmSlider;
     private Slider fxSlider;
     private Slider UISlider;
+    private ResetUI resetUI;
 
     void Awake()
     {
         bgmSlider = transform.Find("Slider_Bgm").GetComponent<Slider>();
         fxSlider = transform.Find("Slider_Fx").GetComponent<Slider>();
         UISlider = transform.Find("Slider_UI").GetComponent<Slider>();
+        resetUI = transform.Find("Panel").GetComponent<ResetUI>();
     }
 
     void OnEnable()
@@ -23,6 +25,7 @@ public class Option : MonoBehaviour {
     public void On()
     {
         gameObject.SetActive(true);
+        SetSliderValues();
     }
 
     public void Off()
@@ -58,4 +61,35 @@ public class Option : MonoBehaviour {
         Off();
     }
 
+    public void OnAchiveButtonDown()
+    {
+        MainMenu.ButtonDown();
+        GooglePlayManager.ShowAchievementUI();
+    }
+
+    public void OnCloudButtonDown()
+    {
+        MainMenu.ButtonDown();
+        NoticeTool.Notice("클라우드 로드 중...", 10f);
+        Debug.Log("dasd");
+        MainMenu.instance.LoadPanelOn();
+        SaveManager.LoadAll(true, OnLoadComplete, OnLoadFail);
+    }
+
+    public void OnResetButtonDown()
+    {
+        MainMenu.ButtonDown();
+        resetUI.On();
+    }
+
+    public void OnLoadComplete()
+    {
+        MainMenu.instance.LoadPanelOff();
+        NoticeTool.Notice("로드 완료!", 2f);
+    }
+    public void OnLoadFail()
+    {
+        MainMenu.instance.LoadPanelOff();
+        NoticeTool.Notice("로드 실패, 네트워크환경을 확인하세요", 2f);
+    }
 }

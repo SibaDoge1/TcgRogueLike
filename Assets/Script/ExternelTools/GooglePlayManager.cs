@@ -13,10 +13,8 @@ using System;
 public static class GooglePlayManager
 {
     public delegate void voidFunc();
-    public delegate void OnLoadComplete(byte[] data);
 
     private static byte[] buffedData;
-    private static OnLoadComplete onLoadComplete;
 
     //게임서비스 플러그인 초기화시에 EnableSavedGames()를 넣어서 저장된 게임 사용할 수 있게 합니다.
 
@@ -27,7 +25,7 @@ public static class GooglePlayManager
 
     public static void Init()
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         //if (PlayGamesPlatform.Instance != null) return;
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
         // enables saving game progress.
@@ -63,7 +61,7 @@ public static class GooglePlayManager
 
     public static void LogIn(voidFunc successFunc = null, voidFunc failFunc = null)
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         Debug.Log("login");
         Social.localUser.Authenticate((bool success) =>
         {
@@ -78,26 +76,27 @@ public static class GooglePlayManager
             else
             {
                 Debug.Log("login fail");
-                if(failFunc != null)
+                if (failFunc != null)
                     failFunc();
                 // to do ...
                 // 구글 플레이 게임 서비스 로그인 실패 처리
             }
         });
+#else
+        successFunc();
 #endif
     }
 
     public static void LogOut()
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         PlayGamesPlatform.Instance.SignOut();
 #endif
     }
 
     public static bool CheckLogin()
     {
-
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         return Social.localUser.authenticated;
 #else
         return false;
@@ -106,7 +105,7 @@ public static class GooglePlayManager
 
     public static void UnlockAchievement(string achive, int score)
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -124,6 +123,7 @@ public static class GooglePlayManager
 
     public static void CheckGoogleAchive(int i)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         switch (i)
         {
             case 1: UnlockAchievement(GPGSIds.achievement, 100); break;
@@ -133,11 +133,12 @@ public static class GooglePlayManager
             case 6: UnlockAchievement(GPGSIds.achievement_5, 100); break;
             default: break;
         }
+#endif
     }
 
     public static void ShowAchievementUI()
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -155,7 +156,7 @@ public static class GooglePlayManager
 
     public static void ReportScore(string borad, int score)
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -170,7 +171,7 @@ public static class GooglePlayManager
 
     public static void ShowLeaderboardUI()
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -187,7 +188,7 @@ public static class GooglePlayManager
     //--------------------------------------------------------------------
     public static void ShowSelectUI()
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         uint maxNumToDisplay = 5;
         bool allowCreateNew = false;
         bool allowDelete = true;
@@ -204,6 +205,7 @@ public static class GooglePlayManager
 
     static void OnSavedGameSelected(SelectUIStatus status, ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SelectUIStatus.SavedGameSelected)
         {
             // handle selected game save
@@ -212,13 +214,14 @@ public static class GooglePlayManager
         {
             // handle cancel or error
         }
+#endif
     }
 //---------------------------------------------------------------------------------
     //게임 저장은 다음과 같이 합니다.
 
     public static void SaveToCloud(string saveName, byte[] saveData)
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -244,7 +247,7 @@ public static class GooglePlayManager
     static void OpenSavedGame(string filename, bool bSave)
 
     {
-
+#if UNITY_ANDROID && !UNITY_EDITOR
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
 
         if(savedGameClient == null)
@@ -261,7 +264,7 @@ public static class GooglePlayManager
         else
 
             savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork, ConflictResolutionStrategy.UseLongestPlaytime, OnSavedGameOpenedToRead); //로딩루틴 진행
-
+#endif
     }
 
 
@@ -270,6 +273,7 @@ public static class GooglePlayManager
 
     static void OnSavedGameOpenedToSave(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SavedGameRequestStatus.Success)
         {
             // handle reading or writing of saved game.
@@ -283,11 +287,13 @@ public static class GooglePlayManager
             Debug.LogWarning("클라우드 저장 중 파일열기에 실패 했습니다: " + status);
             //파일열기에 실패 했습니다. 오류메시지를 출력하든지 합니다.
         }
+#endif
     }
-    
+
 
     static void SaveGame(ISavedGameMetadata game, byte[] savedData, TimeSpan totalPlaytime)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         SavedGameMetadataUpdate.Builder builder = new SavedGameMetadataUpdate.Builder();
         builder = builder
@@ -306,11 +312,13 @@ public static class GooglePlayManager
         }*/
         SavedGameMetadataUpdate updatedMetadata = builder.Build();
         savedGameClient.CommitUpdate(game, updatedMetadata, savedData, OnSavedGameWritten);
+#endif
     }
 
 
     static void OnSavedGameWritten(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SavedGameRequestStatus.Success)
         {
             Debug.LogWarning("클라우드 저장이 완료되었습니다.");
@@ -321,6 +329,7 @@ public static class GooglePlayManager
             Debug.LogWarning("클라우드 저장에 실패 했습니다: " + status);
             //데이터 저장에 실패 했습니다.
         }
+#endif
     }
 
 
@@ -328,10 +337,9 @@ public static class GooglePlayManager
 
     //클라우드로 부터 파일읽기
 
-    public static void LoadFromCloud(string fileName, OnLoadComplete _onLoadComplete)
+    public static void LoadFromCloud(string fileName)
     {
-#if GPGS_Enabled
-        onLoadComplete = _onLoadComplete;
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (PlayGamesPlatform.Instance == null)
         {
             Init();
@@ -359,9 +367,10 @@ public static class GooglePlayManager
             //로그인되지 않았으니 로그인 루틴을 진행하던지 합니다.
         }
 
-        onLoadComplete = _onLoadComplete;
         //내가 사용할 파일이름을 지정해줍니다. 그냥 컴퓨터상의 파일과 똑같다 생각하시면됩니다.
         OpenSavedGame(fileName, false);
+#else
+        SaveManager.OnCloudLoadFailed();
 #endif
     }
 
@@ -369,6 +378,7 @@ public static class GooglePlayManager
 
     static void OnSavedGameOpenedToRead(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SavedGameRequestStatus.Success)
         {
             // handle reading or writing of saved game.
@@ -380,25 +390,28 @@ public static class GooglePlayManager
             SaveManager.OnCloudLoadFailed();
             //파일열기에 실패 한경우, 오류메시지를 출력하던지 합니다.
         }
+#endif
     }
-    
+
     //데이터 읽기를 시도합니다.
     static void LoadGameData(ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         savedGameClient.ReadBinaryData(game, OnSavedGameDataRead);
+#endif
     }
 
 
     static void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SavedGameRequestStatus.Success)
         {
             // handle processing the byte array data
             //데이터 읽기에 성공했습니다.
             //data 배열을 복구해서 적절하게 사용하시면됩니다.
-            onLoadComplete(data);
-            onLoadComplete = null;
+            SaveManager.OnCloudLoadCompleted(data);
         }
         else
         {
@@ -406,12 +419,13 @@ public static class GooglePlayManager
             SaveManager.OnCloudLoadFailed();
             //읽기에 실패 했습니다. 오류메시지를 출력하던지 합니다.
         }
+#endif
     }
 
     //--------------세이브 삭제 ------------------
     public static void DeleteGameData(string filename)
     {
-#if GPGS_Enabled
+#if UNITY_ANDROID && !UNITY_EDITOR
         // Open the file to get the metadata.
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         savedGameClient.OpenWithAutomaticConflictResolution(filename, DataSource.ReadCacheOrNetwork,
@@ -421,6 +435,7 @@ public static class GooglePlayManager
 
     static void DeleteSavedGame(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
         if (status == SavedGameRequestStatus.Success)
         {
             ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
@@ -430,6 +445,7 @@ public static class GooglePlayManager
         {
             // handle error
         }
+#endif
     }
 
 }

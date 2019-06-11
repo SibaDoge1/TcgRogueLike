@@ -11,6 +11,15 @@ public static class FadeTool
 {
     private static Fade fade;
 
+    public static void Reset()
+    {
+        if (!IsExist())
+        {
+            return;
+        }
+        fade.Reset();
+    }
+
     public static void FadeOut(float time, voidFunc func = null)
     {
         if (!IsExist())

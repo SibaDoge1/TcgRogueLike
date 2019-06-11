@@ -30,12 +30,14 @@ public class DeckEditUI : MonoBehaviour
     Button changeButton;
     Text deckText;
     Text attainText;
+    GameObject exitPanel;
     private void Awake()
     {
         rect = GetComponent<RectTransform>();
         deckViewPort = transform.Find("DeckPanel").Find("DeckCardPool").Find("viewport").GetComponent<RectTransform>();
         attainViewPort = transform.Find("DeckPanel").Find("AttainCardPool").Find("viewport").GetComponent<RectTransform>();
 
+        exitPanel = transform.Find("DeckPanel").Find("Buttons").Find("ExitPanel").gameObject;
         attainText = transform.Find("DeckPanel").Find("Texts").Find("attainText").GetComponent<Text>();
         deckText = transform.Find("DeckPanel").Find("Texts").Find("deckText").GetComponent<Text>(); 
         changeButton = transform.Find("DeckPanel").Find("Buttons").Find("changeButton").GetComponent<Button>();
@@ -60,6 +62,7 @@ public class DeckEditUI : MonoBehaviour
         UIManager.instance.CardInfoPanel_Off();
         StartCoroutine(OffRoutine());
         changeButton.interactable = false;
+        ExitPanelOff();
         PlayerControl.player.GetHeal(1);
         GameManager.instance.IsInputOk = true;
     }
@@ -123,6 +126,14 @@ public class DeckEditUI : MonoBehaviour
         GameManager.instance.EndingCondition.CardExchanged();
     }
 
+    public void ExitPanelOff()
+    {
+        exitPanel.SetActive(false);
+    }
+    public void ExitPanelOn()
+    {
+        exitPanel.SetActive(true);
+    }
 
     public void RevealAttainCards()
     {
