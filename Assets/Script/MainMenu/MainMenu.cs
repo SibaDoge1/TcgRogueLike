@@ -17,9 +17,19 @@ public class MainMenu : MonoBehaviour
     private Intro intro;
     public delegate void voidFunc();
     public static bool isBtnEnable = false;
+    public static MainMenu instance;
 
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            UnityEngine.Debug.LogError("SingleTone Error : " + this.name);
+            Destroy(this);
+        }
         //FadeTool.FadeIn(1f, ()=> { isBtnEnable = true; });
         #region 안드로이드 설정
         Input.multiTouchEnabled = false;
@@ -40,9 +50,9 @@ public class MainMenu : MonoBehaviour
             Database.ReadDatas();
             ArchLoader.instance.StartCache();
             SaveManager.LoadAll(false);
-            loadPanel.SetActive(true);
+            LoadPanelOn();
             GooglePlayManager.Init();
-            GooglePlayManager.LogIn(OnLogInComplete, OnLogInComplete);
+            GooglePlayManager.LogIn(LoadPanelOff, LoadPanelOff);
                 intro.On(() =>
                 {
                     isBtnEnable = true;
@@ -50,7 +60,7 @@ public class MainMenu : MonoBehaviour
             
         }
 #if !UNITY_ANDROID
-        OnLogInComplete();
+        LoadPanelOff();
 #endif
 
     }
@@ -143,9 +153,13 @@ public class MainMenu : MonoBehaviour
         exitPanel.on();
     }
 
-    public void OnLogInComplete()
+    public void LoadPanelOff()
     {
         loadPanel.SetActive(false);
+    }
+    public void LoadPanelOn()
+    {
+        loadPanel.SetActive(true);
     }
 
 

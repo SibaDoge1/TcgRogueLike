@@ -94,7 +94,14 @@ public class GameManager : MonoBehaviour
             Random.InitState(buildSeed);
         }
         Debug.Log("Seed : "+buildSeed);
-        BuildMap(level);
+        if (Config.instance.RoomTestMode)
+        {
+            BuildMap(Config.instance.floorNum);
+        }
+        else
+        {
+            BuildMap(level);
+        }
         MinimapTexture.Init(currentMap);
 
         player.EnterRoom(CurrentMap.StartRoom);
@@ -188,6 +195,7 @@ public class GameManager : MonoBehaviour
     {
         CurrentTurn = Turn.ENEMY;
         StartCoroutine(EndTurnDelay(time));
+        MyCamera.instance.ReStartTrace();
     }
     IEnumerator EndTurnDelay(float time)
     {
@@ -322,7 +330,7 @@ public class GameManager : MonoBehaviour
 
         player.SetHp(startHp);
         Card.SetPlayer(player);
-        MyCamera.instance.PlayerTrace(player);
+        MyCamera.instance.StartPlayerTrace(player);
     }
 
     private void BuildMap(int level)

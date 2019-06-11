@@ -28,7 +28,7 @@ public class EditCardObject : CardObject, IPointerClickHandler
         return data;
     }
     private DeckEditUI deckEditUI;
-    private Image highLightImage;
+    private GameObject highLight;
 
     bool isSelected;
     public bool IsSelected {
@@ -38,8 +38,8 @@ public class EditCardObject : CardObject, IPointerClickHandler
     protected override void Awake()
     {
         base.Awake();
-        highLightImage = transform.Find("HighLight").GetComponent<Image>();
-        highLightImage.enabled = false;
+        highLight = transform.Find("HighLight").gameObject;
+        highLight.SetActive(false);
     }
 
     public void SetRenderKnown()
@@ -67,13 +67,13 @@ public class EditCardObject : CardObject, IPointerClickHandler
     public void HighLightOn()
     {
         isSelected = true;
-        highLightImage.enabled = true;
+        highLight.SetActive(true);
     }
 
     public void HighLightOff()
     {
         isSelected = false;
-        highLightImage.enabled = false;
+        highLight.SetActive(false);
     }
 
     public void Locate(int i)

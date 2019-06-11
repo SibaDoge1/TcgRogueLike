@@ -463,12 +463,14 @@ public static class SaveManager
 
 
     static event voidFunc OnCloudLoadCompleteEvent;
+    static event voidFunc OnCloudLoadFailEvent;
     /// <summary>
     /// 로드시에 부르는 메소드
     /// </summary>
-    public static void LoadAll(bool isCloud, voidFunc onCloudLoadComplete = null)
+    public static void LoadAll(bool isCloud, voidFunc onCloudLoadComplete = null, voidFunc onCloudLoadFail = null)
     {
         OnCloudLoadCompleteEvent += onCloudLoadComplete;
+        OnCloudLoadFailEvent += onCloudLoadFail;
         byte[] binary = BinaryLocalLoad(SaveManager.FileName, SaveManager.Path);
         if(binary != null)
         {
@@ -478,7 +480,7 @@ public static class SaveManager
         }
         ApplySave();
         if(isCloud)
-            GooglePlayManager.LoadFromCloud(FileName, OnCloudLoadCompleted);
+            GooglePlayManager.LoadFromCloud(FileName);
     }
 
     #region Debug
@@ -524,6 +526,11 @@ public static class SaveManager
 
     public static void OnCloudLoadFailed()
     {
+        if(OnCloudLoadFailEvent != null)
+        {
+            OnCloudLoadFailEvent();
+            OnCloudLoadCompleteEvent = null;
+        }
         return;
     }
 

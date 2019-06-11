@@ -19,6 +19,7 @@ public class ResetUI : MonoBehaviour
     {
         MainMenu.ButtonDown();
         SaveManager.CreateNew();
+        NoticeTool.Notice("초기화 완료", 1.8f);
         Off();
     }
 
