@@ -33,7 +33,7 @@ public class Card_Special : Card
         {
             if(cost>1)
             {
-                cost -= 2;
+                cost -= 1;
             }
             if(cost<1)
             {
