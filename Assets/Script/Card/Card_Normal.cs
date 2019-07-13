@@ -74,7 +74,7 @@ public class Card_Normal : Card
                 index = 92;
 
                 cardEffect = CardEffect.TELEPORT;
-                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 2만큼 텔레포트합니다.";
+                info = "주어진 범위의 적들에게 <val1>만큼의 피해를 입히고 선택한 방향으로 3만큼 텔레포트합니다.";
                 isDirectionCard = true;
                 break;
             case CardType.V:
