@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI.Card
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 2cf18ac4a76acf744a86085644e46994, type: 3}
+    totalSpriteSurfaceArea: 1250849
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 1813313072bc36c489cbbc11e1f7809e, type: 3}
+  - {fileID: 21300000, guid: d62d15e02e581f34c8a54615973b31d4, type: 3}
+  - {fileID: 21300000, guid: 58eb6c115d3c0914a8b66fee1513d9bb, type: 3}
+  - {fileID: 21300000, guid: 414c31c1926911647b810950c7a3fb78, type: 3}
+  - {fileID: 21300000, guid: acc4553204b489e4baf52d8d864d145f, type: 3}
+  - {fileID: 21300000, guid: 07671d04d87d5024abc1c9d77381c31a, type: 3}
+  - {fileID: 21300000, guid: 6b6a2a0816ce2ba489d8fcbb1b4f26f1, type: 3}
+  - {fileID: 21300000, guid: 85df94d92bd9aae49ab7ec1c653096f3, type: 3}
+  - {fileID: 21300000, guid: 07841ad95e2c386459ca13c14e1e9731, type: 3}
+  - {fileID: 21300000, guid: 6b3c255aa512d0d4397babce976e22e4, type: 3}
+  - {fileID: 21300000, guid: 81c49b0b9f8a2e24bb00af813bb86e07, type: 3}
+  - {fileID: 21300000, guid: fe3a873b059005448908d3ef768eeffc, type: 3}
+  - {fileID: 21300000, guid: 4c7b410cd47c2d84790956e516463e11, type: 3}
+  - {fileID: 21300000, guid: 4bccb12de52249f4796aeccbb644462a, type: 3}
+  - {fileID: 21300000, guid: b88833fe577a2b9449d58e30ea273634, type: 3}
+  - {fileID: 21300000, guid: 1099b52f3a7de084983c913d63c6e88b, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - canva-arrow-icon-direction-button-pointer--MAB_Of-JV5A
+  - card_3a
+  - card_line
+  - card_lv2
+  - card_lv4
+  - card_level
+  - card_hr_icon
+  - card_2t
+  - caution
+  - card_lv5
+  - card_4p
+  - card_akslow
+  - card_lv3
+  - card_lv1
+  - upgrade
+  - card_1v
+  m_Tag: UI.Card
+  m_IsVariant: 0

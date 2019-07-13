@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Option
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 58356974b404b264192610fd0b598162, type: 3}
+    totalSpriteSurfaceArea: 1336052
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 5335b800dedc8f04db05290431afa755, type: 3}
+  - {fileID: 21300000, guid: ce406430b37328e45ad5e9f5e4b4d44e, type: 3}
+  - {fileID: 21300000, guid: 9a89bb3018dc234479cc5c370d4c92ff, type: 3}
+  - {fileID: 21300000, guid: 57086640e3befa644853407f2e70b617, type: 3}
+  - {fileID: 21300000, guid: 27be29b021a9a1b4594b7341ad15642c, type: 3}
+  - {fileID: 21300000, guid: 11721eb27706c864bae9d8db6640461d, type: 3}
+  - {fileID: 21300000, guid: ec9c96e2280f0c9458ec3d2b0e71fd1a, type: 3}
+  - {fileID: 21300000, guid: 23fd1d93286308641993165ea128ced5, type: 3}
+  - {fileID: 21300000, guid: 66344fe624080e549b992fb0b6edd748, type: 3}
+  - {fileID: 21300000, guid: 9677db175a33bd5408bb4b8677f508f0, type: 3}
+  - {fileID: 21300000, guid: 9330ba4ccee4be24287cc7b5431b34e5, type: 3}
+  - {fileID: 21300000, guid: 8cbeed8c20f11f0498af4c3eb4a694a2, type: 3}
+  - {fileID: 21300000, guid: eb975e8f27b542a47994e8125af69a27, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - GameIcon
+  - popup_chip
+  - cloud bakcground
+  - games_achievements_white
+  - games_savedgames_white
+  - games_controller_white
+  - edit_base
+  - icon_report
+  - editslide_button
+  - cloud bakcground short
+  - games_savedgames_green
+  - button_close
+  - editslide_base
+  m_Tag: Option
+  m_IsVariant: 0

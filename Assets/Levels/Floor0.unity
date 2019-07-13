@@ -9862,8 +9862,8 @@ MonoBehaviour:
     bossRoom: 0
     endRoom: 0
   RoomTestMode: 0
-  TestRoomType: 2
-  TestRoomName: EVENT01
+  TestRoomType: 3
+  TestRoomName: boss4
   GodMode: 0
   fullHp: 1000
   maxAkasha: 100

@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MainMenu
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 4b836e3181776324ea4902ecbabd198f, type: 3}
+    - {fileID: 2800000, guid: 6eb594d708ecdbe4ba960c44f9c2dd04, type: 3}
+    - {fileID: 2800000, guid: 4600dbcc42900e94e9d476be70ea62be, type: 3}
+    - {fileID: 2800000, guid: 5b864d5c3593ab044a40019cc8852733, type: 3}
+    - {fileID: 2800000, guid: 78afb4b75e371b147bc238d649b044f4, type: 3}
+    - {fileID: 2800000, guid: 116888e6109a11f4e9429e319515cc6d, type: 3}
+    - {fileID: 2800000, guid: 81f4badda0f2b7e4c81643766a3e74e4, type: 3}
+    - {fileID: 2800000, guid: ecf7ab82b3f79944784d408204a1d43b, type: 3}
+    - {fileID: 2800000, guid: 6d592aca3542d3846b73d34e686b4e0e, type: 3}
+    - {fileID: 2800000, guid: ef7fbf29980e6de47928bd96c6771345, type: 3}
+    - {fileID: 2800000, guid: 78854fba36c17dd419cc9b8c9746eec9, type: 3}
+    - {fileID: 2800000, guid: b233bc6611324084f9fbb68ba795d920, type: 3}
+    - {fileID: 2800000, guid: 548560e8a0774b249ae1377437247b02, type: 3}
+    totalSpriteSurfaceArea: 712415
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 4b836e3181776324ea4902ecbabd198f, type: 3}
+  - {fileID: 21300000, guid: ecf7ab82b3f79944784d408204a1d43b, type: 3}
+  - {fileID: 21300000, guid: b233bc6611324084f9fbb68ba795d920, type: 3}
+  - {fileID: 21300000, guid: 116888e6109a11f4e9429e319515cc6d, type: 3}
+  - {fileID: 21300000, guid: 78afb4b75e371b147bc238d649b044f4, type: 3}
+  - {fileID: 21300000, guid: 6eb594d708ecdbe4ba960c44f9c2dd04, type: 3}
+  - {fileID: 21300000, guid: 548560e8a0774b249ae1377437247b02, type: 3}
+  - {fileID: 21300000, guid: ef7fbf29980e6de47928bd96c6771345, type: 3}
+  - {fileID: 21300000, guid: 78854fba36c17dd419cc9b8c9746eec9, type: 3}
+  - {fileID: 21300000, guid: 6d592aca3542d3846b73d34e686b4e0e, type: 3}
+  - {fileID: 21300000, guid: 5b864d5c3593ab044a40019cc8852733, type: 3}
+  - {fileID: 21300000, guid: 4600dbcc42900e94e9d476be70ea62be, type: 3}
+  - {fileID: 21300000, guid: 81f4badda0f2b7e4c81643766a3e74e4, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - button_exit
+  - button_x
+  - popup_3
+  - button_go_tutorial
+  - button_go_start
+  - button_go_continue
+  - popup_exit_check
+  - popup_1
+  - popup_2
+  - new_report
+  - button_go_report
+  - button_go_edit_1
+  - button_o
+  m_Tag: MainMenu
+  m_IsVariant: 0

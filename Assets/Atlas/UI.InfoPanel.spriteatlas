@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI.InfoPanel
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 1354e2c0aa489814fb907cbeca13ca2f, type: 3}
+    totalSpriteSurfaceArea: 917474
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 49d92d42cba8f2546be31da1bafc5b26, type: 3}
+  - {fileID: 21300000, guid: 1fd684927bb4dd54c8c3ebdf866a0d37, type: 3}
+  - {fileID: 21300000, guid: 13a32fb21f19a374d9b61611908650af, type: 3}
+  - {fileID: 21300000, guid: e13b32d4dce476c4ab9b755d3c037d7b, type: 3}
+  - {fileID: 21300000, guid: 5d708ee4a9b1a2b4f9cf7ef922761aab, type: 3}
+  - {fileID: 21300000, guid: ae05950504bc5ae498a095c20fad2a3d, type: 3}
+  - {fileID: 21300000, guid: da4ae9388bdbace44b4c086d407e25d0, type: 3}
+  - {fileID: 21300000, guid: 1552c3d9c039cd940896c06bb9266728, type: 3}
+  - {fileID: 21300000, guid: 0c74162c5ffc8a9488422c94349eaea6, type: 3}
+  - {fileID: 21300000, guid: 26fc3bfc0986e8d4fbc39ed776f73e7b, type: 3}
+  - {fileID: 21300000, guid: 168d157d468c043428100610f77d88f9, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - chip_explain_3
+  - chip_explain_aks_6
+  - chip_explain_aks_1
+  - chip_explain_1
+  - chip_explain_aks_3
+  - chip_explain_aks_5
+  - chip_explain_aks
+  - popup_chip_explain_white
+  - chip_explain_aks_4
+  - popup_chip_explain_black
+  - chip_explain_aks_2
+  m_Tag: UI.InfoPanel
+  m_IsVariant: 0

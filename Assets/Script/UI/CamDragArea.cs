@@ -13,7 +13,7 @@ public class CamDragArea : MonoBehaviour, IDragHandler, IPointerDownHandler, IPo
         Vector2 originWorldPos = Camera.main.ScreenToWorldPoint(touchOriginPos);
         Vector2 curWorldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         Vector2 diff = curWorldPos - originWorldPos;
-        MyCamera.instance.MoveCam(camOriginPos + diff);
+        MyCamera.instance.MoveCam(camOriginPos - diff);
     }
 
     public void OnPointerDown(PointerEventData eventData)
