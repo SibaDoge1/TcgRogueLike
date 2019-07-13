@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Card.Graphic
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 2
+      m_BuildTarget: Android
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 47
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    - serializedVersion: 2
+      m_BuildTarget: iPhone
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: 33
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 1
+      m_AndroidETC2FallbackOverride: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: c86d9af2afe068644913ad671260f74a, type: 3}
+    totalSpriteSurfaceArea: 552296
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 030eca30fea266a41bdd4acdaed75b90, type: 3}
+  - {fileID: 21300000, guid: 05790a603bd3851439cdb35fd2dd05c7, type: 3}
+  - {fileID: 21300000, guid: 50e34c218ca54e9498219563f33279d5, type: 3}
+  - {fileID: 21300000, guid: 6284fca4ddea08442a331f0edb25788c, type: 3}
+  - {fileID: 21300000, guid: 6c4db8d486324c34abf72cf0acced28d, type: 3}
+  - {fileID: 21300000, guid: 7e17d215567043648ab57fb837f54eb5, type: 3}
+  - {fileID: 21300000, guid: e6c67965e3b2cce488411d9728f50373, type: 3}
+  - {fileID: 21300000, guid: d233787515e1d1c4ab3b98f48cc8f8f7, type: 3}
+  - {fileID: 21300000, guid: 29828b06cbac0f848af4945cdebe73d5, type: 3}
+  - {fileID: 21300000, guid: 07b2fe068982ce540902b95fe01de47a, type: 3}
+  - {fileID: 21300000, guid: 54c854468607a0b44a10e9eec7fdd089, type: 3}
+  - {fileID: 21300000, guid: d972ad37067479a45a05d9afd97be565, type: 3}
+  - {fileID: 21300000, guid: 8106dd67f3c56194aafdf27a029f28d1, type: 3}
+  - {fileID: 21300000, guid: f9d9fe67bb7b2a24595eb3230dd5bb02, type: 3}
+  - {fileID: 21300000, guid: c4faf7d926afb264b8599924e1a201d3, type: 3}
+  - {fileID: 21300000, guid: 57be669a58fd41b4f86c07f3bd574e0d, type: 3}
+  - {fileID: 21300000, guid: e9bbb8caf82c64e4e978798af833d9f1, type: 3}
+  - {fileID: 21300000, guid: fe3911fa83ada774ba3ee391548a1da7, type: 3}
+  - {fileID: 21300000, guid: 5cc2707d7ad3cf34e9c312b79fe919ba, type: 3}
+  - {fileID: 21300000, guid: 069a3b9d4e4c58a448b6af703d5f7458, type: 3}
+  - {fileID: 21300000, guid: 4fd54e5e7b576ff4c83ba8dd140ae192, type: 3}
+  - {fileID: 21300000, guid: 27c7a38ee9104fb4e9bc9bd25da9655a, type: 3}
+  - {fileID: 21300000, guid: 3a1ab6beb5f17784dadaba366788012f, type: 3}
+  - {fileID: 21300000, guid: 18cd961fe6603184c860138d5b55f3fd, type: 3}
+  - {fileID: 21300000, guid: bde4996f53e19464da33f13d7912f518, type: 3}
+  - {fileID: 21300000, guid: a89ae6af41fe4754f9e82f0866dc7764, type: 3}
+  - {fileID: 21300000, guid: 0aadfffffb1474240bf1066918067429, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Card_Cross
+  - Card_BlueGrasp
+  - Card_BlackThunder
+  - Card_Mist
+  - error
+  - Card_WolfBite
+  - Card_Stamp
+  - Card_CrimsonCrow
+  - Card_WormHole
+  - Card_Heal
+  - Card_Vertical
+  - Card_X
+  - Card_Horizon
+  - Card_RedGrasp
+  - Card_PoisonSnail
+  - Card_TimeFrog
+  - Card_Square
+  - Card_Justice
+  - Card_Needle
+  - Card_Rush
+  - Card_BearClaw
+  - Card_WindCat
+  - Card_Reload
+  - Card_Bishop
+  - Card_Shield
+  - Card_HalfMask
+  - Card_Plant
+  m_Tag: Card.Graphic
+  m_IsVariant: 0

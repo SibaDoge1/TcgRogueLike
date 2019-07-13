@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UI.Popup
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 3d3a306ef95e2044ea7d3d695102a79b, type: 3}
+    totalSpriteSurfaceArea: 10872046
+    bindAsDefault: 1
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: d19cca51498934843b28016d7c98924a, type: 3}
+  - {fileID: 21300000, guid: 0be349f2f119ec041b1d0a38738a6a50, type: 3}
+  - {fileID: 21300000, guid: 39e0df4427ec21e4ba920a705c24e8d6, type: 3}
+  - {fileID: 21300000, guid: 9e7cb5e4f3a6d924386a2ae3cf51abc6, type: 3}
+  - {fileID: 21300000, guid: e748de46a87215b4783c7ce59bea104f, type: 3}
+  - {fileID: 21300000, guid: 823a19c8c971e6b4497931266ff4f0d4, type: 3}
+  - {fileID: 21300000, guid: 8f0bbf3ac46393e489a769c3acf27411, type: 3}
+  - {fileID: 21300000, guid: be8258da049c2b549ac253ac6f0c9dd8, type: 3}
+  - {fileID: 21300000, guid: a0e0e14c0d2785f41b43bec5ad46e3e9, type: 3}
+  - {fileID: 21300000, guid: dded52ed49f41da43a4a2586e5d56119, type: 3}
+  - {fileID: 21300000, guid: 2206cdcf43c8ffd4285f94f43b8ee9a5, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - AKASHA
+  - popup_get_chip
+  - MOVE
+  - robot
+  - CARD
+  - fail
+  - entry_popup_event
+  - spiderboss
+  - pablus
+  - xynus
+  - success
+  m_Tag: UI.Popup
+  m_IsVariant: 0
